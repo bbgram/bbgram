@@ -54,10 +54,10 @@ Page {
     }
     
     Container {
-        leftPadding: 50
-        rightPadding: 50
-        topPadding:  50
-        bottomPadding: 50
+        leftPadding: 20
+        rightPadding: 20
+        topPadding:  20
+        bottomPadding: 20
 
         ListView {
             id: countries
