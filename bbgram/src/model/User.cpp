@@ -102,6 +102,18 @@ const QDateTime& User::lastSeen() const
     return m_lastSeen;
 }
 
+QString User::lastSeenFormatted() const
+{
+    QLocale locale(QLocale::English);
+    QString str;
+    if (m_lastSeen.date() == QDate::currentDate())
+        str = "today";
+    else
+        str = locale.toString(m_lastSeen, "MMM dd");
+    str += " at " + locale.toString(m_lastSeen, "hh:mm");
+    return str;
+}
+
 void User::setStatus(bool online, const QDateTime& lastSeen)
 {
     m_online = online;

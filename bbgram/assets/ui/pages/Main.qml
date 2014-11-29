@@ -12,8 +12,6 @@ TabbedPane {
         id: chatsTab
         imageSource: "asset:///images/bar_chats.png"
         title: "Chats"
-        newContentAvailable: true
-        unreadContentCount: 5
     }
     Tab {
         id: settingsTab

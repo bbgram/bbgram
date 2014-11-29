@@ -14,6 +14,7 @@ class User : public QObject
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(bool online READ online NOTIFY statusChanged)
     Q_PROPERTY(QDateTime lastSeen READ lastSeen NOTIFY statusChanged)
+    Q_PROPERTY(QString lastSeenFormatted READ lastSeenFormatted NOTIFY statusChanged)
     Q_PROPERTY(QVariant photo READ photo NOTIFY photoChanged)
 public:
     User(int id = 0);
@@ -34,6 +35,7 @@ public:
 
     bool online() const;
     const QDateTime& lastSeen() const;
+    QString lastSeenFormatted() const;
     void setStatus(bool online, const QDateTime& lastSeen);
 
     void setPhoto(const QString &filename);

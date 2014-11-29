@@ -36,10 +36,10 @@ Container {
             
             Container {
                 Label {
-                    text: ListItemData.status
+                    text: ListItemData.online ? "online" : "last seen " + ListItemData.lastSeenFormatted  
                     //text: "status"
                     textStyle {
-                        color: Color.Gray
+                        color: ListItemData.online ? Color.create('#236DBA') : Color.Gray
                         fontSize: FontSize.Medium
                     }
                     verticalAlignment: VerticalAlignment.Top
