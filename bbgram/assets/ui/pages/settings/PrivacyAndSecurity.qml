@@ -39,10 +39,19 @@ Page {
                     title: "If Away For"
                     options: [
                         Option {
+                            text: "1 month"
+                        },
+                        Option {
+                            text: "3 months"
+                        },
+                        Option {
                             text: "6 months"
+                        },
+                        Option {
+                            text: "1 year"
                         }
                     ]
-                    selectedIndex: 0
+                    selectedIndex: 2
                 }
                 Label {
                     text: "If you do not log in at least once within this period, your account will be deleted along with all groups, messages and contacts."
