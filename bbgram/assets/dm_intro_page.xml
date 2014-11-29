@@ -1,0 +1,13 @@
+<model>
+	<page icon="asset:///images/intro/intro1.png" title="Telegram" message="The world&apos;s &lt;b&gt;fastest&lt;/b&gt; messaging app.&lt;br/&gt;It is &lt;b&gt;free&lt;/b&gt; and &lt;b&gt;secure&lt;/b&gt;." color="#2CA5E0"/>
+	<page icon="asset:///images/intro/intro2.png" title="Fast" message="&lt;b&gt;Telegram&lt;/b&gt; delivers messages faster than&lt;br/&gt;any other application." color="#D95848"/>
+	<page icon="asset:///images/intro/intro3.png" title="Free" message="&lt;b&gt;Telegram&lt;/b&gt; is free forever. No ads.&lt;br/&gt;No subscription fees." color="#E6C162"/>
+	<page icon="asset:///images/intro/intro4.png" title="Secure" message="&lt;b&gt;Telegram&lt;/b&gt; keeps your messages safe&lt;br/&gt;from hacker attacks." color="#7EC455"/>
+	<page icon="asset:///images/intro/intro5.png" title="Powerful" message="&lt;b&gt;Telegram&lt;/b&gt; has no limits on the size of&lt;br/&gt;your media and chats." color="#8F73C3"/>
+	<page icon="asset:///images/intro/intro6.png" title="Cloud-Based" message="&lt;b&gt;Telegram&lt;/b&gt; lets you access your messages&lt;br/&gt;from multiple devices." color="#58BCD5"/>
+	<page icon="asset:///images/intro/intro7.png" title="Private" message="&lt;b&gt;Telegram&lt;/b&gt; messages are heavily encrypted&lt;br/&gt;and can self-destruct." color="#EE9459"/>
+</model>
+
+
+
+

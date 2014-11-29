@@ -1,0 +1,234 @@
+<countries>
+	<country code="1876" isoCode="JM" name="Jamaica"/>
+	<country code="1869" isoCode="KN" name="Saint Kitts &amp; Nevis"/>
+	<country code="1868" isoCode="TT" name="Trinidad &amp; Tobago"/>
+	<country code="1784" isoCode="VC" name="Saint Vincent &amp; the Grenadines"/>
+	<country code="1767" isoCode="DM" name="Dominica"/>
+	<country code="1758" isoCode="LC" name="Saint Lucia"/>
+	<country code="1721" isoCode="SX" name="Sint Maarten"/>
+	<country code="1684" isoCode="AS" name="American Samoa"/>
+	<country code="1671" isoCode="GU" name="Guam"/>
+	<country code="1670" isoCode="MP" name="Northern Mariana Islands"/>
+	<country code="1664" isoCode="MS" name="Montserrat"/>
+	<country code="1649" isoCode="TC" name="Turks &amp; Caicos Islands"/>
+	<country code="1473" isoCode="GD" name="Grenada"/>
+	<country code="1441" isoCode="BM" name="Bermuda"/>
+	<country code="1345" isoCode="KY" name="Cayman Islands"/>
+	<country code="1340" isoCode="VI" name="US Virgin Islands"/>
+	<country code="1284" isoCode="VG" name="British Virgin Islands"/>
+	<country code="1268" isoCode="AG" name="Antigua &amp; Barbuda"/>
+	<country code="1264" isoCode="AI" name="Anguilla"/>
+	<country code="1246" isoCode="BB" name="Barbados"/>
+	<country code="1242" isoCode="BS" name="Bahamas"/>
+	<country code="998" isoCode="UZ" name="Uzbekistan"/>
+	<country code="996" isoCode="KG" name="Kyrgyzstan"/>
+	<country code="995" isoCode="GE" name="Georgia"/>
+	<country code="994" isoCode="AZ" name="Azerbaijan"/>
+	<country code="993" isoCode="TM" name="Turkmenistan"/>
+	<country code="992" isoCode="TJ" name="Tajikistan"/>
+	<country code="977" isoCode="NP" name="Nepal"/>
+	<country code="976" isoCode="MN" name="Mongolia"/>
+	<country code="975" isoCode="BT" name="Bhutan"/>
+	<country code="974" isoCode="QA" name="Qatar"/>
+	<country code="973" isoCode="BH" name="Bahrain"/>
+	<country code="972" isoCode="IL" name="Israel"/>
+	<country code="971" isoCode="AE" name="United Arab Emirates"/>
+	<country code="970" isoCode="PS" name="Palestine"/>
+	<country code="968" isoCode="OM" name="Oman"/>
+	<country code="967" isoCode="YE" name="Yemen"/>
+	<country code="966" isoCode="SA" name="Saudi Arabia"/>
+	<country code="965" isoCode="KW" name="Kuwait"/>
+	<country code="964" isoCode="IQ" name="Iraq"/>
+	<country code="963" isoCode="SY" name="Syrian Arab Republic"/>
+	<country code="962" isoCode="JO" name="Jordan"/>
+	<country code="961" isoCode="LB" name="Lebanon"/>
+	<country code="960" isoCode="MV" name="Maldives"/>
+	<country code="886" isoCode="TW" name="Taiwan"/>
+	<country code="880" isoCode="BD" name="Bangladesh"/>
+	<country code="856" isoCode="LA" name="Laos"/>
+	<country code="855" isoCode="KH" name="Cambodia"/>
+	<country code="853" isoCode="MO" name="Macau"/>
+	<country code="852" isoCode="HK" name="Hong Kong"/>
+	<country code="850" isoCode="KP" name="North Korea"/>
+	<country code="692" isoCode="MH" name="Marshall Islands"/>
+	<country code="691" isoCode="FM" name="Micronesia"/>
+	<country code="690" isoCode="TK" name="Tokelau"/>
+	<country code="689" isoCode="PF" name="French Polynesia"/>
+	<country code="688" isoCode="TV" name="Tuvalu"/>
+	<country code="687" isoCode="NC" name="New Caledonia"/>
+	<country code="686" isoCode="KI" name="Kiribati"/>
+	<country code="685" isoCode="WS" name="Samoa"/>
+	<country code="683" isoCode="NU" name="Niue"/>
+	<country code="682" isoCode="CK" name="Cook Islands"/>
+	<country code="681" isoCode="WF" name="Wallis &amp; Futuna"/>
+	<country code="680" isoCode="PW" name="Palau"/>
+	<country code="679" isoCode="FJ" name="Fiji"/>
+	<country code="678" isoCode="VU" name="Vanuatu"/>
+	<country code="677" isoCode="SB" name="Solomon Islands"/>
+	<country code="676" isoCode="TO" name="Tonga"/>
+	<country code="675" isoCode="PG" name="Papua New Guinea"/>
+	<country code="674" isoCode="NR" name="Nauru"/>
+	<country code="673" isoCode="BN" name="Brunei Darussalam"/>
+	<country code="672" isoCode="NF" name="Norfolk Island"/>
+	<country code="670" isoCode="TL" name="Timor-Leste"/>
+	<country code="599" isoCode="BQ" name="Bonaire, Sint Eustatius &amp; Saba"/>
+	<country code="599" isoCode="CW" name="Curaçao"/>
+	<country code="598" isoCode="UY" name="Uruguay"/>
+	<country code="597" isoCode="SR" name="Suriname"/>
+	<country code="596" isoCode="MQ" name="Martinique"/>
+	<country code="595" isoCode="PY" name="Paraguay"/>
+	<country code="594" isoCode="GF" name="French Guiana"/>
+	<country code="593" isoCode="EC" name="Ecuador"/>
+	<country code="592" isoCode="GY" name="Guyana"/>
+	<country code="591" isoCode="BO" name="Bolivia"/>
+	<country code="590" isoCode="GP" name="Guadeloupe"/>
+	<country code="509" isoCode="HT" name="Haiti"/>
+	<country code="508" isoCode="PM" name="Saint Pierre &amp; Miquelon"/>
+	<country code="507" isoCode="PA" name="Panama"/>
+	<country code="506" isoCode="CR" name="Costa Rica"/>
+	<country code="505" isoCode="NI" name="Nicaragua"/>
+	<country code="504" isoCode="HN" name="Honduras"/>
+	<country code="503" isoCode="SV" name="El Salvador"/>
+	<country code="502" isoCode="GT" name="Guatemala"/>
+	<country code="501" isoCode="BZ" name="Belize"/>
+	<country code="500" isoCode="FK" name="Falkland Islands"/>
+	<country code="423" isoCode="LI" name="Liechtenstein"/>
+	<country code="421" isoCode="SK" name="Slovakia"/>
+	<country code="420" isoCode="CZ" name="Czech Republic"/>
+	<country code="389" isoCode="MK" name="Macedonia"/>
+	<country code="387" isoCode="BA" name="Bosnia &amp; Herzegovina"/>
+	<country code="386" isoCode="SI" name="Slovenia"/>
+	<country code="385" isoCode="HR" name="Croatia"/>
+	<country code="382" isoCode="ME" name="Montenegro"/>
+	<country code="381" isoCode="RS" name="Serbia"/>
+	<country code="380" isoCode="UA" name="Ukraine"/>
+	<country code="378" isoCode="SM" name="San Marino"/>
+	<country code="377" isoCode="MC" name="Monaco"/>
+	<country code="376" isoCode="AD" name="Andorra"/>
+	<country code="375" isoCode="BY" name="Belarus"/>
+	<country code="374" isoCode="AM" name="Armenia"/>
+	<country code="373" isoCode="MD" name="Moldova"/>
+	<country code="372" isoCode="EE" name="Estonia"/>
+	<country code="371" isoCode="LV" name="Latvia"/>
+	<country code="370" isoCode="LT" name="Lithuania"/>
+	<country code="359" isoCode="BG" name="Bulgaria"/>
+	<country code="358" isoCode="FI" name="Finland"/>
+	<country code="357" isoCode="CY" name="Cyprus"/>
+	<country code="356" isoCode="MT" name="Malta"/>
+	<country code="355" isoCode="AL" name="Albania"/>
+	<country code="354" isoCode="IS" name="Iceland"/>
+	<country code="353" isoCode="IE" name="Ireland"/>
+	<country code="352" isoCode="LU" name="Luxembourg"/>
+	<country code="351" isoCode="PT" name="Portugal"/>
+	<country code="350" isoCode="GI" name="Gibraltar"/>
+	<country code="299" isoCode="GL" name="Greenland"/>
+	<country code="298" isoCode="FO" name="Faroe Islands"/>
+	<country code="297" isoCode="AW" name="Aruba"/>
+	<country code="291" isoCode="ER" name="Eritrea"/>
+	<country code="290" isoCode="SH" name="Saint Helena"/>
+	<country code="269" isoCode="KM" name="Comoros"/>
+	<country code="268" isoCode="SZ" name="Swaziland"/>
+	<country code="267" isoCode="BW" name="Botswana"/>
+	<country code="266" isoCode="LS" name="Lesotho"/>
+	<country code="265" isoCode="MW" name="Malawi"/>
+	<country code="264" isoCode="NA" name="Namibia"/>
+	<country code="263" isoCode="ZW" name="Zimbabwe"/>
+	<country code="262" isoCode="RE" name="Réunion"/>
+	<country code="261" isoCode="MG" name="Madagascar"/>
+	<country code="260" isoCode="ZM" name="Zambia"/>
+	<country code="258" isoCode="MZ" name="Mozambique"/>
+	<country code="257" isoCode="BI" name="Burundi"/>
+	<country code="256" isoCode="UG" name="Uganda"/>
+	<country code="255" isoCode="TZ" name="Tanzania"/>
+	<country code="254" isoCode="KE" name="Kenya"/>
+	<country code="253" isoCode="DJ" name="Djibouti"/>
+	<country code="252" isoCode="SO" name="Somalia"/>
+	<country code="251" isoCode="ET" name="Ethiopia"/>
+	<country code="250" isoCode="RW" name="Rwanda"/>
+	<country code="249" isoCode="SD" name="Sudan"/>
+	<country code="248" isoCode="SC" name="Seychelles"/>
+	<country code="247" isoCode="SH" name="Saint Helena"/>
+	<country code="246" isoCode="IO" name="Diego Garcia"/>
+	<country code="245" isoCode="GW" name="Guinea-Bissau"/>
+	<country code="244" isoCode="AO" name="Angola"/>
+	<country code="243" isoCode="CD" name="Congo (Dem. Rep.)"/>
+	<country code="242" isoCode="CG" name="Congo (Rep.)"/>
+	<country code="241" isoCode="GA" name="Gabon"/>
+	<country code="240" isoCode="GQ" name="Equatorial Guinea"/>
+	<country code="239" isoCode="ST" name="São Tomé &amp; Príncipe"/>
+	<country code="238" isoCode="CV" name="Cape Verde"/>
+	<country code="237" isoCode="CM" name="Cameroon"/>
+	<country code="236" isoCode="CF" name="Central African Rep."/>
+	<country code="235" isoCode="TD" name="Chad"/>
+	<country code="234" isoCode="NG" name="Nigeria"/>
+	<country code="233" isoCode="GH" name="Ghana"/>
+	<country code="232" isoCode="SL" name="Sierra Leone"/>
+	<country code="231" isoCode="LR" name="Liberia"/>
+	<country code="230" isoCode="MU" name="Mauritius"/>
+	<country code="229" isoCode="BJ" name="Benin"/>
+	<country code="228" isoCode="TG" name="Togo"/>
+	<country code="227" isoCode="NE" name="Niger"/>
+	<country code="226" isoCode="BF" name="Burkina Faso"/>
+	<country code="225" isoCode="CI" name="Côte d`Ivoire"/>
+	<country code="224" isoCode="GN" name="Guinea"/>
+	<country code="223" isoCode="ML" name="Mali"/>
+	<country code="222" isoCode="MR" name="Mauritania"/>
+	<country code="221" isoCode="SN" name="Senegal"/>
+	<country code="220" isoCode="GM" name="Gambia"/>
+	<country code="218" isoCode="LY" name="Libya"/>
+	<country code="216" isoCode="TN" name="Tunisia"/>
+	<country code="213" isoCode="DZ" name="Algeria"/>
+	<country code="212" isoCode="MA" name="Morocco"/>
+	<country code="211" isoCode="SS" name="South Sudan"/>
+	<country code="98" isoCode="IR" name="Iran"/>
+	<country code="95" isoCode="MM" name="Myanmar"/>
+	<country code="94" isoCode="LK" name="Sri Lanka"/>
+	<country code="93" isoCode="AF" name="Afghanistan"/>
+	<country code="92" isoCode="PK" name="Pakistan"/>
+	<country code="91" isoCode="IN" name="India"/>
+	<country code="90" isoCode="TR" name="Turkey"/>
+	<country code="86" isoCode="CN" name="China"/>
+	<country code="84" isoCode="VN" name="Vietnam"/>
+	<country code="82" isoCode="KR" name="South Korea"/>
+	<country code="81" isoCode="JP" name="Japan"/>
+	<country code="66" isoCode="TH" name="Thailand"/>
+	<country code="65" isoCode="SG" name="Singapore"/>
+	<country code="64" isoCode="NZ" name="New Zealand"/>
+	<country code="63" isoCode="PH" name="Philippines"/>
+	<country code="62" isoCode="ID" name="Indonesia"/>
+	<country code="61" isoCode="AU" name="Australia"/>
+	<country code="60" isoCode="MY" name="Malaysia"/>
+	<country code="58" isoCode="VE" name="Venezuela"/>
+	<country code="57" isoCode="CO" name="Colombia"/>
+	<country code="56" isoCode="CL" name="Chile"/>
+	<country code="55" isoCode="BR" name="Brazil"/>
+	<country code="54" isoCode="AR" name="Argentina"/>
+	<country code="53" isoCode="CU" name="Cuba"/>
+	<country code="52" isoCode="MX" name="Mexico"/>
+	<country code="51" isoCode="PE" name="Peru"/>
+	<country code="49" isoCode="DE" name="Germany"/>
+	<country code="48" isoCode="PL" name="Poland"/>
+	<country code="47" isoCode="NO" name="Norway"/>
+	<country code="46" isoCode="SE" name="Sweden"/>
+	<country code="45" isoCode="DK" name="Denmark"/>
+	<country code="44" isoCode="GB" name="United Kingdom"/>
+	<country code="43" isoCode="AT" name="Austria"/>
+	<country code="42" isoCode="YL" name="Y-land"/>
+	<country code="41" isoCode="CH" name="Switzerland"/>
+	<country code="40" isoCode="RO" name="Romania"/>
+	<country code="39" isoCode="IT" name="Italy"/>
+	<country code="36" isoCode="HU" name="Hungary"/>
+	<country code="34" isoCode="ES" name="Spain"/>
+	<country code="33" isoCode="FR" name="France"/>
+	<country code="32" isoCode="BE" name="Belgium"/>
+	<country code="31" isoCode="NL" name="Netherlands"/>
+	<country code="30" isoCode="GR" name="Greece"/>
+	<country code="27" isoCode="ZA" name="South Africa"/>
+	<country code="20" isoCode="EG" name="Egypt"/>
+	<country code="7" isoCode="KZ" name="Kazakhstan"/>
+	<country code="7" isoCode="RU" name="Russian Federation"/>
+	<country code="1" isoCode="PR" name="Puerto Rico"/>
+	<country code="1" isoCode="DO" name="Dominican Rep."/>
+	<country code="1" isoCode="CA" name="Canada"/>
+	<country code="1" isoCode="US" name="USA"/>
+</countries>
