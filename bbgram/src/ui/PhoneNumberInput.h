@@ -8,6 +8,7 @@ class PhoneNumberInput: public bb::cascades::CustomControl
     Q_OBJECT
 
     Q_PROPERTY(bb::cascades::GroupDataModel* dataModel READ dataModel NOTIFY dataModelChanged)
+    Q_PROPERTY(QString phone READ phone)
 public:
     PhoneNumberInput();
     virtual ~PhoneNumberInput();
@@ -16,6 +17,8 @@ public:
     void setFilter(const QString& filter);
     Q_INVOKABLE
     void setCountry(const QString& name, const QString& code);
+
+    QString phone() const;
 
     bb::cascades::GroupDataModel* dataModel() const;
 signals:

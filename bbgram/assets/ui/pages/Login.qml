@@ -27,7 +27,7 @@ Page {
             horizontalAlignment: HorizontalAlignment.Center
             text: "Next"
             onClicked: {
-                _owner.requestCode('+79084839697')
+                _owner.requestCode(phoneNumber.phone)
                 var page = yourCodePageDef.createObject()
                 var navigationPane = Application.scene
                 navigationPane.backButtonsVisible = false

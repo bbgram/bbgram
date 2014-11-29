@@ -33,7 +33,6 @@ PhoneNumberInput::PhoneNumberInput()
 
     m_PhoneNumber = TextField::create();
     m_PhoneNumber->setInputMode(TextFieldInputMode::PhoneNumber);
-    m_PhoneNumber->setText("9084839697");
     panel->add(m_PhoneNumber);
 
     container->add(panel);
@@ -90,6 +89,11 @@ void PhoneNumberInput::setCountry(const QString& name, const QString& code)
     NavigationPane* navigationPane = static_cast<NavigationPane*>(Application::instance()->scene());
     if (navigationPane)
        navigationPane->pop();
+}
+
+QString PhoneNumberInput::phone() const
+{
+    return m_CountryCode->text() + m_PhoneNumber->text();
 }
 
 void PhoneNumberInput::onCountryFocusChanged(bool focused)
