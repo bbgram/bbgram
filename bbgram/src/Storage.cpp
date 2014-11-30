@@ -220,6 +220,7 @@ void Storage::_getContactsCallback(struct tgl_state *TLS, void *callback_extra, 
     for (int i = 0; i < size; i++)
     {
         User* contact = m_instance->findUser(contacts[i]->id.id);
+        tgl_do_get_user_info(gTLS, contacts[i]->id, false, NULL, NULL);
         if (newContacts->indexOf(contact) != -1)
             oldContacts.removeAll(contact);
         else
