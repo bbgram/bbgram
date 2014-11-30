@@ -38,12 +38,6 @@ static void update_user_registered(struct tgl_state *TLS, struct tgl_user *U)
     qDebug() << "update_user_registered" << QString::fromUtf8(U->first_name);
 }
 
-static void update_message_received (struct tgl_state *TLS, struct tgl_message *M)
-{
-    tgl_peer_id_t from = M->from_id;
-    qDebug() << "update_message_received " << QString::fromUtf8(M->message) << " id=" << from.id << " type=" << from.type;
-}
-
 static void update_chat_handler (struct tgl_state *TLS, struct tgl_chat *C, unsigned flags)
 {
     qDebug() << "update_chat_handler";
@@ -300,8 +294,7 @@ void Telegraph::start()
     m_updateCallbacks.logprintf = logprintf;
     m_updateCallbacks.user_update = Storage::userUpdateHandler;
     m_updateCallbacks.user_status_update = Storage::userStatusUpdateHandler;
-    m_updateCallbacks.new_msg = update_message_received;
-    m_updateCallbacks.msg_receive = update_message_received;
+    m_updateCallbacks.msg_receive = Storage::messageReceivedHandler;
     m_updateCallbacks.status_notification = update_status_notification;
     m_updateCallbacks.chat_update = update_chat_handler;
     m_updateCallbacks.type_notification = update_user_typing;

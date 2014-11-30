@@ -1,7 +1,7 @@
 #include "Dialog.h"
 
 Dialog::Dialog(User* user)
-    : m_user(user)
+    : Chat(TGL_PEER_USER, user->id()), m_user(user)
 {
     connect(m_user, SIGNAL(photoChanged()), this, SIGNAL(photoChanged()));
 

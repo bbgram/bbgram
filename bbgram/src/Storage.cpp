@@ -2,6 +2,8 @@
 
 #include "model/Dialog.h"
 
+#include <QDateTime>
+
 Storage* Storage::m_instance = 0;
 
 const char* DATABASE_NAME = "data/storage.db";
@@ -184,6 +186,47 @@ void Storage::userStatusUpdateHandler(struct tgl_state *TLS, struct tgl_user *U)
     user->setStatus(online, lastSeen);
 }
 
+void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *M)
+{
+    int peer_id = 0;
+
+    if (M->to_id.type == TGL_PEER_USER && M->to_id.id == gTLS->our_id)
+        peer_id = M->from_id.id;    // in
+    if (M->from_id.type == TGL_PEER_USER && M->from_id.id == gTLS->our_id)
+        peer_id = M->to_id.id;      // out
+    if (peer_id == 0)
+        return;
+
+    Chat* dialog = 0;
+    for (int i = 0; i < m_instance->m_chats->size(); i++)
+    {
+        Chat* chat = m_instance->m_chats->value(i);
+        if (chat->type() == TGL_PEER_USER && chat->id() == peer_id)
+        {
+            dialog = chat;
+            break;
+        }
+    }
+    if (!dialog)
+        return;
+
+    Message* message = m_instance->getMessage(M->id);
+
+    QListDataModel<Message*>* messages = dialog->m_messages;
+    for (int i = 0; i < messages->size(); i++)
+    {
+        Message* existingMessage = messages->value(i);
+        if (existingMessage->id() == message->id())
+            return;
+        if (existingMessage->date() < message->date())
+        {
+            messages->insert(i, message);
+            return;
+        }
+    }
+    messages->append(message);
+}
+
 
 QListDataModel<User*>* Storage::contacts() const
 {
@@ -257,6 +300,7 @@ void Storage::_getUserInfoCallback(struct tgl_state *TLS, void *callback_extra, 
             idx++;
     }
     m_instance->m_chats->insert(idx, dialog);
+    m_instance->updateHistory(U->id);
 }
 
 /*void get_chat_info_callback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_chat *C)
@@ -288,6 +332,33 @@ void Storage::_getDialogsCallback(struct tgl_state *TLS, void *callback_extra, i
     }
 }
 
+void Storage::_getHistoryCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[])
+{
+    if (!success)
+        return;
+
+    User* user = (User*)callback_extra;
+    Chat* dialog = 0;
+    for (int i = 0; i < m_instance->m_chats->size(); i++)
+    {
+        Chat* chat = m_instance->m_chats->value(i);
+        if (chat->type() == TGL_PEER_USER && chat->id() == user->id())
+        {
+            dialog = chat;
+            break;
+        }
+    }
+    if (!dialog)
+        return;
+    QListDataModel<Message*>* messages = dialog->m_messages;
+    messages->clear();
+    for (int i = 0; i < size; i++)
+    {
+        Message* message = m_instance->getMessage(list[i]->id);
+        messages->append(message);
+    }
+}
+
 void Storage::updateContacts()
 {
     tgl_do_update_contact_list(gTLS, _getContactsCallback, this);
@@ -296,5 +367,14 @@ void Storage::updateContacts()
 void Storage::updateChats()
 {
     tgl_do_get_dialog_list(gTLS, _getDialogsCallback, this);
+}
+
+void Storage::updateHistory(const tgl_peer_id_t& id)
+{
+    if (id.type == TGL_PEER_USER)
+    {
+        User* user = findUser(id.id);
+        tgl_do_get_history(gTLS, id, 50, 0, _getHistoryCallback, user);
+    }
 }
 

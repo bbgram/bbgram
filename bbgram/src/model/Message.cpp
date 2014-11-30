@@ -6,6 +6,7 @@ Message::Message(long long id, tgl_message* M)
 {
     m_text = QString::fromUtf8(M->message);
     m_date = QDateTime::fromTime_t(M->date);
+    m_from_id = M->from_id.id;
 }
 
 Message::~Message()
@@ -15,6 +16,11 @@ Message::~Message()
 long long Message::id() const
 {
     return m_id;
+}
+
+bool Message::our() const
+{
+    return m_from_id == gTLS->our_id;
 }
 
 const QDateTime& Message::date() const

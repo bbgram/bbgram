@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <bb/cascades/QListDataModel>
 
 #include "Message.h"
 
@@ -11,10 +12,16 @@ class Chat : public QObject
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(QString status READ status NOTIFY statusChanged)
     Q_PROPERTY(QVariant photo READ photo NOTIFY photoChanged)
+    Q_PROPERTY(bb::cascades::DataModel* messages READ messages CONSTANT)
     Q_PROPERTY(Message* lastMessage READ lastMessage NOTIFY messagesChanged)
 public:
-    Chat();
+    Chat(int type = 0, int id = 0);
     ~Chat();
+
+    int type() const;
+    int id() const;
+
+    bb::cascades::DataModel* messages() const;
 
     virtual QString title() const;
     virtual QString status() const;
@@ -28,7 +35,11 @@ signals:
     void photoChanged();
     void messagesChanged();
 protected:
-    QList<Message*> m_messages;
+    int             m_type;
+    int             m_id;
+
+    friend class Storage;
+    bb::cascades::QListDataModel<Message*>* m_messages;
 };
 
 Q_DECLARE_METATYPE(Chat*);

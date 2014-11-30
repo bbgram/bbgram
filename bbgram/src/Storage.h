@@ -16,6 +16,8 @@ public:
     static Storage* instance();
 
     static void userUpdateHandler(struct tgl_state *TLS, struct tgl_user *U, unsigned flags);
+    static void messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *M);
+
     static void userStatusUpdateHandler(struct tgl_state *TLS, struct tgl_user *U);
 
     bb::cascades::QListDataModel<User*>* contacts() const;
@@ -28,6 +30,7 @@ public:
 
     void updateContacts();
     void updateChats();
+    void updateHistory(const tgl_peer_id_t& id);
 protected:
     static Storage* m_instance;
     QSqlDatabase    m_db;
@@ -40,4 +43,5 @@ protected:
     static void _getContactsCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *contacts[]);
     static void _getUserInfoCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *U);
     static void _getDialogsCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, tgl_peer_id_t peers[], int last_msg_id[], int unread_count[]);
+    static void _getHistoryCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]);
 };
