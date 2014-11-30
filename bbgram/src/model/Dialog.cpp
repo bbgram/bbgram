@@ -17,6 +17,11 @@ Dialog::~Dialog()
 {
 }
 
+User* Dialog::user() const
+{
+    return m_user;
+}
+
 QString Dialog::title() const
 {
     return m_title;
