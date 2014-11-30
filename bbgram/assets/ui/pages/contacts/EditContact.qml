@@ -11,6 +11,7 @@ Sheet {
             title: "Edit Contact"
             acceptAction: ActionItem {
                 title: "Done"
+                enabled: firstName.text.length > 0 && lastName.text.length > 0
                 onTriggered: {
                     _owner.updateContact(user, firstName.text, lastName.text)
                 }
@@ -35,7 +36,7 @@ Sheet {
                 ImageView {
                     verticalAlignment: VerticalAlignment.Center
                     
-                    image: user.photo
+                    image: user ? user.photo : null
                     //imageSource: "asset:///images/placeholders/user_placeholder_purple.png"
                     scalingMethod: ScalingMethod.AspectFit
                     preferredHeight: 180
@@ -46,12 +47,12 @@ Sheet {
                     leftPadding: 20
                     TextField {
                         id: firstName
-                        text: user.firstName
+                        text: user ? user.firstName : ""
                         hintText: ""
                     }
                     TextField {
                         id: lastName
-                        text: user.lastName
+                        text: user ? user.lastName : ""
                         hintText: ""
                     }
                 }

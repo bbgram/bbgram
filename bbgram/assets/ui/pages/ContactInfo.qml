@@ -11,6 +11,11 @@ Page {
             title: "Edit"
             imageSource: "asset:///images/menu_bar_edit.png"
             ActionBar.placement: ActionBarPlacement.OnBar
+            onTriggered: {
+                var sheet = editContactSheetDef.createObject();
+                sheet.user = user;
+                sheet.open();
+            }
         },
         ActionItem {
             title: "Send Message"
@@ -84,4 +89,8 @@ Page {
             }
         }
     }
+    attachedObjects: ComponentDefinition {
+        id: editContactSheetDef
+        source: "contacts/EditContact.qml"
+        }
 }
