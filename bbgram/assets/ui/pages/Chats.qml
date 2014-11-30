@@ -70,7 +70,7 @@ NavigationPane {
                 
                 onTriggered: {
                     var page = dialogPageDef.createObject();
-                    page.chat = dataModel.data(indexPath);
+                    page.dialog = dataModel.data(indexPath);
                     navigationPane.push(page);
                 }
             }

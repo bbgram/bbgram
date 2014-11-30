@@ -4,7 +4,7 @@ import bbgram.types.lib 0.1
 import "settings"
 
 Page {
-    property Chat chat
+    property Dialog dialog
     
     titleBar: TitleBar {
         kind: TitleBarKind.FreeForm
@@ -16,7 +16,7 @@ Page {
                 }
                 
                 ImageView {
-                    image: chat.photo
+                    image: dialog.photo
                     //imageSource: "asset:///images/placeholders/user_placeholder_purple.png"
                     scalingMethod: ScalingMethod.AspectFit
                     maxWidth: 110
@@ -28,7 +28,7 @@ Page {
                     verticalAlignment: VerticalAlignment.Center
                     leftPadding: 20
                     Label {
-                        text: chat.title
+                        text: dialog.title
                         //text: "Anastasiya Shy"
                         bottomMargin: 0
                         textStyle {
@@ -38,7 +38,7 @@ Page {
                         horizontalAlignment: HorizontalAlignment.Left
                     }
                     Label {
-                        text: "online?"
+                        text: dialog.user.online ? "online" : "last seen " + dialog.user.lastSeenFormatted
                         topMargin: 0
                         textStyle {
                             color: Color.White
