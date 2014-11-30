@@ -72,6 +72,7 @@ ui/pages/chats/ChatItem.qml
 ui/pages/Chats.qml
 ui/pages/ContactInfo.qml
 ui/pages/contacts/ContactItem.qml
+ui/pages/contacts/ContactPhoneNumber.qml
 ui/pages/contacts/EditContact.qml
 ui/pages/Contacts.qml
 ui/pages/CountrySelect.qml

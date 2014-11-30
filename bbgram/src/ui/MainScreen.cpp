@@ -21,6 +21,11 @@ MainScreen::~MainScreen()
 {
 }
 
+Q_INVOKABLE void MainScreen::updateContact(User* user, const QString& firstName, const QString& lastName)
+{
+    user->setName(firstName, lastName);
+}
+
 Q_INVOKABLE void MainScreen::openFAQ()
 {
     InvokeRequest request;

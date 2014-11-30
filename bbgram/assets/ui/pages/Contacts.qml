@@ -55,7 +55,7 @@ NavigationPane {
         
         Container {
             ListView {
-                dataModel: _contacts
+                dataModel: _contacts ? _contacts : null
                   
                 listItemComponents: [
                     ListItemComponent {

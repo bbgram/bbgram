@@ -14,6 +14,7 @@ Sheet {
                 enabled: firstName.text.length > 0 && lastName.text.length > 0
                 onTriggered: {
                     _owner.updateContact(user, firstName.text, lastName.text)
+                    me.close()
                 }
             }
             dismissAction: ActionItem {

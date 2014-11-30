@@ -2,6 +2,7 @@ import bb.cascades 1.2
 import bbgram.types.lib 0.1
 
 import "settings"
+import "contacts"
 
 Page {
     property User user
@@ -57,14 +58,42 @@ Page {
                 rightPadding: 20
                 bottomPadding: 20
                 
+                layout: StackLayout {
+                    orientation: LayoutOrientation.LeftToRight
+                }
+                
                 ImageView {
                     verticalAlignment: VerticalAlignment.Center
                     
-                    image: user.photo
+                    image: user ? user.photo : null
                     //imageSource: "asset:///images/placeholders/user_placeholder_purple.png"
                     scalingMethod: ScalingMethod.Fill
                     preferredHeight: 200
                     preferredWidth: 200
+                }
+                
+                Container {
+                    layout: StackLayout {
+                        orientation: LayoutOrientation.TopToBottom
+                    }
+                    verticalAlignment: VerticalAlignment.Center
+                    
+                    Label {
+                        text: user ? user.name : ""
+                        //text: "firstName lastName"
+                        textStyle {
+                            fontSize: FontSize.Large
+                        }
+                    }
+                    
+                    Label {
+                        text: user ? user.lastSeenFormatted : ""
+                        //text: "last seen ..."
+                        textStyle {
+                            color: Color.Gray
+                            fontSize: FontSize.Large
+                        }
+                    }
                 }
             }
             
@@ -75,6 +104,14 @@ Page {
                 
                 SettingsHeader {
                     text: "Phone"
+                }
+                
+                Container {
+                    ContactPhoneNumber {
+                        phone: user ? "+" + user.phone : ""
+                        //phone:"+7 927 7777777"
+                        type: "Mobile"
+                    }
                 }
                 
                 SettingsHeader {
