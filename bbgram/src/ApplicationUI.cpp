@@ -4,7 +4,7 @@
 #include <bb/cascades/TabbedPane>
 #include <bb/cascades/QmlDocument>
 
-#include "ui/PhoneNumberInput.h"
+#include "ui/widgets/PhoneNumberInput.h"
 
 #include "Telegraph.h"
 

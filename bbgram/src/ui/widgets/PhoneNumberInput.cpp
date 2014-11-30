@@ -14,43 +14,43 @@ using namespace bb::data;
 PhoneNumberInput::PhoneNumberInput()
 {
     Container* container = Container::create();
-    m_CountryName = TextField::create();
-    m_CountryName->setHintText("Choose a country");
-    m_CountryName->setClearButtonVisible(false);
-    m_CountryName->setInputMode(TextFieldInputMode::Custom);
-    m_CountryName->input()->setFlags(TextInputFlag::VirtualKeyboardOff);
-    container->add(m_CountryName);
+    m_countryName = TextField::create();
+    m_countryName->setHintText("Choose a country");
+    m_countryName->setClearButtonVisible(false);
+    m_countryName->setInputMode(TextFieldInputMode::Custom);
+    m_countryName->input()->setFlags(TextInputFlag::VirtualKeyboardOff);
+    container->add(m_countryName);
 
     Container* panel = Container::create();
     panel->setLayout(StackLayout::create().orientation(LayoutOrientation::LeftToRight));
     panel->setTopMargin(50);
 
-    m_CountryCode = TextField::create();
-    m_CountryCode->setInputMode(TextFieldInputMode::PhoneNumber);
-    m_CountryCode->setMaxWidth(150);
-    m_CountryCode->setText("+7");
-    panel->add(m_CountryCode);
+    m_countryCode = TextField::create();
+    m_countryCode->setInputMode(TextFieldInputMode::PhoneNumber);
+    m_countryCode->setMaxWidth(150);
+    m_countryCode->setText("+7");
+    panel->add(m_countryCode);
 
-    m_PhoneNumber = TextField::create();
-    m_PhoneNumber->setInputMode(TextFieldInputMode::PhoneNumber);
-    panel->add(m_PhoneNumber);
+    m_phoneNumber = TextField::create();
+    m_phoneNumber->setInputMode(TextFieldInputMode::PhoneNumber);
+    panel->add(m_phoneNumber);
 
     container->add(panel);
 
     setRoot(container);
 
-    QObject::connect(m_CountryName, SIGNAL(focusedChanged(bool)), this, SLOT(onCountryFocusChanged(bool)));
+    QObject::connect(m_countryName, SIGNAL(focusedChanged(bool)), this, SLOT(onCountryFocusChanged(bool)));
 
-    m_DataModel = new GroupDataModel(this);
-    m_DataModel->setSortingKeys(QStringList() << "name");
-    m_DataModel->setGrouping(ItemGrouping::ByFirstChar);
+    m_dataModel = new GroupDataModel(this);
+    m_dataModel->setSortingKeys(QStringList() << "name");
+    m_dataModel->setGrouping(ItemGrouping::ByFirstChar);
 
     XmlDataAccess xda;
     QVariant list = xda.load(QDir::currentPath() +
                              "/app/native/assets/dm_countries.xml",
                              "/countries/country");
-    m_CountriesList = list.value<QVariantList>();
-    m_DataModel->insertList(m_CountriesList);
+    m_countriesList = list.value<QVariantList>();
+    m_dataModel->insertList(m_countriesList);
     emit dataModelChanged();
 }
 
@@ -60,31 +60,31 @@ PhoneNumberInput::~PhoneNumberInput()
 
 GroupDataModel* PhoneNumberInput::dataModel() const
 {
-    return m_DataModel;
+    return m_dataModel;
 }
 
 void PhoneNumberInput::setFilter(const QString& filter)
 {
-    m_DataModel->clear();
+    m_dataModel->clear();
     if (filter.isEmpty())
-        m_DataModel->insertList(m_CountriesList);
+        m_dataModel->insertList(m_countriesList);
     else
     {
         QVariantList filteredList;
-        for(QVariantList::const_iterator it = m_CountriesList.begin(); it != m_CountriesList.end(); ++it)
+        for(QVariantList::const_iterator it = m_countriesList.begin(); it != m_countriesList.end(); ++it)
         {
             QMap<QString, QVariant> country = it->toMap();
             if(country["name"].toString().startsWith(filter, Qt::CaseInsensitive))
                 filteredList.append(*it);
         };
-        m_DataModel->insertList(filteredList);
+        m_dataModel->insertList(filteredList);
     }
 }
 
 void PhoneNumberInput::setCountry(const QString& name, const QString& code)
 {
-    m_CountryName->setText(name);
-    m_CountryCode->setText("+" + code);
+    m_countryName->setText(name);
+    m_countryCode->setText("+" + code);
 
     NavigationPane* navigationPane = static_cast<NavigationPane*>(Application::instance()->scene());
     if (navigationPane)
@@ -93,7 +93,7 @@ void PhoneNumberInput::setCountry(const QString& name, const QString& code)
 
 QString PhoneNumberInput::phone() const
 {
-    return m_CountryCode->text() + m_PhoneNumber->text();
+    return m_countryCode->text() + m_phoneNumber->text();
 }
 
 void PhoneNumberInput::onCountryFocusChanged(bool focused)

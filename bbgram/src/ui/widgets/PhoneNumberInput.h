@@ -24,12 +24,12 @@ public:
 signals:
     void dataModelChanged();
 protected:
-    bb::cascades::TextField* m_CountryName;
-    bb::cascades::TextField* m_CountryCode;
-    bb::cascades::TextField* m_PhoneNumber;
+    bb::cascades::TextField* m_countryName;
+    bb::cascades::TextField* m_countryCode;
+    bb::cascades::TextField* m_phoneNumber;
 
-    bb::cascades::GroupDataModel* m_DataModel;
-    QVariantList    m_CountriesList;
+    bb::cascades::GroupDataModel* m_dataModel;
+    QVariantList    m_countriesList;
 protected slots:
     void onCountryFocusChanged(bool focused);
 };
