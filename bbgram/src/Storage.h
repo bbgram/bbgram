@@ -3,9 +3,9 @@
 #include <QtSql>
 #include <bb/cascades/QListDataModel>
 
-
-#include "model/User.h"
 #include "model/Chat.h"
+#include "model/Message.h"
+#include "model/User.h"
 
 class Storage: public QObject
 {
@@ -24,6 +24,8 @@ public:
     User* addUser(int id);
     User* findUser(int id);
 
+    Message* getMessage(long long id);
+
     void updateContacts();
     void updateChats();
 protected:
@@ -33,6 +35,7 @@ protected:
     bb::cascades::QListDataModel<User*>*    m_contacts;
     bb::cascades::QListDataModel<Chat*>*    m_chats;
     QMap<int, User*>                        m_users;
+    QMap<long long, Message*>               m_messages;
 
     static void _getContactsCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *contacts[]);
     static void _getUserInfoCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *U);

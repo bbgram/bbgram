@@ -92,6 +92,25 @@ User* Storage::findUser(int id)
         return 0;
 }
 
+Message* Storage::getMessage(long long id)
+{
+    QMap<long long, Message*>::iterator it = m_messages.find(id);
+    if (it != m_messages.end())
+        return it.value();
+    else
+    {
+        tgl_message* M = tgl_message_get(gTLS, id);
+        if (M)
+        {
+            Message* message = new Message(id, M);
+            m_messages.insert(id, message);
+            return message;
+        }
+        else
+            return 0;
+    }
+}
+
 void load_photo_callback(struct tgl_state *TLS, void *callback_extra, int success, char *filename)
 {
     if (!success)
@@ -221,6 +240,12 @@ void Storage::_getUserInfoCallback(struct tgl_state *TLS, void *callback_extra, 
 
     User* user = m_instance->findUser(U->id.id);
     Dialog* dialog = new Dialog(user);
+    if (U->last)
+    {
+        Message* lastMessage = m_instance->getMessage(U->last->id);
+        if (lastMessage)
+            dialog->addMessage(lastMessage);
+    }
     m_instance->m_chats->append(dialog);
 }
 

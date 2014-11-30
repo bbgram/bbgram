@@ -28,21 +28,37 @@ Container {
                 layout: StackLayout {
                     orientation: LayoutOrientation.LeftToRight
                 }
-                /*ImageView {
-                     imageSource: "asset:///images/secretchat_green.png"
-                     preferredWidth: 40
-                     preferredHeight: 40
-                     verticalAlignment: VerticalAlignment.Center
-                 }*/
-                Label {
-                    leftMargin: 0
-                    text: ListItemData.title
-                    //text: "firstName lastName"
-                    verticalAlignment: VerticalAlignment.Center
-                    textStyle {
-                        fontSize: FontSize.Large
+                rightPadding: 20
+                Container {
+                    layoutProperties: StackLayoutProperties  {
+                        spaceQuota: 1
                     }
-                }    
+                    /*ImageView {
+                         imageSource: "asset:///images/secretchat_green.png"
+                         preferredWidth: 40
+                         preferredHeight: 40
+                         verticalAlignment: VerticalAlignment.Center
+                     }*/
+                    Label {
+                        text: ListItemData.title
+                        //text: "firstName lastName"
+                        verticalAlignment: VerticalAlignment.Center
+                        textStyle {
+                            fontSize: FontSize.Large
+                        }
+                    }
+                }
+                Container { 
+                    leftPadding: 40
+                    Label {
+                        text: ListItemData.lastMessage ? ListItemData.lastMessage.dateFormatted : ""
+                        //text: "Feb 21"
+                        verticalAlignment: VerticalAlignment.Center
+                        textStyle {
+                            color: Color.Gray
+                        }
+                    }               
+                }
             }
             
             Container {
@@ -55,7 +71,7 @@ Container {
                         spaceQuota: 1
                     }
                     Label {
-                        text: ListItemData.status
+                        text: ListItemData.lastMessage ? ListItemData.lastMessage.text : ""
                         //text: "As they rounded a bend in the path that ran beside the river, Lara recognized the silhouette of a fig tree atop a nearby hill."
                         textStyle {
                             color: Color.Gray
@@ -70,7 +86,7 @@ Container {
                     layoutProperties: StackLayoutProperties  {
                         spaceQuota:-1 
                     }
-                    leftPadding: 20
+                    leftPadding: 40
 
                     verticalAlignment: VerticalAlignment.Center
                     

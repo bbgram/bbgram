@@ -1,5 +1,5 @@
 1
-79
+81
 720x720/ui/pages/Intro.qml
 dm_countries.xml
 dm_intro_page.xml
@@ -56,6 +56,8 @@ images/placeholders/user_placeholder_pink.png
 images/placeholders/user_placeholder_purple.png
 images/placeholders/user_placeholder_red.png
 images/placeholders/user_placeholder_yellow.png
+images/secretchat_black.png
+images/secretchat_green.png
 images/setting_arrow.png
 server.pub
 ui/pages/chats/ChatItem.qml

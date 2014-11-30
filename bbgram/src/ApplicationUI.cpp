@@ -14,14 +14,16 @@
 using namespace bb::cascades;
 using namespace bb::system;
 
-#include "model/User.h"
 #include "model/Chat.h"
+#include "model/Message.h"
+#include "model/User.h"
 
 ApplicationUI::ApplicationUI(bb::cascades::Application* app) :
         QObject(app)
 {
     qmlRegisterType<PhoneNumberInput>("bbgram.control.lib", 0, 1, "PhoneNumberInput");
     qmlRegisterType<Chat>("bbgram.types.lib", 0, 1, "Chat");
+    qmlRegisterType<Message>("bbgram.types.lib", 0, 1, "Message");
     qmlRegisterType<User>("bbgram.types.lib", 0, 1, "User");
 
     m_storage = new Storage(this);
