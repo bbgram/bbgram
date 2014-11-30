@@ -23,7 +23,8 @@ MainScreen::~MainScreen()
 
 Q_INVOKABLE void MainScreen::updateContact(User* user, const QString& firstName, const QString& lastName)
 {
-    user->setName(firstName, lastName);
+    if (user->id() == gTLS->our_id)
+        tgl_do_set_profile_name(gTLS, firstName.toUtf8().data(), lastName.toUtf8().data(), NULL, NULL);
 }
 
 Q_INVOKABLE void MainScreen::openFAQ()
@@ -47,4 +48,7 @@ void MainScreen::initialize()
     tgl_do_get_difference(gTLS, 0, 0, 0);
     Storage::instance()->updateChats();
     Storage::instance()->updateContacts();
+
+    User* currentUser = Storage::instance()->addUser(gTLS->our_id);
+    setContextProperty("_currentUser", currentUser);
 }

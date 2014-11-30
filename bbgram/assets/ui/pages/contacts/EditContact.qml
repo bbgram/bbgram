@@ -5,15 +5,18 @@ Sheet {
     id: me
     
     property User user
+    property string caption
+    
+    signal done(variant user, string firstName, string lastName)
     
     Page {
         titleBar: TitleBar {
-            title: "Edit Contact"
+            title: caption
             acceptAction: ActionItem {
                 title: "Done"
                 enabled: firstName.text.length > 0 && lastName.text.length > 0
                 onTriggered: {
-                    _owner.updateContact(user, firstName.text, lastName.text)
+                    me.done(user, firstName.text, lastName.text)
                     me.close()
                 }
             }

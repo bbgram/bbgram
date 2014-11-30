@@ -15,6 +15,7 @@ Page {
             onTriggered: {
                 var sheet = editContactSheetDef.createObject();
                 sheet.user = user;
+                sheet.caption = "Edit Contact";
                 sheet.open();
             }
         },
