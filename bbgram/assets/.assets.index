@@ -1,8 +1,9 @@
 1
-86
+92
 720x720/ui/pages/Intro.qml
 dm_countries.xml
 dm_intro_page.xml
+images/background_hd.jpg
 images/bar_attach.png
 images/bar_back.png
 images/bar_chats.png
@@ -35,6 +36,10 @@ images/menu_phone.png
 images/menu_plus.png
 images/menu_secretchat.png
 images/menu_sharedmedia.png
+images/msg_in.9.png
+images/msg_in.amd
+images/msg_out.9.png
+images/msg_out.amd
 images/placeholders/broadcast_placeholder_blue.png
 images/placeholders/broadcast_placeholder_cyan.png
 images/placeholders/broadcast_placeholder_green.png

@@ -16,7 +16,7 @@ Page {
                 }
                 
                 ImageView {
-                    image: dialog.photo
+                    image: dialog ? dialog.photo : null
                     //imageSource: "asset:///images/placeholders/user_placeholder_purple.png"
                     scalingMethod: ScalingMethod.AspectFit
                     maxWidth: 110
@@ -28,7 +28,7 @@ Page {
                     verticalAlignment: VerticalAlignment.Center
                     leftPadding: 20
                     Label {
-                        text: dialog.title
+                        text: dialog ? dialog.title : ""
                         //text: "Anastasiya Shy"
                         bottomMargin: 0
                         textStyle {
@@ -38,7 +38,7 @@ Page {
                         horizontalAlignment: HorizontalAlignment.Left
                     }
                     Label {
-                        text: dialog.user.online ? "online" : "last seen " + dialog.user.lastSeenFormatted
+                        text: dialog ? (dialog.user.online ? "online" : "last seen " + dialog.user.lastSeenFormatted) : ""
                         topMargin: 0
                         textStyle {
                             color: Color.White
@@ -88,4 +88,65 @@ Page {
             ActionBar.placement: ActionBarPlacement.InOverflow
         }
     ]
+    
+    Container {
+        layout: DockLayout {            
+        }
+        ImageView {
+            horizontalAlignment: HorizontalAlignment.Fill
+            verticalAlignment: VerticalAlignment.Fill
+            imageSource: "asset:///images/background_hd.jpg"
+            scalingMethod: ScalingMethod.AspectFill
+        }
+        ListView {
+            layout: StackListLayout {
+                orientation: LayoutOrientation.BottomToTop
+            }
+            id: listView
+            verticalAlignment: VerticalAlignment.Bottom
+            
+            dataModel: dialog ? dialog.messages : null
+            
+            stickToEdgePolicy: ListViewStickToEdgePolicy.Beginning
+            
+            
+            listItemComponents: [
+                ListItemComponent {
+                    Container {
+                        minHeight: 100
+                        leftPadding: 20
+                        rightPadding: 20
+                        topPadding: 10
+                        bottomPadding: 10
+                        
+                        preferredWidth: Infinity
+                        Container {
+                            horizontalAlignment: ListItemData.our ? HorizontalAlignment.Right : HorizontalAlignment.Left
+                            layout: DockLayout {}
+                            rightPadding: ListItemData.our ? 0 : 100
+                            leftPadding: ListItemData.our ? 100 : 0
+                            ImageView {
+                                horizontalAlignment: HorizontalAlignment.Fill
+                                verticalAlignment: VerticalAlignment.Fill
+                                imageSource: ListItemData.our ? "asset:///images/msg_out.amd" : "asset:///images/msg_in.amd"
+                            }
+                            Container {
+                                leftPadding: 30
+                                rightPadding: 40
+                                topPadding: 10
+                                bottomPadding: 14
+                                Label {
+                                    
+                                    text: ListItemData.text
+                                    multiline: true
+                                }    
+                            }
+                        
+                        }
+                    }
+                }
+            
+            ]
+        }
+    }
 }
