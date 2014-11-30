@@ -1,13 +1,15 @@
 1
-81
+85
 720x720/ui/pages/Intro.qml
 dm_countries.xml
 dm_intro_page.xml
+images/bar_attach.png
 images/bar_back.png
 images/bar_chats.png
 images/bar_menu.png
 images/bar_menu_settings.png
 images/bar_profile.png
+images/bar_send.png
 images/frame.9.png
 images/frame.amd
 images/header_confirm.png
@@ -29,6 +31,7 @@ images/menu_contactblock.png
 images/menu_contactshare.png
 images/menu_FAQ.png
 images/menu_group.png
+images/menu_phone.png
 images/menu_plus.png
 images/menu_secretchat.png
 images/menu_sharedmedia.png
@@ -66,6 +69,7 @@ ui/pages/ContactInfo.qml
 ui/pages/contacts/ContactItem.qml
 ui/pages/Contacts.qml
 ui/pages/CountrySelect.qml
+ui/pages/Dialog.qml
 ui/pages/intro/CarouselView.qml
 ui/pages/intro/Indicator.qml
 ui/pages/Intro.qml
