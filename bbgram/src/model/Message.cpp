@@ -17,6 +17,11 @@ long long Message::id() const
     return m_id;
 }
 
+const QDateTime& Message::date() const
+{
+    return m_date;
+}
+
 const QString& Message::text() const
 {
     return m_text;
