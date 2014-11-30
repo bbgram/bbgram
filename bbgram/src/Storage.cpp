@@ -240,13 +240,22 @@ void Storage::_getUserInfoCallback(struct tgl_state *TLS, void *callback_extra, 
 
     User* user = m_instance->findUser(U->id.id);
     Dialog* dialog = new Dialog(user);
+    Message* lastMessage = 0;
     if (U->last)
     {
-        Message* lastMessage = m_instance->getMessage(U->last->id);
+        lastMessage = m_instance->getMessage(U->last->id);
         if (lastMessage)
             dialog->addMessage(lastMessage);
     }
-    m_instance->m_chats->append(dialog);
+    int idx = 0;
+    for (int i = 0; i < m_instance->m_chats->size(); i++)
+    {
+        Chat* chat = m_instance->m_chats->value(i);
+        Message* chatLastMessage = chat->lastMessage();
+        if (!lastMessage || (chatLastMessage && chatLastMessage->date() > lastMessage->date()))
+            idx++;
+    }
+    m_instance->m_chats->insert(idx, dialog);
 }
 
 /*void get_chat_info_callback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_chat *C)
