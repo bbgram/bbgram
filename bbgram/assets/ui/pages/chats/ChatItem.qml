@@ -68,7 +68,7 @@ Container {
                 Container {
                     visible: false
                     layoutProperties: StackLayoutProperties  {
-                        spaceQuota:0 
+                        spaceQuota:-1 
                     }
                     leftPadding: 20
 
