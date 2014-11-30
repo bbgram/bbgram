@@ -71,8 +71,9 @@ Container {
                         spaceQuota: 1
                     }
                     Label {
-                        text: ListItemData.lastMessage ? ListItemData.lastMessage.text : ""
+                        text: ListItemData.status
                         //text: "As they rounded a bend in the path that ran beside the river, Lara recognized the silhouette of a fig tree atop a nearby hill."
+                        textFormat: TextFormat.Html
                         textStyle {
                             color: Color.Gray
                             fontSize: FontSize.Medium

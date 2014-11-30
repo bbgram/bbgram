@@ -16,6 +16,7 @@ class User : public QObject
     Q_PROPERTY(QDateTime lastSeen READ lastSeen NOTIFY statusChanged)
     Q_PROPERTY(QString lastSeenFormatted READ lastSeenFormatted NOTIFY statusChanged)
     Q_PROPERTY(QVariant photo READ photo NOTIFY photoChanged)
+    Q_PROPERTY(QString typingStatus READ typingStatus NOTIFY typingStatusChanged)
 public:
     User(int id = 0);
     ~User();
@@ -38,13 +39,20 @@ public:
     QString lastSeenFormatted() const;
     void setStatus(bool online, const QDateTime& lastSeen);
 
+    QString typingStatus() const;
+    void setTypingStatus(tgl_typing_status status);
+
     void setPhoto(const QString &filename);
     QVariant photo() const;
+public slots:
+    void resetTypingStatus();
 signals:
     void phoneChanged();
     void nameChanged();
-    void statusChanged();
     void photoChanged();
+
+    void statusChanged();
+    void typingStatusChanged();
 protected:
     int         m_id;
     QString     m_phone;
@@ -53,6 +61,8 @@ protected:
 
     bool        m_online;
     QDateTime   m_lastSeen;
+
+    tgl_typing_status   m_typingStatus;
 
     QString                 m_photoFilename;
     bb::cascades::Image     m_photo;

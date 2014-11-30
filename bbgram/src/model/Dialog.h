@@ -22,7 +22,6 @@ signals:
 protected:
     User*               m_user;
     QString             m_title;
-    QString             m_status;
 };
 
 Q_DECLARE_METATYPE(Dialog*);

@@ -186,12 +186,24 @@ void Storage::userStatusUpdateHandler(struct tgl_state *TLS, struct tgl_user *U)
     user->setStatus(online, lastSeen);
 }
 
+void Storage::userTypingHandler(struct tgl_state *TLS, struct tgl_user *U, enum tgl_typing_status status)
+{
+    User* user = m_instance->findUser(U->id.id);
+    if (user)
+        user->setTypingStatus(status);
+}
+
 void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *M)
 {
     int peer_id = 0;
 
     if (M->to_id.type == TGL_PEER_USER && M->to_id.id == gTLS->our_id)
+    {
         peer_id = M->from_id.id;    // in
+        User* user = m_instance->findUser(peer_id);
+        if (user)
+            user->resetTypingStatus();
+    }
     if (M->from_id.type == TGL_PEER_USER && M->from_id.id == gTLS->our_id)
         peer_id = M->to_id.id;      // out
     if (peer_id == 0)

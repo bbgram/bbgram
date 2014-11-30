@@ -8,9 +8,8 @@ Dialog::Dialog(User* user)
     m_title = m_user->firstName() + " " + m_user->lastName();
     emit titleChanged();
 
-    /*tgl_message* last = m_user->source()->last;
-    m_status = last ? QString::fromUtf8(last->message) : "";
-    emit statusChanged();*/
+    connect(m_user, SIGNAL(typingStatusChanged()), this, SIGNAL(statusChanged()));
+    connect(this, SIGNAL(messagesChanged()), this, SIGNAL(statusChanged()));
 }
 
 Dialog::~Dialog()
@@ -29,7 +28,12 @@ QString Dialog::title() const
 
 QString Dialog::status() const
 {
-    return m_status;
+    QString typingStatus = m_user->typingStatus();
+    if (typingStatus.length() > 0)
+        return "<p style='color:#236EBB'>" + typingStatus + "</p>";
+    Message* message = lastMessage();
+    if (message)
+        return "<p>" + message->text() + "</p>";
 }
 
 QVariant Dialog::photo() const

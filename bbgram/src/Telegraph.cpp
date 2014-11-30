@@ -43,11 +43,6 @@ static void update_chat_handler (struct tgl_state *TLS, struct tgl_chat *C, unsi
     qDebug() << "update_chat_handler";
 }
 
-static void update_user_typing (struct tgl_state *TLS, struct tgl_user *U, enum tgl_typing_status status)
-{
-    qDebug() << "update_user_typing";
-}
-
 void logprintf(const char *format, ...)
 {
     va_list args;
@@ -297,7 +292,7 @@ void Telegraph::start()
     m_updateCallbacks.msg_receive = Storage::messageReceivedHandler;
     m_updateCallbacks.status_notification = update_status_notification;
     m_updateCallbacks.chat_update = update_chat_handler;
-    m_updateCallbacks.type_notification = update_user_typing;
+    m_updateCallbacks.type_notification = Storage::userTypingHandler;
     m_updateCallbacks.user_registered = update_user_registered;
 
 

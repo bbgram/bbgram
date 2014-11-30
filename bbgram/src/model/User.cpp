@@ -3,7 +3,7 @@
 using namespace bb::cascades;
 
 User::User(int id)
-    : m_id(id), m_online(false)
+    : m_id(id), m_online(false), m_typingStatus(tgl_typing_none)
 {
     setPhoto("");
 }
@@ -119,6 +119,52 @@ void User::setStatus(bool online, const QDateTime& lastSeen)
     m_online = online;
     m_lastSeen = lastSeen;
     emit statusChanged();
+}
+
+QString User::typingStatus() const
+{
+    switch (m_typingStatus)
+    {
+        case tgl_typing_typing:
+            return "typing...";
+        case tgl_typing_record_video:
+            return "recording a video message...";
+        case tgl_typing_upload_video:
+            return "sending a video message...";
+        case tgl_typing_record_audio:
+            return "recording a voice message...";
+        case tgl_typing_upload_audio:
+            return "sending a voice message...";
+        case tgl_typing_upload_photo:
+            return "sending a photo...";
+        case tgl_typing_upload_document:
+            return "sending a document...";
+        case tgl_typing_geo:
+            return "sending ageo...";
+        case tgl_typing_choose_contact:
+            return "choosing a contact...";
+        default:
+            return "";
+    }
+}
+
+void User::setTypingStatus(tgl_typing_status typingStatus)
+{
+    if (typingStatus == tgl_typing_cancel)
+        m_typingStatus = tgl_typing_none;
+    else
+    {
+        m_typingStatus = typingStatus;
+        QTimer::singleShot(5000, this, SLOT(resetTypingStatus()));
+    }
+
+    emit typingStatusChanged();
+}
+
+void User::resetTypingStatus()
+{
+    m_typingStatus = tgl_typing_none;
+    emit typingStatusChanged();
 }
 
 QVariant User::photo() const
