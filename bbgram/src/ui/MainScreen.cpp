@@ -11,7 +11,8 @@ MainScreen::MainScreen(ApplicationUI* app)
     : Screen("asset:///ui/pages/Main.qml")
         , m_app(app)
 {
-    setContextProperty("_contacts", Storage::instance()->contacts());
+    m_contacts = new ContactList(Storage::instance()->contacts());
+    setContextProperty("_contacts", m_contacts);
     setContextProperty("_chats", Storage::instance()->chats());
 
     m_contactManager = new ContactManager();

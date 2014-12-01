@@ -192,3 +192,9 @@ void User::setPhoto(const QString &filename)
 
     emit photoChanged();
 }
+
+const QString& User::sortingKey() const
+{
+    static QString source = "!";
+    return source;
+}

@@ -17,6 +17,7 @@ class User : public QObject
     Q_PROPERTY(QString lastSeenFormatted READ lastSeenFormatted NOTIFY statusChanged)
     Q_PROPERTY(QVariant photo READ photo NOTIFY photoChanged)
     Q_PROPERTY(QString typingStatus READ typingStatus NOTIFY typingStatusChanged)
+    Q_PROPERTY(QString sortingKey READ sortingKey CONSTANT)
 public:
     User(int id = 0);
     ~User();
@@ -44,6 +45,8 @@ public:
 
     void setPhoto(const QString &filename);
     QVariant photo() const;
+
+    const QString& sortingKey() const;
 public slots:
     void resetTypingStatus();
 signals:

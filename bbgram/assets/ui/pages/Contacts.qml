@@ -61,12 +61,20 @@ NavigationPane {
         Container {
             ListView {
                 id: contacts_list
-                dataModel: _contacts ? _contacts : null
+                dataModel: _contacts ? _contacts.model : null
                 
                 property MultiSelectHandler currentMultiSelectHandler : multiSelectHandler
                 
                 listItemComponents: [
                     ListItemComponent {
+                        type: "header"
+                        Header {
+                            visible: ListItemData != "!"
+                            title: ListItemData
+                        }
+                    },
+                    ListItemComponent {
+                        type: "item"
                         ContactItem { }
                     }
                 ]

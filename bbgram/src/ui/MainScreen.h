@@ -2,6 +2,7 @@
 
 #include "Screen.h"
 #include "../model/Chat.h"
+#include "../model/ContactList.h"
 #include "../model/User.h"
 #include "../utils/ContactManager.h"
 
@@ -25,4 +26,5 @@ protected slots:
 protected:
     ApplicationUI*  m_app;
     ContactManager* m_contactManager;
+    ContactList*    m_contacts;
 };
