@@ -6,6 +6,11 @@ import "chats"
 Page {
     property Dialog dialog
     
+    function sendMessage() {
+        _owner.sendMessage(dialog.type, dialog.id, message.text)
+        message.text = ""
+    }
+    
     titleBar: TitleBar {
         kind: TitleBarKind.FreeForm
         kindProperties: FreeFormTitleBarKindProperties {
@@ -58,9 +63,15 @@ Page {
             ActionBar.placement: ActionBarPlacement.OnBar
         },
         ActionItem {
+            id: sendAction
+            enabled: false
             title: "Send"
             imageSource: "asset:///images/bar_send.png"
             ActionBar.placement: ActionBarPlacement.OnBar
+            
+            onTriggered: {
+                sendMessage()
+            }
         },
         ActionItem {
             title: "Call"
@@ -90,36 +101,81 @@ Page {
     ]
     
     Container {
-        layout: DockLayout {            
+        layout: StackLayout {
         }
-        ImageView {
-            horizontalAlignment: HorizontalAlignment.Fill
-            verticalAlignment: VerticalAlignment.Fill
-            imageSource: "asset:///images/background_hd.jpg"
-            scalingMethod: ScalingMethod.AspectFill
-        }
-        ListView {
-            layout: StackListLayout {
-                orientation: LayoutOrientation.BottomToTop
+        Container {
+            layout: DockLayout {            
             }
-            id: listView
-            verticalAlignment: VerticalAlignment.Bottom
-            
-            dataModel: dialog ? dialog.messages : null
-            
-            stickToEdgePolicy: ListViewStickToEdgePolicy.Beginning
-            
-            
-            listItemComponents: [
-                ListItemComponent {
-                    Message {
-                        incoming: !ListItemData.our
-                        text: ListItemData.text
-                        date: ListItemData.date
+            ImageView {
+                horizontalAlignment: HorizontalAlignment.Fill
+                verticalAlignment: VerticalAlignment.Fill
+                imageSource: "asset:///images/background_hd.jpg"
+                scalingMethod: ScalingMethod.AspectFill
+            }
+            ListView {
+                layout: StackListLayout {
+                    orientation: LayoutOrientation.BottomToTop
+                }
+                id: listView
+                verticalAlignment: VerticalAlignment.Bottom
+                
+                dataModel: dialog ? dialog.messages : null
+                
+                stickToEdgePolicy: ListViewStickToEdgePolicy.Beginning
+                
+                
+                listItemComponents: [
+                    ListItemComponent {
+                        Message {
+                            incoming: !ListItemData.our
+                            text: ListItemData.text
+                            date: ListItemData.date
+                        }
+                    }
+                
+                ]
+            }
+        }
+        Container {
+            layout: StackLayout {
+                orientation: LayoutOrientation.LeftToRight
+            }
+            leftPadding: 20
+            rightPadding: 20
+            topPadding: 10
+            bottomPadding: 20
+            horizontalAlignment: HorizontalAlignment.Fill
+            background: Color.create("#252525")
+            ImageButton {
+                verticalAlignment: VerticalAlignment.Center
+                defaultImageSource: "asset:///images/bar_voice1.png"
+                pressedImageSource: "asset:///images/bar_voice2.png"
+                preferredWidth: 90
+                preferredHeight: 90
+            }
+            TextArea {
+                id: message
+                verticalAlignment: VerticalAlignment.Center
+                focusPolicy: FocusPolicy.KeyAndTouch
+                //text: "asdasjdh asdk jhasd asd jahsd kasd haskdjha asjdasdasdh"
+                hintText: "Enter a message"
+                onTextChanging: {
+                    sendAction.enabled = text.length > 0;
+                }
+                
+                input {
+                    onSubmitted: {
+                        sendMessage()
                     }
                 }
-            
-            ]
+            }
+            ImageButton {
+                verticalAlignment: VerticalAlignment.Center
+                defaultImageSource: "asset:///images/bar_smile.png"
+                pressedImageSource: "asset:///images/bar_smile.png"
+                preferredWidth: 90
+                preferredHeight: 90
+            }
         }
     }
 }

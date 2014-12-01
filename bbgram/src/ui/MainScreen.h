@@ -15,7 +15,7 @@ public:
     ~MainScreen();
 
     Q_INVOKABLE void updateContact(User* user, const QString& firstName, const QString& lastName);
-
+    Q_INVOKABLE void sendMessage(int peerType, int peerId, const QString& message);
     Q_INVOKABLE void openFAQ();
 protected slots:
     void initialize();

@@ -1,5 +1,5 @@
 1
-92
+96
 720x720/ui/pages/Intro.qml
 dm_countries.xml
 dm_intro_page.xml
@@ -11,6 +11,9 @@ images/bar_menu.png
 images/bar_menu_settings.png
 images/bar_profile.png
 images/bar_send.png
+images/bar_smile.png
+images/bar_voice1.png
+images/bar_voice2.png
 images/frame.9.png
 images/frame.amd
 images/header_confirm.png

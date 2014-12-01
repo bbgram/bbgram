@@ -27,6 +27,15 @@ Q_INVOKABLE void MainScreen::updateContact(User* user, const QString& firstName,
         tgl_do_set_profile_name(gTLS, firstName.toUtf8().data(), lastName.toUtf8().data(), NULL, NULL);
 }
 
+Q_INVOKABLE void MainScreen::sendMessage(int peerType, int peerId, const QString& message)
+{
+    tgl_peer_id_t peer;
+    peer.type = peerType;
+    peer.id = peerId;
+    QByteArray bytes = message.toUtf8();
+    tgl_do_send_message(gTLS, peer, (const char*)bytes.data(), bytes.length(), 0, 0);
+}
+
 Q_INVOKABLE void MainScreen::openFAQ()
 {
     InvokeRequest request;
