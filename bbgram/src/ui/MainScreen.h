@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Screen.h"
-#include "User.h"
+#include "../model/User.h"
 
 #include <bb/cascades/TabbedPane>
 
@@ -13,7 +13,6 @@ class MainScreen : public Screen<bb::cascades::TabbedPane>
 public:
     MainScreen(ApplicationUI* app);
     ~MainScreen();
-
 
     Q_INVOKABLE void updateContact(User* user, const QString& firstName, const QString& lastName);
 
