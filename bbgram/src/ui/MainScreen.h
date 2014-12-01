@@ -3,7 +3,7 @@
 #include "Screen.h"
 #include "../model/Chat.h"
 #include "../model/User.h"
-#include "ContactManager.h"
+#include "../utils/ContactManager.h"
 
 #include <bb/cascades/TabbedPane>
 

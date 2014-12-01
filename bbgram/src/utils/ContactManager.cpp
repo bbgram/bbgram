@@ -1,5 +1,5 @@
-#include "utils/ContactManager.h"
-#include "Storage.h"
+#include "ContactManager.h"
+#include "../Storage.h"
 
 ContactManager* ContactManager::m_instance = NULL;
 
