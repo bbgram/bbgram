@@ -115,6 +115,7 @@ Page {
                     Message {
                         incoming: !ListItemData.our
                         text: ListItemData.text
+                        date: ListItemData.date
                     }
                 }
             

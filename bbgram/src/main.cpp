@@ -1,5 +1,5 @@
 #include <bb/cascades/Application>
-#include <QObject>
+#include <QLocale>
 
 #include "ApplicationUi.h"
 
@@ -8,6 +8,8 @@ void* TAILQ_END() { return 0; }
 
 Q_DECL_EXPORT int main(int argc, char **argv)
 {
+    QLocale::setDefault(QLocale::English);
+
     bb::cascades::Application app(argc, argv);
 
     //QThread *thread = new QThread;
