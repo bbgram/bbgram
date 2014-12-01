@@ -1,7 +1,9 @@
 import bb.cascades 1.2
 
-Container {
-    Container {
+CustomListItem {
+    preferredHeight: 140
+    
+    content: Container {
         layout: StackLayout {
             orientation: LayoutOrientation.LeftToRight
         }
@@ -118,12 +120,6 @@ Container {
             }
         }
     
-    }
-    Container {
-        background: Color.White
-        
-        Divider {
-        }
     }
 }
 
