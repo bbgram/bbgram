@@ -1,7 +1,7 @@
 import bb.cascades 1.2
 import bbgram.types.lib 0.1
 
-import "settings"
+import "chats"
 
 Page {
     property Dialog dialog
@@ -112,37 +112,9 @@ Page {
             
             listItemComponents: [
                 ListItemComponent {
-                    Container {
-                        minHeight: 100
-                        leftPadding: 20
-                        rightPadding: 20
-                        topPadding: 10
-                        bottomPadding: 10
-                        
-                        preferredWidth: Infinity
-                        Container {
-                            horizontalAlignment: ListItemData.our ? HorizontalAlignment.Right : HorizontalAlignment.Left
-                            layout: DockLayout {}
-                            rightPadding: ListItemData.our ? 0 : 100
-                            leftPadding: ListItemData.our ? 100 : 0
-                            ImageView {
-                                horizontalAlignment: HorizontalAlignment.Fill
-                                verticalAlignment: VerticalAlignment.Fill
-                                imageSource: ListItemData.our ? "asset:///images/msg_out.amd" : "asset:///images/msg_in.amd"
-                            }
-                            Container {
-                                leftPadding: 30
-                                rightPadding: 40
-                                topPadding: 10
-                                bottomPadding: 14
-                                Label {
-                                    
-                                    text: ListItemData.text
-                                    multiline: true
-                                }    
-                            }
-                        
-                        }
+                    Message {
+                        incoming: !ListItemData.our
+                        text: ListItemData.text
                     }
                 }
             
