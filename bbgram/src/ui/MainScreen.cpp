@@ -42,6 +42,11 @@ void MainScreen::markRead(Chat* chat)
     tgl_do_mark_read(gTLS, peer, 0, 0);
 }
 
+void MainScreen::deleteChat(Chat* chat)
+{
+    qDebug() << "deleting " << chat->title();
+}
+
 void MainScreen::openFAQ()
 {
     InvokeRequest request;

@@ -1,4 +1,5 @@
 import bb.cascades 1.2
+import bb.system 1.0
 import bbgram.types.lib 0.1
 
 import "chats"
@@ -28,6 +29,10 @@ Page {
         message.text = ""
     }
     
+    function clearHistory(chat) {
+        //_owner.clearHistory(chat)
+    }
+    
     titleBar: TitleBar {
         kind: TitleBarKind.FreeForm
         kindProperties: FreeFormTitleBarKindProperties {
@@ -38,7 +43,7 @@ Page {
                 }
                 
                 ImageView {
-                    image: dialog.photo
+                    image: dialog ? dialog.photo : null
                     //imageSource: "asset:///images/placeholders/user_placeholder_purple.png"
                     scalingMethod: ScalingMethod.AspectFit
                     maxWidth: 110
@@ -50,7 +55,7 @@ Page {
                     verticalAlignment: VerticalAlignment.Center
                     leftPadding: 20
                     Label {
-                        text: dialog.title
+                        text: dialog ? dialog.title : ""
                         //text: "Anastasiya Shy"
                         bottomMargin: 0
                         textStyle {
@@ -60,7 +65,7 @@ Page {
                         horizontalAlignment: HorizontalAlignment.Left
                     }
                     Label {
-                        text: dialog.user.online ? "online" : "last seen " + dialog.user.lastSeenFormatted
+                        text: dialog ? (dialog.user.online ? "online" : "last seen " + dialog.user.lastSeenFormatted) : ""
                         topMargin: 0
                         textStyle {
                             color: Color.White
@@ -106,14 +111,21 @@ Page {
             ActionBar.placement: ActionBarPlacement.InOverflow
         },
         ActionItem {
-            title: "Block Contact"
-            imageSource: "asset:///images/menu_contactblock.png"
-            ActionBar.placement: ActionBarPlacement.InOverflow
-        },
-        ActionItem {
-            title: "Delete Contact"
+            title: "Clear Chat"
             imageSource: "asset:///images/menu_bin.png"
             ActionBar.placement: ActionBarPlacement.InOverflow
+            onTriggered: confirmDialog.show()
+            attachedObjects: [
+                SystemDialog {
+                    id: confirmDialog
+                    title: "Clear History"
+                    body: "Are you sure you want to clear history?"
+                    onFinished: {
+                        if (value == SystemUiResult.ConfirmButtonSelection)
+                            clearHistory(ListItemData)
+                    }
+                }
+            ]
         }
     ]
     
@@ -136,7 +148,7 @@ Page {
                 id: messages
                 verticalAlignment: VerticalAlignment.Bottom
                 
-                dataModel: dialog.messages
+                dataModel: dialog ? dialog.messages : null
                 
                 stickToEdgePolicy: ListViewStickToEdgePolicy.Beginning
                 
@@ -179,7 +191,6 @@ Page {
                 onTextChanging: {
                     sendAction.enabled = text.length > 0;
                 }
-                
                 input {
                     onSubmitted: {
                         sendMessage()

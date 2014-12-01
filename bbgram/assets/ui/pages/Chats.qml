@@ -1,10 +1,11 @@
 import bb.cascades 1.2
+import bb.system 1.0
 
 import "chats"
 
 NavigationPane {
     id: navigationPane
-    
+
     onPushTransitionEnded: {
         if (page.onPush != undefined)
             page.onPush()
@@ -74,18 +75,52 @@ NavigationPane {
                 
                 listItemComponents: [
                     ListItemComponent {
-                        ChatItem {   
+                        ChatItem {
+                            id: itemContainer
+                            gestureHandlers: [
+                                TapHandler {
+                                    onTapped: {
+                                        itemContainer.ListItem.view.openChat(ListItemData)
+                                    }                
+                                },
+                                LongPressHandler {    
+                                    onLongPressed: {
+                                        confirmDialog.show()
+                                    }
+                                    attachedObjects: [
+                                        SystemDialog {
+                                            id: confirmDialog
+                                            title: "Delete Chat"
+                                            body: "Are you sure you want to delete this chat?"
+                                            onFinished: {
+                                                if (value == SystemUiResult.ConfirmButtonSelection)
+                                                    itemContainer.ListItem.view.deleteChat(ListItemData)
+                                            }
+                                        }
+                                    ]
+                                }
+                            
+                            ]
                         }
                     }
                 ]
                 
-                onTriggered: {
-                    var component = Qt.createComponent("Dialog.qml")
-                    var dialog = dataModel.data(indexPath)
-                    console.log(dialog.title)
-                    var page = component.createObject(this, {"dialog": dialog})
+                function deleteChat(chat) {
+                    _owner.deleteChat(chat)
+                }
+                
+                function openChat(chat) {
+                    var page = dialogPageDef.createObject()//this, {"dialog": chat})
+                    page.dialog = chat
                     navigationPane.push(page)
                 }
+                
+                attachedObjects: [
+                    ComponentDefinition {                      
+                        id: dialogPageDef                       
+                        source: "Dialog.qml"             
+                    }
+                ]
             }
         }
     }
