@@ -25,18 +25,13 @@ MainScreen::~MainScreen()
     delete m_contactManager;
 }
 
-void my_callback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M)
-{
-    qDebug() << "my_callback " << M->id << " "<< M->date;
-}
-
 void MainScreen::sendMessage(Chat* chat, const QString& message)
 {
     tgl_peer_id_t peer;
     peer.type = chat->type();
     peer.id = chat->id();
     QByteArray bytes = message.toUtf8();
-    tgl_do_send_message(gTLS, peer, (const char*)bytes.data(), bytes.length(), my_callback, 0);
+    tgl_do_send_message(gTLS, peer, (const char*)bytes.data(), bytes.length(), 0, 0);
 }
 
 void MainScreen::markRead(Chat* chat)
