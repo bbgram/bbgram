@@ -1,5 +1,5 @@
 1
-96
+98
 720x720/ui/pages/Intro.qml
 dm_countries.xml
 dm_intro_page.xml
@@ -33,6 +33,7 @@ images/menu_broadcast.png
 images/menu_chat.png
 images/menu_contactblock.png
 images/menu_contactshare.png
+images/menu_deletehistory.png
 images/menu_FAQ.png
 images/menu_group.png
 images/menu_phone.png

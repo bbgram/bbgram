@@ -41,38 +41,95 @@ NavigationPane {
                     sheet.open();
                 }
             },
-            ActionItem {
+            MultiSelectActionItem {
                 title: "Invite Friends"
                 imageSource: "asset:///images/menu_bar_contact_plus.png"
-                ActionBar.placement: ActionBarPlacement.InOverflow
+                multiSelectHandler: inviteFriendsMultiSelectHandler
             },
-            ActionItem {
+            MultiSelectActionItem {
                 title: "New Secret Chat"
                 imageSource: "asset:///images/menu_secretchat.png"
-                ActionBar.placement: ActionBarPlacement.InOverflow
+                multiSelectHandler: newSecretChatMultiSelectHandler
             },
-            ActionItem {
+            MultiSelectActionItem {
                 title: "New Broadcast"
                 imageSource: "asset:///images/menu_broadcast.png"
-                ActionBar.placement: ActionBarPlacement.InOverflow
+                multiSelectHandler: newBroadcastMultiSelectHandler
             }
         ]
         
         Container {
             ListView {
+                id: contacts_list
                 dataModel: _contacts ? _contacts : null
-                  
+                
+                property MultiSelectHandler currentMultiSelectHandler : multiSelectHandler
+                
                 listItemComponents: [
                     ListItemComponent {
                         ContactItem { }
                     }
                 ]
                 
+                onSelectionChanged: {
+                    //multiSelectHandler.status = "Selected" + selectionList().length;
+                    selectionList().valueOf()
+                }
+                
                 onTriggered: {
                     var page = contactPageDef.createObject();
                     page.user = dataModel.data(indexPath);
                     navigationPane.push(page);
                 }
+                
+                attachedObjects: [
+                    MultiSelectHandler {
+                        id: inviteFriendsMultiSelectHandler
+                        actions: [
+                            ActionItem {
+                                title: "Invite Friends"
+                                imageSource: "asset:///images/menu_bar_contact_plus.png"
+                                onTriggered: {
+                                    console.log("Action invite friends")
+                                }
+                            }
+                        ]
+                        onActiveChanged: {
+                            contacts_list.currentMultiSelectHandler = inviteFriendsMultiSelectHandler;
+                        }
+                    },
+                    MultiSelectHandler {
+                        id: newSecretChatMultiSelectHandler
+                        actions: [
+                            ActionItem {
+                                title: "New Secret Chat"
+                                imageSource: "asset:///images/menu_secretchat.png"
+                                onTriggered: {
+                                    console.log("SecretChat invite")
+                                }
+                            }
+                        ]
+                        onActiveChanged: {
+                            contacts_list.currentMultiSelectHandler = newSecretChatMultiSelectHandler;
+                        }
+                    },
+                    MultiSelectHandler {
+                        id: newBroadcastMultiSelectHandler
+                        actions: [
+                            ActionItem {
+                                title: "New Broadcast"
+                                imageSource: "asset:///images/menu_broadcast.png"
+                                onTriggered: {
+                                    console.log("Briadcast invite")
+                                }
+                            }
+                        ]
+                        onActiveChanged: {
+                            contacts_list.currentMultiSelectHandler = newBroadcastMultiSelectHandler;
+                        }
+                    }
+                    
+                ]
             }
         }
         
