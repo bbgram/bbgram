@@ -11,12 +11,20 @@ public:
 
     Q_INVOKABLE
     void addContact(const QString& firstName, const QString& lastName, const QString& phone);
+    Q_INVOKABLE
+    void renameContact(const QString& firstName, const QString& lastName, const QString& phone);
+
 
 signals:
      void onContactAdded(bool error, QString message);
+     void onContactRenamed(bool error, QString message);
+
+protected:
+     bool contactExist(const QString& phone);
 
 private:
     static void contactAddHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[]);
+    static void contactRenameHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[]);
 
     static ContactManager* m_instance;
 };

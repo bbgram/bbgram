@@ -16,8 +16,6 @@ public:
     MainScreen(ApplicationUI* app);
     ~MainScreen();
 
-
-    Q_INVOKABLE void updateContact(User* user, const QString& firstName, const QString& lastName);
     Q_INVOKABLE void sendMessage(Chat* chat, const QString& message);
     Q_INVOKABLE void markRead(Chat* chat);
     Q_INVOKABLE void openFAQ();

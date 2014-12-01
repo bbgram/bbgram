@@ -3,37 +3,39 @@ import bb.cascades 1.2
 Sheet {
     id: me
     
-    property bool isProcessing : false
+    function checkFields(){
+        addButton.enabled = firstName.text.length > 0 && lastName.text.length > 0 && phoneNumber.text.length > 0
+    }
     
     Page {
         titleBar: TitleBar {
             title: "Add Contact"
             acceptAction: ActionItem {
+                id: addButton
                 title: "Add"
-                enabled: firstName.text.length > 0 && lastName.text.length > 0 && phoneNumber.text.length > 0 && !isProcessing
+                enabled: firstName.text.length > 0 && lastName.text.length > 0 && phoneNumber.text.length > 0
                 
                 function contactAdded(error, message){
-                    isProcessing = false
                     
-                    if (error)
-                    {
+                    if (error){
                         errorLabel.text = message
+                        cancelButton.enabled = true
                     }    
                     else
                         me.close()
                 }
                 
                 onTriggered: {
-                    //me.done(user, firstName.text, lastName.text)
-                    //me.close()
                     _contactManager.onContactAdded.connect(contactAdded)
                     _contactManager.addContact(firstName.text, lastName.text, phoneNumber.text)
-                    isProcessing = true
+                    
+                    addButton.enabled = false
+                    cancelButton.enabled = false
                 }
             }
             dismissAction: ActionItem {
+                id: cancelButton
                 title: "Cancel"
-                enabled: !isProcessing
                 onTriggered: {
                     me.close()
                 }
@@ -48,21 +50,27 @@ Sheet {
             Container {
                 TextField {
                     id: firstName
-                    //text: user ? user.firstName : ""
                     text: ""
                     hintText: "First Name"
+                    onTextChanging:{
+                        me.checkFields()
+                    }
                 }
                 TextField {
                     id: lastName
                     text: ""
-                    //text: user ? user.lastName : ""
                     hintText: "Last Name"
+                    onTextChanging:{
+                        me.checkFields()
+                    }
                 }
                 TextField {
                     id: phoneNumber
                     text: ""
-                    //text: user ? user.lastName : ""
                     hintText: "Phone Number"
+                    onTextChanging:{
+                        me.checkFields()
+                    }
                 }
                 
                 Label {

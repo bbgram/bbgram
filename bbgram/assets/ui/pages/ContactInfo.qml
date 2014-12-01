@@ -8,17 +8,23 @@ Page {
     property User user
     
     actions: [
-        /*ActionItem {
+        ActionItem {
             title: "Edit"
             imageSource: "asset:///images/menu_bar_edit.png"
             ActionBar.placement: ActionBarPlacement.OnBar
+            
+            function updateContactName(user, firstName, lastName){
+                _contactManager.renameContact(firstName, lastName, user.phone)
+            }
+            
             onTriggered: {
                 var sheet = editContactSheetDef.createObject();
                 sheet.user = user;
                 sheet.caption = "Edit Contact";
+                sheet.done.connect(updateContactName);
                 sheet.open();
             }
-        },*/
+        },
         ActionItem {
             title: "Send Message"
             imageSource: "asset:///images/menu_bar_chat.png"

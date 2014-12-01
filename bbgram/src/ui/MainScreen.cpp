@@ -25,12 +25,6 @@ MainScreen::~MainScreen()
     delete m_contactManager;
 }
 
-void MainScreen::updateContact(User* user, const QString& firstName, const QString& lastName)
-{
-    if (user->id() == gTLS->our_id)
-        tgl_do_set_profile_name(gTLS, firstName.toUtf8().data(), lastName.toUtf8().data(), NULL, NULL);
-}
-
 void my_callback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M)
 {
     qDebug() << "my_callback " << M->id << " "<< M->date;
