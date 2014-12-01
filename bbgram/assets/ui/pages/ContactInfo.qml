@@ -8,7 +8,7 @@ Page {
     property User user
     
     actions: [
-        ActionItem {
+        /*ActionItem {
             title: "Edit"
             imageSource: "asset:///images/menu_bar_edit.png"
             ActionBar.placement: ActionBarPlacement.OnBar
@@ -18,7 +18,7 @@ Page {
                 sheet.caption = "Edit Contact";
                 sheet.open();
             }
-        },
+        },*/
         ActionItem {
             title: "Send Message"
             imageSource: "asset:///images/menu_bar_chat.png"
