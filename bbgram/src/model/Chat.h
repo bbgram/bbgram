@@ -45,4 +45,3 @@ protected:
 };
 
 Q_DECLARE_METATYPE(Chat*);
-Q_DECLARE_METATYPE(QList<Message*>);

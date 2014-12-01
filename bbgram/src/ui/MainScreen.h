@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Screen.h"
+#include "../model/Chat.h"
 #include "../model/User.h"
 
 #include <bb/cascades/TabbedPane>
@@ -15,7 +16,8 @@ public:
     ~MainScreen();
 
     Q_INVOKABLE void updateContact(User* user, const QString& firstName, const QString& lastName);
-    Q_INVOKABLE void sendMessage(int peerType, int peerId, const QString& message);
+    Q_INVOKABLE void sendMessage(Chat* chat, const QString& message);
+    Q_INVOKABLE void markRead(Chat* chat);
     Q_INVOKABLE void openFAQ();
 protected slots:
     void initialize();

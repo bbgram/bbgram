@@ -4,10 +4,27 @@ import bbgram.types.lib 0.1
 import "chats"
 
 Page {
-    property Dialog dialog
+    property variant dialog: null
     
+    function messageAdded(indexPath) {
+        if (indexPath.length != 0 && indexPath[0] == 0)
+            messages.scrollToPosition(ScrollPosition.Beginning, ScrollAnimation.None);
+        if (!messages.dataModel.data(indexPath).our)
+            _owner.markRead(dialog);
+    }
+    
+    function onPop() {
+        messages.dataModel.itemAdded.disconnect(messageAdded)
+    }
+    
+    function onPush() {
+        _owner.markRead(dialog);
+        
+        messages.dataModel.itemAdded.connect(messageAdded)
+    }
+
     function sendMessage() {
-        _owner.sendMessage(dialog.type, dialog.id, message.text)
+        _owner.sendMessage(dialog, message.text)
         message.text = ""
     }
     
@@ -21,7 +38,7 @@ Page {
                 }
                 
                 ImageView {
-                    image: dialog ? dialog.photo : null
+                    image: dialog.photo
                     //imageSource: "asset:///images/placeholders/user_placeholder_purple.png"
                     scalingMethod: ScalingMethod.AspectFit
                     maxWidth: 110
@@ -33,7 +50,7 @@ Page {
                     verticalAlignment: VerticalAlignment.Center
                     leftPadding: 20
                     Label {
-                        text: dialog ? dialog.title : ""
+                        text: dialog.title
                         //text: "Anastasiya Shy"
                         bottomMargin: 0
                         textStyle {
@@ -43,7 +60,7 @@ Page {
                         horizontalAlignment: HorizontalAlignment.Left
                     }
                     Label {
-                        text: dialog ? (dialog.user.online ? "online" : "last seen " + dialog.user.lastSeenFormatted) : ""
+                        text: dialog.user.online ? "online" : "last seen " + dialog.user.lastSeenFormatted
                         topMargin: 0
                         textStyle {
                             color: Color.White
@@ -116,10 +133,10 @@ Page {
                 layout: StackListLayout {
                     orientation: LayoutOrientation.BottomToTop
                 }
-                id: listView
+                id: messages
                 verticalAlignment: VerticalAlignment.Bottom
                 
-                dataModel: dialog ? dialog.messages : null
+                dataModel: dialog.messages
                 
                 stickToEdgePolicy: ListViewStickToEdgePolicy.Beginning
                 

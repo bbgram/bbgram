@@ -31,7 +31,9 @@ Storage::Storage(QObject* parent)
     }
 
     m_contacts = new QListDataModel<User*>();
+    m_contacts->setParent(this);
     m_chats = new QListDataModel<Chat*>();
+    m_chats->setParent(this);
 
     QSqlQuery query(m_db);
     query.exec("SELECT id, data, online, last_seen FROM users LEFT OUTER JOIN statuses ON users.id = statuses.user_id");
@@ -80,6 +82,7 @@ User* Storage::addUser(int id)
     else
     {
         User* user = new User(id);
+        user->setParent(this);
         m_users.insert(id, user);
         return user;
     }
@@ -105,6 +108,7 @@ Message* Storage::getMessage(long long id)
         if (M)
         {
             Message* message = new Message(id, M);
+            message->setParent(this);
             m_messages.insert(id, message);
             return message;
         }
@@ -296,6 +300,7 @@ void Storage::_getUserInfoCallback(struct tgl_state *TLS, void *callback_extra, 
 
     User* user = m_instance->findUser(U->id.id);
     Dialog* dialog = new Dialog(user);
+    dialog->setParent(m_instance);
     Message* lastMessage = 0;
     if (U->last)
     {

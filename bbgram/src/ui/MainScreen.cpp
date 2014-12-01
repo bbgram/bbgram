@@ -21,22 +21,35 @@ MainScreen::~MainScreen()
 {
 }
 
-Q_INVOKABLE void MainScreen::updateContact(User* user, const QString& firstName, const QString& lastName)
+void MainScreen::updateContact(User* user, const QString& firstName, const QString& lastName)
 {
     if (user->id() == gTLS->our_id)
         tgl_do_set_profile_name(gTLS, firstName.toUtf8().data(), lastName.toUtf8().data(), NULL, NULL);
 }
 
-Q_INVOKABLE void MainScreen::sendMessage(int peerType, int peerId, const QString& message)
+void my_callback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M)
 {
-    tgl_peer_id_t peer;
-    peer.type = peerType;
-    peer.id = peerId;
-    QByteArray bytes = message.toUtf8();
-    tgl_do_send_message(gTLS, peer, (const char*)bytes.data(), bytes.length(), 0, 0);
+    qDebug() << "my_callback " << M->id << " "<< M->date;
 }
 
-Q_INVOKABLE void MainScreen::openFAQ()
+void MainScreen::sendMessage(Chat* chat, const QString& message)
+{
+    tgl_peer_id_t peer;
+    peer.type = chat->type();
+    peer.id = chat->id();
+    QByteArray bytes = message.toUtf8();
+    tgl_do_send_message(gTLS, peer, (const char*)bytes.data(), bytes.length(), my_callback, 0);
+}
+
+void MainScreen::markRead(Chat* chat)
+{
+    tgl_peer_id_t peer;
+    peer.type = chat->type();
+    peer.id = chat->id();
+    tgl_do_mark_read(gTLS, peer, 0, 0);
+}
+
+void MainScreen::openFAQ()
 {
     InvokeRequest request;
     request.setTarget("sys.browser");

@@ -4,6 +4,17 @@ import "chats"
 
 NavigationPane {
     id: navigationPane
+    
+    onPushTransitionEnded: {
+        if (page.onPush != undefined)
+            page.onPush()
+    }    
+    onPopTransitionEnded: {
+        if (page.onPop != undefined)
+        page.onPop()
+        //page.destroy()
+    }
+    
     Page {
         titleBar: TitleBar {
             kind: TitleBarKind.FreeForm
@@ -69,15 +80,13 @@ NavigationPane {
                 ]
                 
                 onTriggered: {
-                    var page = dialogPageDef.createObject();
-                    page.dialog = dataModel.data(indexPath);
-                    navigationPane.push(page);
+                    var component = Qt.createComponent("Dialog.qml")
+                    var dialog = dataModel.data(indexPath)
+                    console.log(dialog.title)
+                    var page = component.createObject(this, {"dialog": dialog})
+                    navigationPane.push(page)
                 }
             }
-        }
-        attachedObjects: ComponentDefinition {
-            id: dialogPageDef
-            source: "Dialog.qml"
         }
     }
 }
