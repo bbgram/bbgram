@@ -14,11 +14,15 @@ MainScreen::MainScreen(ApplicationUI* app)
     setContextProperty("_contacts", Storage::instance()->contacts());
     setContextProperty("_chats", Storage::instance()->chats());
 
+    m_contactManager = new ContactManager();
+    setContextProperty("_contactManager", m_contactManager);
+
     initialize();
 }
 
 MainScreen::~MainScreen()
 {
+    delete m_contactManager;
 }
 
 void MainScreen::updateContact(User* user, const QString& firstName, const QString& lastName)

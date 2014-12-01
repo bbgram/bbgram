@@ -35,6 +35,11 @@ NavigationPane {
                 title: "Add New Contact"
                 imageSource: "asset:///images/menu_plus.png"
                 ActionBar.placement: ActionBarPlacement.InOverflow
+                
+                onTriggered: {
+                    var sheet = addContactSheetDef.createObject();
+                    sheet.open();
+                }
             },
             ActionItem {
                 title: "Invite Friends"
@@ -71,9 +76,15 @@ NavigationPane {
             }
         }
         
-        attachedObjects: ComponentDefinition {
-            id: contactPageDef
-            source: "ContactInfo.qml"
-        }
+        attachedObjects: [
+            ComponentDefinition {
+                id: contactPageDef
+                source: "ContactInfo.qml"
+            },
+            ComponentDefinition {
+                id: addContactSheetDef
+                source: "contacts/AddContact.qml"
+            }
+        ]
     }
 }

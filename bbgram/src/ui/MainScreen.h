@@ -3,6 +3,7 @@
 #include "Screen.h"
 #include "../model/Chat.h"
 #include "../model/User.h"
+#include "ContactManager.h"
 
 #include <bb/cascades/TabbedPane>
 
@@ -15,6 +16,7 @@ public:
     MainScreen(ApplicationUI* app);
     ~MainScreen();
 
+
     Q_INVOKABLE void updateContact(User* user, const QString& firstName, const QString& lastName);
     Q_INVOKABLE void sendMessage(Chat* chat, const QString& message);
     Q_INVOKABLE void markRead(Chat* chat);
@@ -23,4 +25,5 @@ protected slots:
     void initialize();
 protected:
     ApplicationUI*  m_app;
+    ContactManager* m_contactManager;
 };
