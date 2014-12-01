@@ -213,12 +213,15 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
     if (peer_id == 0)
         return;
 
+    QListDataModel<Chat*>* chats = m_instance->m_chats;
     Chat* dialog = 0;
-    for (int i = 0; i < m_instance->m_chats->size(); i++)
+    int chatIdx = -1;
+    for (int i = 0; i < chats->size(); i++)
     {
-        Chat* chat = m_instance->m_chats->value(i);
+        Chat* chat = chats->value(i);
         if (chat->type() == TGL_PEER_USER && chat->id() == peer_id)
         {
+            chatIdx = i;
             dialog = chat;
             break;
         }
@@ -237,10 +240,24 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
         if (existingMessage->date() < message->date())
         {
             messages->insert(i, message);
+            if (i == 0) // latest message
+            {
+                for (int j = 0; j < chatIdx; j++)
+                {
+                    Message* lastMessage = chats->value(j)->lastMessage();
+                    if (lastMessage && lastMessage->date() < message->date())
+                    {
+                        chats->move(chatIdx, j);
+                        break;
+                    }
+                }
+
+            }
             return;
         }
     }
     messages->append(message);
+
 }
 
 
