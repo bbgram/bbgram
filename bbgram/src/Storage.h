@@ -30,6 +30,7 @@ public:
 
     void updateContacts();
     void updateChats();
+    void updateUserInfo();
     void updateHistory(const tgl_peer_id_t& id);
 protected:
     static Storage* m_instance;

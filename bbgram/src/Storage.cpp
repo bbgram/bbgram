@@ -381,6 +381,12 @@ void Storage::updateChats()
     tgl_do_get_dialog_list(gTLS, _getDialogsCallback, this);
 }
 
+void Storage::updateUserInfo()
+{
+    tgl_peer_id_t userId = {TGL_PEER_USER, gTLS->our_id};
+    tgl_do_get_user_info(gTLS, userId, false, NULL, NULL);
+}
+
 void Storage::updateHistory(const tgl_peer_id_t& id)
 {
     if (id.type == TGL_PEER_USER)

@@ -48,6 +48,7 @@ void MainScreen::initialize()
     tgl_do_get_difference(gTLS, 0, 0, 0);
     Storage::instance()->updateChats();
     Storage::instance()->updateContacts();
+    Storage::instance()->updateUserInfo();
 
     User* currentUser = Storage::instance()->addUser(gTLS->our_id);
     setContextProperty("_currentUser", currentUser);
