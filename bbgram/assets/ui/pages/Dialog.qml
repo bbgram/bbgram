@@ -23,7 +23,7 @@ Page {
         
         messages.dataModel.itemAdded.connect(messageAdded)
     }
-
+    
     function sendMessage() {
         _owner.sendMessage(dialog, message.text)
         message.text = ""
@@ -161,22 +161,48 @@ Page {
                     orientation: LayoutOrientation.BottomToTop
                 }
                 id: messages
-                verticalAlignment: VerticalAlignment.Bottom
-                
                 dataModel: dialog ? dialog.messages : null
                 
+                verticalAlignment: VerticalAlignment.Bottom
                 stickToEdgePolicy: ListViewStickToEdgePolicy.Beginning
                 
+                multiSelectHandler {
+                    actions: [
+                        ActionItem {
+                            title: "Remove message"
+                            imageSource: "asset:///images/menu_bin.png"
+                            onTriggered: {
+                                console.log("Action remove message")
+                            }
+                        }
+                    ]
+                }
                 
                 listItemComponents: [
                     ListItemComponent {
                         Message {
+                            id: chat_message
                             incoming: !ListItemData.our
                             text: ListItemData.text
                             date: ListItemData.date
+                            
+                            ListItem.onSelectionChanged: {
+                                chat_message.selected = selected;
+                            }
                         }
                     }
+                ]
                 
+                onSelectionChanged: {
+                    messages.multiSelectHandler.status = "Selected: " + selectionList().length
+                }
+                
+                gestureHandlers: [
+                    LongPressHandler {    
+                        onLongPressed: {
+                            messages.multiSelectHandler.active = true
+                        }
+                    }
                 ]
             }
         }

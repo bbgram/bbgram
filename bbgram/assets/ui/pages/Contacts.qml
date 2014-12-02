@@ -81,7 +81,6 @@ NavigationPane {
                 
                 onSelectionChanged: {
                     //multiSelectHandler.status = "Selected" + selectionList().length;
-                    selectionList().valueOf()
                 }
                 
                 onTriggered: {
