@@ -275,6 +275,7 @@ Page {
                     sendAction.enabled = text.length > 0;
                 }
                 input {
+                    submitKey: SubmitKey.Send
                     onSubmitted: {
                         sendMessage()
                     }
