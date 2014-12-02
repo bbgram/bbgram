@@ -14,7 +14,7 @@ Sheet {
         _contacts.filter = 1
     }
     
-    signal done(variant users, variant sheet)    
+    signal done(variant users, variant sheet)
     
     Page {
         titleBar: TitleBar {

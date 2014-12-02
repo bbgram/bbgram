@@ -77,7 +77,7 @@ Storage* Storage::instance()
 
 User* Storage::addUser(int id)
 {
-    long long peerId = (TGL_PEER_USER << 32) | id;
+    long long peerId = ((long long)TGL_PEER_USER << 32) | id;
     QMap<long long, Chat*>::iterator it = m_peers.find(peerId);
     if (it != m_peers.end())
         return (User*)it.value();
@@ -92,7 +92,7 @@ User* Storage::addUser(int id)
 
 User* Storage::findUser(int id)
 {
-    long long peerId = (TGL_PEER_USER << 32) | id;
+    long long peerId = ((long long)TGL_PEER_USER << 32) | id;
     QMap<long long, Chat*>::iterator it = m_peers.find(peerId);
     if (it != m_peers.end())
         return (User*)it.value();
@@ -122,7 +122,7 @@ Message* Storage::getMessage(long long id)
 
 Chat* Storage::getPeer(int type, int id)
 {
-    long long peerId = (type << 32) | id;
+    long long peerId = ((long long)type << 32) | id;
     QMap<long long, Chat*>::iterator it = m_peers.find(peerId);
 
     if (it != m_peers.end())
