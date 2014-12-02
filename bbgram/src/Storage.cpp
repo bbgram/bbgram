@@ -265,7 +265,7 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
     for (int j = 0; j < dialogs->size(); j++)
     {
         Message* lastMessage = dialogs->value(j)->lastMessage();
-        if (lastMessage && lastMessage->date() < message->date())
+        if (lastMessage && lastMessage->dateTime() < message->dateTime())
         {
             newPos = j;
             break;
@@ -345,7 +345,7 @@ void Storage::_getUserInfoCallback(struct tgl_state *TLS, void *callback_extra, 
     {
         Chat* chat = m_instance->m_dialogs->value(i);
         Message* chatLastMessage = chat->lastMessage();
-        if (!lastMessage || (chatLastMessage && chatLastMessage->date() > lastMessage->date()))
+        if (!lastMessage || (chatLastMessage && chatLastMessage->dateTime() > lastMessage->dateTime()))
             idx++;
     }
     m_instance->m_dialogs->insert(idx, user);
@@ -374,7 +374,7 @@ void Storage::_getChatInfoCallback(struct tgl_state *TLS, void *callback_extra, 
     {
         Chat* chat = m_instance->m_dialogs->value(i);
         Message* chatLastMessage = chat->lastMessage();
-        if (!lastMessage || (chatLastMessage && chatLastMessage->date() > lastMessage->date()))
+        if (!lastMessage || (chatLastMessage && chatLastMessage->dateTime() > lastMessage->dateTime()))
             idx++;
     }
     m_instance->m_dialogs->insert(idx, groupChat);
