@@ -33,11 +33,23 @@ Page {
         //_owner.clearHistory(chat)
     }
     
+    function about() {
+        var page = contactPageDef.createObject()
+        page.user = dialog.user
+        navigationPane.push(page)
+    }
+    
     titleBar: TitleBar {
         kind: TitleBarKind.FreeForm
         kindProperties: FreeFormTitleBarKindProperties {
             Container {
-
+                gestureHandlers: [
+                    TapHandler {
+                        onTapped: {
+                            about()
+                        }
+                    }
+                ]
                 layout: StackLayout {
                     orientation: LayoutOrientation.LeftToRight
                 }
@@ -104,6 +116,9 @@ Page {
             title: "About"
             imageSource: "asset:///images/bar_profile.png"
             ActionBar.placement: ActionBarPlacement.InOverflow
+            onTriggered: {
+                about();
+            }
         },
         ActionItem {
             title: "Shared Media"
@@ -206,4 +221,11 @@ Page {
             }
         }
     }
+    
+    attachedObjects: [
+        ComponentDefinition {
+            id: contactPageDef
+            source: "ContactInfo.qml"
+        }
+    ]
 }
