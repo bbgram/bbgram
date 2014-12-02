@@ -14,7 +14,7 @@ Sheet {
         _contacts.filter = 1
     }
     
-    signal done(variant users)    
+    signal done(variant users, variant sheet)    
     
     Page {
         titleBar: TitleBar {
@@ -61,7 +61,7 @@ Sheet {
                                 for (var i = 0; i < contacts_list.selectionList().length; i++)
                                 result.push(contacts_list.dataModel.data(contacts_list.selectionList()[i]))
                                 
-                                done(result)
+                                done(result, me)
                                 me.close()
                             }
                         }
@@ -86,7 +86,7 @@ Sheet {
                 onTriggered: {
                     var result = []
                     result.push(dataModel.data(indexPath))
-                    done(result)
+                    done(result, me)
                     me.close()
                 }
                 

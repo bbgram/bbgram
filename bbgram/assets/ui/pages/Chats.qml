@@ -53,6 +53,15 @@ NavigationPane {
                 title: "New Chat"
                 ActionBar.placement: ActionBarPlacement.InOverflow
                 
+                function newChatSlot(users, sheet)
+                {
+                    if (users.length > 0)
+                    {
+                        Application.scene.openChat(users[0])
+                    }
+                    sheet.done.disconnect(newChatSlot)
+                }
+                
                 onTriggered: {
                     var sheet = contactSelectionSheetDef.createObject()
                     sheet.caption = "New Chat"
@@ -61,6 +70,7 @@ NavigationPane {
                     sheet.multiselect = false
                     
                     //callback
+                    sheet.done.connect(newChatSlot);
                     
                     sheet.open()
                 }
@@ -123,7 +133,7 @@ NavigationPane {
         
         Container {
             ListView {
-                dataModel: _chats
+                dataModel: _chats ? _chats : null
                 stickToEdgePolicy: ListViewStickToEdgePolicy.Beginning
                 
                 listItemComponents: [
