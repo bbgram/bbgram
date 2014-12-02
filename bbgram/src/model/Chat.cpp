@@ -49,7 +49,10 @@ QVariant Chat::photo() const
 Message* Chat::lastMessage() const
 {
     if (m_messages->size() > 0)
-        return m_messages->data(QVariantList() << 0).value<Message*>();
+    {
+        QVariant data = m_messages->data(QVariantList() << 0 << 0);
+        return (Message*)data.value<QObject*>();
+    }
     return 0;
 }
 
