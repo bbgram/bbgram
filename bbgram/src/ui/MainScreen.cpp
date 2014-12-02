@@ -35,6 +35,11 @@ void MainScreen::sendMessage(Chat* chat, const QString& message)
     tgl_do_send_message(gTLS, peer, (const char*)bytes.data(), bytes.length(), 0, 0);
 }
 
+void MainScreen::deleteMessage(long long id)
+{
+    Storage::instance()->deleteMessage(id);
+}
+
 void MainScreen::markRead(Chat* chat)
 {
     tgl_peer_id_t peer;

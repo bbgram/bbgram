@@ -18,6 +18,7 @@ public:
     ~MainScreen();
 
     Q_INVOKABLE void sendMessage(Chat* chat, const QString& message);
+    Q_INVOKABLE void deleteMessage(long long id);
     Q_INVOKABLE void markRead(Chat* chat);
     Q_INVOKABLE Chat* getChat(User* user);
     Q_INVOKABLE void deleteChat(Chat* chat);

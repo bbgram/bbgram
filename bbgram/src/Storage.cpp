@@ -156,6 +156,13 @@ Chat* Storage::getChat(int type, int id)
     return result;
 }
 
+void Storage::deleteMessage(long long id)
+{
+    long long* msg_id = new long long();
+    *msg_id = id;
+    tgl_do_delete_msg(gTLS, id, Storage::_deleteMessageCallback, msg_id);
+}
+
 void load_photo_callback(struct tgl_state *TLS, void *callback_extra, int success, char *filename)
 {
     if (!success)
@@ -441,6 +448,19 @@ void Storage::_getHistoryCallback(struct tgl_state *TLS, void *callback_extra, i
         Message* message = m_instance->getMessage(list[i]->id);
         messages->append(message);
     }
+}
+
+void Storage::_deleteMessageCallback(struct tgl_state *TLS, void *callback_extra, int success)
+{
+    long long id = *(long long*)callback_extra;
+    delete (long long*)callback_extra;
+
+    Message* msg = m_instance->getMessage(id);
+
+    for (int i = 0; i < m_instance->m_chats->size(); i++)
+        m_instance->m_chats->value(i)->deleteMessage(msg);
+
+    m_instance->m_messages.remove(id);
 }
 
 void Storage::updateContacts()

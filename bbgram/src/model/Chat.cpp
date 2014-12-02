@@ -54,3 +54,14 @@ void Chat::addMessage(Message* message)
     m_messages->append(message);
 }
 
+void Chat::deleteMessage(Message* message)
+{
+    for (int i = 0; i < m_messages->size(); i++)
+    {
+        if (m_messages->value(i) == message)
+        {
+            m_messages->removeAt(i);
+            break;
+        }
+    }
+}

@@ -29,6 +29,8 @@ public:
     Message* getMessage(long long id);
     Chat* getChat(int type, int id);
 
+    void deleteMessage(long long id);
+
     void updateContacts();
     void updateChats();
     void updateUserInfo();
@@ -47,4 +49,5 @@ protected:
     static void _getUserInfoCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *U);
     static void _getDialogsCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, tgl_peer_id_t peers[], int last_msg_id[], int unread_count[]);
     static void _getHistoryCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]);
+    static void _deleteMessageCallback(struct tgl_state *TLS, void *callback_extra, int success);
 };

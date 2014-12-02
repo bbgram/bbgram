@@ -31,6 +31,7 @@ public:
     Message* lastMessage() const;
 
     void addMessage(Message* message);
+    void deleteMessage(Message* message);
 signals:
     void titleChanged();
     void statusChanged();

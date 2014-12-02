@@ -6,6 +6,7 @@ class Message: public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(long long id READ id CONSTANT)
     Q_PROPERTY(QString text READ text CONSTANT)
     Q_PROPERTY(QDateTime date READ date CONSTANT)
     Q_PROPERTY(QString dateFormatted READ dateFormatted CONSTANT)

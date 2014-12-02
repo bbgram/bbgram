@@ -170,11 +170,13 @@ Page {
                 
                 multiSelectHandler {
                     actions: [
-                        ActionItem {
-                            title: "Remove message"
-                            imageSource: "asset:///images/menu_bin.png"
+                        DeleteActionItem {
                             onTriggered: {
-                                console.log("Action remove message")
+                                for (var i = 0; i < messages.selectionList().length; i++)
+                                {
+                                    _owner.deleteMessage(messages.dataModel.data(messages.selectionList()[i]).id);
+                                }
+                                
                             }
                         }
                     ]
@@ -196,7 +198,7 @@ Page {
                 ]
                 
                 onSelectionChanged: {
-                    messages.multiSelectHandler.status = "Selected: " + selectionList().length
+                    messages.multiSelectHandler.status = "Selected: " + messages.selectionList().length
                 }
                 
                 gestureHandlers: [
