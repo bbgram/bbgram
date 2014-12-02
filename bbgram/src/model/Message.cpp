@@ -44,12 +44,12 @@ QString Message::dateFormatted() const
     QLocale locale(QLocale::English);
     QString str;
     QDate date = m_date.date();
-    QDate currentDate = QDate::currentDate();
-    if (date == currentDate)
+    QDateTime currentDate = QDateTime::currentDateTime();
+    if (m_date.secsTo(currentDate) < 24*60*60)
         str = locale.toString(m_date, "hh:mm");
     else
     {
-        if (date.daysTo(currentDate) < 7)
+        if (m_date.daysTo(currentDate) < 7)
             str = locale.toString(m_date, "ddd");
         else
             str = locale.toString(m_date, "MMM dd");
