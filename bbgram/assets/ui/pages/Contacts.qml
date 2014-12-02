@@ -84,8 +84,7 @@ NavigationPane {
                 onTriggered: {
                     var user = dataModel.data(indexPath);
                     if (user.sortingKey == "!") {
-                        var chat = _owner.getChat(user);
-                        Application.scene.openChat(chat);
+                        Application.scene.openChat(user);
                     }
                 }
                 

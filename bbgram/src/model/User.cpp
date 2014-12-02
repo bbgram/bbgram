@@ -3,9 +3,13 @@
 using namespace bb::cascades;
 
 User::User(int id)
-    : m_id(id), m_online(false), m_typingStatus(tgl_typing_none)
+    : Chat(TGL_PEER_USER, id), m_online(false), m_typingStatus(tgl_typing_none)
 {
     setPhoto("");
+
+    connect(this, SIGNAL(titleChanged()), this, SIGNAL(nameChanged()));
+    connect(this, SIGNAL(typingStatusChanged()), this, SIGNAL(statusChanged()));
+    connect(this, SIGNAL(messagesChanged()), this, SIGNAL(statusChanged()));
 }
 
 User::~User()
@@ -114,11 +118,26 @@ QString User::lastSeenFormatted() const
     return str;
 }
 
+QString User::status() const
+{
+    if (m_typingStatus != tgl_typing_none)
+        return "<p style='color:#236EBB'>" + typingStatus() + "</p>";
+    Message* message = lastMessage();
+    if (message)
+        return "<p>" + message->text() + "</p>";
+    return "";
+}
+
 void User::setStatus(bool online, const QDateTime& lastSeen)
 {
     m_online = online;
     m_lastSeen = lastSeen;
     emit statusChanged();
+}
+
+QString User::title() const
+{
+    return m_firstName + " " + m_lastName;
 }
 
 QString User::typingStatus() const

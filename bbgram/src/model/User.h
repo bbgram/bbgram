@@ -1,10 +1,11 @@
 #pragma once
 
-#include <QObject>
 #include <QMap>
 #include <bb/cascades/Image>
 
-class User : public QObject
+#include "Chat.h"
+
+class User : public Chat
 {
     Q_OBJECT
 
@@ -15,7 +16,6 @@ class User : public QObject
     Q_PROPERTY(bool online READ online NOTIFY statusChanged)
     Q_PROPERTY(QDateTime lastSeen READ lastSeen NOTIFY statusChanged)
     Q_PROPERTY(QString lastSeenFormatted READ lastSeenFormatted NOTIFY statusChanged)
-    Q_PROPERTY(QVariant photo READ photo NOTIFY photoChanged)
     Q_PROPERTY(QString typingStatus READ typingStatus NOTIFY typingStatusChanged)
     Q_PROPERTY(QString sortingKey READ sortingKey CONSTANT)
 public:
@@ -38,7 +38,10 @@ public:
     bool online() const;
     const QDateTime& lastSeen() const;
     QString lastSeenFormatted() const;
+    QString status() const;
     void setStatus(bool online, const QDateTime& lastSeen);
+
+    QString title() const;
 
     QString typingStatus() const;
     void setTypingStatus(tgl_typing_status status);
@@ -52,12 +55,10 @@ public slots:
 signals:
     void phoneChanged();
     void nameChanged();
-    void photoChanged();
 
     void statusChanged();
     void typingStatusChanged();
 protected:
-    int         m_id;
     QString     m_phone;
     QString     m_firstName;
     QString     m_lastName;

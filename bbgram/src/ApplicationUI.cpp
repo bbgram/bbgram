@@ -15,7 +15,7 @@ using namespace bb::cascades;
 using namespace bb::system;
 
 #include "model/Chat.h"
-#include "model/Dialog.h"
+#include "model/GroupChat.h"
 #include "model/Message.h"
 #include "model/User.h"
 
@@ -24,7 +24,7 @@ ApplicationUI::ApplicationUI(bb::cascades::Application* app) :
 {
     qmlRegisterType<PhoneNumberInput>("bbgram.control.lib", 0, 1, "PhoneNumberInput");
     qmlRegisterType<Chat>("bbgram.types.lib", 0, 1, "Chat");
-    qmlRegisterType<Dialog>("bbgram.types.lib", 0, 1, "Dialog");
+    qmlRegisterType<GroupChat>("bbgram.types.lib", 0, 1, "GroupChat");
     qmlRegisterType<Message>("bbgram.types.lib", 0, 1, "Message");
     qmlRegisterType<User>("bbgram.types.lib", 0, 1, "User");
 

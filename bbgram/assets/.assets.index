@@ -72,6 +72,7 @@ images/secretchat_black.png
 images/secretchat_green.png
 images/setting_arrow.png
 server.pub
+ui/pages/Chat.qml
 ui/pages/chats/ChatItem.qml
 ui/pages/chats/Message.qml
 ui/pages/Chats.qml
@@ -82,7 +83,6 @@ ui/pages/contacts/ContactPhoneNumber.qml
 ui/pages/contacts/EditContact.qml
 ui/pages/Contacts.qml
 ui/pages/CountrySelect.qml
-ui/pages/Dialog.qml
 ui/pages/intro/CarouselView.qml
 ui/pages/intro/Indicator.qml
 ui/pages/Intro.qml

@@ -4,7 +4,8 @@
 Message::Message(long long id, tgl_message* M)
     : m_id(id)
 {
-    m_text = QString::fromUtf8(M->message);
+    if (M->service == 0 && M->message)
+        m_text = QString::fromUtf8(M->message);
     m_date = QDateTime::fromTime_t(M->date);
     m_from_id = M->from_id.id;
 }

@@ -64,7 +64,6 @@ NavigationPane {
             Container {
                 layout: StackLayout {
                 }
-                topPadding: 40
                 bottomPadding: 40
                 Container {
                     leftPadding: 20

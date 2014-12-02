@@ -76,6 +76,7 @@ NavigationPane {
         Container {
             ListView {
                 dataModel: _chats
+                stickToEdgePolicy: ListViewStickToEdgePolicy.Beginning
                 
                 listItemComponents: [
                     ListItemComponent {
@@ -114,15 +115,15 @@ NavigationPane {
                 }
                 
                 function openChat(chat) {
-                    var page = dialogPageDef.createObject()//this, {"dialog": chat})
-                    page.dialog = chat
+                    var page = chatPageDef.createObject()//this, {"dialog": chat})
+                    page.chat = chat
                     navigationPane.push(page)
                 }
                 
                 attachedObjects: [
                     ComponentDefinition {                      
-                        id: dialogPageDef                       
-                        source: "Dialog.qml"             
+                        id: chatPageDef                       
+                        source: "Chat.qml"             
                     }
                 ]
             }

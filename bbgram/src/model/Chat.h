@@ -9,8 +9,8 @@ class Chat : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(int id READ id CONSTANT)
     Q_PROPERTY(int type READ type CONSTANT)
+    Q_PROPERTY(int id READ id CONSTANT)
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(QString status READ status NOTIFY statusChanged)
     Q_PROPERTY(QVariant photo READ photo NOTIFY photoChanged)

@@ -30,8 +30,7 @@ Page {
             imageSource: "asset:///images/menu_bar_chat.png"
             ActionBar.placement: ActionBarPlacement.OnBar
             onTriggered: {
-                var chat = _owner.getChat(user)
-                Application.scene.openChat(chat)
+                Application.scene.openChat(user)
             }
         },
         ActionItem {

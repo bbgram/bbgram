@@ -6,13 +6,13 @@ import "chats"
 
 Page {
     objectName: "Chat"
-    property variant dialog: null
+    property variant chat: null
     
     function messageAdded(indexPath) {
         if (indexPath.length != 0 && indexPath[0] == 0)
             messages.scrollToPosition(ScrollPosition.Beginning, ScrollAnimation.None);
         if (!messages.dataModel.data(indexPath).our)
-            _owner.markRead(dialog);
+            _owner.markRead(chat);
     }
     
     function onPop() {
@@ -20,13 +20,13 @@ Page {
     }
     
     function onPush() {
-        _owner.markRead(dialog);
+        _owner.markRead(chat);
         
         messages.dataModel.itemAdded.connect(messageAdded)
     }
     
     function sendMessage() {
-        _owner.sendMessage(dialog, message.text)
+        _owner.sendMessage(chat, message.text)
         message.text = ""
     }
     
@@ -36,7 +36,7 @@ Page {
     
     function about() {
         var page = contactPageDef.createObject()
-        page.user = dialog.user
+        page.user = chat.user
         var navigationPane = Application.scene.activeTab.content 
         navigationPane.push(page)
     }
@@ -57,7 +57,7 @@ Page {
                 }
                 
                 ImageView {
-                    image: dialog ? dialog.photo : null
+                    image: chat ? chat.photo : null
                     //imageSource: "asset:///images/placeholders/user_placeholder_purple.png"
                     scalingMethod: ScalingMethod.AspectFit
                     maxWidth: 110
@@ -69,7 +69,7 @@ Page {
                     verticalAlignment: VerticalAlignment.Center
                     leftPadding: 20
                     Label {
-                        text: dialog ? dialog.title : ""
+                        text: chat ? chat.title : ""
                         //text: "Anastasiya Shy"
                         bottomMargin: 0
                         textStyle {
@@ -79,7 +79,7 @@ Page {
                         horizontalAlignment: HorizontalAlignment.Left
                     }
                     Label {
-                        text: dialog ? (dialog.user.online ? "online" : "last seen " + dialog.user.lastSeenFormatted) : ""
+                        text: chat && chat.user ? (chat.user.online ? "online" : "last seen " + chat.user.lastSeenFormatted) : ""
                         topMargin: 0
                         textStyle {
                             color: Color.White
@@ -94,6 +94,7 @@ Page {
     
     actions: [
         ActionItem {
+            id: attachAction
             title: "Attach"
             imageSource: "asset:///images/bar_attach.png"
             ActionBar.placement: ActionBarPlacement.OnBar
@@ -110,11 +111,13 @@ Page {
             }
         },
         ActionItem {
+            id: callAction
             title: "Call"
             imageSource: "asset:///images/menu_phone.png"
             ActionBar.placement: ActionBarPlacement.InOverflow
         },
         ActionItem {
+            id: aboutAction
             title: "About"
             imageSource: "asset:///images/bar_profile.png"
             ActionBar.placement: ActionBarPlacement.InOverflow
@@ -123,11 +126,19 @@ Page {
             }
         },
         ActionItem {
+            id: addParticipantAction
+            title: "Add Participant"
+            imageSource: "asset:///images/menu_bar_contact_plus.png"
+            ActionBar.placement: ActionBarPlacement.InOverflow
+        },
+        ActionItem {
+            id: sharedMediaAction
             title: "Shared Media"
             imageSource: "asset:///images/menu_sharedmedia.png"
             ActionBar.placement: ActionBarPlacement.InOverflow
         },
         ActionItem {
+            id: clearHistoryAction
             title: "Clear Chat"
             imageSource: "asset:///images/menu_bin.png"
             ActionBar.placement: ActionBarPlacement.InOverflow
@@ -135,7 +146,7 @@ Page {
             attachedObjects: [
                 SystemDialog {
                     id: confirmDialog
-                    title: "Clear History"
+                    title: clearHistoryAction.title
                     body: "Are you sure you want to clear history?"
                     onFinished: {
                         if (value == SystemUiResult.ConfirmButtonSelection)
@@ -145,6 +156,20 @@ Page {
             ]
         }
     ]
+    
+    onChatChanged: {
+        if (!chat)
+            return
+        if (chat.type != 1)    // User
+            removeAction(callAction)
+        if (chat.type != 2)  // Group
+            removeAction(addParticipantAction)
+        if (chat.type == 2) {
+            clearHistoryAction.title = "Clear Conversation"
+            aboutAction.imageSource = "asset:///images/menu_group.png"
+        }
+    }
+    
     
     Container {
         layout: StackLayout {
@@ -163,10 +188,11 @@ Page {
                     orientation: LayoutOrientation.BottomToTop
                 }
                 id: messages
-                dataModel: dialog ? dialog.messages : null
+                dataModel: chat ? chat.messages : null
                 
                 verticalAlignment: VerticalAlignment.Bottom
                 stickToEdgePolicy: ListViewStickToEdgePolicy.Beginning
+                //snapMode: SnapMode.LeadingEdge
                 
                 multiSelectHandler {
                     actions: [

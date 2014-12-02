@@ -9,7 +9,7 @@ TabbedPane {
     function openChat(chat) {
         activeTab = chatsTab
         var page = chatPageDef.createObject()
-        page.dialog = chat
+        page.chat = chat
         activeTab.content.push(page)
     }
     
@@ -63,7 +63,7 @@ TabbedPane {
         },
         ComponentDefinition {
             id: chatPageDef
-            source: "Dialog.qml"
+            source: "Chat.qml"
         }
     ]
 }

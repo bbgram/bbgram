@@ -34,19 +34,19 @@ public:
     void updateContacts();
     void updateChats();
     void updateUserInfo();
-    void updateHistory(const tgl_peer_id_t& id);
+    void updateHistory(Chat* chat);
 protected:
     static Storage* m_instance;
     QSqlDatabase    m_db;
 
     bb::cascades::QListDataModel<User*>*    m_contacts;
     bb::cascades::QListDataModel<Chat*>*    m_chats;
-    QList<Chat*>                            m_newChats;
     QMap<int, User*>                        m_users;
     QMap<long long, Message*>               m_messages;
 
     static void _getContactsCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *contacts[]);
     static void _getUserInfoCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *U);
+    static void _getChatInfoCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_chat *C);
     static void _getDialogsCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, tgl_peer_id_t peers[], int last_msg_id[], int unread_count[]);
     static void _getHistoryCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]);
     static void _deleteMessageCallback(struct tgl_state *TLS, void *callback_extra, int success);
