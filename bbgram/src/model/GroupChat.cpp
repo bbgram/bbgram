@@ -18,15 +18,15 @@ GroupChat::~GroupChat()
 {
 }
 
-void GroupChat::update(tgl_chat *chat)
-{
-    m_title = QString::fromUtf8(chat->title);
-    emit titleChanged();
-}
-
 QString GroupChat::title() const
 {
     return m_title;
+}
+
+void GroupChat::setTitle(const QString& title)
+{
+    m_title = title;
+    emit titleChanged();
 }
 
 QString GroupChat::status() const
@@ -40,4 +40,25 @@ QString GroupChat::status() const
 QVariant GroupChat::photo() const
 {
     return QVariant::fromValue(m_photo);
+}
+
+void GroupChat::setPhoto(const QString &filename)
+{
+    if (!m_photo.isNull() && m_photoFilename.compare(filename) == 0)
+            return;
+        m_photoFilename = filename;
+        QString path;
+        if (filename.length() != 0)
+            path = filename;
+        else
+            path = QString("app/native/assets/images/placeholders/user_placeholder_purple.png");
+
+        QFile file(path);
+        if (!file.open(QIODevice::ReadOnly))
+            return;
+        QByteArray bytes = file.readAll();
+        file.close();
+        m_photo = Image(bytes);
+
+        emit photoChanged();
 }

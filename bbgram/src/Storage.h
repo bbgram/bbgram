@@ -19,12 +19,10 @@ public:
     static void messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *M);
     static void userStatusUpdateHandler(struct tgl_state *TLS, struct tgl_user *U);
     static void userTypingHandler(struct tgl_state *TLS, struct tgl_user *U, enum tgl_typing_status status);
+    static void updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsigned flags);
 
     bb::cascades::QListDataModel<User*>* contacts() const;
     bb::cascades::QListDataModel<Chat*>* dialogs() const;
-
-    User* addUser(int id);
-    User* findUser(int id);
 
     Message* getMessage(long long id);
     Chat* getPeer(int type, int id);

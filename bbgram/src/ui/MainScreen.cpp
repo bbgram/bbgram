@@ -106,6 +106,6 @@ void MainScreen::initialize()
     Storage::instance()->updateContacts();
     Storage::instance()->updateUserInfo();
 
-    User* currentUser = Storage::instance()->addUser(gTLS->our_id);
+    User* currentUser = (User*)Storage::instance()->getPeer(TGL_PEER_USER, gTLS->our_id);
     setContextProperty("_currentUser", currentUser);
 }

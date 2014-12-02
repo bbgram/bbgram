@@ -44,7 +44,8 @@ Storage::Storage(QObject* parent)
         int id = query.value(0).toInt();
         QByteArray data = query.value(1).toByteArray();
 
-        User* user = addUser(id);
+
+        User* user = (User*)getPeer(TGL_PEER_USER, id);
         user->deserialize(data);
 
         bool online =  query.value(2).toInt() == 1;
@@ -56,7 +57,7 @@ Storage::Storage(QObject* parent)
     while (query.next())
     {
         int id = query.value(0).toInt();
-        User* user = addUser(id);
+        User* user = (User*)getPeer(TGL_PEER_USER, id);
         m_contacts->append(user);
     }
 }
@@ -73,31 +74,6 @@ Storage::~Storage()
 Storage* Storage::instance()
 {
     return m_instance;
-}
-
-User* Storage::addUser(int id)
-{
-    long long peerId = ((long long)TGL_PEER_USER << 32) | id;
-    QMap<long long, Chat*>::iterator it = m_peers.find(peerId);
-    if (it != m_peers.end())
-        return (User*)it.value();
-    else
-    {
-        User* user = new User(id);
-        user->setParent(this);
-        m_peers.insert(peerId, user);
-        return user;
-    }
-}
-
-User* Storage::findUser(int id)
-{
-    long long peerId = ((long long)TGL_PEER_USER << 32) | id;
-    QMap<long long, Chat*>::iterator it = m_peers.find(peerId);
-    if (it != m_peers.end())
-        return (User*)it.value();
-    else
-        return 0;
 }
 
 Message* Storage::getMessage(long long id)
@@ -152,8 +128,23 @@ void load_photo_callback(struct tgl_state *TLS, void *callback_extra, int succes
     if (!success)
         return;
 
-    User* _this = (User*)callback_extra;
-    _this->setPhoto(filename);
+    Chat* chat = (Chat*)callback_extra;
+
+    switch(chat->type())
+    {
+        case TGL_PEER_USER:
+        {
+            User* user = (User*)chat;
+            user->setPhoto(filename);
+        }
+        break;
+        case TGL_PEER_CHAT:
+        {
+            GroupChat* groupChat = (GroupChat*)chat;
+            groupChat->setPhoto(filename);
+        }
+        break;
+    }
 }
 
 void Storage::userUpdateHandler (struct tgl_state *TLS, struct tgl_user *U, unsigned flags)
@@ -173,13 +164,13 @@ void Storage::userUpdateHandler (struct tgl_state *TLS, struct tgl_user *U, unsi
     qDebug() << "update_user_handler user=" << QString::fromUtf8(U->first_name) << " flags=" << flags << str;
 
 */
-    User* user = 0;
-    if (flags & TGL_UPDATE_CREATED)
+    User* user = (User*)m_instance->getPeer(TGL_PEER_USER, U->id.id);
+    /*if (flags & TGL_UPDATE_CREATED)
     {
         user = m_instance->addUser(U->id.id);
     }
     else
-        user = m_instance->findUser(U->id.id);
+        user = m_instance->findUser(U->id.id);*/
 
     if (flags & TGL_UPDATE_PHONE)
         user->setPhone(QString::fromUtf8(U->phone));
@@ -216,13 +207,13 @@ void Storage::userStatusUpdateHandler(struct tgl_state *TLS, struct tgl_user *U)
 
     bool online = U->status.online == 1;
     QDateTime lastSeen = QDateTime::fromTime_t(U->status.when);
-    User* user = m_instance->findUser(U->id.id);
+    User* user = (User*)m_instance->getPeer(TGL_PEER_USER, U->id.id);
     user->setStatus(online, lastSeen);
 }
 
 void Storage::userTypingHandler(struct tgl_state *TLS, struct tgl_user *U, enum tgl_typing_status status)
 {
-    User* user = m_instance->findUser(U->id.id);
+    User* user = (User*)m_instance->getPeer(TGL_PEER_USER, U->id.id);
     if (user)
         user->setTypingStatus(status);
 }
@@ -235,7 +226,7 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
     if (M->to_id.type == TGL_PEER_USER && M->to_id.id == gTLS->our_id)
     {
         peer_id = M->from_id.id;    // in
-        User* user = m_instance->findUser(peer_id);
+        User* user = (User*)m_instance->getPeer(TGL_PEER_USER, peer_id);
         if (user)
             user->resetTypingStatus();
     }
@@ -277,6 +268,45 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
         dialogs->insert(newPos, chat);
 }
 
+void Storage::updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsigned flags)
+{
+    /*QString str;
+    #define CHECK_FLAG(F) if ((flags & F) == F) str += " " #F;
+
+    //CHECK_FLAG(TGL_UPDATE_CREATED)
+    CHECK_FLAG(TGL_UPDATE_DELETED)
+    CHECK_FLAG(TGL_UPDATE_PHONE)
+    CHECK_FLAG(TGL_UPDATE_CONTACT)
+    //CHECK_FLAG(TGL_UPDATE_PHOTO)
+    CHECK_FLAG(TGL_UPDATE_BLOCKED)
+    CHECK_FLAG(TGL_UPDATE_REAL_NAME)
+    CHECK_FLAG(TGL_UPDATE_NAME)
+    CHECK_FLAG(TGL_UPDATE_REQUESTED)
+    CHECK_FLAG(TGL_UPDATE_WORKING)
+    CHECK_FLAG(TGL_UPDATE_FLAGS)
+    //CHECK_FLAG(TGL_UPDATE_TITLE)
+    CHECK_FLAG(TGL_UPDATE_ADMIN)
+    CHECK_FLAG(TGL_UPDATE_MEMBERS)
+    CHECK_FLAG(TGL_UPDATE_ACCESS_HASH)
+    CHECK_FLAG(TGL_UPDATE_USERNAME)
+
+    qDebug() << "Storage::updateChatHandler chat=" << QString::fromUtf8(C->title) << " flags=" << flags << str;*/
+
+
+    GroupChat* groupChat = (GroupChat*)m_instance->getPeer(C->id.type, C->id.id);
+
+    //not needed
+    /*if (flags & TGL_UPDATE_CREATED)
+        groupChat = m_instance->addGroupChat(C->id.id);*/
+
+    if (flags & TGL_UPDATE_TITLE)
+        groupChat->setTitle(QString::fromUtf8(C->title));
+
+    if (flags & TGL_UPDATE_PHOTO)
+        if (C->photo.sizes_num != 0)
+            tgl_do_load_photo(gTLS, &C->photo, load_photo_callback, groupChat);
+}
+
 
 QListDataModel<User*>* Storage::contacts() const
 {
@@ -312,7 +342,7 @@ void Storage::_getContactsCallback(struct tgl_state *TLS, void *callback_extra, 
 
     for (int i = 0; i < size; i++)
     {
-        User* contact = m_instance->findUser(contacts[i]->id.id);
+        User* contact = (User*)m_instance->getPeer(TGL_PEER_USER, contacts[i]->id.id);
         tgl_do_get_user_info(gTLS, contacts[i]->id, false, NULL, NULL);
         if (newContacts->indexOf(contact) != -1)
             oldContacts.removeAll(contact);
@@ -358,9 +388,6 @@ void Storage::_getChatInfoCallback(struct tgl_state *TLS, void *callback_extra, 
         return;
 
     GroupChat* groupChat = (GroupChat*)m_instance->getPeer(C->id.type, C->id.id);
-    if (!groupChat)
-        groupChat = new GroupChat(C->id.id);
-    groupChat->update(C);
 
     Message* lastMessage = 0;
     if (C->last)

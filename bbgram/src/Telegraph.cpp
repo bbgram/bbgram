@@ -38,11 +38,6 @@ static void update_user_registered(struct tgl_state *TLS, struct tgl_user *U)
     qDebug() << "update_user_registered" << QString::fromUtf8(U->first_name);
 }
 
-static void update_chat_handler (struct tgl_state *TLS, struct tgl_chat *C, unsigned flags)
-{
-    qDebug() << "update_chat_handler";
-}
-
 void logprintf(const char *format, ...)
 {
     va_list args;
@@ -291,7 +286,7 @@ void Telegraph::start()
     m_updateCallbacks.user_status_update = Storage::userStatusUpdateHandler;
     m_updateCallbacks.msg_receive = Storage::messageReceivedHandler;
     m_updateCallbacks.status_notification = update_status_notification;
-    m_updateCallbacks.chat_update = update_chat_handler;
+    m_updateCallbacks.chat_update = Storage::updateChatHandler;
     m_updateCallbacks.type_notification = Storage::userTypingHandler;
     m_updateCallbacks.user_registered = update_user_registered;
 

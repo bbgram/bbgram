@@ -11,13 +11,15 @@ public:
     GroupChat(int id = 0);
     ~GroupChat();
 
-    void update(tgl_chat *chat);
-
     QString title() const;
+    void setTitle(const QString& title);
+
     QString status() const;
     QVariant photo() const;
+    void setPhoto(const QString &filename);
 protected:
     bb::cascades::Image     m_photo;
+    QString                 m_photoFilename;
     QString                 m_title;
 };
 
