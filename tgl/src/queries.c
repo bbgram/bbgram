@@ -4177,3 +4177,39 @@ void tgl_do_commit_exchange (struct tgl_state *TLS, struct tgl_secret_chat *E, u
 void tgl_do_abort_exchange (struct tgl_state *TLS, struct tgl_secret_chat *E) {
   bl_do_encr_chat_exchange_abort (TLS, E);
 }
+
+static int get_invite_text_on_answer (struct tgl_state *TLS, struct query *q) {
+
+  assert (fetch_int () == (int)CODE_help_invite_text);
+  char *message = fetch_str_dup();
+  tfree_str (q->extra);
+
+  if (q->callback) {
+    ((void (*)(struct tgl_state *, void *, int, const char *))(q->callback)) (TLS, q->callback_extra, 1, message);
+  }
+  tfree_str (message);
+  return 0;
+}
+
+static int get_invite_text_on_error (struct tgl_state *TLS, struct query *q, int error_code, int l, char *error) {
+  if (q->callback) {
+    ((void (*)(struct tgl_state *, void *, int, const char *))(q->callback)) (TLS, q->callback_extra, 0, NULL);
+  }
+  tfree_str (q->extra);
+  return 0;
+}
+
+
+static struct query_methods help_get_invite_text_methods  = {
+  .on_answer = get_invite_text_on_answer,
+  .on_error = get_invite_text_on_error,
+  .type = TYPE_TO_PARAM(help_invite_text)
+};
+
+void tgl_do_help_get_invite_text (struct tgl_state *TLS, const char* lang_code, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, const char* message), void *callback_extra) {
+  clear_packet ();
+  tgl_do_insert_header (TLS);
+  out_int (CODE_help_get_invite_text);
+  out_string (lang_code);
+  tglq_send_query (TLS, TLS->DC_working, packet_ptr - packet_buffer, packet_buffer, &help_get_invite_text_methods, 0, callback, callback_extra);
+}
