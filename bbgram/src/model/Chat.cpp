@@ -5,7 +5,9 @@ using namespace bb::cascades;
 Chat::Chat(int type, int id)
     : m_type(type), m_id(id)
 {
-    m_messages = new QListDataModel<Message*>();
+    m_messages = new GroupDataModel(this);
+    m_messages->setSortingKeys(QStringList() << "date" << "dateTime");
+    m_messages->setSortedAscending(false);
     connect(m_messages, SIGNAL(itemAdded(QVariantList)), this, SIGNAL(messagesChanged()));
     connect(m_messages, SIGNAL(itemRemoved(QVariantList)), this, SIGNAL(messagesChanged()));
 }
@@ -46,22 +48,17 @@ QVariant Chat::photo() const
 
 Message* Chat::lastMessage() const
 {
-    return m_messages->size() > 0 ? m_messages->value(0) : 0;
+    if (m_messages->size() > 0)
+        return m_messages->data(QVariantList() << 0).value<Message*>();
+    return 0;
 }
 
 void Chat::addMessage(Message* message)
 {
-    m_messages->append(message);
+    m_messages->insert(message);
 }
 
 void Chat::deleteMessage(Message* message)
 {
-    for (int i = 0; i < m_messages->size(); i++)
-    {
-        if (m_messages->value(i) == message)
-        {
-            m_messages->removeAt(i);
-            break;
-        }
-    }
+    m_messages->remove(message);
 }

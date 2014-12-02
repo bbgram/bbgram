@@ -212,15 +212,22 @@ Page {
                 
                 listItemComponents: [
                     ListItemComponent {
+                        type: "item"
                         Message {
                             id: chat_message
                             incoming: !ListItemData.our
                             text: ListItemData.text
-                            date: ListItemData.date
+                            date: ListItemData.dateTime
                             
                             ListItem.onSelectionChanged: {
                                 chat_message.selected = selected;
                             }
+                        }
+                    },
+                    ListItemComponent {
+                        type: "header"
+                        Container {
+                            preferredHeight: 0
                         }
                     }
                 ]

@@ -24,7 +24,12 @@ bool Message::our() const
     return m_from_id == gTLS->our_id;
 }
 
-const QDateTime& Message::date() const
+const QDate& Message::date() const
+{
+    return m_date.date();
+}
+
+const QDateTime& Message::dateTime() const
 {
     return m_date;
 }

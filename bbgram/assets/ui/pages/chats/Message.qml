@@ -11,64 +11,93 @@ Container {
         overlay.visible = me.selected
     }
     
-    layout: DockLayout {
+    property bool withHeader: ListItem.indexInSection == ListItem.sectionSize - 1
+    
+    layout: StackLayout {        
     }
     Container {
-        minHeight: 100
-        leftPadding: 20
-        rightPadding: 20
-        topPadding: 10
-        bottomPadding: 10
-        preferredWidth: Infinity
+        visible: me.withHeader
+        topPadding: me.withHeader ? 25 : 0
+        horizontalAlignment: HorizontalAlignment.Center
+        layout: DockLayout {            
+        }
+        ImageView {
+            horizontalAlignment: HorizontalAlignment.Fill
+            verticalAlignment: VerticalAlignment.Fill
+            imageSource: "asset:///images/date.amd"
+        }
         Container {
-            horizontalAlignment: me.incoming ? HorizontalAlignment.Left : HorizontalAlignment.Right
-            layout: DockLayout {}
-            rightPadding: me.incoming ? 80 : 0
-            leftPadding: me.incoming ? 0 : 80
-            ImageView {
-                horizontalAlignment: HorizontalAlignment.Fill
-                verticalAlignment: VerticalAlignment.Fill
-                imageSource: incoming ? "asset:///images/msg_in.amd" : "asset:///images/msg_out.amd"
+            leftPadding: 20
+            rightPadding: 20
+            topPadding: 4
+            bottomPadding: 8
+            Label {
+                text: Qt.formatDate(date, "d MMMM")
             }
-            Container {            
-                leftPadding: me.incoming ? 40 : 20
-                rightPadding: me.incoming ? 20 : 40
-                topPadding: 10
-                bottomPadding: 14
+        }
+        bottomMargin: 25
+        
+    }
+    Container {
+        layout: DockLayout {
+        }
+        Container {
+            minHeight: 100
+            leftPadding: 20
+            rightPadding: 20
+            topPadding: 10
+            bottomPadding: 10
+            preferredWidth: Infinity
+            Container {
+                horizontalAlignment: me.incoming ? HorizontalAlignment.Left : HorizontalAlignment.Right
                 layout: DockLayout {}
-                Label {
-                    text: me.text + "<b>            &nbsp;</b>"
-                    multiline: true
-                    textFormat: TextFormat.Html
-                    attachedObjects: [
-                        LayoutUpdateHandler {
-                            onLayoutFrameChanged: {
-                            }
-                        
-                        }
-                    ]
+                rightPadding: me.incoming ? 80 : 0
+                leftPadding: me.incoming ? 0 : 80
+                ImageView {
+                    horizontalAlignment: HorizontalAlignment.Fill
+                    verticalAlignment: VerticalAlignment.Fill
+                    imageSource: incoming ? "asset:///images/msg_in.amd" : "asset:///images/msg_out.amd"
                 }
-                Label {
-                    horizontalAlignment: HorizontalAlignment.Right
-                    verticalAlignment: VerticalAlignment.Bottom
-                    text: Qt.formatDateTime(me.date, "hh:mm")
-                    
-                    textStyle {
-                        color: Color.Gray
-                        fontSize: FontSize.XSmall
+                Container {            
+                    leftPadding: me.incoming ? 40 : 20
+                    rightPadding: me.incoming ? 20 : 40
+                    topPadding: 10
+                    bottomPadding: 14
+                    layout: DockLayout {}
+                    Label {
+                        text: me.text + "<b>            &nbsp;</b>"
+                        multiline: true
+                        textFormat: TextFormat.Html
+                        attachedObjects: [
+                            LayoutUpdateHandler {
+                                onLayoutFrameChanged: {
+                                }
+                            
+                            }
+                        ]
+                    }
+                    Label {
+                        horizontalAlignment: HorizontalAlignment.Right
+                        verticalAlignment: VerticalAlignment.Bottom
+                        text: Qt.formatDateTime(me.date, "hh:mm")
+                        
+                        textStyle {
+                            color: me.incoming ? Color.Gray : Color.create('#75B166')
+                            fontSize: FontSize.XSmall
+                        }
                     }
                 }
+            
             }
-        
         }
-    }
-    
-    Container {
-        id: overlay
-        horizontalAlignment: HorizontalAlignment.Fill
-        verticalAlignment: VerticalAlignment.Fill
-        background: Color.Blue
-        opacity: 0.2
-        visible: false
+        
+        Container {
+            id: overlay
+            horizontalAlignment: HorizontalAlignment.Fill
+            verticalAlignment: VerticalAlignment.Fill
+            background: Color.create('#31A3DD')
+            opacity: 0.2
+            visible: false
+        }
     }
 }

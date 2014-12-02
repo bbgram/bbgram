@@ -245,54 +245,36 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
     Chat* chat = m_instance->getPeer(peer_type, peer_id);
     Message* message = m_instance->getMessage(M->id);
 
-    QListDataModel<Message*>* messages = chat->m_messages;
-    int msgIdx = -1;
-    for (int i = 0; i < messages->size(); i++)
+    GroupDataModel* messages = chat->m_messages;
+    if (!messages->find(message).isEmpty())
+        return;
+    messages->insert(message);
+
+    QListDataModel<Chat*>* dialogs = m_instance->m_dialogs;
+    int chatIdx = -1;
+    for (int i = 0; i < dialogs->size(); i++)
     {
-        Message* existingMessage = messages->value(i);
-        if (existingMessage->id() == message->id())
-            return;
-        if (existingMessage->date() < message->date())
+        if (dialogs->value(i) == chat)
         {
-            msgIdx = i;
-            messages->insert(i, message);
+            chatIdx = i;
             break;
         }
     }
-    if (msgIdx == -1)
-    {
-        messages->append(message);
-        msgIdx = messages->size() - 1;
-    }
 
-    if (msgIdx == 0)
+    int newPos = dialogs->size() - 1;
+    for (int j = 0; j < dialogs->size(); j++)
     {
-        QListDataModel<Chat*>* dialogs = m_instance->m_dialogs;
-        int chatIdx = -1;
-        for (int i = 0; i < dialogs->size(); i++)
+        Message* lastMessage = dialogs->value(j)->lastMessage();
+        if (lastMessage && lastMessage->date() < message->date())
         {
-            if (dialogs->value(i) == chat)
-            {
-                chatIdx = i;
-                break;
-            }
+            newPos = j;
+            break;
         }
-
-        int newPos = dialogs->size() - 1;
-        for (int j = 0; j < dialogs->size(); j++)
-        {
-            Message* lastMessage = dialogs->value(j)->lastMessage();
-            if (lastMessage && lastMessage->date() < message->date())
-            {
-                newPos = j;
-                break;
-            }
-        }
-        if (chatIdx != -1)
-            dialogs->move(chatIdx, newPos);
-        else
-            dialogs->insert(newPos, chat);
     }
+    if (chatIdx != -1)
+        dialogs->move(chatIdx, newPos);
+    else
+        dialogs->insert(newPos, chat);
 }
 
 
@@ -428,12 +410,12 @@ void Storage::_getHistoryCallback(struct tgl_state *TLS, void *callback_extra, i
         return;
 
     Chat* chat = (Chat*)callback_extra;
-    QListDataModel<Message*>* messages = chat->m_messages;
+    GroupDataModel* messages = chat->m_messages;
     messages->clear();
     for (int i = 0; i < size; i++)
     {
         Message* message = m_instance->getMessage(list[i]->id);
-        messages->append(message);
+        messages->insert(message);
     }
 }
 

@@ -8,7 +8,8 @@ class Message: public QObject
 
     Q_PROPERTY(long long id READ id CONSTANT)
     Q_PROPERTY(QString text READ text CONSTANT)
-    Q_PROPERTY(QDateTime date READ date CONSTANT)
+    Q_PROPERTY(QDate date READ date CONSTANT)
+    Q_PROPERTY(QDateTime dateTime READ dateTime CONSTANT)
     Q_PROPERTY(QString dateFormatted READ dateFormatted CONSTANT)
     Q_PROPERTY(bool our READ our CONSTANT)
 public:
@@ -19,7 +20,8 @@ public:
     bool our() const;
 
     const QString& text() const;
-    const QDateTime& date() const;
+    const QDate& date() const;
+    const QDateTime& dateTime() const;
     QString dateFormatted() const;
 protected:
     long long   m_id;

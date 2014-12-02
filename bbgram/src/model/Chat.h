@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QObject>
-#include <bb/cascades/QListDataModel>
+#include <bb/cascades/GroupDataModel>
 
 #include "Message.h"
 
@@ -42,7 +42,7 @@ protected:
     int             m_id;
 
     friend class Storage;
-    bb::cascades::QListDataModel<Message*>* m_messages;
+    bb::cascades::GroupDataModel* m_messages;
 };
 
 Q_DECLARE_METATYPE(Chat*);
