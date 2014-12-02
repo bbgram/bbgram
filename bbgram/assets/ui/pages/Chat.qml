@@ -81,7 +81,7 @@ Page {
                         horizontalAlignment: HorizontalAlignment.Left
                     }
                     Label {
-                        text: chat && chat.user ? (chat.user.online ? "online" : "last seen " + chat.user.lastSeenFormatted) : ""
+                        text: chat && chat.type == 1 ? (chat.online ? "online" : "last seen " + chat.lastSeenFormatted) : ""
                         topMargin: 0
                         textStyle {
                             color: Color.White
