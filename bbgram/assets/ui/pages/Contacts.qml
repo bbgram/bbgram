@@ -63,8 +63,6 @@ NavigationPane {
                 id: contacts_list
                 dataModel: _contacts ? _contacts.model : null
                 
-                property MultiSelectHandler currentMultiSelectHandler : multiSelectHandler
-                
                 listItemComponents: [
                     ListItemComponent {
                         type: "header"
@@ -80,7 +78,7 @@ NavigationPane {
                 ]
                 
                 onSelectionChanged: {
-                    //multiSelectHandler.status = "Selected" + selectionList().length;
+                    //multiSelectHandler.status = "Selected " + selectionList().length;
                 }
                 
                 onTriggered: {
@@ -102,7 +100,7 @@ NavigationPane {
                             }
                         ]
                         onActiveChanged: {
-                            contacts_list.currentMultiSelectHandler = inviteFriendsMultiSelectHandler;
+                            active ? _contacts.filter = 2 : _contacts.filter = 3
                         }
                     },
                     MultiSelectHandler {
@@ -117,7 +115,7 @@ NavigationPane {
                             }
                         ]
                         onActiveChanged: {
-                            contacts_list.currentMultiSelectHandler = newSecretChatMultiSelectHandler;
+                            active ? _contacts.filter = 1 : _contacts.filter = 3
                         }
                     },
                     MultiSelectHandler {
@@ -132,7 +130,7 @@ NavigationPane {
                             }
                         ]
                         onActiveChanged: {
-                            contacts_list.currentMultiSelectHandler = newBroadcastMultiSelectHandler;
+                            active ? _contacts.filter = 1 : _contacts.filter = 3
                         }
                     }
                     

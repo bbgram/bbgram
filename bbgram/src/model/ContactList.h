@@ -17,6 +17,8 @@ public:
 
     bb::cascades::GroupDataModel* model() const;
 
+    void updatePhonebook();
+
     int filter() const;
     void setFilter(int filter);
 private slots:
@@ -27,5 +29,6 @@ protected:
     bb::cascades::GroupDataModel*   m_model;
     int                             m_filter;
     bb::cascades::QListDataModel<User*>* m_telegramContacts;
+    QList<QVariantMap> mPhoneBook;
 };
 

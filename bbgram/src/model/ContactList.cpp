@@ -1,6 +1,12 @@
 #include "ContactList.h"
 
+#include <bb/pim/contacts/ContactService>
+#include <bb/pim/contacts/Contact>
+#include <bb/pim/contacts/ContactBuilder>
+#include <bb/pim/contacts/ContactAttributeBuilder>
+
 using namespace bb::cascades;
+using namespace bb::pim::contacts;
 
 ContactList::ContactList(QListDataModel<User*>* telegramContacts)
     : m_filter(3), m_telegramContacts(telegramContacts)
@@ -14,6 +20,7 @@ ContactList::ContactList(QListDataModel<User*>* telegramContacts)
     connect(m_telegramContacts, SIGNAL(itemUpdated(QVariantList)), SLOT(updateContent()));
     connect(this, SIGNAL(filterChanged()), SLOT(updateContent()));
 
+    updatePhonebook();
     updateContent();
 }
 
@@ -24,6 +31,36 @@ ContactList::~ContactList()
 GroupDataModel* ContactList::model() const
 {
     return m_model;
+}
+
+void ContactList::updatePhonebook()
+{
+    ContactService service;
+    ContactListFilters filter;
+
+    QSet<AttributeKind::Type> attrs;
+    attrs.insert(AttributeKind::Name);
+    attrs.insert(AttributeKind::Phone);
+
+    filter.setHasAttribute(attrs);
+    QList<Contact> phonebook = service.contacts(filter);
+
+    mPhoneBook.clear();
+
+    Contact contact;
+    foreach (contact, phonebook)
+    {
+        QList<ContactAttribute> phoneNumber = contact.phoneNumbers();
+
+        QVariantMap entry;
+        entry["sortingKey"] = contact.firstName();
+        entry["firstName"] = contact.firstName();
+        entry["lastName"] = contact.lastName();
+        entry["online"] = true;
+        if(!phoneNumber.empty())
+            entry["phone"] = phoneNumber[0].value();
+        mPhoneBook.push_back(entry);
+    }
 }
 
 int ContactList::filter() const
@@ -51,17 +88,10 @@ void ContactList::updateContent()
 
     if (m_filter & 2)
     {
-        for (int i = 0; i < 5; i++)
+        QVariantMap contact;
+        foreach (contact, mPhoneBook)
         {
-            QStringList list;
-            list << QString::fromUtf8("Василий") << QString::fromUtf8("Артём") << QString::fromUtf8("Константин") << QString::fromUtf8("Руслан") << QString::fromUtf8("Сигизмунд");
-            QVariantMap entry;
-            QString name = list.value(rand() % list.size());
-            entry["sortingKey"] = name;
-            entry["firstName"] = name;
-            entry["lastName"] = QString::fromUtf8("Неизвесткин");
-            entry["online"] = true;
-            m_model->insert(entry);
+            m_model->insert(contact);
         }
     }
 }
