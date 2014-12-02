@@ -29,6 +29,10 @@ Page {
             title: "Send Message"
             imageSource: "asset:///images/menu_bar_chat.png"
             ActionBar.placement: ActionBarPlacement.OnBar
+            onTriggered: {
+                var chat = _owner.getChat(user)
+                Application.scene.openChat(chat)
+            }
         },
         ActionItem {
             title: "Start Secret Chat"

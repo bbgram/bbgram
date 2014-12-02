@@ -19,6 +19,7 @@ public:
 
     Q_INVOKABLE void sendMessage(Chat* chat, const QString& message);
     Q_INVOKABLE void markRead(Chat* chat);
+    Q_INVOKABLE Chat* getChat(User* user);
     Q_INVOKABLE void deleteChat(Chat* chat);
     Q_INVOKABLE void openFAQ();
 protected slots:

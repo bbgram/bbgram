@@ -5,6 +5,7 @@ import bbgram.types.lib 0.1
 import "chats"
 
 Page {
+    objectName: "Chat"
     property variant dialog: null
     
     function messageAdded(indexPath) {
@@ -36,6 +37,7 @@ Page {
     function about() {
         var page = contactPageDef.createObject()
         page.user = dialog.user
+        var navigationPane = Application.scene.activeTab.content 
         navigationPane.push(page)
     }
     

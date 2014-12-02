@@ -82,9 +82,11 @@ NavigationPane {
                 }
                 
                 onTriggered: {
-                    var page = contactPageDef.createObject();
-                    page.user = dataModel.data(indexPath);
-                    navigationPane.push(page);
+                    var user = dataModel.data(indexPath);
+                    if (user.sortingKey == "!") {
+                        var chat = _owner.getChat(user);
+                        Application.scene.openChat(chat);
+                    }
                 }
                 
                 attachedObjects: [
@@ -139,10 +141,6 @@ NavigationPane {
         }
         
         attachedObjects: [
-            ComponentDefinition {
-                id: contactPageDef
-                source: "ContactInfo.qml"
-            },
             ComponentDefinition {
                 id: addContactSheetDef
                 source: "contacts/AddContact.qml"

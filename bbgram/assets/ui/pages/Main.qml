@@ -1,8 +1,18 @@
 import bb.cascades 1.2
 
 TabbedPane {
+    id: tabbedPane
     showTabsOnActionBar: true
     activeTab: chatsTab
+
+
+    function openChat(chat) {
+        activeTab = chatsTab
+        var page = chatPageDef.createObject()
+        page.dialog = chat
+        activeTab.content.push(page)
+    }
+    
     Tab {
         id: contactsTab
         imageSource: "asset:///images/bar_profile.png"
@@ -18,9 +28,9 @@ TabbedPane {
         imageSource: "asset:///images/bar_menu_settings.png"
         title: "Settings"
     }
-
+    
     onActiveTabChanged: {
-        if (activeTab.content === null || activeTab.content === undefined) {
+        if (activeTab.content === null) {
             var def = null
             switch (activeTab) {
                 case contactsTab:
@@ -37,7 +47,7 @@ TabbedPane {
                 activeTab.content = def.createObject()
         }
     }
-
+    
     attachedObjects: [
         ComponentDefinition {                      
             id: contactsPageDef                       
@@ -50,6 +60,10 @@ TabbedPane {
         ComponentDefinition {                      
             id: settingsPageDef                       
             source: "Settings.qml"             
+        },
+        ComponentDefinition {
+            id: chatPageDef
+            source: "Dialog.qml"
         }
     ]
 }

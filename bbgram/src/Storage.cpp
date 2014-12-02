@@ -117,6 +117,45 @@ Message* Storage::getMessage(long long id)
     }
 }
 
+Chat* Storage::getChat(int type, int id)
+{
+    Chat* result = 0;
+    QListDataModel<Chat*>* chats = m_instance->m_chats;
+    for (int i = 0; i < chats->size(); i++)
+    {
+        Chat* chat = chats->value(i);
+        if (chat->type() == type && chat->id() == id)
+        {
+            result = chat;
+            break;
+        }
+    }
+    if (!result)
+    {
+        for (int i = 0; i < m_newChats.size(); i++)
+        {
+            Chat* chat = m_newChats.value(i);
+            if (chat->type() == type &&chat->id() == id)
+            {
+                result = chat;
+                break;
+            }
+        }
+    }
+
+   if (!result)
+   {
+        if (type == TGL_PEER_USER)
+        {
+            User* user = findUser(id);
+            result = new Dialog(user);
+        }
+        if (result)
+            m_newChats.append(result);
+    }
+    return result;
+}
+
 void load_photo_callback(struct tgl_state *TLS, void *callback_extra, int success, char *filename)
 {
     if (!success)
@@ -199,6 +238,7 @@ void Storage::userTypingHandler(struct tgl_state *TLS, struct tgl_user *U, enum 
 
 void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *M)
 {
+    int peer_type = M->to_id.type;
     int peer_id = 0;
 
     if (M->to_id.type == TGL_PEER_USER && M->to_id.id == gTLS->our_id)
@@ -210,28 +250,18 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
     }
     if (M->from_id.type == TGL_PEER_USER && M->from_id.id == gTLS->our_id)
         peer_id = M->to_id.id;      // out
+
     if (peer_id == 0)
         return;
 
-    QListDataModel<Chat*>* chats = m_instance->m_chats;
-    Chat* dialog = 0;
-    int chatIdx = -1;
-    for (int i = 0; i < chats->size(); i++)
-    {
-        Chat* chat = chats->value(i);
-        if (chat->type() == TGL_PEER_USER && chat->id() == peer_id)
-        {
-            chatIdx = i;
-            dialog = chat;
-            break;
-        }
-    }
-    if (!dialog)
+    if (peer_type != TGL_PEER_USER)
         return;
 
+    Chat* dialog = m_instance->getChat(TGL_PEER_USER, peer_id);
     Message* message = m_instance->getMessage(M->id);
 
     QListDataModel<Message*>* messages = dialog->m_messages;
+    int msgIdx = -1;
     for (int i = 0; i < messages->size(); i++)
     {
         Message* existingMessage = messages->value(i);
@@ -239,25 +269,45 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
             return;
         if (existingMessage->date() < message->date())
         {
+            msgIdx = i;
             messages->insert(i, message);
-            if (i == 0) // latest message
-            {
-                for (int j = 0; j < chatIdx; j++)
-                {
-                    Message* lastMessage = chats->value(j)->lastMessage();
-                    if (lastMessage && lastMessage->date() < message->date())
-                    {
-                        chats->move(chatIdx, j);
-                        break;
-                    }
-                }
-
-            }
-            return;
+            break;
         }
     }
-    messages->append(message);
+    if (msgIdx == -1)
+    {
+        messages->append(message);
+        msgIdx = messages->size() - 1;
+    }
 
+    if (msgIdx == 0)
+    {
+        QListDataModel<Chat*>* chats = m_instance->m_chats;
+        int chatIdx = -1;
+        for (int i = 0; i < chats->size(); i++)
+        {
+            if (chats->value(i) == dialog)
+            {
+                chatIdx = i;
+                break;
+            }
+        }
+
+        int newPos = chats->size() - 1;
+        for (int j = 0; j < chats->size(); j++)
+        {
+            Message* lastMessage = chats->value(j)->lastMessage();
+            if (lastMessage && lastMessage->date() < message->date())
+            {
+                newPos = j;
+                break;
+            }
+        }
+        if (chatIdx != -1)
+            chats->move(chatIdx, newPos);
+        else
+            chats->insert(newPos, dialog);
+    }
 }
 
 

@@ -27,6 +27,7 @@ public:
     User* findUser(int id);
 
     Message* getMessage(long long id);
+    Chat* getChat(int type, int id);
 
     void updateContacts();
     void updateChats();
@@ -38,6 +39,7 @@ protected:
 
     bb::cascades::QListDataModel<User*>*    m_contacts;
     bb::cascades::QListDataModel<Chat*>*    m_chats;
+    QList<Chat*>                            m_newChats;
     QMap<int, User*>                        m_users;
     QMap<long long, Message*>               m_messages;
 

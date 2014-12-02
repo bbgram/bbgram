@@ -9,6 +9,10 @@ NavigationPane {
     onPushTransitionEnded: {
         if (page.onPush != undefined)
             page.onPush()
+
+        if (page.objectName == "Chat")
+            while (navigationPane.count() > 2)
+            navigationPane.remove(navigationPane.at(1))
     }    
     onPopTransitionEnded: {
         if (page.onPop != undefined)
