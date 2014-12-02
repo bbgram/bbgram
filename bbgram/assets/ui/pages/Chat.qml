@@ -117,6 +117,9 @@ Page {
             title: "Call"
             imageSource: "asset:///images/menu_phone.png"
             ActionBar.placement: ActionBarPlacement.InOverflow
+            onTriggered: {
+                _owner.dialANumber("+" + chat.phone)
+            }
         },
         ActionItem {
             id: aboutAction

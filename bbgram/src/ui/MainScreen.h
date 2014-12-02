@@ -22,6 +22,8 @@ public:
     Q_INVOKABLE void markRead(Chat* chat);
     Q_INVOKABLE void deleteChat(Chat* chat);
     Q_INVOKABLE void openFAQ();
+    Q_INVOKABLE void sendInviteText(const QString& recipient, const QString& text);
+    Q_INVOKABLE void dialANumber(const QString& number);
 protected slots:
     void initialize();
 protected:

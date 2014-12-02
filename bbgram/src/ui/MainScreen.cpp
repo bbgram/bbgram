@@ -3,6 +3,7 @@
 
 #include <bb/system/InvokeManager>
 #include <bb/system/InvokeRequest>
+#include <bb/PpsObject>
 
 using namespace bb::cascades;
 using namespace bb::system;
@@ -59,6 +60,35 @@ void MainScreen::openFAQ()
     request.setTarget("sys.browser");
     request.setAction("bb.action.OPEN");
     request.setUri("http://telegram.org/faq");
+    InvokeManager mgr;
+    mgr.invoke(request);
+}
+
+void MainScreen::sendInviteText(const QString& recipient, const QString& text)
+{
+    InvokeRequest request;
+    request.setTarget("sys.pim.text_messaging.composer");
+    request.setAction("bb.action.COMPOSE");
+    request.setMimeType("application/text_messaging");
+    QVariantMap map;
+    map.insert("to", QVariantList() << recipient);
+    map.insert("body", text);
+    map.insert("send", false);
+    QByteArray requestData = bb::PpsObject::encode(map, NULL);
+    request.setData(requestData);
+    InvokeManager mgr;
+    mgr.invoke(request);
+}
+
+void MainScreen::dialANumber(const QString& number)
+{
+    InvokeRequest request;
+    request.setAction("bb.action.DIAL");
+    request.setMimeType("application/vnd.blackberry.phone.startcall");
+    QVariantMap map;
+    map.insert("number", number);
+    QByteArray requestData = bb::PpsObject::encode(map, NULL);
+    request.setData(requestData);
     InvokeManager mgr;
     mgr.invoke(request);
 }

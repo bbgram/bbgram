@@ -86,6 +86,10 @@ NavigationPane {
                     if (user.sortingKey == "!") {
                         Application.scene.openChat(user);
                     }
+                    else {
+                        if (user.phone != undefined && user.phone != "")
+                            _owner.sendInviteText(user.phone, "Hey, let's switch to Telegram: http://telegram.org/dl2")
+                    }
                 }
                 
                 attachedObjects: [
