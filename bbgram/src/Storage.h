@@ -21,13 +21,13 @@ public:
     static void userTypingHandler(struct tgl_state *TLS, struct tgl_user *U, enum tgl_typing_status status);
 
     bb::cascades::QListDataModel<User*>* contacts() const;
-    bb::cascades::QListDataModel<Chat*>* chats() const;
+    bb::cascades::QListDataModel<Chat*>* dialogs() const;
 
     User* addUser(int id);
     User* findUser(int id);
 
     Message* getMessage(long long id);
-    Chat* getChat(int type, int id);
+    Chat* getPeer(int type, int id);
 
     void deleteMessage(long long id);
 
@@ -40,8 +40,9 @@ protected:
     QSqlDatabase    m_db;
 
     bb::cascades::QListDataModel<User*>*    m_contacts;
-    bb::cascades::QListDataModel<Chat*>*    m_chats;
-    QMap<int, User*>                        m_users;
+    bb::cascades::QListDataModel<Chat*>*    m_dialogs;
+
+    QMap<long long, Chat*>                  m_peers;
     QMap<long long, Message*>               m_messages;
 
     static void _getContactsCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *contacts[]);

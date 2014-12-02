@@ -33,8 +33,8 @@ Storage::Storage(QObject* parent)
 
     m_contacts = new QListDataModel<User*>();
     m_contacts->setParent(this);
-    m_chats = new QListDataModel<Chat*>();
-    m_chats->setParent(this);
+    m_dialogs = new QListDataModel<Chat*>();
+    m_dialogs->setParent(this);
 
     QSqlQuery query(m_db);
     query.exec("SELECT id, data, online, last_seen FROM users LEFT OUTER JOIN statuses ON users.id = statuses.user_id");
@@ -77,23 +77,25 @@ Storage* Storage::instance()
 
 User* Storage::addUser(int id)
 {
-    QMap<int, User*>::iterator it = m_users.find(id);
-    if (it != m_users.end())
-        return it.value();
+    long long peerId = (TGL_PEER_USER << 32) | id;
+    QMap<long long, Chat*>::iterator it = m_peers.find(peerId);
+    if (it != m_peers.end())
+        return (User*)it.value();
     else
     {
         User* user = new User(id);
         user->setParent(this);
-        m_users.insert(id, user);
+        m_peers.insert(peerId, user);
         return user;
     }
 }
 
 User* Storage::findUser(int id)
 {
-    QMap<int, User*>::iterator it = m_users.find(id);
-    if (it != m_users.end())
-        return it.value();
+    long long peerId = (TGL_PEER_USER << 32) | id;
+    QMap<long long, Chat*>::iterator it = m_peers.find(peerId);
+    if (it != m_peers.end())
+        return (User*)it.value();
     else
         return 0;
 }
@@ -118,26 +120,24 @@ Message* Storage::getMessage(long long id)
     }
 }
 
-Chat* Storage::getChat(int type, int id)
+Chat* Storage::getPeer(int type, int id)
 {
-    if (type == TGL_PEER_USER)
-    {
-        User* user = addUser(id);
-        return user;
-    }
+    long long peerId = (type << 32) | id;
+    QMap<long long, Chat*>::iterator it = m_peers.find(peerId);
 
-    Chat* result = 0;
-    QListDataModel<Chat*>* chats = m_instance->m_chats;
-    for (int i = 0; i < chats->size(); i++)
+    if (it != m_peers.end())
+        return it.value();
+    else
     {
-        Chat* chat = chats->value(i);
-        if (chat->type() == type && chat->id() == id)
-        {
-            result = chat;
-            break;
-        }
+        Chat* peer = 0;
+        if (type == TGL_PEER_USER)
+            peer = new User(id);
+        if (type == TGL_PEER_CHAT)
+            peer = new GroupChat(id);
+        if (peer)
+            m_peers.insert(peerId, peer);
+        return peer;
     }
-    return result;
 }
 
 void Storage::deleteMessage(long long id)
@@ -242,9 +242,7 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
     if (M->from_id.type == TGL_PEER_USER && M->from_id.id == gTLS->our_id)
         peer_id = M->to_id.id;      // out
 
-    Chat* chat = m_instance->getChat(peer_type, peer_id);
-    if (!chat)
-        return;
+    Chat* chat = m_instance->getPeer(peer_type, peer_id);
     Message* message = m_instance->getMessage(M->id);
 
     QListDataModel<Message*>* messages = chat->m_messages;
@@ -269,21 +267,21 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
 
     if (msgIdx == 0)
     {
-        QListDataModel<Chat*>* chats = m_instance->m_chats;
+        QListDataModel<Chat*>* dialogs = m_instance->m_dialogs;
         int chatIdx = -1;
-        for (int i = 0; i < chats->size(); i++)
+        for (int i = 0; i < dialogs->size(); i++)
         {
-            if (chats->value(i) == chat)
+            if (dialogs->value(i) == chat)
             {
                 chatIdx = i;
                 break;
             }
         }
 
-        int newPos = chats->size() - 1;
-        for (int j = 0; j < chats->size(); j++)
+        int newPos = dialogs->size() - 1;
+        for (int j = 0; j < dialogs->size(); j++)
         {
-            Message* lastMessage = chats->value(j)->lastMessage();
+            Message* lastMessage = dialogs->value(j)->lastMessage();
             if (lastMessage && lastMessage->date() < message->date())
             {
                 newPos = j;
@@ -291,9 +289,9 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
             }
         }
         if (chatIdx != -1)
-            chats->move(chatIdx, newPos);
+            dialogs->move(chatIdx, newPos);
         else
-            chats->insert(newPos, chat);
+            dialogs->insert(newPos, chat);
     }
 }
 
@@ -303,9 +301,9 @@ QListDataModel<User*>* Storage::contacts() const
     return m_contacts;
 }
 
-QListDataModel<Chat*>* Storage::chats() const
+QListDataModel<Chat*>* Storage::dialogs() const
 {
-    return m_chats;
+    return m_dialogs;
 }
 
 void Storage::_getContactsCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *contacts[])
@@ -352,7 +350,7 @@ void Storage::_getUserInfoCallback(struct tgl_state *TLS, void *callback_extra, 
     if (!success)
         return;
 
-    User* user = m_instance->addUser(U->id.id);
+    User* user = (User*)m_instance->getPeer(U->id.type, U->id.id);
     Message* lastMessage = 0;
     if (U->last)
     {
@@ -361,14 +359,14 @@ void Storage::_getUserInfoCallback(struct tgl_state *TLS, void *callback_extra, 
             user->addMessage(lastMessage);
     }
     int idx = 0;
-    for (int i = 0; i < m_instance->m_chats->size(); i++)
+    for (int i = 0; i < m_instance->m_dialogs->size(); i++)
     {
-        Chat* chat = m_instance->m_chats->value(i);
+        Chat* chat = m_instance->m_dialogs->value(i);
         Message* chatLastMessage = chat->lastMessage();
         if (!lastMessage || (chatLastMessage && chatLastMessage->date() > lastMessage->date()))
             idx++;
     }
-    m_instance->m_chats->insert(idx, user);
+    m_instance->m_dialogs->insert(idx, user);
     m_instance->updateHistory(user);
 }
 
@@ -377,7 +375,7 @@ void Storage::_getChatInfoCallback(struct tgl_state *TLS, void *callback_extra, 
     if (!success)
         return;
 
-    GroupChat* groupChat = (GroupChat*)m_instance->getChat(C->id.type, C->id.id);
+    GroupChat* groupChat = (GroupChat*)m_instance->getPeer(C->id.type, C->id.id);
     if (!groupChat)
         groupChat = new GroupChat(C->id.id);
     groupChat->update(C);
@@ -390,14 +388,14 @@ void Storage::_getChatInfoCallback(struct tgl_state *TLS, void *callback_extra, 
             groupChat->addMessage(lastMessage);
     }
     int idx = 0;
-    for (int i = 0; i < m_instance->m_chats->size(); i++)
+    for (int i = 0; i < m_instance->m_dialogs->size(); i++)
     {
-        Chat* chat = m_instance->m_chats->value(i);
+        Chat* chat = m_instance->m_dialogs->value(i);
         Message* chatLastMessage = chat->lastMessage();
         if (!lastMessage || (chatLastMessage && chatLastMessage->date() > lastMessage->date()))
             idx++;
     }
-    m_instance->m_chats->insert(idx, groupChat);
+    m_instance->m_dialogs->insert(idx, groupChat);
     m_instance->updateHistory(groupChat);
 }
 
@@ -408,7 +406,7 @@ void Storage::_getDialogsCallback(struct tgl_state *TLS, void *callback_extra, i
 
     Storage* _this = (Storage*)callback_extra;
 
-    _this->m_chats->clear();
+    _this->m_dialogs->clear();
     for (int i = 0; i < size; i++)
     {
         tgl_peer_id_t _peer = peers[i];
@@ -446,8 +444,8 @@ void Storage::_deleteMessageCallback(struct tgl_state *TLS, void *callback_extra
 
     Message* msg = m_instance->getMessage(id);
 
-    for (int i = 0; i < m_instance->m_chats->size(); i++)
-        m_instance->m_chats->value(i)->deleteMessage(msg);
+    for (int i = 0; i < m_instance->m_dialogs->size(); i++)
+        m_instance->m_dialogs->value(i)->deleteMessage(msg);
 
     m_instance->m_messages.remove(id);
 }

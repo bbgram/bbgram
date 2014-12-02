@@ -13,7 +13,7 @@ MainScreen::MainScreen(ApplicationUI* app)
 {
     m_contacts = new ContactList(Storage::instance()->contacts());
     setContextProperty("_contacts", m_contacts);
-    setContextProperty("_chats", Storage::instance()->chats());
+    setContextProperty("_chats", Storage::instance()->dialogs());
 
     m_contactManager = new ContactManager();
     setContextProperty("_contactManager", m_contactManager);

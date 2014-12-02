@@ -35,10 +35,12 @@ Page {
     }
     
     function about() {
-        var page = contactPageDef.createObject()
-        page.user = chat.user
-        var navigationPane = Application.scene.activeTab.content 
-        navigationPane.push(page)
+        if (chat.type == 1) {// user
+            var page = contactPageDef.createObject()
+            page.user = chat
+            var navigationPane = Application.scene.activeTab.content 
+            navigationPane.push(page)
+        }
     }
     
     titleBar: TitleBar {
