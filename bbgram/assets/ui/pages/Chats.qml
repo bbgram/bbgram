@@ -52,24 +52,72 @@ NavigationPane {
                 imageSource: "asset:///images/menu_chat.png"
                 title: "New Chat"
                 ActionBar.placement: ActionBarPlacement.InOverflow
+                
+                onTriggered: {
+                    var sheet = contactSelectionSheetDef.createObject()
+                    sheet.caption = "New Chat"
+                    sheet.actionText = "Select"
+                    sheet.actionImageSource = "asset:///images/menu_chat.png"
+                    sheet.multiselect = false
+                    
+                    //callback
+                    
+                    sheet.open()
+                }
             },
             
             ActionItem {
                 imageSource: "asset:///images/menu_group.png"
                 title: "New Group"
                 ActionBar.placement: ActionBarPlacement.InOverflow
+                
+                onTriggered: {
+                    var sheet = contactSelectionSheetDef.createObject()
+                    sheet.caption = "New Group"
+                    sheet.actionText = "Select"
+                    sheet.actionImageSource = "asset:///images/menu_group.png"
+                    sheet.multiselect = true
+                    
+                    //callback
+                    
+                    sheet.open()
+                }
             },
             
             ActionItem {
                 imageSource: "asset:///images/menu_secretchat.png"
                 title: "New Secret Chat"
                 ActionBar.placement: ActionBarPlacement.InOverflow
+                
+                onTriggered: {
+                    var sheet = contactSelectionSheetDef.createObject()
+                    sheet.caption = "New Secret Chat"
+                    sheet.actionText = "Select"
+                    sheet.actionImageSource = "asset:///images/menu_secretchat.png"
+                    sheet.multiselect = false
+                    
+                    //callback
+                    
+                    sheet.open()
+                }
             },
             
             ActionItem {
                 imageSource: "asset:///images/menu_broadcast.png"
                 title: "New Broadcast"
                 ActionBar.placement: ActionBarPlacement.InOverflow
+                
+                onTriggered: {
+                    var sheet = contactSelectionSheetDef.createObject()
+                    sheet.caption = "New Broadcast"
+                    sheet.actionText = "Select"
+                    sheet.actionImageSource = "asset:///images/menu_broadcast.png"
+                    sheet.multiselect = true
+                    
+                    //callback
+                    
+                    sheet.open()
+                }
             }
         ]
         
@@ -128,5 +176,11 @@ NavigationPane {
                 ]
             }
         }
+        attachedObjects: [
+            ComponentDefinition {
+                id: contactSelectionSheetDef
+                source: "ContactsSelection.qml"
+            }
+        ]
     }
 }

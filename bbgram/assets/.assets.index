@@ -1,5 +1,5 @@
 1
-98
+99
 720x720/ui/pages/Intro.qml
 dm_countries.xml
 dm_intro_page.xml
@@ -82,6 +82,7 @@ ui/pages/contacts/ContactItem.qml
 ui/pages/contacts/ContactPhoneNumber.qml
 ui/pages/contacts/EditContact.qml
 ui/pages/Contacts.qml
+ui/pages/ContactsSelection.qml
 ui/pages/CountrySelect.qml
 ui/pages/intro/CarouselView.qml
 ui/pages/intro/Indicator.qml
