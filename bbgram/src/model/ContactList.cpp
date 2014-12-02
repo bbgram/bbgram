@@ -36,20 +36,46 @@ GroupDataModel* ContactList::model() const
 void ContactList::updatePhonebook()
 {
     ContactService service;
-    ContactListFilters filter;
 
+    QSet<ContactId> excludedContacts;
+
+    for (int i = 0; i < m_telegramContacts->size(); i++)
+    {
+        User* user = m_telegramContacts->value(i);
+        ContactSearchFilters phoneSearch;
+        phoneSearch.setHasAttribute(AttributeKind::Phone);
+        phoneSearch.setSearchValue(QString("+") + user->phone());
+        QList<Contact> users = service.searchContactsByPhoneNumber(phoneSearch);
+
+        foreach (Contact contact, users)
+        {
+            excludedContacts.insert(contact.id());
+        }
+
+    }
+
+    ContactListFilters contactFilter;
     QSet<AttributeKind::Type> attrs;
     attrs.insert(AttributeKind::Name);
     attrs.insert(AttributeKind::Phone);
-
-    filter.setHasAttribute(attrs);
-    QList<Contact> phonebook = service.contacts(filter);
+    contactFilter.setHasAttribute(attrs);
+    QList<Contact> phonebook = service.contacts(contactFilter);
 
     mPhoneBook.clear();
 
-    Contact contact;
-    foreach (contact, phonebook)
+    foreach (Contact contact, phonebook)
     {
+        bool found = false;
+        foreach (ContactId id, excludedContacts)
+            if (contact.id() == id)
+            {
+                found = true;
+                break;
+            }
+
+        if (found)
+            continue;
+
         QList<ContactAttribute> phoneNumber = contact.phoneNumbers();
 
         QVariantMap entry;
