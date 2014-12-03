@@ -306,8 +306,12 @@ void Storage::updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsig
         groupChat->setTitle(QString::fromUtf8(C->title));
 
     if (flags & TGL_UPDATE_PHOTO)
+    {
         if (C->photo.sizes_num != 0)
             tgl_do_load_photo(gTLS, &C->photo, load_photo_callback, groupChat);
+        else
+            groupChat->setPhoto("");
+    }
 }
 
 void Storage::markedReadHandler(struct tgl_state *TLS, int num, struct tgl_message *list[])

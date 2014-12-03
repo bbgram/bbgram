@@ -51,7 +51,7 @@ void GroupChat::setPhoto(const QString &filename)
     if (filename.length() != 0)
         path = filename;
     else
-        path = QString("app/native/assets/images/placeholders/user_placeholder_purple.png");
+        path = QString("app/native/assets/images/placeholders/group_placeholder_green.png");
 
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly))
