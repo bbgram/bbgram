@@ -24,14 +24,12 @@ Sheet {
                 id: acceptButton
                 title: acceptText
                 onTriggered:{
-                    _contacts.filter = prev_filter
-                    
                     var result = []
                     for (var i = 0; i < contacts_list.selectionList().length; i++)
                         result.push(contacts_list.dataModel.data(contacts_list.selectionList()[i]))
                     
                     done(result, me)
-                    
+                    _contacts.filter = prev_filter
                     me.close()
                 }
             }

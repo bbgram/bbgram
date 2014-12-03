@@ -5,7 +5,6 @@ TabbedPane {
     showTabsOnActionBar: true
     activeTab: chatsTab
 
-
     function openChat(chat) {
         activeTab = chatsTab
         var page = chatPageDef.createObject()

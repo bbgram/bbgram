@@ -55,10 +55,10 @@ bool ContactManager::contactExist(const QString& phone)
 
 void ContactManager::contactAddHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[])
 {
-    m_instance->emit onContactAdded(size == 0, "Somthing wrong");
+    emit m_instance->onContactAdded(size == 0, "Somthing wrong");
 }
 
 void ContactManager::contactRenameHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[])
 {
-    m_instance->emit onContactRenamed(size == 0, "Somthing wrong");
+    emit m_instance->onContactRenamed(size == 0, "Somthing wrong");
 }

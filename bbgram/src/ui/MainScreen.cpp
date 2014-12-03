@@ -8,10 +8,15 @@
 using namespace bb::cascades;
 using namespace bb::system;
 
+MainScreen* MainScreen::m_instance = NULL;
+
 MainScreen::MainScreen(ApplicationUI* app)
     : Screen("asset:///ui/pages/Main.qml")
         , m_app(app)
 {
+    Q_ASSERT(m_instance == NULL);
+    m_instance = this;
+
     m_contacts = new ContactList(Storage::instance()->contacts());
     setContextProperty("_contacts", m_contacts);
     setContextProperty("_chats", Storage::instance()->dialogs());
@@ -25,6 +30,7 @@ MainScreen::MainScreen(ApplicationUI* app)
 MainScreen::~MainScreen()
 {
     delete m_contactManager;
+    m_instance = NULL;
 }
 
 void MainScreen::sendMessage(Chat* chat, const QString& message)
@@ -47,6 +53,22 @@ void MainScreen::markRead(Chat* chat)
     peer.type = chat->type();
     peer.id = chat->id();
     tgl_do_mark_read(gTLS, peer, 0, 0);
+}
+
+void MainScreen::createGroup(QVariantList users, const QString& title)
+{
+    tgl_peer_id_t* peers = new tgl_peer_id_t[users.size()];
+
+    int idx = 0;
+    foreach (QVariant variant, users)
+    {
+        User* user = (User*)variant.value<QObject*>();
+        tgl_peer_id_t peer = {TGL_PEER_USER, user->id()};
+        peers[idx] = peer;
+        idx++;
+    }
+
+    tgl_do_create_group_chat_ex(gTLS, users.size(), peers, title.toUtf8().data(), MainScreen::_createGroupCallback, peers);
 }
 
 void MainScreen::deleteChat(Chat* chat)
@@ -108,4 +130,19 @@ void MainScreen::initialize()
 
     User* currentUser = (User*)Storage::instance()->getPeer(TGL_PEER_USER, gTLS->our_id);
     setContextProperty("_currentUser", currentUser);
+}
+
+void MainScreen::_createGroupCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M)
+{
+    delete[] (tgl_peer_id_t*)callback_extra;
+
+    GroupChat* groupChat = NULL;
+
+    if (success)
+    {
+        int peer_id = M->to_id.id;
+        groupChat = (GroupChat*)Storage::instance()->getPeer(TGL_PEER_CHAT, peer_id);
+    }
+
+    emit m_instance->groupCreated(groupChat);
 }
