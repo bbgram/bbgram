@@ -8,7 +8,7 @@ ListView {
         orientation: LayoutOrientation.BottomToTop
     }
 
-    dataModel: me.messages
+    dataModel: messages ? messages : null
     
     verticalAlignment: VerticalAlignment.Bottom
     stickToEdgePolicy: ListViewStickToEdgePolicy.Beginning

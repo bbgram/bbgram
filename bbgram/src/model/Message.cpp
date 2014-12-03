@@ -50,10 +50,10 @@ const QDateTime& Message::dateTime() const
     return m_date;
 }
 
-QString formatUser(int id, bool replaceToYou = true)
+QString formatUser(int id)
 {
     QString author="";
-    if (replaceToYou && id == gTLS->our_id)
+    if (id == gTLS->our_id)
         author = "You";
     else
     {
@@ -90,13 +90,19 @@ QString Message::text() const
         }
         else if (type == tgl_message_action_chat_add_user)
         {
-            QString another = formatUser(m_action["user"].toInt(), false);
-            text = QString("%1 added %2").arg(user, another);
+            int userId = m_action["user"].toInt();
+            if (userId == gTLS->our_id)
+                text = QString("%1 added you").arg(user);
+            else
+                text = QString("%1 added %2").arg(user, formatUser(userId));
         }
         else if (type == tgl_message_action_chat_delete_user)
         {
-            QString another = formatUser(m_action["user"].toInt(), false);
-            text = QString("%1 removed %2").arg(user, another);
+            int userId = m_action["user"].toInt();
+            if (userId == gTLS->our_id)
+                text = QString("%1 removed you").arg(user);
+            else
+                text = QString("%1 removed %2").arg(user, formatUser(userId));
         }
         else
             text = QString("system message with type=%1").arg(type);
