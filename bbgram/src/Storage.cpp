@@ -152,7 +152,7 @@ void load_photo_callback(struct tgl_state *TLS, void *callback_extra, int succes
 
 void Storage::userUpdateHandler (struct tgl_state *TLS, struct tgl_user *U, unsigned flags)
 {
-/*    QString str;
+    /*QString str;
 #define CHECK_FLAG(F) if ((flags & F) == F) str += " " #F;
 
             CHECK_FLAG(TGL_UPDATE_CREATED)
@@ -164,9 +164,8 @@ void Storage::userUpdateHandler (struct tgl_state *TLS, struct tgl_user *U, unsi
     CHECK_FLAG(TGL_UPDATE_REAL_NAME)
             CHECK_FLAG(TGL_UPDATE_NAME)
 
-    qDebug() << "update_user_handler user=" << QString::fromUtf8(U->first_name) << " flags=" << flags << str;
+    qDebug() << "update_user_handler user=" << QString::fromUtf8(U->first_name) << " flags=" << flags << str;*/
 
-*/
     User* user = (User*)m_instance->getPeer(TGL_PEER_USER, U->id.id);
     /*if (flags & TGL_UPDATE_CREATED)
     {
@@ -276,18 +275,18 @@ void Storage::updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsig
     /*QString str;
     #define CHECK_FLAG(F) if ((flags & F) == F) str += " " #F;
 
-    //CHECK_FLAG(TGL_UPDATE_CREATED)
+    CHECK_FLAG(TGL_UPDATE_CREATED)
     CHECK_FLAG(TGL_UPDATE_DELETED)
     CHECK_FLAG(TGL_UPDATE_PHONE)
     CHECK_FLAG(TGL_UPDATE_CONTACT)
-    //CHECK_FLAG(TGL_UPDATE_PHOTO)
+    CHECK_FLAG(TGL_UPDATE_PHOTO)
     CHECK_FLAG(TGL_UPDATE_BLOCKED)
     CHECK_FLAG(TGL_UPDATE_REAL_NAME)
     CHECK_FLAG(TGL_UPDATE_NAME)
     CHECK_FLAG(TGL_UPDATE_REQUESTED)
     CHECK_FLAG(TGL_UPDATE_WORKING)
     CHECK_FLAG(TGL_UPDATE_FLAGS)
-    //CHECK_FLAG(TGL_UPDATE_TITLE)
+    CHECK_FLAG(TGL_UPDATE_TITLE)
     CHECK_FLAG(TGL_UPDATE_ADMIN)
     CHECK_FLAG(TGL_UPDATE_MEMBERS)
     CHECK_FLAG(TGL_UPDATE_ACCESS_HASH)
@@ -295,12 +294,9 @@ void Storage::updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsig
 
     qDebug() << "Storage::updateChatHandler chat=" << QString::fromUtf8(C->title) << " flags=" << flags << str;*/
 
+    GroupChat* groupChat = (GroupChat*)m_instance->getPeer(TGL_PEER_CHAT, C->id.id);
 
-    GroupChat* groupChat = (GroupChat*)m_instance->getPeer(C->id.type, C->id.id);
-
-    //not needed
-    /*if (flags & TGL_UPDATE_CREATED)
-        groupChat = m_instance->addGroupChat(C->id.id);*/
+    //if (flags & TGL_UPDATE_CREATED)
 
     if (flags & TGL_UPDATE_TITLE)
         groupChat->setTitle(QString::fromUtf8(C->title));
@@ -311,6 +307,22 @@ void Storage::updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsig
             tgl_do_load_photo(gTLS, &C->photo, load_photo_callback, groupChat);
         else
             groupChat->setPhoto("");
+    }
+
+    if (flags & TGL_UPDATE_ADMIN)
+    {
+        groupChat->setAdmin((User*)m_instance->getPeer(TGL_PEER_USER, C->admin_id));
+    }
+
+    if (flags & TGL_UPDATE_MEMBERS)
+    {
+        QList<User*> members;
+        for(int i = 0; i < C->user_list_size; i++)
+        {
+            User* member = (User*)m_instance->getPeer(TGL_PEER_USER, C->user_list[i].user_id);
+            members.push_back(member);
+        }
+        groupChat->setMembers(members);
     }
 }
 

@@ -3,7 +3,7 @@
 using namespace bb::cascades;
 
 GroupChat::GroupChat(int id)
-    : Chat(TGL_PEER_CHAT, id)
+    : Chat(TGL_PEER_CHAT, id), m_admin(NULL)
 {
     QString path = QString("app/native/assets/images/placeholders/group_placeholder_green.png");
     QFile file(path);
@@ -61,4 +61,29 @@ void GroupChat::setPhoto(const QString &filename)
     m_photo = Image(bytes);
 
     emit photoChanged();
+}
+
+User* GroupChat::admin() const
+{
+    return m_admin;
+}
+
+void GroupChat::setAdmin(User* admin)
+{
+    m_admin = admin;
+    emit adminChanged();
+}
+
+void GroupChat::setMembers(const QList<User*>& members)
+{
+    m_members.clear();
+    foreach(User* member, members)
+        m_members.push_back(member);
+
+    emit membersChanged();
+}
+
+const QList<User*>& GroupChat::getMembers() const
+{
+    return m_members;
 }
