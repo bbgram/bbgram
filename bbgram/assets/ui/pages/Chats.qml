@@ -63,10 +63,9 @@ NavigationPane {
                 }
                 
                 onTriggered: {
-                    var sheet = contactSelectionSheetDef.createObject()
+                    var sheet = contactPickerSheetDef.createObject()
                     sheet.caption = "New Chat"
-                    sheet.actionText = "Select"
-                    sheet.actionImageSource = "asset:///images/menu_chat.png"
+                    sheet.acceptText = "Select"
                     sheet.multiselect = false
                     
                     //callback
@@ -82,10 +81,9 @@ NavigationPane {
                 ActionBar.placement: ActionBarPlacement.InOverflow
                 
                 onTriggered: {
-                    var sheet = contactSelectionSheetDef.createObject()
+                    var sheet = contactPickerSheetDef.createObject()
                     sheet.caption = "New Group"
-                    sheet.actionText = "Select"
-                    sheet.actionImageSource = "asset:///images/menu_group.png"
+                    sheet.acceptText = "Select"
                     sheet.multiselect = true
                     
                     //callback
@@ -100,10 +98,9 @@ NavigationPane {
                 ActionBar.placement: ActionBarPlacement.InOverflow
                 
                 onTriggered: {
-                    var sheet = contactSelectionSheetDef.createObject()
+                    var sheet = contactPickerSheetDef.createObject()
                     sheet.caption = "New Secret Chat"
-                    sheet.actionText = "Select"
-                    sheet.actionImageSource = "asset:///images/menu_secretchat.png"
+                    sheet.acceptText = "Select"
                     sheet.multiselect = false
                     
                     //callback
@@ -118,10 +115,9 @@ NavigationPane {
                 ActionBar.placement: ActionBarPlacement.InOverflow
                 
                 onTriggered: {
-                    var sheet = contactSelectionSheetDef.createObject()
+                    var sheet = contactPickerSheetDef.createObject()
                     sheet.caption = "New Broadcast"
-                    sheet.actionText = "Select"
-                    sheet.actionImageSource = "asset:///images/menu_broadcast.png"
+                    sheet.acceptText = "Select"
                     sheet.multiselect = true
                     
                     //callback
@@ -188,8 +184,8 @@ NavigationPane {
         }
         attachedObjects: [
             ComponentDefinition {
-                id: contactSelectionSheetDef
-                source: "ContactsSelection.qml"
+                id: contactPickerSheetDef
+                source: "contacts/ContactPicker.qml"
             }
         ]
     }
