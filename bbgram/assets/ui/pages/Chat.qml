@@ -41,6 +41,12 @@ Page {
             var navigationPane = Application.scene.activeTab.content 
             navigationPane.push(page)
         }
+        else if (chat.type == 2) { // group
+            var page = groupPageDef.createObject()
+            page.chat = chat
+            var navigationPane = Application.scene.activeTab.content 
+            navigationPane.push(page)
+        }
     }
     
     titleBar: TitleBar {
@@ -241,6 +247,10 @@ Page {
         ComponentDefinition {
             id: contactPageDef
             source: "ContactInfo.qml"
+        },
+        ComponentDefinition {
+            id: groupPageDef
+            source: "GroupInfo.qml"
         }
     ]
 }

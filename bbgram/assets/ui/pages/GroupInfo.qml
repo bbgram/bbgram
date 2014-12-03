@@ -3,9 +3,10 @@ import bbgram.types.lib 0.1
 
 import "settings"
 import "contacts"
+import "chats"
 
 Page {
-    property User user
+    property GroupChat chat
     
     actions: [
         ActionItem {
@@ -13,48 +14,26 @@ Page {
             imageSource: "asset:///images/menu_bar_edit.png"
             ActionBar.placement: ActionBarPlacement.OnBar
             
-            function updateContactName(user, firstName, lastName){
-                _contactManager.renameContact(firstName, lastName, user.phone)
-            }
-            
             onTriggered: {
-                var sheet = editContactSheetDef.createObject();
-                sheet.user = user;
-                sheet.caption = "Edit Contact";
-                sheet.done.connect(updateContactName);
+                var sheet = editGroupSheetDef.createObject();
+                sheet.chat = chat;
                 sheet.open();
             }
         },
         ActionItem {
-            title: "Send Message"
-            imageSource: "asset:///images/menu_bar_chat.png"
+            id: addParticipantAction
+            title: "Add Participant"
+            imageSource: "asset:///images/menu_bar_contact_plus.png"
             ActionBar.placement: ActionBarPlacement.OnBar
-            onTriggered: {
-                Application.scene.openChat(user)
-            }
         },
         ActionItem {
-            title: "Start Secret Chat"
-            imageSource: "asset:///images/menu_secretchat.png"
-            ActionBar.placement: ActionBarPlacement.InOverflow
-        },
-        ActionItem {
-            title: "Share Contact"
-            imageSource: "asset:///images/menu_contactshare.png"
-            ActionBar.placement: ActionBarPlacement.InOverflow
-        },
-        ActionItem {
+            id: sharedMediaAction
             title: "Shared Media"
             imageSource: "asset:///images/menu_sharedmedia.png"
             ActionBar.placement: ActionBarPlacement.InOverflow
         },
-        ActionItem {
-            title: "Block Contact"
-            imageSource: "asset:///images/menu_contactblock.png"
-            ActionBar.placement: ActionBarPlacement.InOverflow
-        },
-        ActionItem {
-            title: "Delete Contact"
+        DeleteActionItem {
+            title: "Clear and Exit"
             imageSource: "asset:///images/menu_bin.png"
             ActionBar.placement: ActionBarPlacement.InOverflow
         }
@@ -75,7 +54,7 @@ Page {
                 ImageView {
                     verticalAlignment: VerticalAlignment.Center
                     
-                    image: user ? user.photo : null
+                    image: chat ? chat.photo : null
                     //imageSource: "asset:///images/placeholders/user_placeholder_purple.png"
                     scalingMethod: ScalingMethod.Fill
                     preferredHeight: 200
@@ -89,7 +68,7 @@ Page {
                     verticalAlignment: VerticalAlignment.Center
                     
                     Label {
-                        text: user ? user.name : ""
+                        text: chat ? chat.title : ""
                         //text: "firstName lastName"
                         textStyle {
                             fontSize: FontSize.Large
@@ -97,7 +76,7 @@ Page {
                     }
                     
                     Label {
-                        text: user ? user.lastSeenFormatted : ""
+                        text: "Members Online"
                         //text: "last seen ..."
                         textStyle {
                             color: Color.Gray
@@ -113,18 +92,6 @@ Page {
                 horizontalAlignment: HorizontalAlignment.Fill
                 
                 SettingsHeader {
-                    text: "Phone"
-                }
-                
-                Container {
-                    ContactPhoneNumber {
-                        phone: user ? "+" + user.phone : ""
-                        //phone:"+7 927 7777777"
-                        type: "Mobile"
-                    }
-                }
-                
-                SettingsHeader {
                     text: "Settings"
                 }
                 SettingsToggleButton {
@@ -133,11 +100,51 @@ Page {
                 SettingsRow {
                     text: "Shared Media"
                 }
+                
+                SettingsHeader {
+                    text: "Participants"
+                }
+                
+                ListView {
+                    id: groupList
+                    dataModel: _contacts ? _contacts.model : null
+                    
+                    multiSelectHandler {
+                        actions: [
+                            ActionItem {
+                                title: "Delete from Group"
+                                imageSource: "asset:///images/menu_bin.png"
+                                onTriggered: {
+                                    console.log("Delete from froup")                                
+                                }
+                            }
+                        ]
+                    }
+                    
+                    gestureHandlers: [
+                        LongPressHandler {
+                            onLongPressed: {
+                                groupList.multiSelectHandler.active = true;
+                            }
+                        }
+                    ]
+                    
+                    listItemComponents: [
+                        ListItemComponent {
+                            type: "item"
+                            ContactItem { }
+                        }
+                    ]
+                    
+                    onSelectionChanged: {
+                        groupList.multiSelectHandler.status = "Selected: " + selectionList().length
+                    }
+                }
             }
         }
     }
     attachedObjects: ComponentDefinition {
-        id: editContactSheetDef
-        source: "contacts/EditContact.qml"
+        id: editGroupSheetDef
+        source: "chats/EditGroup.qml"
     }
 }
