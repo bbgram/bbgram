@@ -10,19 +10,19 @@ Page {
     
     function messageAdded(indexPath) {
         if (indexPath.length != 0 && indexPath[0] == 0)
-            messages.scrollToPosition(ScrollPosition.Beginning, ScrollAnimation.None);
-        if (!messages.dataModel.data(indexPath).our)
+            messageList.scrollToPosition(ScrollPosition.Beginning, ScrollAnimation.None);
+        if (!messageList.dataModel.data(indexPath).our)
             _owner.markRead(chat);
     }
     
     function onPop() {
-        messages.dataModel.itemAdded.disconnect(messageAdded)
+        messageList.dataModel.itemAdded.disconnect(messageAdded)
     }
     
     function onPush() {
         _owner.markRead(chat);
         
-        messages.dataModel.itemAdded.connect(messageAdded)
+        messageList.dataModel.itemAdded.connect(messageAdded)
     }
     
     function sendMessage() {
@@ -188,60 +188,9 @@ Page {
                 imageSource: "asset:///images/background_hd.jpg"
                 scalingMethod: ScalingMethod.AspectFill
             }
-            ListView {
-                layout: StackListLayout {
-                    orientation: LayoutOrientation.BottomToTop
-                }
-                id: messages
-                dataModel: chat ? chat.messages : null
-                
-                verticalAlignment: VerticalAlignment.Bottom
-                stickToEdgePolicy: ListViewStickToEdgePolicy.Beginning
-                //snapMode: SnapMode.LeadingEdge
-                
-                multiSelectHandler {
-                    actions: [
-                        DeleteActionItem {
-                            onTriggered: {
-                                for (var i = 0; i < messages.selectionList().length; i++)
-                                {
-                                    _owner.deleteMessage(messages.dataModel.data(messages.selectionList()[i]).id);
-                                }
-                                
-                            }
-                        }
-                    ]
-                }
-                
-                listItemComponents: [
-                    ListItemComponent {
-                        type: "item"
-                        Message {
-                            id: chat_message
-                            ListItem.onSelectionChanged: {
-                                chat_message.selected = selected;
-                            }
-                        }
-                    },
-                    ListItemComponent {
-                        type: "header"
-                        Container {
-                            preferredHeight: 0
-                        }
-                    }
-                ]
-                
-                onSelectionChanged: {
-                    messages.multiSelectHandler.status = "Selected: " + messages.selectionList().length
-                }
-                
-                gestureHandlers: [
-                    LongPressHandler {    
-                        onLongPressed: {
-                            messages.multiSelectHandler.active = true
-                        }
-                    }
-                ]
+            MessageList {
+                id: messageList
+                messages: chat && chat.messages != undefined ? chat.messages : null
             }
         }
         Container {

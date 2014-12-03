@@ -35,6 +35,7 @@ Container {
             bottomPadding: 8
             Label {
                 text: Qt.formatDate(date, "d MMMM")
+                textStyle.color: Color.White
             }
         }
         bottomMargin: 25

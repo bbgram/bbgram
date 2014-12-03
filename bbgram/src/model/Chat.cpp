@@ -1,11 +1,12 @@
 #include "Chat.h"
+#include "MessagesDataModel.h"
 
 using namespace bb::cascades;
 
 Chat::Chat(int type, int id)
     : m_type(type), m_id(id)
 {
-    m_messages = new GroupDataModel(this);
+    m_messages = new MessagesDataModel(this);
     m_messages->setSortingKeys(QStringList() << "date" << "dateTime");
     m_messages->setSortedAscending(false);
     connect(m_messages, SIGNAL(itemAdded(QVariantList)), this, SIGNAL(messagesChanged()));

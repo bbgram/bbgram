@@ -13,6 +13,7 @@ class Message: public QObject
     Q_PROPERTY(QString dateFormatted READ dateFormatted CONSTANT)
     Q_PROPERTY(bool our READ our CONSTANT)
     Q_PROPERTY(bool unread READ unread NOTIFY markedRead)
+    Q_PROPERTY(bool service READ service CONSTANT)
 public:
     Message(long long id = 0, tgl_message* M = 0);
     ~Message();
@@ -20,22 +21,25 @@ public:
     long long id() const;
     bool our() const;
 
-    const QString& text() const;
+    QString text() const;
     const QDate& date() const;
     const QDateTime& dateTime() const;
     QString dateFormatted() const;
 
     bool unread() const;
     void markAsRead();
+    bool service() const;
 signals:
     void markedRead();
 protected:
     long long   m_id;
-    int         m_from_id;
+    int         m_fromId;
 
     QString     m_text;
     QDateTime   m_date;
     bool        m_unread;
+    bool        m_service;
+    QVariantMap m_action;
 };
 
 Q_DECLARE_METATYPE(Message*);

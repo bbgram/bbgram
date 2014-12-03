@@ -1,5 +1,6 @@
 1
-109
+111
+.assets.index.orig
 720x720/ui/pages/Intro.qml
 dm_countries.xml
 dm_intro_page.xml
@@ -84,6 +85,8 @@ server.pub
 ui/pages/Chat.qml
 ui/pages/chats/ChatItem.qml
 ui/pages/chats/Message.qml
+ui/pages/chats/MessageList.qml
+ui/pages/chats/ServiceMessage.qml
 ui/pages/Chats.qml
 ui/pages/ContactInfo.qml
 ui/pages/contacts/AddContact.qml
