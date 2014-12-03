@@ -102,7 +102,7 @@ NavigationPane {
                     sheet.caption = "New Group"
                     sheet.acceptText = "Select"
                     sheet.multiselect = true
-                    sheet.textHintText = "Enter Grpup Name"
+                    sheet.textHintText = "Enter Group Name"
                     sheet.textFieldVisible = true
                     
                     sheet.done.connect(newGroupSlot);

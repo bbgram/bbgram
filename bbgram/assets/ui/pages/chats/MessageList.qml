@@ -19,7 +19,7 @@ ListView {
         actions: [
             DeleteActionItem {
                 onTriggered: {
-                    for (var i = 0; i < messages.selectionList().length; i++)
+                    for (var i = 0; i < me.selectionList().length; i++)
                     {
                         _owner.deleteMessage(me.messages.data(me.selectionList()[i]).id);
                     }
@@ -33,9 +33,9 @@ ListView {
         ListItemComponent {
             type: "message"
             Message {
-                id: chat_message
+                id: chatMessage
                 ListItem.onSelectionChanged: {
-                    chat_message.selected = selected;
+                    chatMessage.selected = selected;
                 }
             }
         },
