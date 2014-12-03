@@ -4182,7 +4182,6 @@ static int get_invite_text_on_answer (struct tgl_state *TLS, struct query *q) {
 
   assert (fetch_int () == (int)CODE_help_invite_text);
   char *message = fetch_str_dup();
-  tfree_str (q->extra);
 
   if (q->callback) {
     ((void (*)(struct tgl_state *, void *, int, const char *))(q->callback)) (TLS, q->callback_extra, 1, message);
@@ -4195,7 +4194,6 @@ static int get_invite_text_on_error (struct tgl_state *TLS, struct query *q, int
   if (q->callback) {
     ((void (*)(struct tgl_state *, void *, int, const char *))(q->callback)) (TLS, q->callback_extra, 0, NULL);
   }
-  tfree_str (q->extra);
   return 0;
 }
 
