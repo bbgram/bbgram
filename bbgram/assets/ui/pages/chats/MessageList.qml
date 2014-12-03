@@ -45,6 +45,11 @@ ListView {
             }
         },
         ListItemComponent {
+            type: "photo"
+            Photo {
+            }
+        },
+        ListItemComponent {
             type: "header"
             Container {
                 visible: false

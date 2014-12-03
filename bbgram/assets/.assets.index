@@ -1,6 +1,5 @@
 1
-111
-.assets.index.orig
+117
 720x720/ui/pages/Intro.qml
 dm_countries.xml
 dm_intro_page.xml
@@ -34,6 +33,10 @@ images/intro/intro4.png
 images/intro/intro5.png
 images/intro/intro6.png
 images/intro/intro7.png
+images/media_in.9.png
+images/media_in.amd
+images/media_out.9.png
+images/media_out.amd
 images/menu_bar_chat.png
 images/menu_bar_contact_plus.png
 images/menu_bar_edit.png
@@ -81,11 +84,14 @@ images/placeholders/user_placeholder_yellow.png
 images/secretchat_black.png
 images/secretchat_green.png
 images/setting_arrow.png
+images/system_black.9.png
+images/system_black.amd
 server.pub
 ui/pages/Chat.qml
 ui/pages/chats/ChatItem.qml
 ui/pages/chats/Message.qml
 ui/pages/chats/MessageList.qml
+ui/pages/chats/Photo.qml
 ui/pages/chats/ServiceMessage.qml
 ui/pages/Chats.qml
 ui/pages/ContactInfo.qml

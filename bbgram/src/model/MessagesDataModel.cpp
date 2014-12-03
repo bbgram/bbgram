@@ -21,8 +21,12 @@ QString MessagesDataModel::itemType(const QVariantList &indexPath)
     {
         if (message->service())
             return "service_message";
-        else
-            return "message";
+        else if (message->mediaType() != tgl_message_media_none)
+        {
+            if (message->mediaType() == tgl_message_media_photo)
+                return "photo";
+        }
+        return "message";
     }
     else
         return "header";

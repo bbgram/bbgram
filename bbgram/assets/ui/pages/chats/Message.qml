@@ -34,7 +34,7 @@ Container {
             topPadding: 4
             bottomPadding: 8
             Label {
-                text: Qt.formatDate(date, "d MMMM")
+                text: Qt.formatDate(date, "MMMM d")
                 textStyle.color: Color.White
             }
         }

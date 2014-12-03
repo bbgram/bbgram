@@ -5,6 +5,7 @@
 #include <bb/cascades/QmlDocument>
 
 #include "ui/widgets/PhoneNumberInput.h"
+#include "ui/widgets/MediaViewer.h"
 
 #include "Telegraph.h"
 
@@ -23,6 +24,7 @@ ApplicationUI::ApplicationUI(bb::cascades::Application* app) :
         QObject(app)
 {
     qmlRegisterType<PhoneNumberInput>("bbgram.control.lib", 0, 1, "PhoneNumberInput");
+    qmlRegisterType<MediaViewer>("bbgram.control.lib", 0, 1, "MediaViewer");
     qmlRegisterType<Chat>("bbgram.types.lib", 0, 1, "Chat");
     qmlRegisterType<GroupChat>("bbgram.types.lib", 0, 1, "GroupChat");
     qmlRegisterType<Message>("bbgram.types.lib", 0, 1, "Message");

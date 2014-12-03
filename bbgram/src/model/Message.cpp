@@ -24,6 +24,38 @@ Message::Message(long long id, tgl_message* M)
             // @todo: put photo
         }
     }
+    m_mediaType = M->media.type;
+    if (m_mediaType != tgl_message_media_none)
+    {
+        if (m_mediaType == tgl_message_media_photo)
+        {
+            int max = -1;
+            int maxi = -1;
+            for (int i = 0; i < M->media.photo.sizes_num; i++)
+            {
+                  if (M->media.photo.sizes[i].w + M->media.photo.sizes[i].h > max)
+                  {
+                    max = M->media.photo.sizes[i].w + M->media.photo.sizes[i].h;
+                    maxi = i;
+                  }
+            }
+            tgl_photo_size &sz = M->media.photo.sizes[maxi];
+            m_media.insert("width", sz.w);
+            m_media.insert("height", sz.h);
+            m_media.insert("size", sz.size);
+            m_media.insert("volume", sz.loc.volume);
+            m_media.insert("dc", sz.loc.dc);
+            m_media.insert("local_id", sz.loc.local_id);
+            m_media.insert("secret", sz.loc.secret);
+        }
+        else if (m_mediaType == tgl_message_media_document)
+        {
+            int a = 1;
+        }
+       // tgl_do_load_photo()
+
+        // @todo: put media
+    }
 }
 
 Message::~Message()
@@ -110,7 +142,30 @@ QString Message::text() const
         return text;
     }
     else
-        return m_text;
+    {
+        switch (m_mediaType)
+        {
+            case tgl_message_media_video:
+                return "#Unsupported media: video";
+            case tgl_message_media_audio:
+                return "#Unsupported media: audio";
+            case tgl_message_media_document:
+                return "#Unsupported media: document";
+            case tgl_message_media_geo:
+                return "#Unsupported media: geo";
+            case tgl_message_media_contact:
+                return "#Unsupported media: contact";
+            case tgl_message_media_photo_encr:
+                return "#Unsupported media: photo encr";
+            case tgl_message_media_video_encr:
+                return "#Unsupported media: video encr";
+            case tgl_message_media_audio_encr:
+                return "#Unsupported media: audio encr";
+            case tgl_message_media_document_encr:
+                return "#Unsupported media: document encr";
+        }
+    }
+    return m_text;
 }
 
 QString Message::dateFormatted() const
@@ -145,4 +200,14 @@ void Message::markAsRead()
 bool Message::service() const
 {
     return m_service;
+}
+
+int Message::mediaType() const
+{
+    return m_mediaType;
+}
+
+QVariantMap& Message::media()
+{
+    return m_media;
 }

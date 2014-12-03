@@ -219,7 +219,8 @@ Page {
                 onTextChanging: {
                     sendAction.enabled = text.length > 0;
                 }
-                input {
+                inputMode: TextAreaInputMode.Chat
+                input {                    
                     submitKey: SubmitKey.Send
                     onSubmitted: {
                         sendMessage()

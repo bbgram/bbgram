@@ -14,6 +14,7 @@ class Message: public QObject
     Q_PROPERTY(bool our READ our CONSTANT)
     Q_PROPERTY(bool unread READ unread NOTIFY markedRead)
     Q_PROPERTY(bool service READ service CONSTANT)
+    Q_PROPERTY(int mediaType READ mediaType CONSTANT)
 public:
     Message(long long id = 0, tgl_message* M = 0);
     ~Message();
@@ -29,6 +30,8 @@ public:
     bool unread() const;
     void markAsRead();
     bool service() const;
+    int mediaType() const;
+    QVariantMap& media();
 signals:
     void markedRead();
 protected:
@@ -40,6 +43,8 @@ protected:
     bool        m_unread;
     bool        m_service;
     QVariantMap m_action;
+    int         m_mediaType;
+    QVariantMap m_media;
 };
 
 Q_DECLARE_METATYPE(Message*);
