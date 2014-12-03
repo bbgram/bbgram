@@ -4211,3 +4211,48 @@ void tgl_do_help_get_invite_text (struct tgl_state *TLS, const char* lang_code, 
   out_string (lang_code);
   tglq_send_query (TLS, TLS->DC_working, packet_ptr - packet_buffer, packet_buffer, &help_get_invite_text_methods, 0, callback, callback_extra);
 }
+
+static int delete_history_on_answer (struct tgl_state *TLS, struct query *q) {
+  assert (fetch_int () == (int)CODE_messages_affected_history);
+  int pts = fetch_int ();
+  int seq = fetch_int ();
+  int offset = fetch_int ();
+
+  if (seq == TLS->seq + 1 && !(TLS->locks & TGL_LOCK_DIFF)) {
+    bl_do_set_pts (TLS, pts);
+    bl_do_set_seq (TLS, seq);
+  } else {
+    if (seq > TLS->seq + 1) {
+      vlogprintf (E_NOTICE, "Hole in seq\n");
+      tgl_do_get_difference (TLS, 0, 0, 0);
+    }
+  }
+
+  if (q->callback) {
+    ((void (*)(struct tgl_state *, void *, int, int))(q->callback)) (TLS, q->callback_extra, 1, offset);
+  }
+  return 0;
+}
+
+static int delete_history_on_error (struct tgl_state *TLS, struct query *q, int error_code, int l, char *error) {
+  if (q->callback) {
+    ((void (*)(struct tgl_state *, void *, int, int))(q->callback)) (TLS, q->callback_extra, 0, 0);
+  }
+  return 0;
+}
+
+
+static struct query_methods delete_history_methods  = {
+  .on_answer = delete_history_on_answer,
+  .on_error = delete_history_on_error,
+  .type = TYPE_TO_PARAM(messages_affected_history)
+};
+
+void tgl_do_delete_history (struct tgl_state *TLS, tgl_peer_id_t id, int offset, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, int offset), void *callback_extra) {
+    clear_packet ();
+    tgl_do_insert_header (TLS);
+    out_int (CODE_messages_delete_history);
+    out_peer_id (TLS, id);
+    out_int (offset);
+    tglq_send_query (TLS, TLS->DC_working, packet_ptr - packet_buffer, packet_buffer, &delete_history_methods, 0, callback, callback_extra);
+}
