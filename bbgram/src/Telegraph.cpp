@@ -289,6 +289,7 @@ void Telegraph::start()
     m_updateCallbacks.chat_update = Storage::updateChatHandler;
     m_updateCallbacks.type_notification = Storage::userTypingHandler;
     m_updateCallbacks.user_registered = update_user_registered;
+    m_updateCallbacks.marked_read = Storage::markedReadHandler;
 
 
     memset(&timer_methods, 0, sizeof(tgl_timer_methods));

@@ -310,6 +310,15 @@ void Storage::updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsig
             tgl_do_load_photo(gTLS, &C->photo, load_photo_callback, groupChat);
 }
 
+void Storage::markedReadHandler(struct tgl_state *TLS, int num, struct tgl_message *list[])
+{
+    for (int i = 0; i < num; i++)
+    {
+        Message* message = m_instance->getMessage(list[i]->id);
+        message->markAsRead();
+    }
+    //! update db
+}
 
 QListDataModel<User*>* Storage::contacts() const
 {

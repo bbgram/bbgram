@@ -2,9 +2,11 @@ import bb.cascades 1.2
 
 Container {
     id: me
-    property bool incoming: false
-    property string text: ""
-    property variant date: null
+    
+    property bool incoming: !ListItemData.our
+    property string text: ListItemData.text
+    property variant date: ListItemData.dateTime
+    property bool unread: ListItemData.unread
     
     property bool selected : false
     onSelectedChanged: {
@@ -26,7 +28,7 @@ Container {
             verticalAlignment: VerticalAlignment.Fill
             imageSource: "asset:///images/date.amd"
         }
-        Container {
+        Container {            
             leftPadding: 20
             rightPadding: 20
             topPadding: 4
@@ -60,12 +62,12 @@ Container {
                 }
                 Container {            
                     leftPadding: me.incoming ? 40 : 20
-                    rightPadding: me.incoming ? 20 : 40
+                    rightPadding: me.incoming ? 20 : 25
                     topPadding: 10
                     bottomPadding: 14
                     layout: DockLayout {}
                     Label {
-                        text: me.text + "<b>            &nbsp;</b>"
+                        text: me.text + (incoming ? "<b>            &nbsp;</b>" : "<b>                 &nbsp;</b>")
                         multiline: true
                         textFormat: TextFormat.Html
                         attachedObjects: [
@@ -76,14 +78,28 @@ Container {
                             }
                         ]
                     }
-                    Label {
+                    Container {
                         horizontalAlignment: HorizontalAlignment.Right
                         verticalAlignment: VerticalAlignment.Bottom
-                        text: Qt.formatDateTime(me.date, "hh:mm")
-                        
-                        textStyle {
-                            color: me.incoming ? Color.Gray : Color.create('#75B166')
-                            fontSize: FontSize.XSmall
+                        layout: StackLayout {
+                            orientation: LayoutOrientation.LeftToRight
+                        }
+                        Label {
+                            text: Qt.formatDateTime(me.date, "hh:mm")
+                            
+                            textStyle {
+                                color: me.incoming ? Color.Gray : Color.create('#75B166')
+                                fontSize: FontSize.XSmall
+                            }
+                            verticalAlignment: VerticalAlignment.Center
+                            rightMargin: 0
+                        }
+                        ImageView {
+                            visible: !incoming
+                            imageSource: unread ? "asset:///images/check_green.png" : "asset:///images/check_2_green.png"
+                            
+                            verticalAlignment: VerticalAlignment.Center
+                            leftMargin: 0
                         }
                     }
                 }

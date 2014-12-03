@@ -218,10 +218,6 @@ Page {
                         type: "item"
                         Message {
                             id: chat_message
-                            incoming: !ListItemData.our
-                            text: ListItemData.text
-                            date: ListItemData.dateTime
-                            
                             ListItem.onSelectionChanged: {
                                 chat_message.selected = selected;
                             }

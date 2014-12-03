@@ -8,6 +8,7 @@ Message::Message(long long id, tgl_message* M)
         m_text = QString::fromUtf8(M->message);
     m_date = QDateTime::fromTime_t(M->date);
     m_from_id = M->from_id.id;
+    m_unread = M->unread;
 }
 
 Message::~Message()
@@ -55,4 +56,15 @@ QString Message::dateFormatted() const
             str = locale.toString(m_date, "MMM dd");
     }
     return str;
+}
+
+bool Message::unread() const
+{
+    return m_unread;
+}
+
+void Message::markAsRead()
+{
+    m_unread = 0;
+    emit markedRead();
 }
