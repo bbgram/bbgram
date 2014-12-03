@@ -24,7 +24,7 @@ Sheet {
                 id: acceptButton
                 title: acceptText
                 onTriggered:{
-                    //_contacts.filter = prev_filter
+                    _contacts.filter = prev_filter
                     
                     var result = []
                     for (var i = 0; i < contacts_list.selectionList().length; i++)
@@ -39,7 +39,7 @@ Sheet {
                 id: cancelButton
                 title: "Cancel"
                 onTriggered:{
-                    //_contacts.filter = prev_filter
+                    _contacts.filter = prev_filter
                     done([], me);
                     me.close()
                 }

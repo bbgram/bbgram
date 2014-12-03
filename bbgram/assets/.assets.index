@@ -1,5 +1,5 @@
 1
-101
+102
 720x720/ui/pages/Intro.qml
 dm_countries.xml
 dm_intro_page.xml
@@ -64,6 +64,7 @@ images/placeholders/group_placeholder_red.png
 images/placeholders/group_placeholder_yellow.png
 images/placeholders/user_placeholder_blue.png
 images/placeholders/user_placeholder_cyan.png
+images/placeholders/user_placeholder_grayscale.png
 images/placeholders/user_placeholder_green.png
 images/placeholders/user_placeholder_orange.png
 images/placeholders/user_placeholder_pink.png
