@@ -45,20 +45,20 @@ QVariant GroupChat::photo() const
 void GroupChat::setPhoto(const QString &filename)
 {
     if (!m_photo.isNull() && m_photoFilename.compare(filename) == 0)
-            return;
-        m_photoFilename = filename;
-        QString path;
-        if (filename.length() != 0)
-            path = filename;
-        else
-            path = QString("app/native/assets/images/placeholders/user_placeholder_purple.png");
+        return;
+    m_photoFilename = filename;
+    QString path;
+    if (filename.length() != 0)
+        path = filename;
+    else
+        path = QString("app/native/assets/images/placeholders/user_placeholder_purple.png");
 
-        QFile file(path);
-        if (!file.open(QIODevice::ReadOnly))
-            return;
-        QByteArray bytes = file.readAll();
-        file.close();
-        m_photo = Image(bytes);
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly))
+        return;
+    QByteArray bytes = file.readAll();
+    file.close();
+    m_photo = Image(bytes);
 
-        emit photoChanged();
+    emit photoChanged();
 }

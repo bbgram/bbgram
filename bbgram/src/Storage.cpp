@@ -111,7 +111,10 @@ Chat* Storage::getPeer(int type, int id)
         if (type == TGL_PEER_CHAT)
             peer = new GroupChat(id);
         if (peer)
+        {
             m_peers.insert(peerId, peer);
+            peer->setParent(this);
+        }
         return peer;
     }
 }
