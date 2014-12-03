@@ -4,10 +4,12 @@ Sheet {
     id: me
     property string caption : "Caption"
     property string acceptText : "Add"
+    property string textHintText: "Text"
     property int prev_filter : 3
     property bool multiselect : false
+    property bool textFieldVisible: false 
     
-    signal done(variant users, variant sheet)
+    signal done(variant users, variant sheet, string inputText)
     
     onCreationCompleted: {
         prev_filter = _contacts.filter
@@ -20,15 +22,15 @@ Sheet {
             kind: TitleBarKind.Default
             title: caption
             acceptAction: ActionItem {
-                enabled: multiselect
+                enabled: false
                 id: acceptButton
                 title: acceptText
                 onTriggered:{
                     var result = []
-                    for (var i = 0; i < contacts_list.selectionList().length; i++)
-                        result.push(contacts_list.dataModel.data(contacts_list.selectionList()[i]))
+                    for (var i = 0; i < contactsList.selectionList().length; i++)
+                        result.push(contactsList.dataModel.data(contactsList.selectionList()[i]))
                     
-                    done(result, me)
+                    done(result, me, inputText.text)
                     _contacts.filter = prev_filter
                     me.close()
                 }
@@ -38,14 +40,27 @@ Sheet {
                 title: "Cancel"
                 onTriggered:{
                     _contacts.filter = prev_filter
-                    done([], me);
+                    done([], me, "")
                     me.close()
                 }
             }
         }
+        
         Container {
+            TextField {
+                id: inputText
+                visible: textFieldVisible
+                hintText: textHintText
+                
+                onTextChanging: {
+                    acceptButton.enabled = (contactsList.selectionList().length != 0) && (textFieldVisible ? text.length != 0 : true)
+                }
+            }
+            Divider {
+                visible: textFieldVisible
+            }
             ListView {
-                id: contacts_list
+                id: contactsList
                 dataModel: _contacts ? _contacts.model : null
                 
                 listItemComponents: [
@@ -85,7 +100,7 @@ Sheet {
                 }
 
                 onSelectionChanged:{
-                    acceptButton.enabled = selectionList().length != 0
+                    acceptButton.enabled = (selectionList().length != 0) && (textFieldVisible ? inputText.text.length != 0 : true)
                     
                     if (selectionList().length > 1) {
                         titleBar.title = selectionList().length + " items selected";

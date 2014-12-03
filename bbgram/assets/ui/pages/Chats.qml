@@ -53,7 +53,7 @@ NavigationPane {
                 title: "New Chat"
                 ActionBar.placement: ActionBarPlacement.InOverflow
                 
-                function newChatSlot(users, sheet)
+                function newChatSlot(users, sheet, text)
                 {
                     if (users.length > 0)
                     {
@@ -87,12 +87,12 @@ NavigationPane {
                         Application.scene.openChat(groupChat)
                 }
                 
-                function newGroupSlot(users, sheet)
+                function newGroupSlot(users, sheet, text)
                 {
                     if (users.length > 0)
                     {
                         _owner.groupCreated.connect(groupCreatedSlot)
-                        _owner.createGroup(users, "Test Group Chat")
+                        _owner.createGroup(users, text)
                     }
                     sheet.done.disconnect(newGroupSlot)
                 }
@@ -102,6 +102,8 @@ NavigationPane {
                     sheet.caption = "New Group"
                     sheet.acceptText = "Select"
                     sheet.multiselect = true
+                    sheet.textHintText = "Enter Grpup Name"
+                    sheet.textFieldVisible = true
                     
                     sheet.done.connect(newGroupSlot);
                     
