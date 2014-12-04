@@ -6,6 +6,7 @@ import "contacts"
 import "chats"
 
 Page {
+    id: me
     property GroupChat chat
     
     actions: [
@@ -25,6 +26,25 @@ Page {
             title: "Add Participant"
             imageSource: "asset:///images/menu_bar_contact_plus.png"
             ActionBar.placement: ActionBarPlacement.OnBar
+            
+            function addParticipant(users, sheet, text)
+            {
+                sheet.done.disconnect(addParticipant)
+                
+                for (var i = 0; i < users.length; i++)
+                    _owner.addUserToGroup(chat, users[i])
+            }
+            
+            onTriggered: {
+                var sheet = contactPickerSheetDef.createObject();
+                sheet.caption = "Add Participant"
+                sheet.acceptText = "Add"
+                sheet.multiselect = true
+                
+                sheet.done.connect(addParticipant);
+                
+                sheet.open()
+            }
         },
         ActionItem {
             id: sharedMediaAction
@@ -107,7 +127,10 @@ Page {
                 
                 ListView {
                     id: groupList
-                    dataModel: _contacts ? _contacts.model : null
+                    dataModel: chat ? chat.members : null
+                    
+                    property variant currentUser : null
+                    property variant currentChat : me.chat
                     
                     multiSelectHandler {
                         actions: [
@@ -115,10 +138,23 @@ Page {
                                 title: "Delete from Group"
                                 imageSource: "asset:///images/menu_bin.png"
                                 onTriggered: {
-                                    console.log("Delete from froup")                                
+                                    for (var i = 0; i < groupList.selectionList().length; i++)
+                                    {
+                                        var user = groupList.dataModel.data(groupList.selectionList()[i])
+                                        _owner.deleteUserFromGroup(chat, user)
+                                    }   
                                 }
                             }
                         ]
+                        
+                        onActiveChanged: {
+                            if (active)
+                                currentUser = _currentUser
+                            else
+                                currentUser = null
+                        }
+                        
+                        
                     }
                     
                     gestureHandlers: [
@@ -132,19 +168,33 @@ Page {
                     listItemComponents: [
                         ListItemComponent {
                             type: "item"
-                            ContactItem { }
+                            ContactItem { 
+                                enabled: ListItem.view.currentUser ? ListItem.view.currentChat.canDeleteUser(ListItem.view.currentUser, ListItemData) : true
+                            }
                         }
                     ]
                     
                     onSelectionChanged: {
+                        if (selected)
+                        {
+                            if (!chat.canDeleteUser(_currentUser, dataModel.data(indexPath)))
+                                toggleSelection(indexPath);
+                        }
+                        
                         groupList.multiSelectHandler.status = "Selected: " + selectionList().length
                     }
                 }
             }
         }
     }
-    attachedObjects: ComponentDefinition {
-        id: editGroupSheetDef
-        source: "chats/EditGroup.qml"
-    }
+    attachedObjects: [
+        ComponentDefinition {
+            id: editGroupSheetDef
+            source: "chats/EditGroup.qml"
+        },
+        ComponentDefinition {
+            id: contactPickerSheetDef
+            source: "contacts/ContactPicker.qml"
+        }
+    ]
 }

@@ -311,18 +311,12 @@ void Storage::updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsig
 
     if (flags & TGL_UPDATE_ADMIN)
     {
-        groupChat->setAdmin((User*)m_instance->getPeer(TGL_PEER_USER, C->admin_id));
+        groupChat->setAdmin(C->admin_id);
     }
 
     if (flags & TGL_UPDATE_MEMBERS)
     {
-        QList<User*> members;
-        for(int i = 0; i < C->user_list_size; i++)
-        {
-            User* member = (User*)m_instance->getPeer(TGL_PEER_USER, C->user_list[i].user_id);
-            members.push_back(member);
-        }
-        groupChat->setMembers(members);
+        groupChat->setMembers(C->user_list, C->user_list_size);
     }
 }
 

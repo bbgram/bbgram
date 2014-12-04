@@ -49,6 +49,14 @@ Page {
         }
     }
     
+    function addParticipant(users, sheet, text)
+    {
+        sheet.done.disconnect(addParticipant)
+        
+        for (var i = 0; i < users.length; i++)
+            _owner.addUserToGroup(chat, users[i])
+    }
+    
     titleBar: TitleBar {
         kind: TitleBarKind.FreeForm
         kindProperties: FreeFormTitleBarKindProperties {
@@ -141,6 +149,16 @@ Page {
             title: "Add Participant"
             imageSource: "asset:///images/menu_bar_contact_plus.png"
             ActionBar.placement: ActionBarPlacement.InOverflow
+            onTriggered: {
+                var sheet = contactPickerSheetDef.createObject();
+                sheet.caption = "Add Participant"
+                sheet.acceptText = "Add"
+                sheet.multiselect = true
+                
+                sheet.done.connect(addParticipant);
+                
+                sheet.open()
+            }
         },
         ActionItem {
             id: sharedMediaAction
@@ -251,6 +269,10 @@ Page {
         ComponentDefinition {
             id: groupPageDef
             source: "GroupInfo.qml"
+        },
+        ComponentDefinition {
+            id: contactPickerSheetDef
+            source: "contacts/ContactPicker.qml"
         }
     ]
 }

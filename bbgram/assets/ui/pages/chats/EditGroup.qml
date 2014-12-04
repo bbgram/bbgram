@@ -14,6 +14,10 @@ Sheet {
             acceptAction: ActionItem {
                 title: "Done"
                 onTriggered: {
+                    
+                    if (groupTitle.text != chat.title)
+                        _owner.setGroupName(chat, groupTitle.text);
+                    
                     me.close()
                 }
             }
@@ -48,7 +52,7 @@ Sheet {
                     verticalAlignment: VerticalAlignment.Center
                     leftPadding: 20
                     TextField {
-                        id: groupName
+                        id: groupTitle
                         text: chat ? chat.title : ""
                     }
                 }

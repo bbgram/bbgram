@@ -1,12 +1,18 @@
 #include "GroupChat.h"
 #include "../utils/Colorizer.h"
+#include "../Storage.h"
 
 using namespace bb::cascades;
 
 GroupChat::GroupChat(int id)
-    : Chat(TGL_PEER_CHAT, id), m_admin(NULL)
+    : Chat(TGL_PEER_CHAT, id), m_adminId(0)
 {
     setPhoto("");
+
+    m_members = new GroupDataModel();
+    m_members->setParent(this);
+    m_members->setSortingKeys(QStringList() << "firstName");
+    m_members->setGrouping(ItemGrouping::None);
 }
 
 GroupChat::~GroupChat()
@@ -58,27 +64,67 @@ void GroupChat::setPhoto(const QString &filename)
     emit photoChanged();
 }
 
-User* GroupChat::admin() const
+int GroupChat::getAdmin() const
 {
-    return m_admin;
+    return m_adminId;
 }
 
-void GroupChat::setAdmin(User* admin)
+void GroupChat::setAdmin(int adminId)
 {
-    m_admin = admin;
+    m_adminId = adminId;
+
     emit adminChanged();
 }
 
-void GroupChat::setMembers(const QList<User*>& members)
+void GroupChat::addMember(User* newMember, int inviterId)
 {
-    m_members.clear();
-    foreach(User* member, members)
-        m_members.push_back(member);
+    m_members->insert(newMember);
+    m_invites.insert(newMember->id(), inviterId);
+}
+
+void GroupChat::deleteMember(User* member)
+{
+    m_members->remove(member);
+    m_invites.remove(member->id());
 
     emit membersChanged();
 }
 
-const QList<User*>& GroupChat::getMembers() const
+void GroupChat::setMembers(const tgl_chat_user* members, int count)
+{
+    m_members->clear();
+    m_invites.clear();
+
+    for (int i = 0; i < count; i++)
+    {
+        User* member = (User*)Storage::instance()->getPeer(TGL_PEER_USER, members[i].user_id);
+        m_members->insert(member);
+        m_invites.insert(members[i].user_id, members[i].inviter_id);
+    }
+
+    emit membersChanged();
+}
+
+bb::cascades::DataModel* GroupChat::members() const
 {
     return m_members;
+}
+
+bool GroupChat::canDeleteUser(User* self, User* target) const
+{
+    if (self->id() == target->id() || target->id() == m_adminId)
+        return false;
+
+    if (self->id() == m_adminId)
+        return true;
+
+    int selfId = self->id();
+    int targetId = target->id();
+
+    QMap<int, int>::const_iterator it = m_invites.find(targetId);
+    if (it != m_invites.end())
+        if (it.value() == selfId)
+            return true;
+
+    return false;
 }

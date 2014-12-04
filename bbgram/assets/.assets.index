@@ -1,5 +1,5 @@
 1
-117
+119
 720x720/ui/pages/Intro.qml
 dm_countries.xml
 dm_intro_page.xml
@@ -89,6 +89,7 @@ images/system_black.amd
 server.pub
 ui/pages/Chat.qml
 ui/pages/chats/ChatItem.qml
+ui/pages/chats/EditGroup.qml
 ui/pages/chats/Message.qml
 ui/pages/chats/MessageList.qml
 ui/pages/chats/Photo.qml
@@ -102,6 +103,7 @@ ui/pages/contacts/ContactPicker.qml
 ui/pages/contacts/EditContact.qml
 ui/pages/Contacts.qml
 ui/pages/CountrySelect.qml
+ui/pages/GroupInfo.qml
 ui/pages/intro/CarouselView.qml
 ui/pages/intro/Indicator.qml
 ui/pages/Intro.qml

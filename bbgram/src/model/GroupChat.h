@@ -3,11 +3,14 @@
 #include "Chat.h"
 #include "User.h"
 
-#include <bb/cascades/Image>
+#include <bb/cascades/DataModel>
+#include <bb/cascades/QListDataModel>
 
 class GroupChat : public Chat
 {
     Q_OBJECT
+
+    Q_PROPERTY(bb::cascades::DataModel *members READ members CONSTANT);
 public:
     GroupChat(int id = 0);
     ~GroupChat();
@@ -19,21 +22,27 @@ public:
     QVariant photo() const;
     void setPhoto(const QString &filename);
 
-    User* admin() const;
-    void setAdmin(User* admin);
+    int getAdmin() const;
+    void setAdmin(int adminId);
 
-    void setMembers(const QList<User*>& members);
-    const QList<User*>& getMembers() const;
+    void addMember(User* newMember, int inviterId);
+    void deleteMember(User* member);
+    void setMembers(const tgl_chat_user* members, int count);
 
+    bb::cascades::DataModel* members() const;
+
+    Q_INVOKABLE bool canDeleteUser(User* self, User* target) const;
 signals:
         void adminChanged();
         void membersChanged();
 protected:
-    bb::cascades::Image     m_photo;
-    QString                 m_photoFilename;
-    QString                 m_title;
-    User*                   m_admin;
-    QList<User*>            m_members;
+    bb::cascades::Image             m_photo;
+    QString                         m_photoFilename;
+    QString                         m_title;
+    int                             m_adminId;
+    bb::cascades::GroupDataModel*   m_members;
+    //user inviter
+    QMap<int, int>                  m_invites;
 };
 
 Q_DECLARE_METATYPE(GroupChat*);

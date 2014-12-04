@@ -71,6 +71,21 @@ void MainScreen::createGroup(QVariantList users, const QString& title)
     tgl_do_create_group_chat_ex(gTLS, users.size(), peers, title.toUtf8().data(), MainScreen::_createGroupCallback, peers);
 }
 
+void MainScreen::setGroupName(GroupChat* group, const QString& title)
+{
+    tgl_do_rename_chat(gTLS, {group->type(), group->id()}, title.toUtf8().data(), NULL, NULL);
+}
+
+void MainScreen::addUserToGroup(GroupChat* group, User* user)
+{
+    tgl_do_add_user_to_chat(gTLS, {group->type(), group->id()}, {user->type(), user->id()}, 0, MainScreen::_addMemberCallback, user);
+}
+
+void MainScreen::deleteUserFromGroup(GroupChat* group, User* user)
+{
+    tgl_do_del_user_from_chat(gTLS, {group->type(), group->id()}, {user->type(), user->id()}, MainScreen::_deleteMemberCallback, user);
+}
+
 void MainScreen::deleteChat(Chat* chat)
 {
     qDebug() << "deleting " << chat->title();
@@ -140,9 +155,27 @@ void MainScreen::_createGroupCallback(struct tgl_state *TLS, void *callback_extr
 
     if (success)
     {
-        int peer_id = M->to_id.id;
-        groupChat = (GroupChat*)Storage::instance()->getPeer(TGL_PEER_CHAT, peer_id);
+        groupChat = (GroupChat*)Storage::instance()->getPeer(TGL_PEER_CHAT, M->to_id.id);
+        groupChat->setAdmin(gTLS->our_id);
     }
 
     emit m_instance->groupCreated(groupChat);
+}
+
+void MainScreen::_addMemberCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M)
+{
+    if (!success)
+        return;
+
+    GroupChat* groupChat = (GroupChat*)Storage::instance()->getPeer(TGL_PEER_CHAT, M->to_id.id);
+    groupChat->addMember((User*)callback_extra, TLS->our_id);
+}
+
+void MainScreen::_deleteMemberCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M)
+{
+    if (!success)
+        return;
+
+    GroupChat* groupChat = (GroupChat*)Storage::instance()->getPeer(TGL_PEER_CHAT, M->to_id.id);
+    groupChat->deleteMember((User*)callback_extra);
 }
