@@ -15,9 +15,11 @@ Container {
     
     property bool withHeader: ListItem.indexInSection == ListItem.sectionSize - 1
     
+    layout: StackLayout {            
+    }
     Container {
         visible: me.withHeader
-        topPadding: me.withHeader ? 25 : 0
+        topPadding: me.withHeader ? 15 : 0
         horizontalAlignment: HorizontalAlignment.Center
         layout: DockLayout {            
         }
@@ -36,7 +38,7 @@ Container {
                 textStyle.color: Color.White
             }
         }
-        bottomMargin: 25
+        bottomMargin: 15
     
     }
     
@@ -45,7 +47,7 @@ Container {
         layout: DockLayout {
         }
         Container {
-            minHeight: 100
+            minHeight: 80
             leftPadding: 20
             rightPadding: 20
             topPadding: 10
@@ -84,7 +86,7 @@ Container {
                         rightMargin: 20
                         topPadding: 10
                         bottomPadding: 8
-
+                    
                     }
                     Container { // body
                         layout: StackLayout {
@@ -98,9 +100,7 @@ Container {
                         
                         }
                         Container {   
-                            layoutProperties: StackLayoutProperties {
-                                spaceQuota: 1
-                            }
+                            //preferredHeight: Infinity
                             horizontalAlignment: HorizontalAlignment.Fill 
                             verticalAlignment: VerticalAlignment.Fill
                             layout: DockLayout {}
@@ -144,14 +144,17 @@ Container {
                     }
                 }
             }
-            
-            Container {
-                id: overlay
-                horizontalAlignment: HorizontalAlignment.Fill
-                verticalAlignment: VerticalAlignment.Fill
-                background: Color.create('#31A3DD')
-                opacity: 0.2
-                visible: false
-            }
-        }}
+        
+        
+        
+        }
+        Container {
+            id: overlay
+            horizontalAlignment: HorizontalAlignment.Fill
+            verticalAlignment: VerticalAlignment.Fill
+            background: Color.create('#31A3DD')
+            opacity: 0.2
+            visible: false
+        }
+    }
 }
