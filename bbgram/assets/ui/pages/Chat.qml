@@ -1,6 +1,7 @@
 import bb.cascades 1.2
 import bb.system 1.0
 import bbgram.types.lib 0.1
+import bb.cascades.pickers 1.0
 
 import "chats"
 
@@ -131,6 +132,23 @@ Page {
             title: "Attach"
             imageSource: "asset:///images/bar_attach.png"
             ActionBar.placement: ActionBarPlacement.OnBar
+            
+            onTriggered: {
+                filePicker.open()
+            }
+            
+            attachedObjects: [
+                FilePicker {
+                    id: filePicker
+                    type : FileType.Picture
+                    title : "Select Picture"
+                    mode: FilePickerMode.Picker
+                    directories : ["/accounts/1000/shared/"]
+                    onFileSelected : {
+                        _owner.sendPhoto(chat, selectedFiles[0]);
+                    }
+                }
+            ]
         },
         ActionItem {
             id: sendAction

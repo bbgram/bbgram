@@ -10,6 +10,12 @@ using namespace bb::system;
 
 MainScreen* MainScreen::m_instance = NULL;
 
+struct CreateGroupData
+{
+    tgl_peer_id_t* peers;
+    QString chatPhoto;
+};
+
 MainScreen::MainScreen(ApplicationUI* app)
     : Screen("asset:///ui/pages/Main.qml")
         , m_app(app)
@@ -42,6 +48,12 @@ void MainScreen::sendMessage(Chat* chat, const QString& message)
     tgl_do_send_message(gTLS, peer, (const char*)bytes.data(), bytes.length(), 0, 0);
 }
 
+void MainScreen::sendPhoto(Chat* chat, const QString& fileName)
+{
+    tgl_peer_id_t peer = {chat->type(), chat->id()};
+    tgl_do_send_photo(gTLS, tgl_message_media_photo, peer, fileName.toUtf8().data(), NULL, NULL);
+}
+
 void MainScreen::deleteMessage(long long id)
 {
     Storage::instance()->deleteMessage(id);
@@ -55,20 +67,23 @@ void MainScreen::markRead(Chat* chat)
     tgl_do_mark_read(gTLS, peer, 0, 0);
 }
 
-void MainScreen::createGroup(QVariantList users, const QString& title)
+void MainScreen::createGroup(QVariantList users, const QString& title, const QString& chatPhoto)
 {
-    tgl_peer_id_t* peers = new tgl_peer_id_t[users.size()];
+    CreateGroupData* data = new CreateGroupData;
+
+    data->peers = new tgl_peer_id_t[users.size()];
+    data->chatPhoto = chatPhoto;
 
     int idx = 0;
     foreach (QVariant variant, users)
     {
         User* user = (User*)variant.value<QObject*>();
         tgl_peer_id_t peer = {TGL_PEER_USER, user->id()};
-        peers[idx] = peer;
+        data->peers[idx] = peer;
         idx++;
     }
 
-    tgl_do_create_group_chat_ex(gTLS, users.size(), peers, title.toUtf8().data(), MainScreen::_createGroupCallback, peers);
+    tgl_do_create_group_chat_ex(gTLS, users.size(), data->peers, title.toUtf8().data(), MainScreen::_createGroupCallback, data);
 }
 
 void MainScreen::setGroupName(GroupChat* group, const QString& title)
@@ -149,7 +164,8 @@ void MainScreen::initialize()
 
 void MainScreen::_createGroupCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M)
 {
-    delete[] (tgl_peer_id_t*)callback_extra;
+    CreateGroupData* data = (CreateGroupData*)callback_extra;
+    delete[] data->peers;
 
     GroupChat* groupChat = NULL;
 
@@ -157,7 +173,14 @@ void MainScreen::_createGroupCallback(struct tgl_state *TLS, void *callback_extr
     {
         groupChat = (GroupChat*)Storage::instance()->getPeer(TGL_PEER_CHAT, M->to_id.id);
         groupChat->setAdmin(gTLS->our_id);
+
+        tgl_peer_id_t peer = {groupChat->type(), groupChat->id()};
+
+        if (!data->chatPhoto.isEmpty())
+            tgl_do_set_chat_photo(gTLS, peer, data->chatPhoto.toUtf8().data(), NULL, NULL);
     }
+
+    delete data;
 
     emit m_instance->groupCreated(groupChat);
 }

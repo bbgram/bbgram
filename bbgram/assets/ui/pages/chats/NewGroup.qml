@@ -10,8 +10,6 @@ Sheet {
     property int prev_filter : 3
     property NewGroupFinal finalStep : null
     
-    signal usersSelected(variant users, string groupName, variant sheet)
-    
     onCreationCompleted: {
         prev_filter = _contacts.filter
         _contacts.filter = 1
@@ -25,13 +23,6 @@ Sheet {
     function creationCompleated()
     {
         finalStep.created.disconnect(creationCompleated);
-        
-        var result = [];
-        for (var i = 0; i < contactsList.selectionList().length; i++)
-        {
-            result.push(contactsList.dataModel.data(contactsList.selectionList()[i]))
-        }
-        usersSelected(result, finalStep.groupName, me)
         _contacts.filter = prev_filter
         me.close()
     }

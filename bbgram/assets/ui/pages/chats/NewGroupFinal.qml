@@ -1,4 +1,5 @@
 import bb.cascades 1.2
+import bb.cascades.pickers 1.0
 
 import "../settings"
 import "../contacts"
@@ -8,8 +9,20 @@ Sheet {
     
     property GroupDataModel selectionDataModel;
     property string groupName : "";
+    property string chatPhoto : "";
     
     signal created()
+    
+    function groupCreatedSlot(groupChat)
+    {
+        _owner.groupCreated.disconnect(groupCreatedSlot)
+        
+        if (groupChat)
+            Application.scene.openChat(groupChat)
+            
+        created();
+        me.close();
+    }
     
     Page {
         titleBar: TitleBar {
@@ -22,11 +35,34 @@ Sheet {
                 title: "Create"
                 
                 onTriggered: {
-                    created();
-                    me.close();
+                    if (!selectionDataModel.isEmpty())
+                    {
+                        var idx = 0
+                        var users = [];
+                        var it = selectionDataModel.first();
+                        while (idx < selectionDataModel.size())
+                        {
+                            users.push(selectionDataModel.data(it));
+                            it = selectionDataModel.after(it);
+                            idx++;
+                        }
+                        it = null
+
+                        _owner.groupCreated.connect(groupCreatedSlot)
+                        _owner.createGroup(users, groupName, chatPhoto)
+                        
+                        acceptAction.enabled = false
+                        backAction.enabled = false
+                    }
+                    else
+                    {
+                        created();
+                        me.close();
+                    }
                 }
             }
             dismissAction: ActionItem {
+                id: backAction
                 title: "Back"
                 onTriggered:{
                     me.close()
@@ -45,6 +81,7 @@ Sheet {
                     orientation: LayoutOrientation.LeftToRight
                 }
                 ImageView {
+                    id: groupImageView
                     verticalAlignment: VerticalAlignment.Center
                     
                     //image: chat ? chat.photo : null
@@ -52,6 +89,26 @@ Sheet {
                     scalingMethod: ScalingMethod.AspectFit
                     preferredHeight: 180
                     preferredWidth: 180
+                    
+                    gestureHandlers: TapHandler {
+                        onTapped: {
+                            filePicker.open()
+                        }
+                    }
+                    
+                    attachedObjects: [
+                        FilePicker {
+                            id: filePicker
+                            type : FileType.Picture
+                            title : "Select Picture"
+                            mode: FilePickerMode.Picker
+                            directories : ["/accounts/1000/shared/"]
+                            onFileSelected : {
+                                //groupImageView.imageSource = "asset://" + selectedFiles[0];
+                                chatPhoto = selectedFiles[0];
+                            }
+                        }
+                    ]
                 } 
                 
                 Container {

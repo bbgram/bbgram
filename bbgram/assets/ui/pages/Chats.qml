@@ -64,7 +64,6 @@ NavigationPane {
                 
                 onTriggered: {
                     var sheet = contactPickerSheetDef.createObject()
-                    sheet.userSelected.connect(newChatSlot);
                     sheet.open()
                 }
             },
@@ -74,28 +73,8 @@ NavigationPane {
                 title: "New Group"
                 ActionBar.placement: ActionBarPlacement.InOverflow
                 
-                function groupCreatedSlot(groupChat)
-                {
-                    _owner.groupCreated.disconnect(groupCreatedSlot)
-                    
-                    if (groupChat)
-                        Application.scene.openChat(groupChat)
-                }
-                
-                function newGroupSlot(users, text, sheet)
-                {
-                    sheet.usersSelected.disconnect(newGroupSlot)
-                    if (users.length > 0)
-                    {
-                        _owner.groupCreated.connect(groupCreatedSlot)
-                        _owner.createGroup(users, text)
-                    }
-                }
-                
                 onTriggered: {
                     var sheet = newGroupSheetDef.createObject()
-                    sheet.usersSelected.connect(newGroupSlot);
-                    
                     sheet.open()
                 }
             },

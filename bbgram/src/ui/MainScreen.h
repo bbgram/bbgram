@@ -19,9 +19,10 @@ public:
     ~MainScreen();
 
     Q_INVOKABLE void sendMessage(Chat* chat, const QString& message);
+    Q_INVOKABLE void sendPhoto(Chat* chat, const QString& fileName);
     Q_INVOKABLE void deleteMessage(long long id);
     Q_INVOKABLE void markRead(Chat* chat);
-    Q_INVOKABLE void createGroup(QVariantList users, const QString& title);
+    Q_INVOKABLE void createGroup(QVariantList users, const QString& title, const QString& chatPhoto);
     Q_INVOKABLE void setGroupName(GroupChat* group, const QString& title);
     Q_INVOKABLE void addUserToGroup(GroupChat* group, User* user);
     Q_INVOKABLE void deleteUserFromGroup(GroupChat* group, User* user);
