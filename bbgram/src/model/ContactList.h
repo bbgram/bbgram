@@ -11,6 +11,7 @@ class ContactList : public QObject
 
     Q_PROPERTY(bb::cascades::GroupDataModel *model READ model CONSTANT);
     Q_PROPERTY(int filter READ filter WRITE setFilter NOTIFY filterChanged)
+    Q_PROPERTY(int telegramContactsCount READ telegramContactsCount NOTIFY contentUpdated)
 public:
     ContactList(bb::cascades::QListDataModel<User*>* telegramContacts);
     ~ContactList();
@@ -21,14 +22,17 @@ public:
 
     int filter() const;
     void setFilter(int filter);
+
+    int telegramContactsCount() const;
 private slots:
     void updateContent();
 signals:
     void filterChanged();
+    void contentUpdated();
 protected:
-    bb::cascades::GroupDataModel*   m_model;
-    int                             m_filter;
-    bb::cascades::QListDataModel<User*>* m_telegramContacts;
-    QList<QVariantMap> mPhoneBook;
+    bb::cascades::GroupDataModel*           m_model;
+    int                                     m_filter;
+    bb::cascades::QListDataModel<User*>*    m_telegramContacts;
+    QList<QVariantMap>                      m_phoneBook;
 };
 

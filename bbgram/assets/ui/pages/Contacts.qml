@@ -60,6 +60,20 @@ NavigationPane {
         
         Container {
             ListView {
+                leadingVisual: Container {
+                    topPadding: 20
+                    bottomPadding: 20
+                    layoutProperties: StackLayoutProperties {
+                        spaceQuota: 1
+                    }
+                     Label {
+                         preferredWidth: Infinity
+                         verticalAlignment: VerticalAlignment.Center                         
+                         text: "%1 Contacts".arg(_contacts ? _contacts.telegramContactsCount : 0)
+                         textStyle.fontSize: FontSize.XLarge
+                         textStyle.textAlign: TextAlign.Center
+                     }
+                }
                 id: contacts_list
                 dataModel: _contacts ? _contacts.model : null
                 

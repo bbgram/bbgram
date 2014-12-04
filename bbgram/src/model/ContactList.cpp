@@ -61,7 +61,7 @@ void ContactList::updatePhonebook()
     contactFilter.setHasAttribute(attrs);
     QList<Contact> phonebook = service.contacts(contactFilter);
 
-    mPhoneBook.clear();
+    m_phoneBook.clear();
 
     foreach (Contact contact, phonebook)
     {
@@ -85,7 +85,7 @@ void ContactList::updatePhonebook()
         entry["online"] = true;
         if(!phoneNumber.empty())
             entry["phone"] = phoneNumber[0].value();
-        mPhoneBook.push_back(entry);
+        m_phoneBook.push_back(entry);
     }
 }
 
@@ -98,6 +98,11 @@ void ContactList::setFilter(int filter)
 {
     m_filter = filter;
     emit filterChanged();
+}
+
+int ContactList::telegramContactsCount() const
+{
+    return m_telegramContacts->size();
 }
 
 void ContactList::updateContent()
@@ -115,9 +120,10 @@ void ContactList::updateContent()
     if (m_filter & 2)
     {
         QVariantMap contact;
-        foreach (contact, mPhoneBook)
+        foreach (contact, m_phoneBook)
         {
             m_model->insert(contact);
         }
     }
+    emit contentUpdated();
 }
