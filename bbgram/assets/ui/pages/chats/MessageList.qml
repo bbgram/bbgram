@@ -2,6 +2,7 @@ import bb.cascades 1.2
 
 ListView {
     id: me
+    property bool groupChat: false
     property variant messages: null
     
     layout: StackListLayout {
@@ -34,6 +35,7 @@ ListView {
             type: "message"
             Message {
                 id: chatMessage
+                author: ListItem.view.groupChat && !ListItemData.our ? ListItemData.from : null
                 ListItem.onSelectionChanged: {
                     chatMessage.selected = selected;
                 }

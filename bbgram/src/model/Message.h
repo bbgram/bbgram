@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QDateTime>
+class User;
 
 class Message: public QObject
 {
@@ -15,6 +16,7 @@ class Message: public QObject
     Q_PROPERTY(bool unread READ unread NOTIFY markedRead)
     Q_PROPERTY(bool service READ service CONSTANT)
     Q_PROPERTY(int mediaType READ mediaType CONSTANT)
+    Q_PROPERTY(User* from READ from CONSTANT)
 public:
     Message(long long id = 0, tgl_message* M = 0);
     ~Message();
@@ -32,6 +34,8 @@ public:
     bool service() const;
     int mediaType() const;
     QVariantMap& media();
+
+    User* from() const;
 signals:
     void markedRead();
 protected:

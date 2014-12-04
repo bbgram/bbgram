@@ -18,6 +18,7 @@ class User : public Chat
     Q_PROPERTY(QString lastSeenFormatted READ lastSeenFormatted NOTIFY statusChanged)
     Q_PROPERTY(QString typingStatus READ typingStatus NOTIFY typingStatusChanged)
     Q_PROPERTY(QString sortingKey READ sortingKey CONSTANT)
+    Q_PROPERTY(QString color READ color CONSTANT)
 public:
     User(int id = 0);
     ~User();
@@ -50,6 +51,7 @@ public:
     QVariant photo() const;
 
     const QString& sortingKey() const;
+    QString color() const;
 public slots:
     void resetTypingStatus();
 signals:

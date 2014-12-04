@@ -214,6 +214,7 @@ Page {
             }
             MessageList {
                 id: messageList
+                groupChat: chat && chat.type != undefined ? chat.type == 2 : false
                 messages: chat && chat.messages != undefined ? chat.messages : null
             }
         }
@@ -243,7 +244,6 @@ Page {
                 onTextChanging: {
                     sendAction.enabled = text.length > 0;
                 }
-                inputMode: TextAreaInputMode.Chat
                 input {                    
                     submitKey: SubmitKey.Send
                     onSubmitted: {

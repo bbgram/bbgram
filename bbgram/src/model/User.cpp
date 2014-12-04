@@ -218,3 +218,8 @@ const QString& User::sortingKey() const
     static QString source = "!";
     return source;
 }
+
+QString User::color() const
+{
+    return Colorizer::color(m_id);
+}

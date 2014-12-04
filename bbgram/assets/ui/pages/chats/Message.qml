@@ -2,7 +2,7 @@ import bb.cascades 1.2
 
 Container {
     id: me
-    
+    property variant author: null //{firstName: "Adam", lastName: "Smith", color:"#FFEE00"}
     property bool incoming: !ListItemData.our
     property string text: ListItemData.text
     property variant date: ListItemData.dateTime
@@ -15,8 +15,6 @@ Container {
     
     property bool withHeader: ListItem.indexInSection == ListItem.sectionSize - 1
     
-    layout: StackLayout {        
-    }
     Container {
         visible: me.withHeader
         topPadding: me.withHeader ? 25 : 0
@@ -39,9 +37,11 @@ Container {
             }
         }
         bottomMargin: 25
-        
+    
     }
-    Container {
+    
+    
+    Container { // message body
         layout: DockLayout {
         }
         Container {
@@ -61,60 +61,97 @@ Container {
                     verticalAlignment: VerticalAlignment.Fill
                     imageSource: incoming ? "asset:///images/msg_in.amd" : "asset:///images/msg_out.amd"
                 }
-                Container {            
+                Container { // message
                     leftPadding: me.incoming ? 40 : 20
                     rightPadding: me.incoming ? 20 : 25
                     topPadding: 10
-                    bottomPadding: 14
-                    layout: DockLayout {}
-                    Label {
-                        text: me.text + (incoming ? "<b>            &nbsp;</b>" : "<b>                 &nbsp;</b>")
-                        multiline: true
-                        textFormat: TextFormat.Html
-                        attachedObjects: [
-                            LayoutUpdateHandler {
-                                onLayoutFrameChanged: {
-                                }
-                            
-                            }
-                        ]
+                    bottomPadding: 16
+                    
+                    layout: StackLayout {
+                        orientation: LayoutOrientation.LeftToRight
                     }
-                    Container {
-                        horizontalAlignment: HorizontalAlignment.Right
-                        verticalAlignment: VerticalAlignment.Bottom
+                    
+                    Container { // avatar
+                        visible: author != null
+                        ImageView {
+                            image: author ? author.photo : null
+                            //imageSource: "asset:///images/placeholders/user_placeholder_purple.png"                            
+                            minWidth: 80
+                            minHeight: 80                
+                            preferredWidth: 80
+                            preferredHeight: 80
+                        }
+                        rightMargin: 20
+                        topPadding: 10
+                        bottomPadding: 8
+
+                    }
+                    Container { // body
                         layout: StackLayout {
-                            orientation: LayoutOrientation.LeftToRight
+                            orientation: LayoutOrientation.TopToBottom
                         }
                         Label {
-                            text: Qt.formatDateTime(me.date, "hh:mm")
-                            
-                            textStyle {
-                                color: me.incoming ? Color.Gray : Color.create('#75B166')
-                                fontSize: FontSize.XSmall
-                            }
-                            verticalAlignment: VerticalAlignment.Center
-                            rightMargin: 0
+                            visible: author != null
+                            text: author ? (author.firstName + " " + author.lastName) : ""
+                            textStyle.color: author ? Color.create(author.color) : Color.Black
+                            bottomMargin: 4
+                        
                         }
-                        ImageView {
-                            visible: !incoming
-                            imageSource: unread ? "asset:///images/check_green.png" : "asset:///images/check_2_green.png"
-                            
-                            verticalAlignment: VerticalAlignment.Center
-                            leftMargin: 0
+                        Container {   
+                            layoutProperties: StackLayoutProperties {
+                                spaceQuota: 1
+                            }
+                            horizontalAlignment: HorizontalAlignment.Fill 
+                            verticalAlignment: VerticalAlignment.Fill
+                            layout: DockLayout {}
+                            Label {
+                                text: me.text + (incoming ? "<b>            &nbsp;</b>" : "<b>                 &nbsp;</b>")
+                                multiline: true
+                                textFormat: TextFormat.Html
+                                attachedObjects: [
+                                    LayoutUpdateHandler {
+                                        onLayoutFrameChanged: {
+                                        }
+                                    
+                                    }
+                                ]
+                            }
+                            Container { // date and read status
+                                horizontalAlignment: HorizontalAlignment.Right
+                                verticalAlignment: VerticalAlignment.Bottom
+                                layout: StackLayout {
+                                    orientation: LayoutOrientation.LeftToRight
+                                }
+                                Label {
+                                    text: Qt.formatDateTime(me.date, "hh:mm")
+                                    
+                                    textStyle {
+                                        color: me.incoming ? Color.Gray : Color.create('#75B166')
+                                        fontSize: FontSize.XSmall
+                                    }
+                                    verticalAlignment: VerticalAlignment.Center
+                                    rightMargin: 0
+                                }
+                                ImageView {
+                                    visible: !incoming
+                                    imageSource: unread ? "asset:///images/check_green.png" : "asset:///images/check_2_green.png"
+                                    
+                                    verticalAlignment: VerticalAlignment.Center
+                                    leftMargin: 0
+                                }
+                            }
                         }
                     }
                 }
-            
             }
-        }
-        
-        Container {
-            id: overlay
-            horizontalAlignment: HorizontalAlignment.Fill
-            verticalAlignment: VerticalAlignment.Fill
-            background: Color.create('#31A3DD')
-            opacity: 0.2
-            visible: false
-        }
-    }
+            
+            Container {
+                id: overlay
+                horizontalAlignment: HorizontalAlignment.Fill
+                verticalAlignment: VerticalAlignment.Fill
+                background: Color.create('#31A3DD')
+                opacity: 0.2
+                visible: false
+            }
+        }}
 }
