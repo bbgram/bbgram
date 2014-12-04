@@ -404,8 +404,44 @@ void tglu_work_update (struct tgl_state *TLS, struct connection *c, long long ms
     break;
   case CODE_update_notify_settings:
     {
-       assert (skip_type_any (TYPE_TO_PARAM (notify_peer)) >= 0);
-       assert (skip_type_any (TYPE_TO_PARAM (peer_notify_settings)) >= 0);
+        struct tgl_notify_peer notify_peer;
+        memset(&notify_peer, 0, sizeof(tgl_notify_peer));
+
+        int magic = fetch_int ();
+        switch (magic) {
+        case  0x9fd40bd8:
+            notify_peer.type = tgl_notify_peer;
+            notify_peer.peer = tglf_fetch_peer_id (TLS);
+            break;
+        case  0xb4c83b4c:
+            notify_peer.type = tgl_notify_users;
+            break;
+        case  0xc007cec3:
+            notify_peer.type = tgl_notify_chats;
+            break;
+        case  0x74d07c60:
+            notify_peer.type = tgl_notify_all;
+            break;
+        }
+
+        int mute_until = 0;
+        char* sound = 0;
+        int show_previews = 0;
+        int events_masks = 0;
+
+        magic = fetch_int ();
+        if (magic == 0x8d5e11ee)
+        {
+            mute_until = fetch_int ();
+            sound = fetch_str_dup();
+            show_previews = fetch_bool();
+            events_masks = fetch_int();
+        }
+
+        if (TLS->callback.notify_settings_update) {
+          TLS->callback.notify_settings_update (TLS, &notify_peer, mute_until, sound, show_previews, events_masks);
+        }
+        tfree_str(sound);
     }
     break;
   case CODE_update_service_notification:

@@ -468,5 +468,22 @@ struct tgl_message {
     };
   };
 };
+
+
+enum tgl_notify_peer_type {
+    tgl_notify_peer,
+    tgl_notify_users,
+    tgl_notify_chats,
+    tgl_notify_all
+};
+
+struct tgl_notify_peer {
+    enum tgl_notify_peer_type type;
+    union {
+        tgl_peer_id_t peer;
+    };
+};
+
+
 #pragma pack(pop)
 #endif

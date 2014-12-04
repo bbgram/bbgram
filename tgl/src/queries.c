@@ -4256,3 +4256,56 @@ void tgl_do_delete_history (struct tgl_state *TLS, tgl_peer_id_t id, int offset,
     out_int (offset);
     tglq_send_query (TLS, TLS->DC_working, packet_ptr - packet_buffer, packet_buffer, &delete_history_methods, 0, callback, callback_extra);
 }
+
+static int update_notify_settings_on_answer (struct tgl_state *TLS, struct query *q) {
+    fetch_bool ();
+      if (q->callback) {
+        ((void (*)(struct tgl_state *TLS, void *, int))(q->callback))(TLS, q->callback_extra, 1);
+      }
+}
+
+static struct query_methods update_notify_settings_methods  = {
+  .on_answer = update_notify_settings_on_answer,
+  .on_error = q_void_on_error,
+  .type = TYPE_TO_PARAM(bool)
+};
+
+void tgl_do_update_notify_settings (struct tgl_state *TLS, struct tgl_notify_peer *notify_peer, int mute_until, char* sound, int show_previews, int events_mask, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success), void *callback_extra) {
+    clear_packet ();
+    tgl_do_insert_header (TLS);
+    out_int (CODE_account_update_notify_settings);
+    switch (notify_peer->type) {
+    case tgl_notify_peer:
+        out_int(CODE_input_notify_peer);
+        if (notify_peer->peer.type == TGL_PEER_USER) {
+            if (notify_peer->peer.id == TLS->our_id)
+                out_int(CODE_input_peer_self);
+            else {
+                out_int(CODE_input_peer_contact);
+                out_int(notify_peer->peer.id);
+            }
+        }
+        else if (notify_peer->peer.type == TGL_PEER_CHAT) {
+            out_int(CODE_input_peer_chat);
+            out_int(notify_peer->peer.id);
+        }
+        break;
+    case tgl_notify_users:
+        out_int(CODE_input_notify_users);
+        break;
+    case tgl_notify_chats:
+        out_int(CODE_input_notify_chats);
+        break;
+    case tgl_notify_all:
+        out_int(CODE_input_notify_all);
+        break;
+    }
+
+    out_int(CODE_input_peer_notify_settings);
+    out_int(mute_until);
+    out_string(sound);
+    out_int(show_previews ? CODE_bool_true : CODE_bool_false);
+    out_int(events_mask);
+
+    tglq_send_query (TLS, TLS->DC_working, packet_ptr - packet_buffer, packet_buffer, &help_get_config_methods, 0, callback, callback_extra);
+}
