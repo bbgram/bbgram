@@ -49,12 +49,12 @@ Page {
         }
     }
     
-    function addParticipant(users, sheet, text)
+    function addParticipant(user, sheet)
     {
-        sheet.done.disconnect(addParticipant)
+        sheet.userSelected.disconnect(addParticipant)
         
-        for (var i = 0; i < users.length; i++)
-            _owner.addUserToGroup(chat, users[i])
+        if (user)
+            _owner.addUserToGroup(chat, user)
     }
     
     titleBar: TitleBar {
@@ -169,10 +169,8 @@ Page {
             onTriggered: {
                 var sheet = contactPickerSheetDef.createObject();
                 sheet.caption = "Add Participant"
-                sheet.acceptText = "Add"
-                sheet.multiselect = true
                 
-                sheet.done.connect(addParticipant);
+                sheet.userSelected.connect(addParticipant);
                 
                 sheet.open()
             }

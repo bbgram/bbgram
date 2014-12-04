@@ -53,23 +53,18 @@ NavigationPane {
                 title: "New Chat"
                 ActionBar.placement: ActionBarPlacement.InOverflow
                 
-                function newChatSlot(users, sheet, text)
+                function newChatSlot(user, sheet)
                 {
-                    if (users.length > 0)
-                    {
-                        Application.scene.openChat(users[0])
-                    }
-                    sheet.done.disconnect(newChatSlot)
+                    sheet.userSelected.disconnect(newChatSlot)
+                    
+                    if (user)
+                        Application.scene.openChat(user)
+                    
                 }
                 
                 onTriggered: {
                     var sheet = contactPickerSheetDef.createObject()
-                    sheet.caption = "New Chat"
-                    sheet.acceptText = "Select"
-                    sheet.multiselect = false
-                    
-                    sheet.done.connect(newChatSlot);
-                    
+                    sheet.userSelected.connect(newChatSlot);
                     sheet.open()
                 }
             },
@@ -87,25 +82,19 @@ NavigationPane {
                         Application.scene.openChat(groupChat)
                 }
                 
-                function newGroupSlot(users, sheet, text)
+                function newGroupSlot(users, text, sheet)
                 {
+                    sheet.usersSelected.disconnect(newGroupSlot)
                     if (users.length > 0)
                     {
                         _owner.groupCreated.connect(groupCreatedSlot)
                         _owner.createGroup(users, text)
                     }
-                    sheet.done.disconnect(newGroupSlot)
                 }
                 
                 onTriggered: {
-                    var sheet = contactPickerSheetDef.createObject()
-                    sheet.caption = "New Group"
-                    sheet.acceptText = "Select"
-                    sheet.multiselect = true
-                    sheet.textHintText = "Enter Group Name"
-                    sheet.textFieldVisible = true
-                    
-                    sheet.done.connect(newGroupSlot);
+                    var sheet = newGroupSheetDef.createObject()
+                    sheet.usersSelected.connect(newGroupSlot);
                     
                     sheet.open()
                 }
@@ -117,14 +106,6 @@ NavigationPane {
                 ActionBar.placement: ActionBarPlacement.InOverflow
                 
                 onTriggered: {
-                    var sheet = contactPickerSheetDef.createObject()
-                    sheet.caption = "New Secret Chat"
-                    sheet.acceptText = "Select"
-                    sheet.multiselect = false
-                    
-                    //callback
-                    
-                    sheet.open()
                 }
             },
             
@@ -133,14 +114,19 @@ NavigationPane {
                 title: "New Broadcast"
                 ActionBar.placement: ActionBarPlacement.InOverflow
                 
+                function newBroadcastSlot(users, sheet)
+                {
+                    sheet.usersSelected.disconnect(newBroadcastSlot)
+                    
+                    if (users.length > 0)
+                    {
+                        //open broadcasts
+                    }
+                }
+                
                 onTriggered: {
-                    var sheet = contactPickerSheetDef.createObject()
-                    sheet.caption = "New Broadcast"
-                    sheet.acceptText = "Select"
-                    sheet.multiselect = true
-                    
-                    //callback
-                    
+                    var sheet = newBroadcastSheetDef.createObject()
+                    sheet.usersSelected.connect(newBroadcastSlot)
                     sheet.open()
                 }
             }
@@ -205,6 +191,14 @@ NavigationPane {
             ComponentDefinition {
                 id: contactPickerSheetDef
                 source: "contacts/ContactPicker.qml"
+            },
+            ComponentDefinition {
+                id: newBroadcastSheetDef
+                source: "chats/NewBroadcast.qml"
+            },
+            ComponentDefinition {
+                id: newGroupSheetDef
+                source: "chats/NewGroup.qml"
             }
         ]
     }

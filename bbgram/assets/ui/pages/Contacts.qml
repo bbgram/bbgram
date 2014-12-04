@@ -147,6 +147,10 @@ NavigationPane {
             ComponentDefinition {
                 id: addContactSheetDef
                 source: "contacts/AddContact.qml"
+            },
+            ComponentDefinition {
+                id: newBroadcastSheetDef
+                source: "chats/NewBroadcast.qml"
             }
         ]
     }

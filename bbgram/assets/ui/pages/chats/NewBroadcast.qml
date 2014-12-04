@@ -1,11 +1,14 @@
 import bb.cascades 1.2
 
+import "../settings"
+import "../contacts"
+
 Sheet {
     id: me
-    property string caption : "Select Contact"
+    property string caption : "New Broadcast"
     property int prev_filter : 3
     
-    signal userSelected(variant user, variant sheet)
+    signal usersSelected(variant users, variant sheet)
     
     onCreationCompleted: {
         prev_filter = _contacts.filter
@@ -17,30 +20,42 @@ Sheet {
             id: titleBar
             kind: TitleBarKind.Default
             title: caption
+            acceptAction: ActionItem {
+                enabled: contactsList.selectedCount > 0
+                title: "Create"
+                
+                onTriggered: {
+                    var result = [];
+                    for (var i = 0; i < contactsList.selectionList().length; i++)
+                    {
+                        result.push(contactsList.dataModel.data(indexPath))
+                    }
+                    usersSelected(result, me)
+                    me.close()
+                }
+            }
             dismissAction: ActionItem {
                 title: "Cancel"
                 onTriggered:{
                     _contacts.filter = prev_filter
-                    userSelected(null, me)
+                    usersSelected([], me)
                     me.close()
                 }
             }
         }
         
         Container {
-            topPadding: 20
-            leftPadding: 20
-            rightPadding: 20
-            bottomPadding: 20
-            TextField {
-                id: inputText
-                hintText: "Search"
-            }
+            /*SettingsHeader {
+                text: "Send message to.."
+            }*/
+            
             Divider {
             }
             ListView {
                 id: contactsList
                 dataModel: _contacts ? _contacts.model : null
+                
+                property int selectedCount : 0
                 
                 listItemComponents: [
                     ListItemComponent {
@@ -53,13 +68,14 @@ Sheet {
                     ListItemComponent {
                         type: "item"
                         ContactItem { }
-                        
+                    
                     }
                 ]
                 onTriggered: {
-                    var user = dataModel.data(indexPath);
-                    userSelected(user, me)
-                    me.close()
+                    toggleSelection(indexPath)
+                }
+                onSelectionChanged: {
+                    selected ? selectedCount++ : selectedCount--
                 }
             }
         }
