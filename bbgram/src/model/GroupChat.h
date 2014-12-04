@@ -10,7 +10,7 @@ class GroupChat : public Chat
 {
     Q_OBJECT
 
-    Q_PROPERTY(bb::cascades::DataModel *members READ members CONSTANT);
+    Q_PROPERTY(bb::cascades::DataModel *members READ members NOTIFY membersChanged);
 public:
     GroupChat(int id = 0);
     ~GroupChat();

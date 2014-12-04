@@ -95,7 +95,24 @@ Page {
                         horizontalAlignment: HorizontalAlignment.Left
                     }
                     Label {
-                        text: chat && chat.type == 1 ? (chat.online ? "online" : "last seen " + chat.lastSeenFormatted) : ""
+                        text: 
+                            if(chat) {
+                                if (chat.type == 1)
+                                    chat.online ? "online" : "last seen " + chat.lastSeenFormatted
+                                else if (chat.type == 2) {
+                                    var n = chat.members.size();
+                                    var o = 0;
+                                    for (var i = 0; i < n; i++) {
+                                        var user = chat.members.data([i])
+                                        if (user.online)
+                                            o++
+                                    }
+                                    "%1 members, %2 online".arg(n).arg(o) 
+                                }
+                                    
+                            }
+                            else  
+                                ""
                         topMargin: 0
                         textStyle {
                             color: Color.White

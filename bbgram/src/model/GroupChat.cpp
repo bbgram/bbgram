@@ -80,6 +80,8 @@ void GroupChat::addMember(User* newMember, int inviterId)
 {
     m_members->insert(newMember);
     m_invites.insert(newMember->id(), inviterId);
+
+    emit membersChanged();
 }
 
 void GroupChat::deleteMember(User* member)
