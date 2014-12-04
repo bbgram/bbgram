@@ -1,4 +1,5 @@
 #include "User.h"
+#include "../utils/Colorizer.h"
 
 using namespace bb::cascades;
 
@@ -200,7 +201,7 @@ void User::setPhoto(const QString &filename)
     if (filename.length() != 0)
         path = filename;
     else
-        path = QString("app/native/assets/images/placeholders/user_placeholder_purple.png");
+        path = Colorizer::userPlaceholder(m_id);
 
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly))
