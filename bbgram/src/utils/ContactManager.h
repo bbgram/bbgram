@@ -16,8 +16,8 @@ public:
 
 
 signals:
-     void onContactAdded(bool error, QString message);
-     void onContactRenamed(bool error, QString message);
+     void contactAdded(bool error, QString message);
+     void contactRenamed(bool error, QString message);
 
 protected:
      bool contactExist(const QString& phone);

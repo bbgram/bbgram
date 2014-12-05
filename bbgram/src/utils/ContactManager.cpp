@@ -19,7 +19,7 @@ void ContactManager::addContact(const QString& firstName, const QString& lastNam
     if (!contactExist(phone))
         tgl_do_add_contact(gTLS, phone.toUtf8().data(), phone.toUtf8().size(), firstName.toUtf8().data(), firstName.toUtf8().size(), lastName.toUtf8().data(), lastName.toUtf8().size(), false, ContactManager::contactAddHandler, NULL);
     else
-        m_instance->emit onContactAdded(true, "Contact already exists");
+        emit m_instance->contactAdded(true, "Contact already exists");
 }
 
 Q_INVOKABLE
@@ -28,7 +28,7 @@ void ContactManager::renameContact(const QString& firstName, const QString& last
     if (contactExist(phone))
         tgl_do_add_contact(gTLS, phone.toUtf8().data(), phone.toUtf8().size(), firstName.toUtf8().data(), firstName.toUtf8().size(), lastName.toUtf8().data(), lastName.toUtf8().size(), false, ContactManager::contactRenameHandler, NULL);
     else
-        m_instance->emit onContactRenamed(true, "Contact not exist");
+        emit m_instance->contactRenamed(true, "Contact not exist");
 }
 
 bool ContactManager::contactExist(const QString& phone)
@@ -55,10 +55,10 @@ bool ContactManager::contactExist(const QString& phone)
 
 void ContactManager::contactAddHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[])
 {
-    emit m_instance->onContactAdded(size == 0, "Somthing wrong");
+    emit m_instance->contactAdded(size == 0, "Somthing wrong");
 }
 
 void ContactManager::contactRenameHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[])
 {
-    emit m_instance->onContactRenamed(size == 0, "Somthing wrong");
+    emit m_instance->contactRenamed(size == 0, "Somthing wrong");
 }

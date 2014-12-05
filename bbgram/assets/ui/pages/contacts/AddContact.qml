@@ -25,11 +25,11 @@ Sheet {
                     else
                         me.close()
                     
-                    _contactManager.onContactAdded.disconect(contactAdded)
+                    _contactManager.contactAdded.disconect(contactAdded)
                 }
                 
                 onTriggered: {
-                    _contactManager.onContactAdded.connect(contactAdded)
+                    _contactManager.contactAdded.connect(contactAdded)
                     _contactManager.addContact(firstName.text, lastName.text, phoneNumber.text)
                     
                     firstName.enabled = false
@@ -42,7 +42,6 @@ Sheet {
                 title: "Cancel"
                 onTriggered:{
                     me.close()
-                    _contactManager.onContactAdded.disconect(contactAdded)
                 }
             }
         }

@@ -104,7 +104,8 @@ Sheet {
                             mode: FilePickerMode.Picker
                             directories : ["/accounts/1000/shared/"]
                             onFileSelected : {
-                                //groupImageView.imageSource = "asset://" + selectedFiles[0];
+                                
+                                groupImageView.imageSource =  "file://" + selectedFiles[0];
                                 chatPhoto = selectedFiles[0];
                             }
                         }
