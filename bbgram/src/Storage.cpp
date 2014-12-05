@@ -272,6 +272,13 @@ void Storage::userUpdateHandler (struct tgl_state *TLS, struct tgl_user *U, unsi
     CHECK_FLAG(flags, TGL_UPDATE_BLOCKED)
     CHECK_FLAG(flags, TGL_UPDATE_REAL_NAME)
     CHECK_FLAG(flags, TGL_UPDATE_NAME)
+    CHECK_FLAG(flags, TGL_UPDATE_WORKING)
+    CHECK_FLAG(flags, TGL_UPDATE_FLAGS)
+    CHECK_FLAG(flags, TGL_UPDATE_TITLE)
+    CHECK_FLAG(flags, TGL_UPDATE_ADMIN)
+    CHECK_FLAG(flags, TGL_UPDATE_MEMBERS)
+    CHECK_FLAG(flags, TGL_UPDATE_ACCESS_HASH)
+    CHECK_FLAG(flags, TGL_UPDATE_USERNAME)
     str += "  %  ";
 
     CHECK_FLAG(U->flags, FLAG_MESSAGE_EMPTY)
@@ -419,7 +426,13 @@ void Storage::updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsig
         CHECK_FLAG(flags, TGL_UPDATE_PHOTO)
         CHECK_FLAG(flags, TGL_UPDATE_BLOCKED)
         CHECK_FLAG(flags, TGL_UPDATE_REAL_NAME)
-        CHECK_FLAG(flags, TGL_UPDATE_NAME)
+        CHECK_FLAG(flags, TGL_UPDATE_WORKING)
+        CHECK_FLAG(flags, TGL_UPDATE_FLAGS)
+        CHECK_FLAG(flags, TGL_UPDATE_TITLE)
+        CHECK_FLAG(flags, TGL_UPDATE_ADMIN)
+        CHECK_FLAG(flags, TGL_UPDATE_MEMBERS)
+        CHECK_FLAG(flags, TGL_UPDATE_ACCESS_HASH)
+        CHECK_FLAG(flags, TGL_UPDATE_USERNAME)
         str += "  %  ";
 
         CHECK_FLAG(C->flags, FLAG_MESSAGE_EMPTY)
@@ -439,6 +452,10 @@ void Storage::updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsig
         qDebug() << "Storage::updateChatHandler user=" << QString::fromUtf8(C->title) << " flags=" << flags << str;*/
 
     GroupChat* groupChat = (GroupChat*)m_instance->getPeer(TGL_PEER_CHAT, C->id.id);
+
+    if (flags & TGL_UPDATE_CREATED)
+        tgl_do_get_chat_info(gTLS, {groupChat->type(), groupChat->id()}, 0, NULL, NULL);
+
 
     if (flags & TGL_UPDATE_TITLE)
         groupChat->setTitle(QString::fromUtf8(C->title));
