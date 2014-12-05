@@ -6,10 +6,15 @@
 Message::Message(long long id, tgl_message* M)
     : m_id(id)
 {
+    if (!M)
+        return;
+
     if (M->service == 0 && M->message)
         m_text = QString::fromUtf8(M->message);
     m_date = QDateTime::fromTime_t(M->date);
     m_fromId = M->from_id.id;
+    m_toId = M->to_id.id;
+    m_toType = M->to_id.type;
     m_unread = M->unread;
     m_service = M->service;
     if (m_service)
@@ -67,6 +72,48 @@ Message::Message(long long id, tgl_message* M)
 
 Message::~Message()
 {
+}
+
+void Message::deserialize(QByteArray& data)
+{
+    QDataStream stream(&data, QIODevice::ReadOnly);
+
+    QMap<QString, QVariant> map;
+    stream >> map;
+
+    QMap<QString, QVariant>::iterator it;
+
+    it = map.find("unread");
+    if (it != map.end())
+        m_unread = it.value().toBool();
+    it = map.find("service");
+    if (it != map.end())
+        m_service = it.value().toBool();
+    it = map.find("action");
+    if (it != map.end())
+        m_action = it.value().toMap();
+    it = map.find("mediaType");
+    if (it != map.end())
+        m_mediaType = it.value().toInt();
+    it = map.find("media");
+        if (it != map.end())
+            m_media = it.value().toMap();
+}
+
+QByteArray Message::serialize() const
+{
+    QMap<QString, QVariant> map;
+
+    map.insert("unread", m_unread);
+    map.insert("service", m_service);
+    map.insert("action", m_action);
+    map.insert("mediaType", m_mediaType);
+    map.insert("media", m_media);
+
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+    stream << map;
+    return data;
 }
 
 long long Message::id() const
@@ -183,7 +230,7 @@ QString Message::dateFormatted() const
     QString str;
     QDate date = m_date.date();
     QDateTime currentDate = QDateTime::currentDateTime();
-    if (m_date.secsTo(currentDate) < 24*60*60)
+    if (m_date.secsTo(currentDate) < 12*60*60)
         str = locale.toString(m_date, "hh:mm");
     else
     {

@@ -29,6 +29,7 @@ public:
     virtual QString status() const;
     virtual QVariant photo() const;
     Message* lastMessage() const;
+    QDateTime lastMessageDate() const;
 
     void addMessage(Message* message);
     void deleteMessage(Message* message);

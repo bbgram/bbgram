@@ -19,6 +19,45 @@ GroupChat::~GroupChat()
 {
 }
 
+void GroupChat::deserialize(QByteArray& data)
+{
+    QDataStream stream(&data, QIODevice::ReadOnly);
+
+    QMap<QString, QVariant> map;
+    stream >> map;
+
+    QMap<QString, QVariant>::iterator it;
+
+    it = map.find("title");
+    if (it != map.end())
+        m_title = it.value().toString();
+    emit titleChanged();
+    it = map.find("adminId");
+    if (it != map.end())
+        m_adminId = it.value().toInt();
+    it = map.find("photo");
+    if (it != map.end())
+        setPhoto(it.value().toString());
+    //map.insert("members", ??);
+    //map.insert("invites", ??);
+}
+
+QByteArray GroupChat::serialize() const
+{
+    QMap<QString, QVariant> map;
+
+    map.insert("title", m_title);
+    map.insert("adminId", m_adminId);
+    //map.insert("members", ??);
+    //map.insert("invites", ??);
+    map.insert("photo", m_photoFilename);
+
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+    stream << map;
+    return data;
+}
+
 QString GroupChat::title() const
 {
     return m_title;

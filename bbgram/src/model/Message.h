@@ -22,6 +22,9 @@ public:
     Message(long long id = 0, tgl_message* M = 0);
     ~Message();
 
+    void deserialize(QByteArray& data);
+    QByteArray serialize() const;
+
     long long id() const;
     bool our() const;
 
@@ -40,8 +43,12 @@ public:
 signals:
     void markedRead();
 protected:
+    friend class Storage;
+
     long long   m_id;
     int         m_fromId;
+    int         m_toId;
+    int         m_toType;
 
     QString     m_text;
     QDateTime   m_date;

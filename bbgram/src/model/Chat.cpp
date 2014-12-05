@@ -57,6 +57,12 @@ Message* Chat::lastMessage() const
     return 0;
 }
 
+QDateTime Chat::lastMessageDate() const
+{
+    Message* last = lastMessage();
+    return last ? last->dateTime() : QDateTime();
+}
+
 void Chat::addMessage(Message* message)
 {
     m_messages->insert(message);

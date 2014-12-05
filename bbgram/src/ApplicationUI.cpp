@@ -30,9 +30,10 @@ ApplicationUI::ApplicationUI(bb::cascades::Application* app) :
     qmlRegisterType<Message>("bbgram.types.lib", 0, 1, "Message");
     qmlRegisterType<User>("bbgram.types.lib", 0, 1, "User");
 
-    m_storage = new Storage(this);
     m_telegraph = new Telegraph();
     m_telegraph->start();
+
+    m_storage = new Storage(this);
 
     QObject::connect(Telegraph::instance(), SIGNAL(mainDCAuthorized()), this, SLOT(onMainAuthorized()));
     QObject::connect(Telegraph::instance(), SIGNAL(allDCAuthorized()), this, SLOT(onAllAuthorized()));

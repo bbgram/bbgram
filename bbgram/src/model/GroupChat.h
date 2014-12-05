@@ -15,6 +15,9 @@ public:
     GroupChat(int id = 0);
     ~GroupChat();
 
+    void deserialize(QByteArray& data);
+    QByteArray serialize() const;
+
     QString title() const;
     void setTitle(const QString& title);
 
@@ -33,8 +36,8 @@ public:
 
     Q_INVOKABLE bool canDeleteUser(User* self, User* target) const;
 signals:
-        void adminChanged();
-        void membersChanged();
+    void adminChanged();
+    void membersChanged();
 protected:
     bb::cascades::Image             m_photo;
     QString                         m_photoFilename;
