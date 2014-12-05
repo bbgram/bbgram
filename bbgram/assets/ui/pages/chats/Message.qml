@@ -15,6 +15,13 @@ Container {
     
     property bool withHeader: ListItem.indexInSection == ListItem.sectionSize - 1
     
+    onCreationCompleted: {
+        if (ListItemData.mediaType == 6)
+            contactDelegate.delegateActive = true
+        else
+            textDelegate.delegateActive = true
+    }
+    
     layout: StackLayout {            
     }
     Container {
@@ -104,17 +111,15 @@ Container {
                             horizontalAlignment: HorizontalAlignment.Fill 
                             verticalAlignment: VerticalAlignment.Fill
                             layout: DockLayout {}
-                            Label {
-                                text: me.text + (incoming ? "<b>            &nbsp;</b>" : "<b>                 &nbsp;</b>")
-                                multiline: true
-                                textFormat: TextFormat.Html
-                                attachedObjects: [
-                                    LayoutUpdateHandler {
-                                        onLayoutFrameChanged: {
-                                        }
-                                    
-                                    }
-                                ]
+                            ControlDelegate {
+                                id: textDelegate
+                                source: "messages/Text.qml"
+                                delegateActive: false
+                            }
+                            ControlDelegate {
+                                id: contactDelegate
+                                source: "messages/Contact.qml"
+                                delegateActive: false
                             }
                             Container { // date and read status
                                 horizontalAlignment: HorizontalAlignment.Right

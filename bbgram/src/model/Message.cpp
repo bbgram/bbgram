@@ -48,6 +48,13 @@ Message::Message(long long id, tgl_message* M)
             m_media.insert("local_id", sz.loc.local_id);
             m_media.insert("secret", sz.loc.secret);
         }
+        else if (m_mediaType == tgl_message_media_contact)
+        {
+            m_media.insert("phone", QString::fromUtf8(M->media.phone));
+            m_media.insert("first_name", QString::fromUtf8(M->media.first_name));
+            m_media.insert("last_name", QString::fromUtf8(M->media.last_name));
+            m_media.insert("user_id", M->media.user_id);
+        }
         else if (m_mediaType == tgl_message_media_document)
         {
             int a = 1;
@@ -145,6 +152,8 @@ QString Message::text() const
     {
         switch (m_mediaType)
         {
+            case tgl_message_media_photo:
+                return "photo";
             case tgl_message_media_video:
                 return "#Unsupported media: video";
             case tgl_message_media_audio:
@@ -154,7 +163,7 @@ QString Message::text() const
             case tgl_message_media_geo:
                 return "#Unsupported media: geo";
             case tgl_message_media_contact:
-                return "#Unsupported media: contact";
+                return "contact";
             case tgl_message_media_photo_encr:
                 return "#Unsupported media: photo encr";
             case tgl_message_media_video_encr:

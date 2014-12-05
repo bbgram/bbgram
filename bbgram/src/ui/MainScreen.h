@@ -30,6 +30,7 @@ public:
     Q_INVOKABLE void openFAQ();
     Q_INVOKABLE void sendInviteText(const QString& recipient, const QString& text);
     Q_INVOKABLE void dialANumber(const QString& number);
+    Q_INVOKABLE User* getUser(int id);
 signals:
     void groupCreated(GroupChat* groupChat);
 protected slots:

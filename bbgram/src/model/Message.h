@@ -15,6 +15,7 @@ class Message: public QObject
     Q_PROPERTY(bool our READ our CONSTANT)
     Q_PROPERTY(bool unread READ unread NOTIFY markedRead)
     Q_PROPERTY(bool service READ service CONSTANT)
+    Q_PROPERTY(QVariantMap media READ media CONSTANT)
     Q_PROPERTY(int mediaType READ mediaType CONSTANT)
     Q_PROPERTY(User* from READ from CONSTANT)
 public:

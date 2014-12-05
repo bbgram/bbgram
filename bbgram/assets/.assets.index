@@ -1,5 +1,5 @@
 1
-119
+124
 720x720/ui/pages/Intro.qml
 dm_countries.xml
 dm_intro_page.xml
@@ -92,6 +92,11 @@ ui/pages/chats/ChatItem.qml
 ui/pages/chats/EditGroup.qml
 ui/pages/chats/Message.qml
 ui/pages/chats/MessageList.qml
+ui/pages/chats/messages/Contact.qml
+ui/pages/chats/messages/Text.qml
+ui/pages/chats/NewBroadcast.qml
+ui/pages/chats/NewGroup.qml
+ui/pages/chats/NewGroupFinal.qml
 ui/pages/chats/Photo.qml
 ui/pages/chats/ServiceMessage.qml
 ui/pages/Chats.qml

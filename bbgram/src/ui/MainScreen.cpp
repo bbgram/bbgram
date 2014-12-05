@@ -202,3 +202,8 @@ void MainScreen::_deleteMemberCallback(struct tgl_state *TLS, void *callback_ext
     GroupChat* groupChat = (GroupChat*)Storage::instance()->getPeer(TGL_PEER_CHAT, M->to_id.id);
     groupChat->deleteMember((User*)callback_extra);
 }
+
+User* MainScreen::getUser(int id)
+{
+    return (User*)Storage::instance()->getPeer(TGL_PEER_USER, id);
+}

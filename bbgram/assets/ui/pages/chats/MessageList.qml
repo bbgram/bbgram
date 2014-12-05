@@ -3,6 +3,7 @@ import bb.cascades 1.2
 ListView {
     id: me
     property bool groupChat: false
+    property variant owner: _owner
     property variant messages: null
     
     layout: StackListLayout {
