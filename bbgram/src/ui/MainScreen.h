@@ -28,6 +28,7 @@ public:
     Q_INVOKABLE void setGroupName(GroupChat* group, const QString& title);
     Q_INVOKABLE void addUserToGroup(GroupChat* group, User* user);
     Q_INVOKABLE void deleteUserFromGroup(GroupChat* group, User* user);
+    Q_INVOKABLE void deleteHistory(Chat* chat);
     Q_INVOKABLE void deleteChat(Chat* chat);
     Q_INVOKABLE void openFAQ();
     Q_INVOKABLE void sendInviteText(const QString& recipient, const QString& text);

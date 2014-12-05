@@ -122,9 +122,18 @@ void MainScreen::deleteUserFromGroup(GroupChat* group, User* user)
     tgl_do_del_user_from_chat(gTLS, {group->type(), group->id()}, {user->type(), user->id()}, MainScreen::_deleteMemberCallback, user);
 }
 
+void MainScreen::deleteHistory(Chat* chat)
+{
+    Storage::instance()->deleteHistory(chat);
+}
+
 void MainScreen::deleteChat(Chat* chat)
 {
-    qDebug() << "deleting " << chat->title();
+    User* currentUser = (User*)Storage::instance()->getPeer(TGL_PEER_USER, gTLS->our_id);
+    if (chat->type() == TGL_PEER_CHAT)
+        deleteUserFromGroup((GroupChat*)chat, currentUser);
+    Storage::instance()->deleteHistory(chat);
+    Storage::instance()->deleteChat(chat);
 }
 
 void MainScreen::openFAQ()

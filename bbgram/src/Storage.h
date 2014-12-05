@@ -32,6 +32,9 @@ public:
     void addContact(User* contact);
     void deleteContact(User* contact);
 
+    void deleteHistory(Chat* chat);
+    void deleteChat(Chat* chat);
+
     void updateChats();
     void updateUserInfo();
     void updateHistory(Chat* chat);
@@ -50,4 +53,5 @@ protected:
     static void _getDialogsCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, tgl_peer_id_t peers[], int last_msg_id[], int unread_count[]);
     static void _getHistoryCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]);
     static void _deleteMessageCallback(struct tgl_state *TLS, void *callback_extra, int success);
+    static void _deleteHistoryCallback(struct tgl_state *TLS, void *callback_extra, int success, int offset);
 };

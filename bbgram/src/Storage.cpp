@@ -235,6 +235,28 @@ void Storage::deleteContact(User* contact)
         contacts->removeAt(idx);
 }
 
+void Storage::deleteHistory(Chat* chat)
+{
+    tgl_do_delete_history(gTLS, {chat->type(), chat->id()}, 0, Storage::_deleteHistoryCallback, chat);
+}
+
+void Storage::deleteChat(Chat* chat)
+{
+    int idx = m_dialogs->indexOf(chat);
+    if (idx != -1)
+    {
+        m_dialogs->removeAt(idx);
+    }
+
+    QSqlDatabase &db = m_instance->m_db;
+    QSqlQuery query(db);
+
+    long long id = ((long long)chat->type() << 32) | chat->id();
+    query.prepare("DELETE FROM dialogs WHERE id=:id");
+    query.bindValue(":id", id);
+    query.exec();
+}
+
 void load_photo_callback(struct tgl_state *TLS, void *callback_extra, int success, char *filename)
 {
     if (!success)
@@ -631,6 +653,30 @@ void Storage::_deleteMessageCallback(struct tgl_state *TLS, void *callback_extra
         m_instance->m_dialogs->value(i)->deleteMessage(msg);
 
     m_instance->m_messages.remove(id);
+}
+
+void Storage::_deleteHistoryCallback(struct tgl_state *TLS, void *callback_extra, int success, int offset)
+{
+    if (success)
+    {
+        Chat* chat = (Chat*)callback_extra;
+
+        QSqlDatabase &db = m_instance->m_db;
+        QSqlQuery query(db);
+        query.prepare("DELETE FROM messages WHERE to_id=:to_id");
+        query.bindValue(":to_id", chat->id());
+        query.exec();
+
+        bb::cascades::GroupDataModel* messages = (bb::cascades::GroupDataModel*)chat->messages();
+
+        for (QVariantList indexPath = messages->first(); !indexPath.isEmpty(); indexPath = messages->after(indexPath))
+        {
+            QVariant item = messages->data(indexPath);
+            Message* msg = (Message*)item.value<QObject*>();
+            m_instance->m_messages.remove(msg->id());
+        }
+        messages->clear();
+    }
 }
 
 void Storage::updateChats()
