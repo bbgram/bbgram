@@ -387,11 +387,9 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
         }
     }
 
-    if (chatIdx == -1)
-        dialogs->insert(dialogs->size(), chat);
-    else if (lastMessage == message)
+    int newPos = dialogs->size();
+    if (lastMessage == message)
     {
-        int newPos = dialogs->size();
         for (int j = 0; j < dialogs->size(); j++)
         {
             Message* lm = dialogs->value(j)->lastMessage();
@@ -401,8 +399,12 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
                 break;
             }
         }
-        dialogs->move(chatIdx, newPos);
     }
+
+    if (chatIdx == -1)
+        dialogs->insert(newPos, chat);
+    else
+        dialogs->move(chatIdx, newPos);
 }
 
 void Storage::updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsigned flags)
