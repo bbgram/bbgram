@@ -293,10 +293,10 @@ void Telegraph::start()
 
 
     memset(&timer_methods, 0, sizeof(tgl_timer_methods));
-    timer_methods.alloc = alloc_timer;
-    timer_methods.insert = insert_timer;
-    timer_methods.remove = remove_timer;
-    timer_methods.free = free_timer;
+    timer_methods.alloc = tgl_timer::alloc;
+    timer_methods.insert = tgl_timer::insert;
+    timer_methods.remove = tgl_timer::remove;
+    timer_methods.free = tgl_timer::free;
 
     memset(&net_methods, 0, sizeof(tgl_net_methods));
     net_methods.create_connection = connection_create;
