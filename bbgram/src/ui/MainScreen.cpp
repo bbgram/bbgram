@@ -98,7 +98,7 @@ void MainScreen::createGroup(QVariantList users, const QString& title, const QSt
     int idx = 0;
     foreach (QVariant variant, users)
     {
-        User* user =NULL;// (User*)variant.value<QObject*>();
+        User* user = (User*)variant.value<QObject*>();
         tgl_peer_id_t peer = {TGL_PEER_USER, user->id()};
         data->peers[idx] = peer;
         idx++;
