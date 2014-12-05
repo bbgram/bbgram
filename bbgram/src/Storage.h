@@ -29,8 +29,9 @@ public:
     Chat* getPeer(int type, int id);
 
     void deleteMessage(long long id);
+    void addContact(User* contact);
+    void deleteContact(User* contact);
 
-    void updateContacts();
     void updateChats();
     void updateUserInfo();
     void updateHistory(Chat* chat);

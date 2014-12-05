@@ -13,22 +13,28 @@ ContactManager::~ContactManager()
     m_instance = NULL;
 }
 
-Q_INVOKABLE
 void ContactManager::addContact(const QString& firstName, const QString& lastName, const QString& phone)
 {
     if (!contactExist(phone))
-        tgl_do_add_contact(gTLS, phone.toUtf8().data(), phone.toUtf8().size(), firstName.toUtf8().data(), firstName.toUtf8().size(), lastName.toUtf8().data(), lastName.toUtf8().size(), false, ContactManager::contactAddHandler, NULL);
+        tgl_do_add_contact(gTLS, phone.toUtf8().data(), phone.toUtf8().size(), firstName.toUtf8().data(), firstName.toUtf8().size(), lastName.toUtf8().data(), lastName.toUtf8().size(), false, ContactManager::_contactAddHandler, NULL);
     else
         emit m_instance->contactAdded(true, "Contact already exists");
 }
 
-Q_INVOKABLE
 void ContactManager::renameContact(const QString& firstName, const QString& lastName, const QString& phone)
 {
     if (contactExist(phone))
-        tgl_do_add_contact(gTLS, phone.toUtf8().data(), phone.toUtf8().size(), firstName.toUtf8().data(), firstName.toUtf8().size(), lastName.toUtf8().data(), lastName.toUtf8().size(), false, ContactManager::contactRenameHandler, NULL);
+        tgl_do_add_contact(gTLS, phone.toUtf8().data(), phone.toUtf8().size(), firstName.toUtf8().data(), firstName.toUtf8().size(), lastName.toUtf8().data(), lastName.toUtf8().size(), false, ContactManager::_contactRenameHandler, NULL);
     else
         emit m_instance->contactRenamed(true, "Contact not exist");
+}
+
+void ContactManager::deleteContact(User* contact)
+{
+    tgl_peer_id_t peer;
+    peer.type = contact->type();
+    peer.id = contact->id();
+    tgl_do_del_contact(gTLS, peer, ContactManager::_contactDeleteHandler, contact);
 }
 
 bool ContactManager::contactExist(const QString& phone)
@@ -53,12 +59,26 @@ bool ContactManager::contactExist(const QString& phone)
     return found;
 }
 
-void ContactManager::contactAddHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[])
+void ContactManager::_contactAddHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[])
 {
     emit m_instance->contactAdded(size == 0, "Somthing wrong");
 }
 
-void ContactManager::contactRenameHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[])
+void ContactManager::_contactRenameHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[])
 {
     emit m_instance->contactRenamed(size == 0, "Somthing wrong");
+}
+
+void ContactManager::_contactDeleteHandler(struct tgl_state *TLS, void *callback_extra, int success)
+{
+    if (success)
+    {
+        tgl_peer_id_t peer;
+        peer.type = ((User*)callback_extra)->type();
+        peer.id = ((User*)callback_extra)->id();
+        tgl_do_get_user_info(gTLS, peer, false, NULL, NULL);
+        //Storage::instance()->deleteContact((User*)callback_extra);
+    }
+
+    emit m_instance->contactDeleted(!success, "Somthing wrong");
 }

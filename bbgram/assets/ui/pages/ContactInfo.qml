@@ -57,6 +57,11 @@ Page {
             title: "Delete Contact"
             imageSource: "asset:///images/menu_bin.png"
             ActionBar.placement: ActionBarPlacement.InOverflow
+            
+            onTriggered: {
+                enabled = false
+                _contactManager.deleteContact(user)
+            }
         }
     ]
     

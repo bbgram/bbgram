@@ -208,6 +208,27 @@ void Storage::deleteMessage(long long id)
     tgl_do_delete_msg(gTLS, id, Storage::_deleteMessageCallback, msg_id);
 }
 
+void Storage::addContact(User* contact)
+{
+    int idx = m_contacts->indexOf(contact);
+    if (idx == -1)
+        m_contacts->append(contact);
+}
+
+void Storage::deleteContact(User* contact)
+{
+    QSqlDatabase &db = m_instance->m_db;
+    QSqlQuery query(db);
+    query.prepare("DELETE FROM contacts WHERE user_id=:id");
+    query.bindValue(":id", contact->id());
+    query.exec();
+
+    QListDataModel<User*>* contacts = m_instance->m_contacts;
+    int idx = contacts->indexOf(contact);
+    if (idx != -1)
+        contacts->removeAt(idx);
+}
+
 void load_photo_callback(struct tgl_state *TLS, void *callback_extra, int success, char *filename)
 {
     if (!success)
@@ -235,26 +256,35 @@ void load_photo_callback(struct tgl_state *TLS, void *callback_extra, int succes
 void Storage::userUpdateHandler (struct tgl_state *TLS, struct tgl_user *U, unsigned flags)
 {
     /*QString str;
-#define CHECK_FLAG(F) if ((flags & F) == F) str += " " #F;
+#define CHECK_FLAG(FLAGS,F) if ((FLAGS & F) == F) str += " " #F;
 
-            CHECK_FLAG(TGL_UPDATE_CREATED)
-    CHECK_FLAG(TGL_UPDATE_DELETED)
-            CHECK_FLAG(TGL_UPDATE_PHONE)
-    CHECK_FLAG(TGL_UPDATE_CONTACT)
-            CHECK_FLAG(TGL_UPDATE_PHOTO)
-    CHECK_FLAG(TGL_UPDATE_BLOCKED)
-    CHECK_FLAG(TGL_UPDATE_REAL_NAME)
-            CHECK_FLAG(TGL_UPDATE_NAME)
+    CHECK_FLAG(flags, TGL_UPDATE_CREATED)
+    CHECK_FLAG(flags, TGL_UPDATE_DELETED)
+    CHECK_FLAG(flags, TGL_UPDATE_PHONE)
+    CHECK_FLAG(flags, TGL_UPDATE_CONTACT)
+    CHECK_FLAG(flags, TGL_UPDATE_PHOTO)
+    CHECK_FLAG(flags, TGL_UPDATE_BLOCKED)
+    CHECK_FLAG(flags, TGL_UPDATE_REAL_NAME)
+    CHECK_FLAG(flags, TGL_UPDATE_NAME)
+    str += "  %  ";
+
+    CHECK_FLAG(U->flags, FLAG_MESSAGE_EMPTY)
+    CHECK_FLAG(U->flags, FLAG_DELETED)
+    CHECK_FLAG(U->flags, FLAG_FORBIDDEN)
+    CHECK_FLAG(U->flags, FLAG_HAS_PHOTO)
+    CHECK_FLAG(U->flags, FLAG_CREATED)
+    CHECK_FLAG(U->flags, FLAG_SESSION_OUTBOUND)
+    CHECK_FLAG(U->flags, FLAG_USER_SELF)
+    CHECK_FLAG(U->flags, FLAG_USER_FOREIGN)
+    CHECK_FLAG(U->flags, FLAG_USER_CONTACT)
+    CHECK_FLAG(U->flags, FLAG_USER_IN_CONTACT)
+    CHECK_FLAG(U->flags, FLAG_USER_OUT_CONTACT)
+    CHECK_FLAG(U->flags, FLAG_ENCRYPTED)
+    CHECK_FLAG(U->flags, FLAG_PENDING)
 
     qDebug() << "update_user_handler user=" << QString::fromUtf8(U->first_name) << " flags=" << flags << str;*/
 
     User* user = (User*)m_instance->getPeer(TGL_PEER_USER, U->id.id);
-    /*if (flags & TGL_UPDATE_CREATED)
-    {
-        user = m_instance->addUser(U->id.id);
-    }
-    else
-        user = m_instance->findUser(U->id.id);*/
 
     if (flags & TGL_UPDATE_PHONE)
         user->setPhone(QString::fromUtf8(U->phone));
@@ -268,6 +298,24 @@ void Storage::userUpdateHandler (struct tgl_state *TLS, struct tgl_user *U, unsi
             tgl_do_load_photo(gTLS, &U->photo, load_photo_callback, user);
         /*else
             user->setPhoto("");*/
+    }
+
+    if (flags & TGL_UPDATE_CONTACT)
+    {
+        if ((U->flags & FLAG_USER_CONTACT) == 0)
+        {
+            m_instance->deleteContact(user);
+        }
+
+        if (U->flags & FLAG_USER_CONTACT)
+        {
+            m_instance->addContact(user);
+        }
+
+        tgl_peer_id_t peer;
+        peer.type = user->type();
+        peer.id = user->id();
+        tgl_do_get_user_info(gTLS, peer, false, NULL, NULL);
     }
 
     QSqlDatabase &db = m_instance->m_db;
@@ -353,30 +401,35 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
 void Storage::updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsigned flags)
 {
     /*QString str;
-    #define CHECK_FLAG(F) if ((flags & F) == F) str += " " #F;
+    #define CHECK_FLAG(FLAGS,F) if ((FLAGS & F) == F) str += " " #F;
 
-    CHECK_FLAG(TGL_UPDATE_CREATED)
-    CHECK_FLAG(TGL_UPDATE_DELETED)
-    CHECK_FLAG(TGL_UPDATE_PHONE)
-    CHECK_FLAG(TGL_UPDATE_CONTACT)
-    CHECK_FLAG(TGL_UPDATE_PHOTO)
-    CHECK_FLAG(TGL_UPDATE_BLOCKED)
-    CHECK_FLAG(TGL_UPDATE_REAL_NAME)
-    CHECK_FLAG(TGL_UPDATE_NAME)
-    CHECK_FLAG(TGL_UPDATE_REQUESTED)
-    CHECK_FLAG(TGL_UPDATE_WORKING)
-    CHECK_FLAG(TGL_UPDATE_FLAGS)
-    CHECK_FLAG(TGL_UPDATE_TITLE)
-    CHECK_FLAG(TGL_UPDATE_ADMIN)
-    CHECK_FLAG(TGL_UPDATE_MEMBERS)
-    CHECK_FLAG(TGL_UPDATE_ACCESS_HASH)
-    CHECK_FLAG(TGL_UPDATE_USERNAME)
+        CHECK_FLAG(flags, TGL_UPDATE_CREATED)
+        CHECK_FLAG(flags, TGL_UPDATE_DELETED)
+        CHECK_FLAG(flags, TGL_UPDATE_PHONE)
+        CHECK_FLAG(flags, TGL_UPDATE_CONTACT)
+        CHECK_FLAG(flags, TGL_UPDATE_PHOTO)
+        CHECK_FLAG(flags, TGL_UPDATE_BLOCKED)
+        CHECK_FLAG(flags, TGL_UPDATE_REAL_NAME)
+        CHECK_FLAG(flags, TGL_UPDATE_NAME)
+        str += "  %  ";
 
-    qDebug() << "Storage::updateChatHandler chat=" << QString::fromUtf8(C->title) << " flags=" << flags << str;*/
+        CHECK_FLAG(C->flags, FLAG_MESSAGE_EMPTY)
+        CHECK_FLAG(C->flags, FLAG_DELETED)
+        CHECK_FLAG(C->flags, FLAG_FORBIDDEN)
+        CHECK_FLAG(C->flags, FLAG_HAS_PHOTO)
+        CHECK_FLAG(C->flags, FLAG_CREATED)
+        CHECK_FLAG(C->flags, FLAG_SESSION_OUTBOUND)
+        CHECK_FLAG(C->flags, FLAG_USER_SELF)
+        CHECK_FLAG(C->flags, FLAG_USER_FOREIGN)
+        CHECK_FLAG(C->flags, FLAG_USER_CONTACT)
+        CHECK_FLAG(C->flags, FLAG_USER_IN_CONTACT)
+        CHECK_FLAG(C->flags, FLAG_USER_OUT_CONTACT)
+        CHECK_FLAG(C->flags, FLAG_ENCRYPTED)
+        CHECK_FLAG(C->flags, FLAG_PENDING)
+
+        qDebug() << "Storage::updateChatHandler user=" << QString::fromUtf8(C->title) << " flags=" << flags << str;*/
 
     GroupChat* groupChat = (GroupChat*)m_instance->getPeer(TGL_PEER_CHAT, C->id.id);
-
-    //if (flags & TGL_UPDATE_CREATED)
 
     if (flags & TGL_UPDATE_TITLE)
         groupChat->setTitle(QString::fromUtf8(C->title));
@@ -455,7 +508,7 @@ void Storage::_getContactsCallback(struct tgl_state *TLS, void *callback_extra, 
     for (int i = 0; i < size; i++)
     {
         User* contact = (User*)m_instance->getPeer(TGL_PEER_USER, contacts[i]->id.id);
-        tgl_do_get_user_info(gTLS, contacts[i]->id, false, NULL, NULL);
+        //tgl_do_get_user_info(gTLS, contacts[i]->id, false, NULL, NULL);
         if (newContacts->indexOf(contact) != -1)
             oldContacts.removeAll(contact);
         else
@@ -591,11 +644,6 @@ void Storage::_deleteMessageCallback(struct tgl_state *TLS, void *callback_extra
     m_instance->m_messages.remove(id);
 }
 
-void Storage::updateContacts()
-{
-    tgl_do_update_contact_list(gTLS, _getContactsCallback, this);
-}
-
 void Storage::updateChats()
 {
     tgl_do_get_dialog_list(gTLS, _getDialogsCallback, this);
@@ -614,4 +662,3 @@ void Storage::updateHistory(Chat* chat)
     peer.id = chat->id();
     tgl_do_get_history(gTLS, peer, 50, 0, _getHistoryCallback, chat);
 }
-
