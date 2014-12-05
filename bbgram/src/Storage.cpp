@@ -48,7 +48,7 @@ Storage::Storage(QObject* parent)
         User* user = (User*)getPeer(TGL_PEER_USER, id);
         user->deserialize(data);
 
-        QDateTime lastSeen = QDateTime::fromTime_t( query.value(3).toInt());
+        QDateTime lastSeen = QDateTime::fromTime_t( query.value(2).toInt());
         user->setStatus(0, lastSeen);
     }
 
@@ -210,6 +210,12 @@ void Storage::deleteMessage(long long id)
 
 void Storage::addContact(User* contact)
 {
+    QSqlDatabase &db = m_instance->m_db;
+    QSqlQuery query(db);
+    query.prepare("REPLACE INTO contacts(user_id) VALUES(:id)");
+    query.bindValue(":id", contact->id());
+    query.exec();
+
     int idx = m_contacts->indexOf(contact);
     if (idx == -1)
         m_contacts->append(contact);
@@ -320,11 +326,12 @@ void Storage::userUpdateHandler (struct tgl_state *TLS, struct tgl_user *U, unsi
 
     QSqlDatabase &db = m_instance->m_db;
     QSqlQuery query(db);
-    query.prepare("REPLACE INTO users(id, name, data) VALUES(:id, :name, :data)");
+    query.prepare("REPLACE INTO users(id, name, last_seen, data) VALUES(:id, :name, :last_seen, :data)");
     query.bindValue(":id", user->id());
     query.bindValue(":name", user->name());
     QByteArray data = user->serialize();
     query.bindValue(":data", data);
+    query.bindValue(":last_seen", user->lastSeen().toTime_t());
     query.exec();
 }
 
@@ -481,45 +488,6 @@ QListDataModel<User*>* Storage::contacts() const
 QListDataModel<Chat*>* Storage::dialogs() const
 {
     return m_dialogs;
-}
-
-void Storage::_getContactsCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *contacts[])
-{
-    if (!success)
-        return;
-
-    QSqlDatabase &db = m_instance->m_db;
-    db.transaction();
-    QSqlQuery query(db);
-    query.exec("DELETE FROM contacts");
-    query.prepare("REPLACE INTO contacts(user_id) VALUES(:id)");
-    for (int i = 0; i < size; i++)
-    {
-        query.bindValue(":id", contacts[i]->id.id);
-        query.exec();
-    }
-    db.commit();
-
-    QListDataModel<User*>* newContacts = m_instance->m_contacts;
-    QList<User*> oldContacts;
-    for (int i = 0; i < newContacts->size(); i++)
-        oldContacts.append(newContacts->value(i));
-
-    for (int i = 0; i < size; i++)
-    {
-        User* contact = (User*)m_instance->getPeer(TGL_PEER_USER, contacts[i]->id.id);
-        //tgl_do_get_user_info(gTLS, contacts[i]->id, false, NULL, NULL);
-        if (newContacts->indexOf(contact) != -1)
-            oldContacts.removeAll(contact);
-        else
-            newContacts->append(contact);
-    }
-
-    for (int i = 0; i < oldContacts.size(); i++)
-    {
-        int idx =  newContacts->indexOf(oldContacts.at(i));
-        newContacts->removeAt(idx);
-    }
 }
 
 void Storage::_getUserInfoCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *U)

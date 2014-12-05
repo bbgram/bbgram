@@ -45,7 +45,6 @@ protected:
     QMap<long long, Chat*>                  m_peers;
     QMap<long long, Message*>               m_messages;
 
-    static void _getContactsCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *contacts[]);
     static void _getUserInfoCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *U);
     static void _getChatInfoCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_chat *C);
     static void _getDialogsCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, tgl_peer_id_t peers[], int last_msg_id[], int unread_count[]);
