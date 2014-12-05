@@ -14,7 +14,7 @@ Page {
             ActionBar.placement: ActionBarPlacement.OnBar
             
             function updateContactName(user, firstName, lastName){
-                _contactManager.renameContact(firstName, lastName, user.phone)
+                _owner.renameContact(firstName, lastName, user.phone)
             }
             
             onTriggered: {
@@ -60,7 +60,7 @@ Page {
             
             onTriggered: {
                 enabled = false
-                _contactManager.deleteContact(user)
+                _owner.deleteContact(user)
             }
         }
     ]

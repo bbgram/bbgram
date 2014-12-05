@@ -5,7 +5,6 @@
 #include "../model/ContactList.h"
 #include "../model/User.h"
 #include "../model/GroupChat.h"
-#include "../utils/ContactManager.h"
 
 #include <bb/cascades/TabbedPane>
 
@@ -18,6 +17,9 @@ public:
     MainScreen(ApplicationUI* app);
     ~MainScreen();
 
+    Q_INVOKABLE void addContact(const QString& firstName, const QString& lastName, const QString& phone);
+    Q_INVOKABLE void renameContact(const QString& firstName, const QString& lastName, const QString& phone);
+    Q_INVOKABLE void deleteContact(User* contact);
     Q_INVOKABLE void sendMessage(Chat* chat, const QString& message);
     Q_INVOKABLE void sendPhoto(Chat* chat, const QString& fileName);
     Q_INVOKABLE void deleteMessage(long long id);
@@ -32,16 +34,23 @@ public:
     Q_INVOKABLE void dialANumber(const QString& number);
     Q_INVOKABLE User* getUser(int id);
 signals:
+    void contactAdded(bool error, QString message);
+    void contactRenamed(bool error, QString message);
+    void contactDeleted(bool error, QString message);
     void groupCreated(GroupChat* groupChat);
 protected slots:
     void initialize();
 protected:
     static MainScreen*  m_instance;
     ApplicationUI*      m_app;
-    ContactManager*     m_contactManager;
     ContactList*        m_contacts;
+
+    bool contactExist(const QString& phone);
 
     static void _createGroupCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M);
     static void _addMemberCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M);
     static void _deleteMemberCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M);
+    static void _contactAddHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[]);
+    static void _contactRenameHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[]);
+    static void _contactDeleteHandler(struct tgl_state *TLS, void *callback_extra, int success);
 };

@@ -25,12 +25,12 @@ Sheet {
                     else
                         me.close()
                     
-                    _contactManager.contactAdded.disconect(contactAdded)
+                    _owner.contactAdded.disconect(contactAdded)
                 }
                 
                 onTriggered: {
-                    _contactManager.contactAdded.connect(contactAdded)
-                    _contactManager.addContact(firstName.text, lastName.text, phoneNumber.text)
+                    _owner.contactAdded.connect(contactAdded)
+                    _owner.addContact(firstName.text, lastName.text, phoneNumber.text)
                     
                     firstName.enabled = false
                     lastName.enabled = false

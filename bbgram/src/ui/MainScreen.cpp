@@ -5,6 +5,7 @@
 #include <bb/system/InvokeRequest>
 #include <bb/PpsObject>
 
+
 using namespace bb::cascades;
 using namespace bb::system;
 
@@ -27,16 +28,36 @@ MainScreen::MainScreen(ApplicationUI* app)
     setContextProperty("_contacts", m_contacts);
     setContextProperty("_chats", Storage::instance()->dialogs());
 
-    m_contactManager = new ContactManager();
-    setContextProperty("_contactManager", m_contactManager);
-
     initialize();
 }
 
 MainScreen::~MainScreen()
 {
-    delete m_contactManager;
     m_instance = NULL;
+}
+
+void MainScreen::addContact(const QString& firstName, const QString& lastName, const QString& phone)
+{
+    if (!contactExist(phone))
+        tgl_do_add_contact(gTLS, phone.toUtf8().data(), phone.toUtf8().size(), firstName.toUtf8().data(), firstName.toUtf8().size(), lastName.toUtf8().data(), lastName.toUtf8().size(), false, MainScreen::_contactAddHandler, NULL);
+    else
+        emit contactAdded(true, "Contact already exists");
+}
+
+void MainScreen::renameContact(const QString& firstName, const QString& lastName, const QString& phone)
+{
+    if (contactExist(phone))
+        tgl_do_add_contact(gTLS, phone.toUtf8().data(), phone.toUtf8().size(), firstName.toUtf8().data(), firstName.toUtf8().size(), lastName.toUtf8().data(), lastName.toUtf8().size(), false, MainScreen::_contactRenameHandler, NULL);
+    else
+        emit contactRenamed(true, "Contact not exist");
+}
+
+void MainScreen::deleteContact(User* contact)
+{
+    tgl_peer_id_t peer;
+    peer.type = contact->type();
+    peer.id = contact->id();
+    tgl_do_del_contact(gTLS, peer, MainScreen::_contactDeleteHandler, contact);
 }
 
 void MainScreen::sendMessage(Chat* chat, const QString& message)
@@ -77,7 +98,7 @@ void MainScreen::createGroup(QVariantList users, const QString& title, const QSt
     int idx = 0;
     foreach (QVariant variant, users)
     {
-        User* user = (User*)variant.value<QObject*>();
+        User* user =NULL;// (User*)variant.value<QObject*>();
         tgl_peer_id_t peer = {TGL_PEER_USER, user->id()};
         data->peers[idx] = peer;
         idx++;
@@ -162,6 +183,28 @@ void MainScreen::initialize()
     setContextProperty("_currentUser", currentUser);
 }
 
+bool MainScreen::contactExist(const QString& phone)
+{
+    bb::cascades::QListDataModel<User*>* contacts = Storage::instance()->contacts();
+
+    QString phone_filtred(phone);
+    phone_filtred.replace("+","");
+    phone_filtred.replace(" ","");
+
+    bool found = false;
+    for (int i = 0; i < contacts->size(); i++)
+    {
+        User* contact = contacts->value(i);
+        if (contact->phone() == phone_filtred)
+        {
+            found = true;
+            break;
+        }
+    }
+
+    return found;
+}
+
 void MainScreen::_createGroupCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M)
 {
     CreateGroupData* data = (CreateGroupData*)callback_extra;
@@ -201,6 +244,30 @@ void MainScreen::_deleteMemberCallback(struct tgl_state *TLS, void *callback_ext
 
     GroupChat* groupChat = (GroupChat*)Storage::instance()->getPeer(TGL_PEER_CHAT, M->to_id.id);
     groupChat->deleteMember((User*)callback_extra);
+}
+
+void MainScreen::_contactAddHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[])
+{
+    emit m_instance->contactAdded(size == 0, "Somthing wrong");
+}
+
+void MainScreen::_contactRenameHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[])
+{
+    emit m_instance->contactRenamed(size == 0, "Somthing wrong");
+}
+
+void MainScreen::_contactDeleteHandler(struct tgl_state *TLS, void *callback_extra, int success)
+{
+    if (success)
+    {
+        tgl_peer_id_t peer;
+        peer.type = ((User*)callback_extra)->type();
+        peer.id = ((User*)callback_extra)->id();
+        tgl_do_get_user_info(gTLS, peer, false, NULL, NULL);
+        Storage::instance()->deleteContact((User*)callback_extra);
+    }
+
+    emit m_instance->contactDeleted(!success, "Somthing wrong");
 }
 
 User* MainScreen::getUser(int id)
