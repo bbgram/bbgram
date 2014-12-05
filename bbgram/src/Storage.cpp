@@ -537,7 +537,8 @@ void Storage::_getUserInfoCallback(struct tgl_state *TLS, void *callback_extra, 
     }
     if (idx != -1)
         m_instance->m_dialogs->insert(idx, user);
-    m_instance->updateHistory(user);
+    if (lastMessage && lastMessage->id() != U->last->id)
+        m_instance->updateHistory(user);
 }
 
 void Storage::_getChatInfoCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_chat *C)
@@ -569,7 +570,8 @@ void Storage::_getChatInfoCallback(struct tgl_state *TLS, void *callback_extra, 
     }
     if (idx != -1)
         m_instance->m_dialogs->insert(idx, groupChat);
-    m_instance->updateHistory(groupChat);
+    if (lastMessage && lastMessage->id() != C->last->id)
+        m_instance->updateHistory(groupChat);
 }
 
 void Storage::_getDialogsCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, tgl_peer_id_t peers[], int last_msg_id[], int unread_count[])
