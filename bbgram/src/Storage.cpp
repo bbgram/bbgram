@@ -542,7 +542,10 @@ void Storage::_getUserInfoCallback(struct tgl_state *TLS, void *callback_extra, 
     {
         lastMessage = m_instance->getMessage(U->last->id);
         if (lastMessage != user->lastMessage())
+        {
             user->addMessage(lastMessage);
+            m_instance->updateHistory(user);
+        }
     }
     int idx = 0;
     for (int i = 0; i < m_instance->m_dialogs->size(); i++)
@@ -559,8 +562,8 @@ void Storage::_getUserInfoCallback(struct tgl_state *TLS, void *callback_extra, 
     }
     if (idx != -1)
         m_instance->m_dialogs->insert(idx, user);
-    if (lastMessage && lastMessage->id() != U->last->id)
-        m_instance->updateHistory(user);
+    //if (lastMessage && lastMessage->id() != U->last->id)
+
 }
 
 void Storage::_getChatInfoCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_chat *C)
@@ -575,7 +578,10 @@ void Storage::_getChatInfoCallback(struct tgl_state *TLS, void *callback_extra, 
     {
         lastMessage = m_instance->getMessage(C->last->id);
         if (lastMessage != groupChat->lastMessage())
+        {
             groupChat->addMessage(lastMessage);
+            m_instance->updateHistory(groupChat);
+        }
     }
     int idx = 0;
     for (int i = 0; i < m_instance->m_dialogs->size(); i++)
@@ -592,8 +598,8 @@ void Storage::_getChatInfoCallback(struct tgl_state *TLS, void *callback_extra, 
     }
     if (idx != -1)
         m_instance->m_dialogs->insert(idx, groupChat);
-    if (lastMessage && lastMessage->id() != C->last->id)
-        m_instance->updateHistory(groupChat);
+    //if (lastMessage && lastMessage->id() != C->last->id)
+
 }
 
 void Storage::_getDialogsCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, tgl_peer_id_t peers[], int last_msg_id[], int unread_count[])
@@ -637,7 +643,9 @@ void Storage::_getHistoryCallback(struct tgl_state *TLS, void *callback_extra, i
     for (int i = 0; i < size; i++)
     {
         Message* message = m_instance->getMessage(list[i]->id);
-        //messages->insert(message);
+        if (!messages->find(message).isEmpty())
+                continue;
+        messages->insert(message);
     }
 }
 
