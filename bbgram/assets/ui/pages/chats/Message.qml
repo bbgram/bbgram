@@ -15,13 +15,6 @@ Container {
     
     property bool withHeader: ListItem.indexInSection == ListItem.sectionSize - 1
     
-    onCreationCompleted: {
-        if (ListItemData.mediaType == 6)
-            contactDelegate.delegateActive = true
-        else
-            textDelegate.delegateActive = true
-    }
-    
     layout: StackLayout {            
     }
     Container {
@@ -114,12 +107,12 @@ Container {
                             ControlDelegate {
                                 id: textDelegate
                                 source: "messages/Text.qml"
-                                delegateActive: false
+                                delegateActive: ListItemData.mediaType != 6
                             }
                             ControlDelegate {
                                 id: contactDelegate
                                 source: "messages/Contact.qml"
-                                delegateActive: false
+                                delegateActive: ListItemData.mediaType == 6
                             }
                             Container { // date and read status
                                 horizontalAlignment: HorizontalAlignment.Right
