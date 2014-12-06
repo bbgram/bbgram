@@ -5,7 +5,7 @@
 using namespace bb::cascades;
 
 GroupChat::GroupChat(int id)
-    : Chat(TGL_PEER_CHAT, id), m_adminId(0)
+    : Chat(TGL_PEER_CHAT, id), m_photoId(0), m_adminId(0)
 {
     setPhoto("");
 
@@ -38,6 +38,9 @@ void GroupChat::deserialize(QByteArray& data)
     it = map.find("photo");
     if (it != map.end())
         setPhoto(it.value().toString());
+    it = map.find("photoId");
+    if (it != map.end())
+            setPhotoId(it.value().toLongLong());
     //map.insert("members", ??);
     //map.insert("invites", ??);
 }
@@ -51,6 +54,7 @@ QByteArray GroupChat::serialize() const
     //map.insert("members", ??);
     //map.insert("invites", ??);
     map.insert("photo", m_photoFilename);
+    map.insert("photoId", m_photoId);
 
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
@@ -101,6 +105,16 @@ void GroupChat::setPhoto(const QString &filename)
     m_photo = Image(bytes);
 
     emit photoChanged();
+}
+
+void GroupChat::setPhotoId(long long photoId)
+{
+    m_photoId = photoId;
+}
+
+long long GroupChat::getPhotoId() const
+{
+    return m_photoId;
 }
 
 int GroupChat::getAdmin() const

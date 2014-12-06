@@ -329,10 +329,9 @@ void Storage::userUpdateHandler (struct tgl_state *TLS, struct tgl_user *U, unsi
 
     if (flags & TGL_UPDATE_PHOTO)
     {
-        if (U->photo.sizes_num != 0)
-            tgl_do_load_photo(gTLS, &U->photo, load_photo_callback, user);
-        /*else
-            user->setPhoto("");*/
+        long long newPhotoId = (long long)U->photo_big.local_id << 32 | U->photo_small.local_id;
+        if (user->getPhotoId() != newPhotoId)
+            tgl_do_get_user_info(gTLS, {user->type(), user->id()}, 0, _updateContactPhoto, NULL);
     }
 
     if (flags & TGL_UPDATE_CONTACT)
@@ -484,10 +483,9 @@ void Storage::updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsig
 
     if (flags & TGL_UPDATE_PHOTO)
     {
-        if (C->photo.sizes_num != 0)
-            tgl_do_load_photo(gTLS, &C->photo, load_photo_callback, groupChat);
-        /*else
-            groupChat->setPhoto("");*/
+        long long newPhotoId = (long long)C->photo_big.local_id << 32 | C->photo_small.local_id;
+        if (groupChat->getPhotoId() != newPhotoId)
+            tgl_do_get_chat_info(gTLS, {groupChat->type(), groupChat->id()}, 0, _updateGroupPhoto, NULL);
     }
 
     if (flags & TGL_UPDATE_ADMIN)
@@ -683,6 +681,36 @@ void Storage::_deleteHistoryCallback(struct tgl_state *TLS, void *callback_extra
             m_instance->m_messages.remove(msg->id());
         }
         messages->clear();
+    }
+}
+
+void Storage::_updateGroupPhoto(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_chat *C)
+{
+    GroupChat* groupChat = (GroupChat*)m_instance->getPeer(TGL_PEER_CHAT, C->id.id);
+
+    long long newPhotoId = (long long)C->photo_big.local_id << 32 | C->photo_small.local_id;
+    if (groupChat->getPhotoId() != newPhotoId)
+    {
+        groupChat->setPhotoId(newPhotoId);
+        if (C->photo.sizes_num != 0)
+                tgl_do_load_photo(gTLS, &C->photo, load_photo_callback, groupChat);
+        else
+            groupChat->setPhoto("");
+    }
+}
+
+void Storage::_updateContactPhoto(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *U)
+{
+    User* user = (User*)m_instance->getPeer(TGL_PEER_USER, U->id.id);
+
+    long long newPhotoId = (long long)U->photo_big.local_id << 32 | U->photo_small.local_id;
+    if (user->getPhotoId() != newPhotoId)
+    {
+        user->setPhotoId(newPhotoId);
+        if (U->photo.sizes_num != 0)
+            tgl_do_load_photo(gTLS, &U->photo, load_photo_callback, user);
+        else
+            user->setPhoto("");
     }
 }
 

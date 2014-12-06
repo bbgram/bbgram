@@ -4,7 +4,7 @@
 using namespace bb::cascades;
 
 User::User(int id)
-    : Chat(TGL_PEER_USER, id), m_online(false), m_typingStatus(tgl_typing_none)
+    : Chat(TGL_PEER_USER, id), m_online(false), m_typingStatus(tgl_typing_none), m_photoId(0)
 {
     setPhoto("");
 
@@ -39,6 +39,9 @@ void User::deserialize(QByteArray& data)
     it = map.find("photo");
     if (it != map.end())
         setPhoto(it.value().toString());
+    it = map.find("photoId");
+    if (it != map.end())
+        setPhotoId(it.value().toLongLong());
 }
 
 QByteArray User::serialize() const
@@ -49,6 +52,8 @@ QByteArray User::serialize() const
     map.insert("firstName", m_firstName);
     map.insert("lastName", m_lastName);
     map.insert("photo", m_photoFilename);
+    map.insert("photoId", m_photoId);
+
 
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
@@ -190,6 +195,16 @@ void User::resetTypingStatus()
 QVariant User::photo() const
 {
     return QVariant::fromValue(m_photo);
+}
+
+void User::setPhotoId(long long photoId)
+{
+    m_photoId = photoId;
+}
+
+long long User::getPhotoId() const
+{
+    return m_photoId;
 }
 
 void User::setPhoto(const QString &filename)

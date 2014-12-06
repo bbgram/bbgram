@@ -24,6 +24,8 @@ public:
     QString status() const;
     QVariant photo() const;
     void setPhoto(const QString &filename);
+    void setPhotoId(long long photoId);
+    long long getPhotoId() const;
 
     int getAdmin() const;
     void setAdmin(int adminId);
@@ -40,6 +42,7 @@ signals:
     void membersChanged();
 protected:
     bb::cascades::Image             m_photo;
+    long long                       m_photoId;
     QString                         m_photoFilename;
     QString                         m_title;
     int                             m_adminId;

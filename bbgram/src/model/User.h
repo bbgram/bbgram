@@ -49,6 +49,8 @@ public:
 
     void setPhoto(const QString &filename);
     QVariant photo() const;
+    void setPhotoId(long long photoId);
+    long long getPhotoId() const;
 
     const QString& sortingKey() const;
     QString color() const;
@@ -72,6 +74,7 @@ protected:
 
     QString                 m_photoFilename;
     bb::cascades::Image     m_photo;
+    long long               m_photoId;
 };
 
 Q_DECLARE_METATYPE(User*);
