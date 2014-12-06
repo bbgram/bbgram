@@ -64,6 +64,7 @@ NavigationPane {
                 
                 onTriggered: {
                     var sheet = contactPickerSheetDef.createObject()
+                    sheet.userSelected.connect(newChatSlot);
                     sheet.open()
                 }
             },
