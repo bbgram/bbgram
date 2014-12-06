@@ -60,6 +60,11 @@ void MainScreen::deleteContact(User* contact)
     tgl_do_del_contact(gTLS, peer, MainScreen::_contactDeleteHandler, contact);
 }
 
+void MainScreen::setProfilePhoto(const QString& fileName)
+{
+    tgl_do_set_profile_photo(gTLS, fileName.toUtf8().data(), NULL, NULL);
+}
+
 void MainScreen::sendMessage(Chat* chat, const QString& message)
 {
     tgl_peer_id_t peer;

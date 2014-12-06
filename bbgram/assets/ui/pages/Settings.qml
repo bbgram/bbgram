@@ -1,4 +1,5 @@
 import bb.cascades 1.2
+import bb.cascades.pickers 1.0
 import "settings"
 
 NavigationPane {
@@ -76,6 +77,7 @@ NavigationPane {
                     }
                     
                     ImageView {
+                        id: photo
                         verticalAlignment: VerticalAlignment.Center
                         
                         image: _currentUser ? _currentUser.photo : null
@@ -83,6 +85,26 @@ NavigationPane {
                         scalingMethod: ScalingMethod.Fill
                         preferredHeight: 200
                         preferredWidth: 200
+                        
+                        gestureHandlers: TapHandler {
+                            onTapped: {
+                                filePicker.open()
+                            }
+                        }
+                        
+                        attachedObjects: [
+                            FilePicker {
+                                id: filePicker
+                                type : FileType.Picture
+                                title : "Select Picture"
+                                mode: FilePickerMode.Picker
+                                directories : ["/accounts/1000/shared/"]
+                                onFileSelected : {
+                                    photo.imageSource =  "file://" + selectedFiles[0];
+                                    _owner.setProfilePhoto(selectedFiles[0])
+                                }
+                            }
+                        ]
                     }
                     
                     Container {

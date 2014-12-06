@@ -20,6 +20,7 @@ public:
     Q_INVOKABLE void addContact(const QString& firstName, const QString& lastName, const QString& phone);
     Q_INVOKABLE void renameContact(const QString& firstName, const QString& lastName, const QString& phone);
     Q_INVOKABLE void deleteContact(User* contact);
+    Q_INVOKABLE void setProfilePhoto(const QString& fileName);
     Q_INVOKABLE void sendMessage(Chat* chat, const QString& message);
     Q_INVOKABLE void sendPhoto(Chat* chat, const QString& fileName);
     Q_INVOKABLE void deleteMessage(long long id);
