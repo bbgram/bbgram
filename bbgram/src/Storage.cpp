@@ -612,18 +612,17 @@ void Storage::_getDialogsCallback(struct tgl_state *TLS, void *callback_extra, i
         int _unread_count = unread_count[i];
         //tgl_do_get_history_ext(gTLS, _peer, _last_msg_id, 1, 0, get_history_callback, 0);
 
-        if (peer_type == TGL_PEER_USER)
+        if (peer_type == TGL_PEER_USER) {
             tgl_do_get_user_info(gTLS, _peer, 0, _getUserInfoCallback, _this);
+            long long id = ((long long)_peer.type << 32) | _peer.id;
+            QSqlDatabase &db = m_instance->m_db;
+            QSqlQuery query(db);
+            query.prepare("REPLACE INTO dialogs(id) VALUES(:id)");
+            query.bindValue(":id", id);
+            query.exec();
+        }
         else if (peer_type == TGL_PEER_CHAT)
             tgl_do_get_chat_info(gTLS, _peer, 0, _getChatInfoCallback, _this);
-
-
-        long long id = ((long long)_peer.type << 32) | _peer.id;
-        QSqlDatabase &db = m_instance->m_db;
-        QSqlQuery query(db);
-        query.prepare("REPLACE INTO dialogs(id) VALUES(:id)");
-        query.bindValue(":id", id);
-        query.exec();
     }
 }
 
