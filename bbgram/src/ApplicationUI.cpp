@@ -70,12 +70,15 @@ void ApplicationUI::onAllAuthorized()
 #include "ui/IntroScreen.h"
 #include "ui/MainScreen.h"
 
+static IntroScreen* introScreen = NULL;
+static MainScreen* mainScreen = NULL;
+
 void ApplicationUI::showIntroScreen()
 {
-    IntroScreen* intro = new IntroScreen(this);
-    intro->setContextProperty("_app", this);
+    introScreen = new IntroScreen(this);
+    introScreen->setContextProperty("_app", this);
 
-    Application::instance()->setScene(intro->rootObject());
+    Application::instance()->setScene(introScreen->rootObject());
 }
 
 void ApplicationUI::showMainScreen()
@@ -87,8 +90,46 @@ void ApplicationUI::showMainScreen()
         prevPane->deleteLater();
     }
 
-    MainScreen* main = new MainScreen(this);
-    main->setContextProperty("_app", this);
+    delete introScreen;
 
-    Application::instance()->setScene(main->rootObject());
+    mainScreen = new MainScreen(this);
+    mainScreen->setContextProperty("_app", this);
+
+    Application::instance()->setScene(mainScreen->rootObject());
+}
+
+void ApplicationUI::logout()
+{
+    AbstractPane* prevPane = Application::instance()->scene();
+
+    if (prevPane)
+    {
+        prevPane->setParent(NULL);
+        prevPane->deleteLater();
+    }
+
+    delete mainScreen;
+
+    m_storage->setParent(NULL);
+    delete m_storage;
+
+    m_telegraph->stop();
+    delete m_telegraph;
+
+    QFile::remove("data/storage.db");
+    QFile::remove("data/auth.dat");
+    QFile::remove("data/state.dat");
+
+    m_telegraph = new Telegraph();
+    m_telegraph->start();
+
+    m_storage = new Storage(this);
+
+    //delete
+
+    QObject::connect(Telegraph::instance(), SIGNAL(mainDCAuthorized()), this, SLOT(onMainAuthorized()));
+    QObject::connect(Telegraph::instance(), SIGNAL(allDCAuthorized()), this, SLOT(onAllAuthorized()));
+
+    showIntroScreen();
+
 }

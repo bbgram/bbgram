@@ -1,4 +1,6 @@
 import bb.cascades 1.2
+import bb.system 1.0
+import bbgram.types.lib 0.1
 import bb.cascades.pickers 1.0
 import "settings"
 
@@ -193,6 +195,18 @@ NavigationPane {
                 Button {
                     text: "Log Out"
                     horizontalAlignment: HorizontalAlignment.Center
+                    onClicked: confirmDialog.show()
+                    attachedObjects: [
+                        SystemDialog {
+                            id: confirmDialog
+                            title: clearHistoryAction.title
+                            body: "Are you sure you want to logout?"
+                            onFinished: {
+                                if (value == SystemUiResult.ConfirmButtonSelection)
+                                    _app.logout();
+                            }
+                        }
+                    ]
                 }
                 Label {
                     text: "Telegram for Blackberry v0.1"

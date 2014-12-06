@@ -15,6 +15,7 @@ public:
 
     Q_INVOKABLE void showIntroScreen();
     Q_INVOKABLE void showMainScreen();
+    Q_INVOKABLE void logout();
 public slots:
     void onMainAuthorized();
     void onAllAuthorized();

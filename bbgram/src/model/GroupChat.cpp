@@ -40,7 +40,7 @@ void GroupChat::deserialize(QByteArray& data)
         setPhoto(it.value().toString());
     it = map.find("photoId");
     if (it != map.end())
-            setPhotoId(it.value().toLongLong());
+        setPhotoId(it.value().toLongLong());
     //map.insert("members", ??);
     //map.insert("invites", ??);
 }
