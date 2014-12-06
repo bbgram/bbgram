@@ -28,7 +28,7 @@ public:
     Q_INVOKABLE void createGroup(QVariantList users, const QString& title, const QString& chatPhoto);
     Q_INVOKABLE void setGroupName(GroupChat* group, const QString& title);
     Q_INVOKABLE void addUserToGroup(GroupChat* group, User* user);
-    Q_INVOKABLE void deleteUserFromGroup(GroupChat* group, User* user);
+    Q_INVOKABLE void deleteMemberFromGroup(GroupChat* group, User* member);
     Q_INVOKABLE void deleteHistory(Chat* chat);
     Q_INVOKABLE void deleteChat(Chat* chat);
     Q_INVOKABLE void openFAQ();
@@ -52,6 +52,7 @@ protected:
     static void _createGroupCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M);
     static void _addMemberCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M);
     static void _deleteMemberCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M);
+    static void _deleteSelfFromGroupCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M);
     static void _contactAddHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[]);
     static void _contactRenameHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[]);
     static void _contactDeleteHandler(struct tgl_state *TLS, void *callback_extra, int success);

@@ -122,9 +122,9 @@ void MainScreen::addUserToGroup(GroupChat* group, User* user)
     tgl_do_add_user_to_chat(gTLS, {group->type(), group->id()}, {user->type(), user->id()}, 0, MainScreen::_addMemberCallback, user);
 }
 
-void MainScreen::deleteUserFromGroup(GroupChat* group, User* user)
+void MainScreen::deleteMemberFromGroup(GroupChat* group, User* member)
 {
-    tgl_do_del_user_from_chat(gTLS, {group->type(), group->id()}, {user->type(), user->id()}, MainScreen::_deleteMemberCallback, user);
+    tgl_do_del_user_from_chat(gTLS, {group->type(), group->id()}, {member->type(), member->id()}, MainScreen::_deleteMemberCallback, member);
 }
 
 void MainScreen::deleteHistory(Chat* chat)
@@ -136,9 +136,14 @@ void MainScreen::deleteChat(Chat* chat)
 {
     User* currentUser = (User*)Storage::instance()->getPeer(TGL_PEER_USER, gTLS->our_id);
     if (chat->type() == TGL_PEER_CHAT)
-        deleteUserFromGroup((GroupChat*)chat, currentUser);
-    Storage::instance()->deleteHistory(chat);
-    Storage::instance()->deleteChat(chat);
+    {
+        tgl_do_del_user_from_chat(gTLS, {chat->type(), chat->id()}, {currentUser->type(), currentUser->id()}, MainScreen::_deleteSelfFromGroupCallback, chat);
+    }
+    else
+    {
+        Storage::instance()->deleteHistory(chat);
+        Storage::instance()->deleteChat(chat);
+    }
 }
 
 void MainScreen::openFAQ()
@@ -258,6 +263,19 @@ void MainScreen::_deleteMemberCallback(struct tgl_state *TLS, void *callback_ext
 
     GroupChat* groupChat = (GroupChat*)Storage::instance()->getPeer(TGL_PEER_CHAT, M->to_id.id);
     groupChat->deleteMember((User*)callback_extra);
+}
+
+void MainScreen::_deleteSelfFromGroupCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M)
+{
+    if (!success)
+        return;
+
+    User* currentUser = (User*)Storage::instance()->getPeer(TGL_PEER_USER, gTLS->our_id);
+    GroupChat* groupChat = (GroupChat*)Storage::instance()->getPeer(TGL_PEER_CHAT, M->to_id.id);
+    groupChat->deleteMember(currentUser);
+
+    Storage::instance()->deleteHistory((Chat*)callback_extra);
+    Storage::instance()->deleteChat((Chat*)callback_extra);
 }
 
 void MainScreen::_contactAddHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[])

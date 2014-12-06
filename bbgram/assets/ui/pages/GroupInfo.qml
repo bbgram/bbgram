@@ -139,7 +139,7 @@ Page {
                                     for (var i = 0; i < groupList.selectionList().length; i++)
                                     {
                                         var user = groupList.dataModel.data(groupList.selectionList()[i])
-                                        _owner.deleteUserFromGroup(chat, user)
+                                        _owner.deleteMemberFromGroup(chat, user)
                                     }   
                                 }
                             }
