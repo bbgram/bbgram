@@ -100,6 +100,7 @@ Storage::Storage(QObject* parent)
         {
             long long id = query.value(0).toLongLong();
             Message* message = new Message(id);
+            message->setParent(this);
             if (!lastMessage)
                 lastMessage = message;
             message->m_fromId = query.value(1).toInt();
@@ -664,6 +665,13 @@ void Storage::_deleteMessageCallback(struct tgl_state *TLS, void *callback_extra
         m_instance->m_dialogs->value(i)->deleteMessage(msg);
 
     m_instance->m_messages.remove(id);
+    delete msg;
+
+    QSqlDatabase &db = m_instance->m_db;
+    QSqlQuery query(db);
+    query.prepare("DELETE FROM messages WHERE id=:id");
+    query.bindValue(":id", id);
+    query.exec();
 }
 
 void Storage::_deleteHistoryCallback(struct tgl_state *TLS, void *callback_extra, int success, int offset)
@@ -685,6 +693,8 @@ void Storage::_deleteHistoryCallback(struct tgl_state *TLS, void *callback_extra
             QVariant item = messages->data(indexPath);
             Message* msg = (Message*)item.value<QObject*>();
             m_instance->m_messages.remove(msg->id());
+
+            msg->setParent(0);//delete analogue
         }
         messages->clear();
     }
