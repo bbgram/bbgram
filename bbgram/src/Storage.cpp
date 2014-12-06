@@ -332,6 +332,9 @@ void Storage::userUpdateHandler (struct tgl_state *TLS, struct tgl_user *U, unsi
         long long newPhotoId = (long long)U->photo_big.local_id << 32 | U->photo_small.local_id;
         if (user->getPhotoId() != newPhotoId)
             tgl_do_get_user_info(gTLS, {user->type(), user->id()}, 0, _updateContactPhoto, NULL);
+
+        if ((flags & TGL_UPDATE_PHOTO) == TGL_UPDATE_PHOTO)
+            return;
     }
 
     if (flags & TGL_UPDATE_CONTACT)
@@ -486,6 +489,9 @@ void Storage::updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsig
         long long newPhotoId = (long long)C->photo_big.local_id << 32 | C->photo_small.local_id;
         if (groupChat->getPhotoId() != newPhotoId)
             tgl_do_get_chat_info(gTLS, {groupChat->type(), groupChat->id()}, 0, _updateGroupPhoto, NULL);
+
+        if ((flags & TGL_UPDATE_PHOTO) == TGL_UPDATE_PHOTO)
+            return;
     }
 
     if (flags & TGL_UPDATE_ADMIN)
@@ -686,6 +692,9 @@ void Storage::_deleteHistoryCallback(struct tgl_state *TLS, void *callback_extra
 
 void Storage::_updateGroupPhoto(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_chat *C)
 {
+    if (!success)
+        return;
+
     GroupChat* groupChat = (GroupChat*)m_instance->getPeer(TGL_PEER_CHAT, C->id.id);
 
     long long newPhotoId = (long long)C->photo_big.local_id << 32 | C->photo_small.local_id;
@@ -697,10 +706,23 @@ void Storage::_updateGroupPhoto(struct tgl_state *TLS, void *callback_extra, int
         else
             groupChat->setPhoto("");
     }
+
+    QSqlDatabase &db = m_instance->m_db;
+    QSqlQuery query(db);
+
+    long long id = ((long long)C->id.type << 32) | C->id.id;
+    query.prepare("REPLACE INTO dialogs(id, data) VALUES(:id, :data)");
+    query.bindValue(":id", id);
+    QByteArray data = groupChat->serialize();
+    query.bindValue(":data", data);
+    query.exec();
 }
 
 void Storage::_updateContactPhoto(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *U)
 {
+    if (!success)
+        return;
+
     User* user = (User*)m_instance->getPeer(TGL_PEER_USER, U->id.id);
 
     long long newPhotoId = (long long)U->photo_big.local_id << 32 | U->photo_small.local_id;
@@ -712,6 +734,16 @@ void Storage::_updateContactPhoto(struct tgl_state *TLS, void *callback_extra, i
         else
             user->setPhoto("");
     }
+
+    QSqlDatabase &db = m_instance->m_db;
+    QSqlQuery query(db);
+    query.prepare("REPLACE INTO users(id, name, last_seen, data) VALUES(:id, :name, :last_seen, :data)");
+    query.bindValue(":id", user->id());
+    query.bindValue(":name", user->name());
+    QByteArray data = user->serialize();
+    query.bindValue(":data", data);
+    query.bindValue(":last_seen", user->lastSeen().toTime_t());
+    query.exec();
 }
 
 void Storage::updateChats()
