@@ -31,8 +31,8 @@ Page {
         message.text = ""
     }
     
-    function clearHistory(chat) {
-        //_owner.clearHistory(chat)
+    function clearHistory() {
+        _owner.deleteHistory(chat)
     }
     
     function about() {
@@ -199,7 +199,7 @@ Page {
             imageSource: "asset:///images/menu_sharedmedia.png"
             ActionBar.placement: ActionBarPlacement.InOverflow
         },
-        ActionItem {
+        DeleteActionItem {
             id: clearHistoryAction
             title: "Clear Chat"
             imageSource: "asset:///images/menu_bin.png"
@@ -212,7 +212,7 @@ Page {
                     body: "Are you sure you want to clear history?"
                     onFinished: {
                         if (value == SystemUiResult.ConfirmButtonSelection)
-                            clearHistory(ListItemData)
+                            clearHistory()
                     }
                 }
             ]
