@@ -2,7 +2,7 @@ import bb.cascades 1.2
 
 Container {
     id: me
-    property variant author: null //{firstName: "Adam", lastName: "Smith", color:"#FFEE00"}
+    property variant author: null//{firstName: "Adam", lastName: "Smith", color:"#FFEE00"}
     property bool incoming: !ListItemData.our
     property string text: ListItemData.text
     property variant date: ListItemData.dateTime
@@ -12,36 +12,16 @@ Container {
     onSelectedChanged: {
         overlay.visible = me.selected
     }
-    
-    property bool withHeader: ListItem.indexInSection == ListItem.sectionSize - 1
-    
+
     layout: StackLayout {            
     }
-    Container {
-        visible: me.withHeader
-        topPadding: me.withHeader ? 15 : 0
+   
+    ControlDelegate {
+        source: "messages/DateHeader.qml"
+        delegateActive: me.ListItem.indexInSection == me.ListItem.sectionSize - 1
+        
         horizontalAlignment: HorizontalAlignment.Center
-        layout: DockLayout {            
-        }
-        ImageView {
-            horizontalAlignment: HorizontalAlignment.Fill
-            verticalAlignment: VerticalAlignment.Fill
-            imageSource: "asset:///images/date.amd"
-        }
-        Container {            
-            leftPadding: 20
-            rightPadding: 20
-            topPadding: 4
-            bottomPadding: 8
-            Label {
-                text: Qt.formatDate(date, "MMMM d")
-                textStyle.color: Color.White
-            }
-        }
-        bottomMargin: 15
-    
     }
-    
     
     Container { // message body
         layout: DockLayout {
@@ -73,31 +53,19 @@ Container {
                         orientation: LayoutOrientation.LeftToRight
                     }
                     
-                    Container { // avatar
-                        visible: author != null
-                        ImageView {
-                            image: author ? author.photo : null
-                            //imageSource: "asset:///images/placeholders/user_placeholder_purple.png"                            
-                            minWidth: 80
-                            minHeight: 80                
-                            preferredWidth: 80
-                            preferredHeight: 80
-                        }
-                        rightMargin: 20
-                        topPadding: 10
-                        bottomPadding: 8
-                    
+                    ControlDelegate {
+                        sourceComponent: senderAvatarCompDef
+                        delegateActive: author != null
                     }
                     Container { // body
                         layout: StackLayout {
                             orientation: LayoutOrientation.TopToBottom
                         }
-                        Label {
-                            visible: author != null
-                            text: author ? (author.firstName + " " + author.lastName) : ""
-                            textStyle.color: author ? Color.create(author.color) : Color.Black
+                        ControlDelegate {
+                            sourceComponent: senderNameCompDef
+                            delegateActive: author != null
+                            
                             bottomMargin: 4
-                        
                         }
                         Container {   
                             //preferredHeight: Infinity
@@ -122,20 +90,16 @@ Container {
                                 }
                                 Label {
                                     text: Qt.formatDateTime(me.date, "hh:mm")
-                                    
                                     textStyle {
-                                        color: me.incoming ? Color.Gray : Color.create('#75B166')
-                                        fontSize: FontSize.XSmall
+                                        base: incoming ? dateInTextStyle.style : dateOutTextStyle.style
                                     }
                                     verticalAlignment: VerticalAlignment.Center
                                     rightMargin: 0
                                 }
-                                ImageView {
-                                    visible: !incoming
-                                    imageSource: unread ? "asset:///images/check_green.png" : "asset:///images/check_2_green.png"
-                                    
+                                ControlDelegate {
+                                    sourceComponent: checkGreenCompDef
+                                    delegateActive: !incoming
                                     verticalAlignment: VerticalAlignment.Center
-                                    leftMargin: 0
                                 }
                             }
                         }
@@ -155,4 +119,51 @@ Container {
             visible: false
         }
     }
+    
+    attachedObjects: [
+        TextStyleDefinition {
+            id: dateTextStyle
+            fontSize: FontSize.XSmall
+        },
+        TextStyleDefinition {
+            id: dateInTextStyle
+            base: dateTextStyle.style
+            color: Color.Gray
+        },
+        TextStyleDefinition {
+            id: dateOutTextStyle
+            base: dateTextStyle.style
+            color: Color.create('#75B166')
+        },
+        ComponentDefinition {
+            id: senderAvatarCompDef
+            Container { // avatar
+                rightPadding: 10
+                topPadding: 8
+                bottomPadding: 8
+                ImageView {
+                    image: author.photo
+                    //imageSource: "asset:///images/placeholders/user_placeholder_purple.png"                            
+                    minWidth: 80
+                    minHeight: 80                
+                    preferredWidth: 80
+                    preferredHeight: 80
+                }
+            }
+        },
+        ComponentDefinition {
+            id: senderNameCompDef
+            Label {
+                text: author.firstName + " " + author.lastName
+                textStyle.color: Color.create(author.color)
+            }
+        },
+        ComponentDefinition {
+            id: checkGreenCompDef
+            ImageView {
+                imageSource: unread ? "asset:///images/check_green.png" : "asset:///images/check_2_green.png"
+                leftMargin: 0
+            }
+        }
+    ]
 }

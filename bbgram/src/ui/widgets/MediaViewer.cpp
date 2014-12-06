@@ -48,7 +48,9 @@ void MediaViewer::setMessage(Message *message)
         m_width = media["width"].toInt();
         m_aspectRatio = (float)m_height / (float)m_width;
 
-        updateImageView(maxWidth());
+        setPreferredWidth(m_width);
+        setPreferredHeight(m_height);
+
         connect(this, SIGNAL(maxWidthChanged(float)), this, SLOT(updateImageView(float)));
 
         if (media.find("filename") != media.end())

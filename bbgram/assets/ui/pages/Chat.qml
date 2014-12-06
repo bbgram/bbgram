@@ -7,7 +7,7 @@ import "chats"
 
 Page {
     objectName: "Chat"
-    property variant chat: null
+    property Chat chat: null
     
     function messageAdded(indexPath) {
         if (indexPath.length != 0 && indexPath[0] == 0)
@@ -88,37 +88,31 @@ Page {
                     Label {
                         text: chat ? chat.title : ""
                         //text: "Anastasiya Shy"
+                        textStyle.base: titleTextStyle.style
                         bottomMargin: 0
-                        textStyle {
-                            color: Color.White
-                            fontSize: FontSize.Large
-                        }
                         horizontalAlignment: HorizontalAlignment.Left
                     }
                     Label {
                         text: 
-                            if(chat) {
-                                if (chat.type == 1)
-                                    chat.online ? "online" : "last seen " + chat.lastSeenFormatted
-                                else if (chat.type == 2) {
-                                    var n = chat.members.size();
-                                    var o = 0;
-                                    for (var i = 0; i < n; i++) {
-                                        var user = chat.members.data([i])
-                                        if (user.online)
-                                            o++
-                                    }
-                                    "%1 members, %2 online".arg(n).arg(o) 
+                        if(chat) {
+                            if (chat.type == 1)
+                                chat.online ? "online" : "last seen " + chat.lastSeenFormatted
+                            else if (chat.type == 2) {
+                                var n = chat.members.size();
+                                var o = 0;
+                                for (var i = 0; i < n; i++) {
+                                    var user = chat.members.data([i])
+                                    if (user.online)
+                                        o++
                                 }
-                                    
+                                "%1 members, %2 online".arg(n).arg(o) 
                             }
-                            else  
-                                ""
-                        topMargin: 0
-                        textStyle {
-                            color: Color.White
-                            fontSize: FontSize.Small
+                        
                         }
+                        else  
+                            ""
+                        topMargin: 0
+                        textStyle.base: titleStatusTextStyle
                         horizontalAlignment: HorizontalAlignment.Left
                     }
                 }
@@ -295,9 +289,19 @@ Page {
     }
     
     attachedObjects: [
+        TextStyleDefinition {
+            id: titleTextStyle
+            color: Color.White
+            fontSize: FontSize.Large
+        },
+        TextStyleDefinition {
+            id: titleStatusTextStyle
+            color: Color.White
+            fontSize: FontSize.Small
+        },
         ComponentDefinition {
-            id: contactPageDef
-            source: "ContactInfo.qml"
+                    id: contactPageDef
+                    source: "ContactInfo.qml"
         },
         ComponentDefinition {
             id: groupPageDef
