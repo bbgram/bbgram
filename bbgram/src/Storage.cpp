@@ -129,6 +129,10 @@ Storage::Storage(QObject* parent)
         }
         m_dialogs->insert(newPos, chat);
     }
+
+    m_saveTimer = new QTimer(this);
+    connect(m_saveTimer, SIGNAL(timeoutimeout()), this, SLOT(saveUpdatesToDatabase()));
+    m_saveTimer->start(5000);
 }
 
 Storage::~Storage()
@@ -217,8 +221,7 @@ void Storage::addContact(User* contact)
     query.bindValue(":id", contact->id());
     query.exec();
 
-    int idx = m_contacts->indexOf(contact);
-    if (idx == -1)
+    if (m_contacts->indexOf(contact) == -1)
         m_contacts->append(contact);
 }
 
@@ -245,9 +248,7 @@ void Storage::deleteChat(Chat* chat)
 {
     int idx = m_dialogs->indexOf(chat);
     if (idx != -1)
-    {
         m_dialogs->removeAt(idx);
-    }
 
     QSqlDatabase &db = m_instance->m_db;
     QSqlQuery query(db);
@@ -356,15 +357,46 @@ void Storage::userUpdateHandler (struct tgl_state *TLS, struct tgl_user *U, unsi
         tgl_do_get_user_info(gTLS, peer, false, NULL, NULL);
     }
 
+    if (m_instance->m_updatedUsers.indexOf(user) == -1)
+        m_instance->m_updatedUsers.append(user);
+}
+
+void Storage::saveUpdatesToDatabase()
+{
     QSqlDatabase &db = m_instance->m_db;
     QSqlQuery query(db);
-    query.prepare("REPLACE INTO users(id, name, last_seen, data) VALUES(:id, :name, :last_seen, :data)");
-    query.bindValue(":id", user->id());
-    query.bindValue(":name", user->name());
-    QByteArray data = user->serialize();
-    query.bindValue(":data", data);
-    query.bindValue(":last_seen", user->lastSeen().toTime_t());
-    query.exec();
+
+    if (m_updatedUsers.size() > 0)
+    {
+        query.prepare("REPLACE INTO users(id, name, last_seen, data) VALUES(:id, :name, :last_seen, :data)");
+
+        for (int i = 0; i < m_updatedUsers.size(); i++)
+        {
+            User* user = m_updatedUsers.value(i);
+            query.bindValue(":id", user->id());
+            query.bindValue(":name", user->name());
+            QByteArray data = user->serialize();
+            query.bindValue(":data", data);
+            query.bindValue(":last_seen", user->lastSeen().toTime_t());
+            query.exec();
+        }
+        m_updatedUsers.clear();
+    }
+
+    if (m_updatedGroupChats.size() > 0)
+    {
+        query.prepare("REPLACE INTO dialogs(id, data) VALUES(:id, :data)");
+        for (int i = 0; i < m_updatedGroupChats.size(); i++)
+        {
+            GroupChat* groupChat = m_updatedGroupChats.value(i);
+            long long id = ((long long)groupChat->type() << 32) | groupChat->id();
+            query.bindValue(":id", id);
+            QByteArray data = groupChat->serialize();
+            query.bindValue(":data", data);
+            query.exec();
+        }
+        m_updatedUsers.clear();
+    }
 }
 
 void Storage::userStatusUpdateHandler(struct tgl_state *TLS, struct tgl_user *U)
@@ -505,15 +537,8 @@ void Storage::updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsig
         groupChat->setMembers(C->user_list, C->user_list_size);
     }
 
-    QSqlDatabase &db = m_instance->m_db;
-    QSqlQuery query(db);
-
-    long long id = ((long long)C->id.type << 32) | C->id.id;
-    query.prepare("REPLACE INTO dialogs(id, data) VALUES(:id, :data)");
-    query.bindValue(":id", id);
-    QByteArray data = groupChat->serialize();
-    query.bindValue(":data", data);
-    query.exec();
+    if (m_instance->m_updatedGroupChats.indexOf(groupChat) == -1)
+        m_instance->m_updatedGroupChats.append(groupChat);
 }
 
 void Storage::markedReadHandler(struct tgl_state *TLS, int num, struct tgl_message *list[])
@@ -717,15 +742,8 @@ void Storage::_updateGroupPhoto(struct tgl_state *TLS, void *callback_extra, int
             groupChat->setPhoto("");
     }
 
-    QSqlDatabase &db = m_instance->m_db;
-    QSqlQuery query(db);
-
-    long long id = ((long long)C->id.type << 32) | C->id.id;
-    query.prepare("REPLACE INTO dialogs(id, data) VALUES(:id, :data)");
-    query.bindValue(":id", id);
-    QByteArray data = groupChat->serialize();
-    query.bindValue(":data", data);
-    query.exec();
+    if (m_instance->m_updatedGroupChats.indexOf(groupChat) == -1)
+        m_instance->m_updatedGroupChats.append(groupChat);
 }
 
 void Storage::_updateContactPhoto(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *U)
@@ -745,15 +763,8 @@ void Storage::_updateContactPhoto(struct tgl_state *TLS, void *callback_extra, i
             user->setPhoto("");
     }
 
-    QSqlDatabase &db = m_instance->m_db;
-    QSqlQuery query(db);
-    query.prepare("REPLACE INTO users(id, name, last_seen, data) VALUES(:id, :name, :last_seen, :data)");
-    query.bindValue(":id", user->id());
-    query.bindValue(":name", user->name());
-    QByteArray data = user->serialize();
-    query.bindValue(":data", data);
-    query.bindValue(":last_seen", user->lastSeen().toTime_t());
-    query.exec();
+    if (m_instance->m_updatedUsers.indexOf(user) == -1)
+        m_instance->m_updatedUsers.append(user);
 }
 
 void Storage::updateChats()

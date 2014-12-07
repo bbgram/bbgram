@@ -4,6 +4,7 @@
 #include <bb/cascades/QListDataModel>
 
 #include "model/Chat.h"
+#include "model/GroupChat.h"
 #include "model/Message.h"
 #include "model/User.h"
 
@@ -38,6 +39,8 @@ public:
     void updateChats();
     void updateUserInfo();
     void updateHistory(Chat* chat);
+protected slots:
+    void saveUpdatesToDatabase();
 protected:
     static Storage* m_instance;
     QSqlDatabase    m_db;
@@ -47,6 +50,10 @@ protected:
 
     QMap<long long, Chat*>                  m_peers;
     QMap<long long, Message*>               m_messages;
+
+    QList<User*>    m_updatedUsers;
+    QList<GroupChat*> m_updatedGroupChats;
+    QTimer*         m_saveTimer;
 
     static void _getUserInfoCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *U);
     static void _getChatInfoCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_chat *C);
