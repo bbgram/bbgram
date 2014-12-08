@@ -132,7 +132,7 @@ NavigationPane {
                         },
                         ActionItem {
                             title: "Delete And Exit";
-                            
+                            imageSource: "asset:///images/menu_bin.png"
                             onTriggered: {
                                 deleteChatDialog.selectedChat = chatsList.dataModel.data(chatsList.selectionList()[0])
                                 deleteChatDialog.show();
