@@ -9,7 +9,7 @@ Sheet {
     
     onCreationCompleted: {
         prev_filter = _contacts.filter
-        _contacts.filter = 1
+        _contacts.setFilter(1)
     }
     
     Page {
@@ -20,7 +20,7 @@ Sheet {
             dismissAction: ActionItem {
                 title: "Cancel"
                 onTriggered:{
-                    _contacts.filter = prev_filter
+                    _contacts.setFilter(prev_filter)
                     userSelected(null, me)
                     me.close()
                 }
@@ -35,6 +35,10 @@ Sheet {
             TextField {
                 id: inputText
                 hintText: "Search"
+                
+                onTextChanging: {
+                    text.length > 0 ? _contacts.setFilter(1 | 4, inputText.text) : _contacts.setFilter(1);
+                }
             }
             Divider {
             }

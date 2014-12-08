@@ -94,9 +94,10 @@ int ContactList::filter() const
     return m_filter;
 }
 
-void ContactList::setFilter(int filter)
+void ContactList::setFilter(int filter, const QString& text)
 {
     m_filter = filter;
+    m_searchText = text;
     emit filterChanged();
 }
 
@@ -124,6 +125,26 @@ void ContactList::updateContent()
         {
             m_model->insert(contact);
         }
+    }
+
+    if ((m_filter & 4) && m_model->size())
+    {
+        QVariantList it = m_model->last();
+
+        while(!it.empty())
+        {
+            Chat* contact =  (Chat*)m_model->data(it).value<QObject*>();
+            if (contact->title().indexOf(m_filter) == -1)
+            {
+                QVariantList toRemove = it;
+                it = m_model->before(it);
+                m_model->removeAt(toRemove);
+                continue;
+            }
+            else
+                it = m_model->before(it);
+        }
+
     }
     emit contentUpdated();
 }

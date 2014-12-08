@@ -12,7 +12,7 @@ Sheet {
     
     onCreationCompleted: {
         prev_filter = _contacts.filter
-        _contacts.filter = 1
+        _contacts.setFilter(1)
         
         finalStep = newGroupFinalSheetDef.createObject();
         finalStep.selectionDataModel = selectionDataModel;
@@ -23,7 +23,7 @@ Sheet {
     function creationCompleated()
     {
         finalStep.created.disconnect(creationCompleated);
-        _contacts.filter = prev_filter
+        _contacts.setFilter(prev_filter);
         me.close()
     }
     
@@ -43,7 +43,7 @@ Sheet {
             dismissAction: ActionItem {
                 title: "Cancel"
                 onTriggered:{
-                    _contacts.filter = prev_filter
+                    _contacts.setFilter(prev_filter);
                     me.close()
                 }
             }

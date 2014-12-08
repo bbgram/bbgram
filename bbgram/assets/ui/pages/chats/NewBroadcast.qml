@@ -12,7 +12,7 @@ Sheet {
     
     onCreationCompleted: {
         prev_filter = _contacts.filter
-        _contacts.filter = 1
+        _contacts.setFilter(1)
     }
     
     Page {
@@ -37,7 +37,7 @@ Sheet {
             dismissAction: ActionItem {
                 title: "Cancel"
                 onTriggered:{
-                    _contacts.filter = prev_filter
+                    _contacts.setFilter(prev_filter)
                     usersSelected([], me)
                     me.close()
                 }

@@ -119,7 +119,7 @@ NavigationPane {
                             }
                         ]
                         onActiveChanged: {
-                            active ? _contacts.filter = 2 : _contacts.filter = 3
+                            active ? _contacts.setFilter(2) : _contacts.setFilter(3)
                         }
                     },
                     MultiSelectHandler {
@@ -134,7 +134,7 @@ NavigationPane {
                             }
                         ]
                         onActiveChanged: {
-                            active ? _contacts.filter = 1 : _contacts.filter = 3
+                            active ? _contacts.setFilter(1) : _contacts.setFilter = (3)
                         }
                     },
                     MultiSelectHandler {
@@ -149,7 +149,7 @@ NavigationPane {
                             }
                         ]
                         onActiveChanged: {
-                            active ? _contacts.filter = 1 : _contacts.filter = 3
+                            active ? _contacts.setFilter(1) : _contacts.setFilter(3)
                         }
                     }
                     
