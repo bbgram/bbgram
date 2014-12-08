@@ -112,7 +112,7 @@ Page {
                         else  
                             ""
                         topMargin: 0
-                        textStyle.base: titleStatusTextStyle
+                        textStyle.base: titleStatusTextStyle.style
                         horizontalAlignment: HorizontalAlignment.Left
                     }
                 }
