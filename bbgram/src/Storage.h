@@ -58,8 +58,6 @@ protected:
     QList<GroupChat*> m_updatedGroupChats;
     QTimer*         m_saveTimer;
 
-    static void _getUserInfoCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *U);
-    static void _getChatInfoCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_chat *C);
     static void _getDialogsCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, tgl_peer_id_t peers[], int last_msg_id[], int unread_count[]);
     static void _getHistoryCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]);
     static void _deleteMessageCallback(struct tgl_state *TLS, void *callback_extra, int success);

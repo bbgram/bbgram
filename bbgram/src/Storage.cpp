@@ -563,77 +563,6 @@ QListDataModel<Chat*>* Storage::dialogs() const
     return m_dialogs;
 }
 
-void Storage::_getUserInfoCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *U)
-{
-    if (!success)
-        return;
-
-    User* user = (User*)m_instance->getPeer(U->id.type, U->id.id);
-    Message* lastMessage = 0;
-    if (U->last)
-    {
-        lastMessage = m_instance->getMessage(U->last->id);
-        if (lastMessage != user->lastMessage())
-        {
-            user->addMessage(lastMessage);
-            m_instance->updateHistory(user);
-        }
-    }
-    int idx = 0;
-    for (int i = 0; i < m_instance->m_dialogs->size(); i++)
-    {
-        Chat* chat = m_instance->m_dialogs->value(i);
-        if (chat == user)
-        {
-            idx = -1;
-            break;
-        }
-        Message* chatLastMessage = chat->lastMessage();
-        if (!lastMessage || (chatLastMessage && chatLastMessage->dateTime() > lastMessage->dateTime()))
-            idx++;
-    }
-    if (idx != -1)
-        m_instance->m_dialogs->insert(idx, user);
-    //if (lastMessage && lastMessage->id() != U->last->id)
-
-}
-
-void Storage::_getChatInfoCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_chat *C)
-{
-    if (!success)
-        return;
-
-    GroupChat* groupChat = (GroupChat*)m_instance->getPeer(C->id.type, C->id.id);
-
-    Message* lastMessage = 0;
-    if (C->last)
-    {
-        lastMessage = m_instance->getMessage(C->last->id);
-        if (lastMessage != groupChat->lastMessage())
-        {
-            groupChat->addMessage(lastMessage);
-            m_instance->updateHistory(groupChat);
-        }
-    }
-    int idx = 0;
-    for (int i = 0; i < m_instance->m_dialogs->size(); i++)
-    {
-        Chat* chat = m_instance->m_dialogs->value(i);
-        if (chat == groupChat)
-        {
-            idx = -1;
-            break;
-        }
-        Message* chatLastMessage = chat->lastMessage();
-        if (!lastMessage || (chatLastMessage && chatLastMessage->dateTime() > lastMessage->dateTime()))
-            idx++;
-    }
-    if (idx != -1)
-        m_instance->m_dialogs->insert(idx, groupChat);
-    //if (lastMessage && lastMessage->id() != C->last->id)
-
-}
-
 void Storage::_getDialogsCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, tgl_peer_id_t peers[], int last_msg_id[], int unread_count[])
 {
     if (!success)
@@ -665,20 +594,40 @@ void Storage::_getDialogsCallback(struct tgl_state *TLS, void *callback_extra, i
         else
             dialogs.removeAt(idx);
 
-        int peer_type = _peer.type;
-        int _last_msg_id = last_msg_id[i];
-        int _unread_count = unread_count[i];
-        //tgl_do_get_history_ext(gTLS, _peer, _last_msg_id, 1, 0, get_history_callback, 0);
+        if (_peer.type == TGL_PEER_USER)
+            tgl_do_get_user_info(gTLS, _peer, 0, 0, 0);
+        else if (_peer.type == TGL_PEER_CHAT)
+            tgl_do_get_chat_info(gTLS, _peer, 0, 0, 0);
 
-        if (peer_type == TGL_PEER_USER) {
-            tgl_do_get_user_info(gTLS, _peer, 0, _getUserInfoCallback, _this);
+
+        Chat* chat = m_instance->getPeer(peers[i].type, peers[i].id);
+        Message* lastMessage = 0;
+        if (last_msg_id[i])
+        {
+            lastMessage = m_instance->getMessage(last_msg_id[i]);
+            if (lastMessage != chat->lastMessage())
+            {
+                chat->addMessage(lastMessage);
+                m_instance->updateHistory(chat);
+            }
         }
-        else if (peer_type == TGL_PEER_CHAT)
-            tgl_do_get_chat_info(gTLS, _peer, 0, _getChatInfoCallback, _this);
-
+        idx = 0;
+        for (int i = 0; i < m_instance->m_dialogs->size(); i++)
+        {
+            Chat* c = m_instance->m_dialogs->value(i);
+            if (c == chat)
+            {
+                idx = -1;
+                break;
+            }
+            Message* cLastMessage = c->lastMessage();
+            if (!lastMessage || (cLastMessage && cLastMessage->dateTime() > lastMessage->dateTime()))
+                idx++;
+        }
+        if (idx != -1)
+            m_instance->m_dialogs->insert(idx, chat);
 
     }
-
     if (dialogs.count() > 0)
     {
         query.prepare("DELETE FROM dialogs WHERE id = :id");

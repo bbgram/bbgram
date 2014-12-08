@@ -284,7 +284,7 @@ void MainScreen::_deleteSelfFromGroupCallback(struct tgl_state *TLS, void *callb
 
 void MainScreen::_contactAddHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[])
 {
-    emit m_instance->contactAdded(size == 0, "Somthing wrong");
+    emit m_instance->contactAdded(size == 0, "Something wrong");
 }
 
 void MainScreen::_contactRenameHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[])
