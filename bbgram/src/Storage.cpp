@@ -131,8 +131,8 @@ Storage::Storage(QObject* parent)
     }
 
     m_saveTimer = new QTimer(this);
-    connect(m_saveTimer, SIGNAL(timeoutimeout()), this, SLOT(saveUpdatesToDatabase()));
-    m_saveTimer->start(5000);
+    Storage::connect(m_saveTimer, SIGNAL(timeout()), this, SLOT(saveUpdatesToDatabase()));
+    m_saveTimer->start(1000);
 }
 
 Storage::~Storage()
@@ -336,7 +336,7 @@ void Storage::userUpdateHandler (struct tgl_state *TLS, struct tgl_user *U, unsi
         if (user->getPhotoId() != newPhotoId)
             tgl_do_get_user_info(gTLS, {user->type(), user->id()}, 0, _updateContactPhoto, NULL);
 
-        if ((flags & TGL_UPDATE_PHOTO) == TGL_UPDATE_PHOTO)
+        if ((flags & TGL_UPDATE_PHOTO) == flags)
             return;
     }
 
@@ -365,10 +365,10 @@ void Storage::userUpdateHandler (struct tgl_state *TLS, struct tgl_user *U, unsi
 void Storage::saveUpdatesToDatabase()
 {
     QSqlDatabase &db = m_instance->m_db;
-    QSqlQuery query(db);
 
     if (m_updatedUsers.size() > 0)
     {
+        QSqlQuery query(db);
         query.prepare("REPLACE INTO users(id, name, last_seen, data) VALUES(:id, :name, :last_seen, :data)");
 
         for (int i = 0; i < m_updatedUsers.size(); i++)
@@ -386,6 +386,7 @@ void Storage::saveUpdatesToDatabase()
 
     if (m_updatedGroupChats.size() > 0)
     {
+        QSqlQuery query(db);
         query.prepare("REPLACE INTO dialogs(id, data) VALUES(:id, :data)");
         for (int i = 0; i < m_updatedGroupChats.size(); i++)
         {
@@ -396,7 +397,7 @@ void Storage::saveUpdatesToDatabase()
             query.bindValue(":data", data);
             query.exec();
         }
-        m_updatedUsers.clear();
+        m_updatedGroupChats.clear();
     }
 }
 
@@ -524,7 +525,7 @@ void Storage::updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsig
         if (groupChat->getPhotoId() != newPhotoId)
             tgl_do_get_chat_info(gTLS, {groupChat->type(), groupChat->id()}, 0, _updateGroupPhoto, NULL);
 
-        if ((flags & TGL_UPDATE_PHOTO) == TGL_UPDATE_PHOTO)
+        if ((flags & TGL_UPDATE_PHOTO) == flags)
             return;
     }
 
@@ -640,10 +641,30 @@ void Storage::_getDialogsCallback(struct tgl_state *TLS, void *callback_extra, i
 
     Storage* _this = (Storage*)callback_extra;
 
+    QSqlDatabase &db = m_instance->m_db;
+    QSqlQuery query(db);
+
+    QList<long long> dialogs;
+    query.exec("SELECT id, data FROM dialogs");
+    while (query.next())
+        dialogs.append(query.value(0).toLongLong());
+
+    query.prepare("REPLACE INTO dialogs(id) VALUES(:id)");
     //_this->m_dialogs->clear();
     for (int i = 0; i < size; i++)
     {
         tgl_peer_id_t _peer = peers[i];
+        long long id = ((long long)_peer.type << 32) | _peer.id;
+
+        int idx = dialogs.indexOf(id);
+        if (idx == -1)
+        {
+            query.bindValue(":id", id);
+            query.exec();
+        }
+        else
+            dialogs.removeAt(idx);
+
         int peer_type = _peer.type;
         int _last_msg_id = last_msg_id[i];
         int _unread_count = unread_count[i];
@@ -651,15 +672,21 @@ void Storage::_getDialogsCallback(struct tgl_state *TLS, void *callback_extra, i
 
         if (peer_type == TGL_PEER_USER) {
             tgl_do_get_user_info(gTLS, _peer, 0, _getUserInfoCallback, _this);
-            long long id = ((long long)_peer.type << 32) | _peer.id;
-            QSqlDatabase &db = m_instance->m_db;
-            QSqlQuery query(db);
-            query.prepare("REPLACE INTO dialogs(id) VALUES(:id)");
-            query.bindValue(":id", id);
-            query.exec();
         }
         else if (peer_type == TGL_PEER_CHAT)
             tgl_do_get_chat_info(gTLS, _peer, 0, _getChatInfoCallback, _this);
+
+
+    }
+
+    if (dialogs.count() > 0)
+    {
+        query.prepare("DELETE FROM dialogs WHERE id = :id");
+        for (int i = 0; i < dialogs.count(); i++)
+        {
+            query.bindValue(":id", dialogs[i]);
+            query.exec();
+        }
     }
 }
 
