@@ -137,6 +137,7 @@ Storage::Storage(QObject* parent)
 
 Storage::~Storage()
 {
+    saveUpdatesToDatabase();
     if (m_db.isOpen())
     {
         m_db.close();
