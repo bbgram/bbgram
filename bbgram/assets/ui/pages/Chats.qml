@@ -124,13 +124,13 @@ NavigationPane {
                     actions: [
                         ActionItem {
                             title: "Clear History";
-                            
+                            imageSource: "asset:///images/menu_deletehistory.png"
                             onTriggered: {
                                 clearHistoryDialog.selectedChat = chatsList.dataModel.data(chatsList.selectionList()[0])
                                 clearHistoryDialog.show();
                             }
                         },
-                        DeleteActionItem {
+                        ActionItem {
                             title: "Delete And Exit";
                             
                             onTriggered: {

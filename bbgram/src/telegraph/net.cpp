@@ -32,8 +32,6 @@ void connection::restartConnection()
         return;
     }
     disconnectFromHost();
-    last_connect_time = time(0);
-    connectToHost(host, port);
 }
 
 void connection::failConnection()
@@ -79,6 +77,7 @@ void connection::onConnected()
     char byte = 0xef;
     assert (connection_write_out(this, &byte, 1) == 1);
 
+    last_receive_time = tglt_get_double_time();
     m_pingTimer->start();
 
     state = conn_ready;
@@ -87,7 +86,9 @@ void connection::onConnected()
 
 void connection::onDisconnected()
 {
-    failConnection();
+    close();
+    last_connect_time = time(0);
+    connectToHost(host, port);
 }
 
 
@@ -202,6 +203,9 @@ struct connection *connection_create(struct tgl_state *TLS, const char *host, in
 
 int connection_write_out(struct connection *c, const void *data, int len)
 {
+    //if (((QAbstractSocket*)c)->state() != QAbstractSocket::ConnectedState)
+    //    return 0;
+
     qint64 written = c->write((const char*)data, (qint64)len);
     return (int)written;
 }
