@@ -269,13 +269,12 @@ void MainScreen::_deleteMemberCallback(struct tgl_state *TLS, void *callback_ext
 
 void MainScreen::_deleteSelfFromGroupCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M)
 {
-    if (!success)
-        return;
-
-    User* currentUser = (User*)Storage::instance()->getPeer(TGL_PEER_USER, gTLS->our_id);
-    GroupChat* groupChat = (GroupChat*)Storage::instance()->getPeer(TGL_PEER_CHAT, M->to_id.id);
-    groupChat->deleteMember(currentUser);
-
+    if (success)
+    {
+        User* currentUser = (User*)Storage::instance()->getPeer(TGL_PEER_USER, gTLS->our_id);
+        GroupChat* groupChat = (GroupChat*)Storage::instance()->getPeer(TGL_PEER_CHAT, M->to_id.id);
+        groupChat->deleteMember(currentUser);
+    }
     Storage::instance()->deleteHistory((Chat*)callback_extra);
     Storage::instance()->deleteChat((Chat*)callback_extra);
 }
