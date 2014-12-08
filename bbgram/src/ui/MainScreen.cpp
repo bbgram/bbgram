@@ -1,5 +1,6 @@
 #include "MainScreen.h"
 #include "../Storage.h"
+#include "../Telegraph.h"
 
 #include <bb/system/InvokeManager>
 #include <bb/system/InvokeRequest>
@@ -28,6 +29,7 @@ MainScreen::MainScreen(ApplicationUI* app)
     setContextProperty("_contacts", m_contacts);
     setContextProperty("_chats", Storage::instance()->dialogs());
 
+    Telegraph::instance()->exportAuthorization();
     initialize();
 }
 

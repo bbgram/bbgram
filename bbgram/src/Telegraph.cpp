@@ -366,15 +366,15 @@ void Telegraph::exportAuthorization()
     cur_a_dc = 0;
 
     for (int i = 0; i <= gTLS->max_dc_num; i++)
-            if (gTLS->DC_list[i] && !tgl_signed_dc (gTLS, gTLS->DC_list[i]))
-            {
-                tgl_do_export_auth (gTLS, i, export_auth_callback, (void*)(long)gTLS->DC_list[i]);
-                cur_a_dc = gTLS->DC_list[i];
-                QTimer::singleShot(50, this, SLOT(exportAuthorization()));
-                return;
-            }
-        write_auth_file(gTLS);
-        Telegraph::instance()->onReady();
+        if (gTLS->DC_list[i] && !tgl_signed_dc (gTLS, gTLS->DC_list[i]))
+        {
+            tgl_do_export_auth (gTLS, i, export_auth_callback, (void*)(long)gTLS->DC_list[i]);
+            cur_a_dc = gTLS->DC_list[i];
+            QTimer::singleShot(50, this, SLOT(exportAuthorization()));
+            return;
+        }
+    write_auth_file(gTLS);
+    Telegraph::instance()->onReady();
 }
 
 void Telegraph::onReady()

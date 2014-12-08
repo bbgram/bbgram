@@ -52,7 +52,6 @@ void IntroScreen::_sendCodeCallback(struct tgl_state *TLS, void *callback_extra,
     if (success)
     {
         _this->m_app->showMainScreen();
-        Telegraph::instance()->exportAuthorization();
     }
     else
     {
