@@ -1,9 +1,16 @@
 import bb.cascades 1.2
 
 CustomListItem {
+    property bool selected : false
     preferredHeight: 140
     
+    
+    onSelectedChanged: {
+        background.background = selected? Color.create("#00A7DE") : Color.White
+    }
+    
     content: Container {
+        id:background
         layout: StackLayout {
             orientation: LayoutOrientation.LeftToRight
         }

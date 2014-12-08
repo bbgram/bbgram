@@ -114,36 +114,61 @@ NavigationPane {
         
         Container {
             ListView {
+                id: chatsList
                 dataModel: _chats ? _chats : null
                 stickToEdgePolicy: ListViewStickToEdgePolicy.Beginning
+                
+                multiSelectHandler{
+                    
+                    
+                    actions: [
+                        ActionItem {
+                            title: "Clear History";
+                            
+                            onTriggered: {
+                                clearHistoryDialog.selectedChat = chatsList.dataModel.data(chatsList.selectionList()[0])
+                                clearHistoryDialog.show();
+                            }
+                        },
+                        DeleteActionItem {
+                            title: "Delete And Exit";
+                            
+                            onTriggered: {
+                                deleteChatDialog.selectedChat = chatsList.dataModel.data(chatsList.selectionList()[0])
+                                deleteChatDialog.show();
+                            }
+                        }
+                    ]
+                }
                 
                 listItemComponents: [
                     ListItemComponent {
                         ChatItem {
                             id: itemContainer
+                            
+                            ListItem.onSelectionChanged: {
+                                itemContainer.selected = selected;
+                            }
+                            
                             gestureHandlers: [
                                 TapHandler {
                                     onTapped: {
-                                        itemContainer.ListItem.view.openChat(ListItemData)
+                                        if (itemContainer.ListItem.view.multiSelectHandler.active != true)
+                                            itemContainer.ListItem.view.openChat(ListItemData)
+                                        else
+                                        {
+                                            for (var i = 0; i < itemContainer.ListItem.view.selectionList().length; i++)
+                                                itemContainer.ListItem.view.toggleSelection(itemContainer.ListItem.view.selectionList()[i]);
+                                            
+                                            itemContainer.ListItem.view.toggleSelection(itemContainer.ListItem.view.indexPath);
+                                        }
                                     }                
                                 },
                                 LongPressHandler {    
                                     onLongPressed: {
-                                        confirmDialog.show()
+                                        itemContainer.ListItem.view.multiSelectHandler.active = true;
                                     }
-                                    attachedObjects: [
-                                        SystemDialog {
-                                            id: confirmDialog
-                                            title: "Delete Chat"
-                                            body: "Are you sure you want to delete this chat?"
-                                            onFinished: {
-                                                if (value == SystemUiResult.ConfirmButtonSelection)
-                                                    itemContainer.ListItem.view.deleteChat(ListItemData)
-                                            }
-                                        }
-                                    ]
                                 }
-                            
                             ]
                         }
                     }
@@ -151,6 +176,10 @@ NavigationPane {
                 
                 function deleteChat(chat) {
                     _owner.deleteChat(chat)
+                }
+                
+                function clearHistory(chat){
+                    _owner.deleteHistory(chat)
                 }
                 
                 function openChat(chat) {
@@ -163,6 +192,26 @@ NavigationPane {
                     ComponentDefinition {                      
                         id: chatPageDef                       
                         source: "Chat.qml"             
+                    },
+                    SystemDialog {
+                        property variant selectedChat : null
+                        id: deleteChatDialog
+                        title: "Delete Chat"
+                        body: "Are you sure you want to delete this chat?"
+                        onFinished: {
+                            if (value == SystemUiResult.ConfirmButtonSelection)
+                                chatsList.deleteChat(selectedChat)
+                        }
+                    },
+                    SystemDialog {
+                        property variant selectedChat : null
+                        id: clearHistoryDialog
+                        title: "Clear History"
+                        body: "Are you sure you want to clear history?"
+                        onFinished: {
+                            if (value == SystemUiResult.ConfirmButtonSelection)
+                                chatsList.clearHistory(selectedChat)
+                        }
                     }
                 ]
             }
