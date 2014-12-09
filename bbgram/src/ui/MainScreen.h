@@ -3,6 +3,7 @@
 #include "Screen.h"
 #include "../model/Chat.h"
 #include "../model/ContactList.h"
+#include "../model/ChatList.h"
 #include "../model/User.h"
 #include "../model/GroupChat.h"
 
@@ -46,6 +47,7 @@ protected:
     static MainScreen*  m_instance;
     ApplicationUI*      m_app;
     ContactList*        m_contacts;
+    ChatList*           m_dialogs;
 
     bool contactExist(const QString& phone);
 

@@ -26,8 +26,11 @@ MainScreen::MainScreen(ApplicationUI* app)
     m_instance = this;
 
     m_contacts = new ContactList(Storage::instance()->contacts());
+    m_contacts->setParent(this);
+    m_dialogs = new ChatList(Storage::instance()->dialogs());
+    m_dialogs->setParent(this);
     setContextProperty("_contacts", m_contacts);
-    setContextProperty("_chats", Storage::instance()->dialogs());
+    setContextProperty("_chats", m_dialogs);
 
     Telegraph::instance()->exportAuthorization();
     initialize();
