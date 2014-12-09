@@ -127,14 +127,14 @@ void ContactList::updateContent()
         }
     }
 
-    if ((m_filter & 4) && m_model->size())
+    if ((m_filter & 4) && m_model->size() && m_searchText.size())
     {
         QVariantList it = m_model->last();
 
         while(!it.empty())
         {
             Chat* contact =  (Chat*)m_model->data(it).value<QObject*>();
-            if (contact->title().indexOf(m_filter) == -1)
+            if (contact->title().indexOf(m_searchText) == -1)
             {
                 QVariantList toRemove = it;
                 it = m_model->before(it);

@@ -5,13 +5,16 @@ NavigationPane {
     id: navigationPane
     Page {
         titleBar: TitleBar {
+            id: titleBar
             kind: TitleBarKind.FreeForm
             kindProperties: FreeFormTitleBarKindProperties {
                 Container {
                     layout: DockLayout {}
                     leftPadding: 20
                     rightPadding: 20
+                    topPadding: 10
                     Label {
+                        id: contactsLabel
                         text: "Contacts"
                         textStyle {
                             color: Color.White
@@ -19,14 +22,63 @@ NavigationPane {
                         }
                         horizontalAlignment: HorizontalAlignment.Left
                         verticalAlignment: VerticalAlignment.Center
-                        layoutProperties: StackLayoutProperties { spaceQuota: 1 }
                     }
+                    
                     ImageButton {
+                        id: searchButton
                         horizontalAlignment: HorizontalAlignment.Right
                         verticalAlignment: VerticalAlignment.Center
                         defaultImageSource: "asset:///images/header_search.png"
+                        
+                        onClicked: {
+                            titleBar.flipVisibility();
+                        }
                     }
+                    
+                    Container {
+                        layout: StackLayout {
+                            orientation: LayoutOrientation.LeftToRight
+                        }
+                        
+                        TextField {
+                            topPadding: 10
+                            id: searchField
+                            visible: false
+                            hintText: "Search"
+                            //horizontalAlignment: HorizontalAlignment.Left
+                            verticalAlignment: VerticalAlignment.Center
+                            
+                            onTextChanging: {
+                                _contacts.setFilter(_contacts.filter | 4, text);
+                            }
+                        }
+                        
+                        Label {
+                            id: cancelLabel
+                            visible: false
+                            text: "Cancel"
+                            textStyle {
+                                color: Color.White
+                            }
+                            verticalAlignment: VerticalAlignment.Center
+                            
+                            gestureHandlers: TapHandler {
+                                onTapped: {
+                                    titleBar.flipVisibility();
+                                }
+                            }
+                        }
+                    }
+                    
                 }
+            }
+            
+            function flipVisibility()
+            {
+                contactsLabel.visible = !contactsLabel.visible;
+                searchField.visible = !searchField.visible;
+                searchButton.visible = !searchButton.visible;
+                cancelLabel.visible = !cancelLabel.visible;
             }
         }
         
