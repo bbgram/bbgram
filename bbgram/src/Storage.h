@@ -65,4 +65,5 @@ protected:
     static void _updateGroupPhoto(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_chat *C);
     static void _updateContactPhoto(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *U);
     static void _searchMessageCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]);
+    static void _loadPhotoCallback(struct tgl_state *TLS, void *callback_extra, int success, char *filename);
 };

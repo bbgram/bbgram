@@ -134,7 +134,24 @@ void ContactList::updateContent()
         while(!it.empty())
         {
             Chat* contact =  (Chat*)m_model->data(it).value<QObject*>();
-            if (contact->title().indexOf(m_searchText) == -1)
+            bool found = false;
+            if (contact)
+            {
+                found = contact->title().indexOf(m_searchText) != -1;
+            }
+            else
+            {
+                QVariantMap map = m_model->data(it).value<QVariantMap>();
+
+                QString str;
+                str += map["firstName"].value<QString>();
+                str += " ";
+                str += map["lastName"].value<QString>();
+
+                found = str.indexOf(m_searchText) != -1;
+            }
+
+            if (!found)
             {
                 QVariantList toRemove = it;
                 it = m_model->before(it);

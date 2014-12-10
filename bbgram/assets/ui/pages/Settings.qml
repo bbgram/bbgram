@@ -7,6 +7,21 @@ import "settings"
 NavigationPane {
     id: navigationPane
     
+    function updateUserName(user, firstName, lastName){
+        _owner.updateContact(user, firstName, lastName)
+    }
+    
+    function editContact()
+    {
+        var sheet = editContactSheetDef.createObject();
+        sheet.user = _currentUser;
+        sheet.caption = "Edit";
+        
+        sheet.done.connect(updateUserName);
+        
+        sheet.open();
+    }
+    
     Page {
         titleBar: TitleBar {
             kind: TitleBarKind.FreeForm
@@ -34,18 +49,8 @@ NavigationPane {
                 imageSource: "asset:///images/menu_bar_edit.png"
                 ActionBar.placement: ActionBarPlacement.InOverflow
                 
-                function updateUserName(user, firstName, lastName){
-                    _owner.updateContact(user, firstName, lastName)
-                }
-                
                 onTriggered: {
-                    var sheet = editContactSheetDef.createObject();
-                    sheet.user = _currentUser;
-                    sheet.caption = "Edit";
-                    
-                    sheet.done.connect(updateUserName);
-                    
-                    sheet.open();
+                    navigationPane.editContact();
                 }
             },
             ActionItem {
@@ -113,6 +118,9 @@ NavigationPane {
                         layout: StackLayout {
                             orientation: LayoutOrientation.TopToBottom
                         }
+                        layoutProperties: StackLayoutProperties {
+                            spaceQuota: 2
+                        }
                         verticalAlignment: VerticalAlignment.Center
                         
                         Label {
@@ -144,6 +152,12 @@ NavigationPane {
                         
                         imageSource: "asset:///images/menu_bar_edit.png"
                         scalingMethod: ScalingMethod.Fill
+                        
+                        gestureHandlers: TapHandler {
+                            onTapped: {
+                                navigationPane.editContact();
+                            }
+                        }
                     }
                 }
     

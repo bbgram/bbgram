@@ -65,6 +65,7 @@ NavigationPane {
                             gestureHandlers: TapHandler {
                                 onTapped: {
                                     titleBar.flipVisibility();
+                                    searchField.text = ""
                                 }
                             }
                         }

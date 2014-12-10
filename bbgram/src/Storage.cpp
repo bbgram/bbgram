@@ -262,7 +262,7 @@ void Storage::deleteChat(Chat* chat)
     query.exec();
 }
 
-void load_photo_callback(struct tgl_state *TLS, void *callback_extra, int success, char *filename)
+void Storage::_loadPhotoCallback(struct tgl_state *TLS, void *callback_extra, int success, char *filename)
 {
     if (!success)
         return;
@@ -275,12 +275,18 @@ void load_photo_callback(struct tgl_state *TLS, void *callback_extra, int succes
         {
             User* user = (User*)chat;
             user->setPhoto(filename);
+
+            if (m_instance->m_updatedUsers.indexOf(user) == -1)
+                m_instance->m_updatedUsers.append(user);
         }
         break;
         case TGL_PEER_CHAT:
         {
             GroupChat* groupChat = (GroupChat*)chat;
             groupChat->setPhoto(filename);
+
+            if (m_instance->m_updatedGroupChats.indexOf(groupChat) == -1)
+                m_instance->m_updatedGroupChats.append(groupChat);
         }
         break;
     }
@@ -769,7 +775,7 @@ void Storage::_updateGroupPhoto(struct tgl_state *TLS, void *callback_extra, int
     {
         groupChat->setPhotoId(newPhotoId);
         if (C->photo.sizes_num != 0)
-                tgl_do_load_photo(gTLS, &C->photo, load_photo_callback, groupChat);
+                tgl_do_load_photo(gTLS, &C->photo, Storage::_loadPhotoCallback, groupChat);
         else
             groupChat->setPhoto("");
     }
@@ -790,7 +796,7 @@ void Storage::_updateContactPhoto(struct tgl_state *TLS, void *callback_extra, i
     {
         user->setPhotoId(newPhotoId);
         if (U->photo.sizes_num != 0)
-            tgl_do_load_photo(gTLS, &U->photo, load_photo_callback, user);
+            tgl_do_load_photo(gTLS, &U->photo, Storage::_loadPhotoCallback, user);
         else
             user->setPhoto("");
     }
