@@ -40,6 +40,8 @@ public:
     void updateChats();
     void updateUserInfo();
     void updateHistory(Chat* chat);
+
+    void searchMessage(Chat* chat, int from, int to, int limit, int offset, const char *s);
 protected slots:
     void saveUpdatesToDatabase();
 protected:
@@ -64,4 +66,5 @@ protected:
     static void _deleteHistoryCallback(struct tgl_state *TLS, void *callback_extra, int success, int offset);
     static void _updateGroupPhoto(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_chat *C);
     static void _updateContactPhoto(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *U);
+    static void _searchMessageCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]);
 };

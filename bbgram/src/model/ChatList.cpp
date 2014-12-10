@@ -1,4 +1,5 @@
 #include "ChatList.h"
+#include "../Storage.h"
 
 using namespace bb::cascades;
 
@@ -7,7 +8,8 @@ ChatList::ChatList(QListDataModel<Chat*>* dialogs)
 {
     m_model = new GroupDataModel(this);
     m_model->setGrouping(ItemGrouping::None);
-    m_model->setSortedAscending(true);
+    m_model->setSortingKeys(QStringList() << "lastMessageDate");
+    m_model->setSortedAscending(false);
 
     connect(m_dialogs, SIGNAL(itemAdded(QVariantList)), SLOT(updateContent()));
     //connect(m_telegramContacts, SIGNAL(itemMoved(QVariantList, QVariantList)), SLOT(updateContent()));
@@ -69,5 +71,39 @@ void ChatList::updateContent()
                 it = m_model->before(it);
         }
     }
+
+    /*if ((m_filter & 4) && m_model->size() && m_searchText.size())
+    {
+        QVariantList it = m_model->last();
+
+        while(!it.empty())
+        {
+            Chat* contact =  (Chat*)m_model->data(it).value<QObject*>();
+            GroupDataModel* messages = (GroupDataModel*)contact->messages();
+
+            bool found = false;
+            for (QVariantList indexPath = messages->first(); !indexPath.isEmpty(); indexPath = messages->after(indexPath))
+            {
+                Message* message = (Message*)messages->data(indexPath).value<QObject*>();
+                if (message->text().indexOf(m_searchText) != -1)
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if(!found)
+            {
+                QVariantList toRemove = it;
+                it = m_model->before(it);
+                m_model->removeAt(toRemove);
+
+
+                Storage::instance()->searchMessage(contact, 0, contact->lastMessageDate().toTime_t(), 1, 0, m_searchText.toUtf8().data());
+            }
+            else
+                it = m_model->before(it);
+        }
+    }*/
     emit contentUpdated();
 }

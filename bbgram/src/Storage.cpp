@@ -795,6 +795,13 @@ void Storage::_updateContactPhoto(struct tgl_state *TLS, void *callback_extra, i
         m_instance->m_updatedUsers.append(user);
 }
 
+void Storage::_searchMessageCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[])
+{
+    if (success && size)
+    {
+    }
+}
+
 void Storage::updateChats()
 {
     tgl_do_get_dialog_list(gTLS, _getDialogsCallback, this);
@@ -812,4 +819,13 @@ void Storage::updateHistory(Chat* chat)
     peer.type = chat->type();
     peer.id = chat->id();
     tgl_do_get_history(gTLS, peer, 50, 0, _getHistoryCallback, chat);
+}
+
+void Storage::searchMessage(Chat* chat, int from, int to, int limit, int offset, const char *s)
+{
+    tgl_peer_id_t peer;
+    peer.type = chat->type();
+    peer.id = chat->id();
+
+    tgl_do_msg_search(gTLS, peer, from, to, limit, offset, s, Storage::_searchMessageCallback, NULL);
 }

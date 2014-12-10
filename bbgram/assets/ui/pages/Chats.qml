@@ -65,7 +65,7 @@ NavigationPane {
                             verticalAlignment: VerticalAlignment.Center
                             
                             onTextChanging: {
-                                _chats.setFilter(_chats.filter | 3, text);
+                                _chats.setFilter(1 | 2, text);
                             }
                         }
                         

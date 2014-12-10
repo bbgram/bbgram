@@ -16,6 +16,7 @@ class Chat : public QObject
     Q_PROPERTY(QVariant photo READ photo NOTIFY photoChanged)
     Q_PROPERTY(bb::cascades::DataModel* messages READ messages CONSTANT)
     Q_PROPERTY(Message* lastMessage READ lastMessage NOTIFY messagesChanged)
+    Q_PROPERTY(QDateTime lastMessageDate READ lastMessageDate NOTIFY messagesChanged)
 public:
     Chat(int type = 0, int id = 0);
     ~Chat();
