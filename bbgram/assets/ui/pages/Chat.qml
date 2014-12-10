@@ -60,6 +60,7 @@ Page {
     
     titleBar: TitleBar {
         kind: TitleBarKind.FreeForm
+        scrollBehavior: TitleBarScrollBehavior.Sticky
         kindProperties: FreeFormTitleBarKindProperties {
             Container {
                 gestureHandlers: [
