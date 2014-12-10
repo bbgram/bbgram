@@ -17,7 +17,7 @@ Container {
         topPadding: 4
         bottomPadding: 8
         Label {
-            text: Qt.formatDate(ListItemData.dateTime, "MMMM d")
+            text: ListItemData.formatDateTime(ListItemData.dateTime, "MMMM d")
             textStyle.base: TextStyleDefinition.style
         }
     }

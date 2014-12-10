@@ -89,7 +89,7 @@ Container {
                                     orientation: LayoutOrientation.LeftToRight
                                 }
                                 Label {
-                                    text: Qt.formatDateTime(me.date, "hh:mm")
+                                    text: ListItemData.formatDateTime(me.date, "hh:mm")
                                     textStyle {
                                         base: incoming ? dateInTextStyle.style : dateOutTextStyle.style
                                     }

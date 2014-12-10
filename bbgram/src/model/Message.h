@@ -40,6 +40,8 @@ public:
     QVariantMap& media();
 
     User* from() const;
+
+    Q_INVOKABLE QString formatDateTime(const QDateTime& date, const QString& format);
 signals:
     void markedRead();
 protected:

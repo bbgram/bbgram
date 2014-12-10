@@ -303,7 +303,7 @@ void MainScreen::_contactDeleteHandler(struct tgl_state *TLS, void *callback_ext
         Storage::instance()->deleteContact((User*)callback_extra);
     }
 
-    emit m_instance->contactDeleted(!success, "Somthing wrong");
+    emit m_instance->contactDeleted(!success, "Something wrong");
 }
 
 User* MainScreen::getUser(int id)

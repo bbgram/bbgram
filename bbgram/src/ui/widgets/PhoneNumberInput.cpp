@@ -29,11 +29,13 @@ PhoneNumberInput::PhoneNumberInput()
     m_countryCode->setInputMode(TextFieldInputMode::PhoneNumber);
     m_countryCode->setMaxWidth(150);
     connect(m_countryCode, SIGNAL(textChanging(QString)), this, SLOT(onContryCodeChanging(QString)));
-    //m_countryCode->setText("+7");
+    m_countryCode->setText("+");
+    m_countryCode->setHintText("");
     panel->add(m_countryCode);
 
     m_phoneNumber = TextField::create();
     m_phoneNumber->setInputMode(TextFieldInputMode::PhoneNumber);
+    m_phoneNumber->setHintText("");
     panel->add(m_phoneNumber);
 
     container->add(panel);

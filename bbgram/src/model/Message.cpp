@@ -272,3 +272,9 @@ User* Message::from() const
 {
     return (User*)Storage::instance()->getPeer(TGL_PEER_USER, m_fromId);
 }
+
+QString Message::formatDateTime(const QDateTime& date, const QString& format)
+{
+    QLocale locale(QLocale::English);
+    return locale.toString(date, format);
+}
