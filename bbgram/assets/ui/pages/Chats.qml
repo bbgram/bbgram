@@ -12,11 +12,11 @@ NavigationPane {
 
         if (page.objectName == "Chat")
             while (navigationPane.count() > 2)
-            navigationPane.remove(navigationPane.at(1))
+                navigationPane.remove(navigationPane.at(1))
     }    
     onPopTransitionEnded: {
         if (page.onPop != undefined)
-        page.onPop()
+            page.onPop()
         //page.destroy()
     }
     

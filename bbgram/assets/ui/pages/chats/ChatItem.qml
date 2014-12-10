@@ -2,11 +2,18 @@ import bb.cascades 1.2
 
 CustomListItem {
     property bool selected : false
-    preferredHeight: 140
+    preferredHeight: 100
     
     
     onSelectedChanged: {
-        background.background = selected? Color.create("#00A7DE") : Color.White
+        if (selected) {
+            background.background = Color.create("#31A3DD")
+            opacity = 0.2
+        }
+        else {
+            background.background = Color.White
+            background.opacity = 1
+        }
     }
     
     content: Container {
@@ -21,10 +28,10 @@ CustomListItem {
             image: ListItemData.photo
             //imageSource: "asset:///images/placeholders/user_placeholder_purple.png"
             scalingMethod: ScalingMethod.AspectFit
-            preferredHeight: 140
-            preferredWidth: 140
-            minHeight: 140
-            minWidth: 140
+            preferredHeight: 100
+            preferredWidth: 100
+            minHeight: 100
+            minWidth: 100
         }
         
         Container {
@@ -91,42 +98,50 @@ CustomListItem {
                         verticalAlignment: VerticalAlignment.Center
                     }
                 }
-                Container {
-                    visible: false
-                    layoutProperties: StackLayoutProperties  {
-                        spaceQuota:-1 
-                    }
-                    leftPadding: 40
-
-                    verticalAlignment: VerticalAlignment.Center
-                    
-                    Container {
-                        layout: DockLayout {}
-                        background: Color.create("#74B266")
-                        minWidth: 45
-                        leftPadding: 4
-                        rightPadding: 4
-                        bottomPadding: 4
-                        horizontalAlignment: HorizontalAlignment.Right
-                        verticalAlignment: VerticalAlignment.Bottom
-                        
-                        Label {
-                            text: "3"
-                            horizontalAlignment: HorizontalAlignment.Center
-                            verticalAlignment: VerticalAlignment.Center
-                            textStyle {
-                                color: Color.White
-                                textAlign: TextAlign.Center
-                                fontSize: FontSize.Small
-                                fontWeight: FontWeight.Bold
-                            }
-                        
-                        }
-                    }
+                ControlDelegate {
+                    sourceComponent: unreadCountCompDef
+                    delegateActive: false
                 }
             }
         }
     
     }
+    attachedObjects: [
+        ComponentDefinition {
+            id: unreadCountCompDef
+            Container {
+                layoutProperties: StackLayoutProperties  {
+                    spaceQuota:-1 
+                }
+                leftPadding: 40
+                
+                verticalAlignment: VerticalAlignment.Center
+                
+                Container {
+                    layout: DockLayout {}
+                    background: Color.create("#74B266")
+                    minWidth: 45
+                    leftPadding: 4
+                    rightPadding: 4
+                    bottomPadding: 4
+                    horizontalAlignment: HorizontalAlignment.Right
+                    verticalAlignment: VerticalAlignment.Bottom
+                    
+                    Label {
+                        text: "3"
+                        horizontalAlignment: HorizontalAlignment.Center
+                        verticalAlignment: VerticalAlignment.Center
+                        textStyle {
+                            color: Color.White
+                            textAlign: TextAlign.Center
+                            fontSize: FontSize.Small
+                            fontWeight: FontWeight.Bold
+                        }
+                    
+                    }
+                }
+            }
+        }
+    ]
 }
 
