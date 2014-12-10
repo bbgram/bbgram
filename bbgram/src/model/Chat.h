@@ -24,6 +24,12 @@ public:
     int type() const;
     int id() const;
 
+    void deserialize(QByteArray& data);
+    QByteArray serialize() const;
+
+    virtual void save(QVariantMap& map) const;
+    virtual void load(const QVariantMap& map);
+
     bb::cascades::DataModel* messages() const;
 
     virtual QString title() const;
@@ -34,6 +40,8 @@ public:
 
     void addMessage(Message* message);
     void deleteMessage(Message* message);
+
+    Q_INVOKABLE void loadAdditionalHistory();
 signals:
     void titleChanged();
     void statusChanged();
@@ -45,6 +53,9 @@ protected:
 
     friend class Storage;
     bb::cascades::GroupDataModel* m_messages;
+    QList<int>    m_lapseMarkers;
+
+    bool        m_loadingHistory;
 };
 
 Q_DECLARE_METATYPE(Chat*);

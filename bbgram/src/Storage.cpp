@@ -7,6 +7,7 @@
 
 Storage* Storage::m_instance = 0;
 
+const int HISTORY_LIMIT = 20;
 const char* DATABASE_NAME = "data/storage.db";
 
 using namespace bb::cascades;
@@ -77,7 +78,7 @@ Storage::Storage(QObject* parent)
         {
             Chat* peer = new GroupChat(id);
             QByteArray data = query.value(1).toByteArray();
-            ((GroupChat*)peer)->deserialize(data);
+            peer->deserialize(data);
             long long peerId = ((long long)type << 32) | id;
             peer->setParent(this);
             m_peers.insert(peerId, peer);
@@ -85,7 +86,7 @@ Storage::Storage(QObject* parent)
         }
     }
 
-    query.prepare("SELECT id, from_id, to_id, to_type, text, date, data FROM messages WHERE (to_id = :r_id AND to_type = :r_type) OR (to_id = :my_id AND to_type = 1 AND from_id = :s_id) ORDER BY date DESC LIMIT 50");
+    query.prepare("SELECT id, from_id, to_id, to_type, text, date, data FROM messages WHERE (to_id = :r_id AND to_type = :r_type) OR (to_id = :my_id AND to_type = 1 AND from_id = :s_id) ORDER BY date DESC LIMIT " + QString::number(HISTORY_LIMIT));
     for (int i = 0; i < dialogs.size(); i++)
     {
         Chat* chat = dialogs.value(i);
@@ -162,6 +163,7 @@ Message* Storage::getMessage(long long id)
         {
             Message* message = new Message(id, M);
             message->setParent(this);
+
             m_messages.insert(id, message);
 
             QSqlDatabase &db = m_instance->m_db;
@@ -435,7 +437,7 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
     Message* message = m_instance->getMessage(M->id);
 
     GroupDataModel* messages = chat->m_messages;
-    if (!messages->find(message).isEmpty())
+    if (!messages->findExact(message).isEmpty())
         return;
 
     messages->insert(message);
@@ -563,6 +565,7 @@ QListDataModel<Chat*>* Storage::dialogs() const
     return m_dialogs;
 }
 
+
 void Storage::_getDialogsCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, tgl_peer_id_t peers[], int last_msg_id[], int unread_count[])
 {
     if (!success)
@@ -579,7 +582,6 @@ void Storage::_getDialogsCallback(struct tgl_state *TLS, void *callback_extra, i
         dialogs.append(query.value(0).toLongLong());
 
     query.prepare("REPLACE INTO dialogs(id) VALUES(:id)");
-    //_this->m_dialogs->clear();
     for (int i = 0; i < size; i++)
     {
         tgl_peer_id_t _peer = peers[i];
@@ -601,16 +603,31 @@ void Storage::_getDialogsCallback(struct tgl_state *TLS, void *callback_extra, i
 
 
         Chat* chat = m_instance->getPeer(peers[i].type, peers[i].id);
+        int last_chat_msg_id = chat->lastMessage() ? chat->lastMessage()->id() : 0;
+
         Message* lastMessage = 0;
-        if (last_msg_id[i])
+        if (last_chat_msg_id != last_msg_id[i])
         {
-            lastMessage = m_instance->getMessage(last_msg_id[i]);
-            if (lastMessage != chat->lastMessage())
+            for (int j = chat->m_lapseMarkers.size() - 1; j >= 0; j--)
             {
-                chat->addMessage(lastMessage);
-                m_instance->updateHistory(chat);
+                if (chat->m_lapseMarkers.at(j) >= last_msg_id[i])
+                {
+                    chat->m_lapseMarkers.removeAt(j);
+                    continue;
+                }
             }
+
+            chat->m_lapseMarkers.push_back(last_msg_id[i]);
+
+            lastMessage = m_instance->getMessage(last_msg_id[i]);
+            chat->addMessage(lastMessage);
+
+            tgl_peer_id_t peer;
+            peer.type = chat->type();
+            peer.id = chat->id();
+            tgl_do_get_history_maxid(gTLS, peer, -1, last_msg_id[i], HISTORY_LIMIT, _getHistoryCallback, chat);
         }
+
         idx = 0;
         for (int i = 0; i < m_instance->m_dialogs->size(); i++)
         {
@@ -620,8 +637,8 @@ void Storage::_getDialogsCallback(struct tgl_state *TLS, void *callback_extra, i
                 idx = -1;
                 break;
             }
-            Message* cLastMessage = c->lastMessage();
-            if (!lastMessage || (cLastMessage && cLastMessage->dateTime() > lastMessage->dateTime()))
+            Message* last_msg = c->lastMessage();
+            if (!lastMessage || (last_msg && last_msg->dateTime() > lastMessage->dateTime()))
                 idx++;
         }
         if (idx != -1)
@@ -641,19 +658,57 @@ void Storage::_getDialogsCallback(struct tgl_state *TLS, void *callback_extra, i
 
 void Storage::_getHistoryCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[])
 {
-    if (!success)
-        return;
-
     Chat* chat = (Chat*)callback_extra;
-    GroupDataModel* messages = chat->m_messages;
-    //messages->clear();
-    for (int i = 0; i < size; i++)
+
+    if (success)
     {
-        Message* message = m_instance->getMessage(list[i]->id);
-        if (!messages->find(message).isEmpty())
+        bool insert_marker = size == HISTORY_LIMIT;
+
+
+        int begin = size == HISTORY_LIMIT ? list[size-1]->id : 0;
+        int end = list[0]->id;
+
+        QList<int>& markers = chat->m_lapseMarkers;
+        for (int i = markers.size() - 1; i >= 0; i--)
+            if (markers[i] >= begin && markers[i] <= end)
+                markers.removeAt(i);
+
+        GroupDataModel* messages = chat->m_messages;
+        for (int i = 0; i < size; i++)
+        {
+            Message* message = m_instance->getMessage(list[i]->id);
+            QVariantList idx = messages->findExact(message);
+            if (!idx.isEmpty())
+            {
+                if (i == size - 1)
+                    insert_marker = false;
                 continue;
-        messages->insert(message);
+            }
+            messages->insert(message);
+            idx = messages->findExact(message);
+        }
+
+        if (insert_marker)
+        {
+            int idx = 0;
+            for (idx = 0; idx < markers.size(); idx++)
+                if (markers[idx] > begin)
+                    break;
+            markers.insert(idx, begin);
+        }
     }
+
+    if (chat->type() == TGL_PEER_USER)
+    {
+        if (m_instance->m_updatedUsers.indexOf((User*)chat) == -1)
+            m_instance->m_updatedUsers.append((User*)chat);
+    }
+    else if (chat->type() == TGL_PEER_CHAT)
+    {
+        if (m_instance->m_updatedGroupChats.indexOf((GroupChat*)chat) == -1)
+            m_instance->m_updatedGroupChats.append((GroupChat*)chat);
+    }
+    chat->m_loadingHistory = false;
 }
 
 void Storage::_deleteMessageCallback(struct tgl_state *TLS, void *callback_extra, int success)
@@ -762,12 +817,61 @@ void Storage::updateUserInfo()
     tgl_do_get_user_info(gTLS, userId, false, NULL, NULL);
 }
 
-void Storage::updateHistory(Chat* chat)
+void Storage::loadAdditionalHistory(Chat* chat)
 {
-    tgl_peer_id_t peer;
-    peer.type = chat->type();
-    peer.id = chat->id();
-    tgl_do_get_history(gTLS, peer, 50, 0, _getHistoryCallback, chat);
+    int marker = 0;
+    if (chat->m_lapseMarkers.size() > 0)
+        marker = chat->m_lapseMarkers.last();
+
+    GroupDataModel* messages = chat->m_messages;
+    QVariantList idx;
+    idx << messages->childCount(idx) - 1;
+    idx << messages->childCount(idx) - 1;
+    Message* msg = (Message*)messages->data(idx).value<QObject*>();
+    int msg_id = msg->id();
+
+    QSqlQuery query(m_db);
+    query.prepare("SELECT id, from_id, to_id, to_type, text, date, data FROM messages WHERE ((to_id = :r_id AND to_type = :r_type) OR (to_id = :my_id AND to_type = 1 AND from_id = :s_id)) AND id > :marker AND id < :max_id ORDER BY date DESC LIMIT " + QString::number(HISTORY_LIMIT));
+
+    query.bindValue(":r_type", chat->type());
+    query.bindValue(":r_id", chat->id());
+    query.bindValue(":my_id", gTLS->our_id);
+    query.bindValue(":s_id", chat->id());
+    query.bindValue(":marker", marker);
+    query.bindValue(":max_id", msg_id);
+    query.exec();
+    int n = 0;
+    while (query.next())
+    {
+        long long id = query.value(0).toLongLong();
+        Message* message = getMessage(id);
+        if (message == 0)
+        {
+            message = new Message(id);
+            message->setParent(this);
+            message->m_fromId = query.value(1).toInt();
+            message->m_toId = query.value(2).toInt();
+            message->m_toType = query.value(3).toInt();
+            message->m_text = query.value(4).toString();
+            message->m_date = QDateTime::fromTime_t(query.value(5).toInt());
+            QByteArray data = query.value(6).toByteArray();
+            message->deserialize(data);
+            m_messages.insert(id, message);
+        }
+        if (chat->m_messages->findExact(message).isEmpty())
+            chat->addMessage(message);
+        n++;
+    }
+
+    if (n < HISTORY_LIMIT)
+    {
+        tgl_peer_id_t peer;
+        peer.type = chat->type();
+        peer.id = chat->id();
+        tgl_do_get_history_maxid(gTLS, peer, -1, msg_id, HISTORY_LIMIT, _getHistoryCallback, chat);
+    }
+    else
+        chat->m_loadingHistory = false;
 }
 
 void Storage::searchMessage(Chat* chat, int from, int to, int limit, int offset, const char *s)

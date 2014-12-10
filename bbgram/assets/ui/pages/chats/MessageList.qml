@@ -2,15 +2,14 @@ import bb.cascades 1.2
 
 ListView {
     id: me
-    property bool groupChat: false
+    property variant peer: null
     property variant owner: _owner
-    property variant messages: null
     
     layout: StackListLayout {
         orientation: LayoutOrientation.BottomToTop
     }
 
-    dataModel: messages ? messages : null
+    dataModel: peer ? peer.messages : null
     
     verticalAlignment: VerticalAlignment.Bottom
     stickToEdgePolicy: ListViewStickToEdgePolicy.Beginning
@@ -36,7 +35,7 @@ ListView {
             type: "message"
             Message {
                 id: chatMessage
-                author: ListItem.view.groupChat && !ListItemData.our ? ListItemData.from : null
+                author: (ListItem.view.peer && ListItem.view.peer.type == 2  && !ListItemData.our) ? ListItemData.from : null
                 ListItem.onSelectionChanged: {
                     chatMessage.selected = selected;
                 }
@@ -69,6 +68,15 @@ ListView {
         LongPressHandler {    
             onLongPressed: {
                 me.multiSelectHandler.active = true
+            }
+        }
+    ]
+    
+    attachedObjects: [
+        ListScrollStateHandler {
+            onAtEndChanged: {
+                if (dataModel && firstVisibleItem.length > 0 && atEnd)
+                    peer.loadAdditionalHistory()
             }
         }
     ]

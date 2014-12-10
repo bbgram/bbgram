@@ -365,6 +365,7 @@ void tgl_do_send_broadcast (struct tgl_state *TLS, int num, tgl_peer_id_t id[], 
 void tgl_do_help_get_invite_text (struct tgl_state *TLS, const char* lang_code, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, const char* message), void *callback_extra);
 void tgl_do_delete_history (struct tgl_state *TLS, tgl_peer_id_t id, int offset, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, int offset), void *callback_extra);
 void tgl_do_update_notify_settings (struct tgl_state *TLS, struct tgl_notify_peer *notify_peer, int mute_until, char* sound, int show_previews, int events_mask, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success), void *callback_extra);
+void tgl_do_get_history_maxid (struct tgl_state *TLS, tgl_peer_id_t id, int offset, int max_id, int limit, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]), void *callback_extra);
 
 void tgl_do_visualize_key (struct tgl_state *TLS, tgl_peer_id_t id, unsigned char buf[16]);
 

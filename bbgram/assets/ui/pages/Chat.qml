@@ -241,8 +241,7 @@ Page {
             }
             MessageList {
                 id: messageList
-                groupChat: chat && chat.type != undefined ? chat.type == 2 : false
-                messages: chat && chat.messages != undefined ? chat.messages : null
+                peer: chat
             }
         }
         Container {

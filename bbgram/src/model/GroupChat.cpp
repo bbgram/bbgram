@@ -19,14 +19,11 @@ GroupChat::~GroupChat()
 {
 }
 
-void GroupChat::deserialize(QByteArray& data)
+void GroupChat::load(const QVariantMap& map)
 {
-    QDataStream stream(&data, QIODevice::ReadOnly);
+    Chat::load(map);
 
-    QMap<QString, QVariant> map;
-    stream >> map;
-
-    QMap<QString, QVariant>::iterator it;
+    QVariantMap::const_iterator it;
 
     it = map.find("title");
     if (it != map.end())
@@ -41,13 +38,14 @@ void GroupChat::deserialize(QByteArray& data)
     it = map.find("photoId");
     if (it != map.end())
         setPhotoId(it.value().toLongLong());
+
     //map.insert("members", ??);
     //map.insert("invites", ??);
 }
 
-QByteArray GroupChat::serialize() const
+void GroupChat::save(QVariantMap& map) const
 {
-    QMap<QString, QVariant> map;
+    Chat::save(map);
 
     map.insert("title", m_title);
     map.insert("adminId", m_adminId);
@@ -55,11 +53,6 @@ QByteArray GroupChat::serialize() const
     //map.insert("invites", ??);
     map.insert("photo", m_photoFilename);
     map.insert("photoId", m_photoId);
-
-    QByteArray data;
-    QDataStream stream(&data, QIODevice::WriteOnly);
-    stream << map;
-    return data;
 }
 
 QString GroupChat::title() const

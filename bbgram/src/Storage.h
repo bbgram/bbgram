@@ -39,8 +39,8 @@ public:
 
     void updateChats();
     void updateUserInfo();
-    void updateHistory(Chat* chat);
 
+    void loadAdditionalHistory(Chat* chat);
     void searchMessage(Chat* chat, int from, int to, int limit, int offset, const char *s);
 protected slots:
     void saveUpdatesToDatabase();

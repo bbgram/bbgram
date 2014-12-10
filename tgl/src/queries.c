@@ -4309,3 +4309,8 @@ void tgl_do_update_notify_settings (struct tgl_state *TLS, struct tgl_notify_pee
 
     tglq_send_query (TLS, TLS->DC_working, packet_ptr - packet_buffer, packet_buffer, &help_get_config_methods, 0, callback, callback_extra);
 }
+
+void tgl_do_get_history_maxid (struct tgl_state *TLS, tgl_peer_id_t id, int offset, int max_id, int limit, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]), void *callback_extra)
+{
+    _tgl_do_get_history(TLS, id, limit, offset, max_id, 0, 0, 0, callback, callback_extra);
+}

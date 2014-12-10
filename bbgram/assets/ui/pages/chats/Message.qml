@@ -142,7 +142,7 @@ Container {
                 topPadding: 8
                 bottomPadding: 8
                 ImageView {
-                    image: author.photo
+                    image: author ? author.photo : null
                     //imageSource: "asset:///images/placeholders/user_placeholder_purple.png"                            
                     minWidth: 80
                     minHeight: 80                
@@ -154,8 +154,8 @@ Container {
         ComponentDefinition {
             id: senderNameCompDef
             Label {
-                text: author.firstName + " " + author.lastName
-                textStyle.color: Color.create(author.color)
+                text: author ? author.firstName + " " + author.lastName : ""
+                textStyle.color: author ? Color.create(author.color) : Color.Black
             }
         },
         ComponentDefinition {

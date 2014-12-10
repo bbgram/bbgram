@@ -17,14 +17,11 @@ User::~User()
 {
 }
 
-void User::deserialize(QByteArray& data)
+void User::load(const QVariantMap& map)
 {
-    QDataStream stream(&data, QIODevice::ReadOnly);
+    Chat::load(map);
 
-    QMap<QString, QVariant> map;
-    stream >> map;
-
-    QMap<QString, QVariant>::iterator it;
+    QVariantMap::const_iterator it;
 
     it = map.find("phone");
     if (it != map.end())
@@ -44,21 +41,15 @@ void User::deserialize(QByteArray& data)
         setPhotoId(it.value().toLongLong());
 }
 
-QByteArray User::serialize() const
+void User::save(QVariantMap& map) const
 {
-    QMap<QString, QVariant> map;
+    Chat::save(map);
 
     map.insert("phone", m_phone);
     map.insert("firstName", m_firstName);
     map.insert("lastName", m_lastName);
     map.insert("photo", m_photoFilename);
     map.insert("photoId", m_photoId);
-
-
-    QByteArray data;
-    QDataStream stream(&data, QIODevice::WriteOnly);
-    stream << map;
-    return data;
 }
 
 int User::id() const

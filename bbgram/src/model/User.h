@@ -23,8 +23,8 @@ public:
     User(int id = 0);
     ~User();
 
-    void deserialize(QByteArray& data);
-    QByteArray serialize() const;
+    void load(const QVariantMap& map);
+    void save(QVariantMap& map) const;
 
     int id() const;
 

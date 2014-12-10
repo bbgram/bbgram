@@ -15,8 +15,8 @@ public:
     GroupChat(int id = 0);
     ~GroupChat();
 
-    void deserialize(QByteArray& data);
-    QByteArray serialize() const;
+    void load(const QVariantMap& map);
+    void save(QVariantMap& map) const;
 
     QString title() const;
     void setTitle(const QString& title);
