@@ -18,6 +18,7 @@ public:
     const QString& phone() const;
 
     Q_INVOKABLE void requestCode(const QString& phone);
+    Q_INVOKABLE void requestPhoneCall();
     Q_INVOKABLE void submitCode(const QString& code);
 signals:
     void phoneChanged();

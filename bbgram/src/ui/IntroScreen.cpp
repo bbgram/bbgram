@@ -45,6 +45,14 @@ void IntroScreen::requestCode(const QString& phone)
     tgl_do_send_code(gTLS, (const char*)user.data(), _requestCodeCallback, this);
 }
 
+void IntroScreen::requestPhoneCall()
+{
+    QByteArray _user = m_phone.toLocal8Bit();
+    QByteArray _hash = m_codeHash.toLocal8Bit();
+    tgl_do_phone_call(gTLS, _user.data(), _hash.data(), 0, 0);
+}
+
+
 
 void IntroScreen::_sendCodeCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *self)
 {

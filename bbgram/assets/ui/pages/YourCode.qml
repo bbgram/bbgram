@@ -1,8 +1,28 @@
 import bb.cascades 1.2
 import bbgram.control.lib 0.1
+import bbgram.types.lib 0.1
 
 Page {
     property variant pageStack: []
+    
+    property int time: 30
+    
+    attachedObjects: [
+        QTimer {
+            id: timer
+            interval: 1000
+            onTimeout: {
+                time -= 1
+                if (time == 0) {
+                    _owner.requestPhoneCall();
+                    timer.stop()
+                }   
+            }
+        }
+    ]
+    onCreationCompleted: {
+        timer.start();
+    }
     
     titleBar: TitleBar {
         title: "Your code"
@@ -34,7 +54,7 @@ Page {
         
         Label {
             topMargin: 30
-            text: "<html><p style='text-align:center'>We will call you in 0:23</p></html>"
+            text: "<html><p style='text-align:center'>" + time == 0 ? "Calling you..." : "We will call you in 0:%1".arg(time < 10 ? "0" + time : time) + "</p></html>"
             multiline: true
             horizontalAlignment: HorizontalAlignment.Center
         }

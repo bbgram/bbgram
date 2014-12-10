@@ -29,6 +29,7 @@ ApplicationUI::ApplicationUI(bb::cascades::Application* app) :
     qmlRegisterType<GroupChat>("bbgram.types.lib", 0, 1, "GroupChat");
     qmlRegisterType<Message>("bbgram.types.lib", 0, 1, "Message");
     qmlRegisterType<User>("bbgram.types.lib", 0, 1, "User");
+    qmlRegisterType<QTimer>("bbgram.types.lib", 0, 1, "QTimer");
 
     m_telegraph = new Telegraph();
     m_telegraph->start();
