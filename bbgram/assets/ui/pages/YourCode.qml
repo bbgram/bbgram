@@ -54,7 +54,7 @@ Page {
         
         Label {
             topMargin: 30
-            text: "<html><p style='text-align:center'>" + time == 0 ? "Calling you..." : "We will call you in 0:%1".arg(time < 10 ? "0" + time : time) + "</p></html>"
+            text: "<html><p style='text-align:center'>" + (time == 0 ? "Calling you..." : "We will call you in 0:%1".arg(time < 10 ? "0" + time : time)) + "</p></html>"
             multiline: true
             horizontalAlignment: HorizontalAlignment.Center
         }

@@ -28,7 +28,8 @@ PhoneNumberInput::PhoneNumberInput()
     m_countryCode = TextField::create();
     m_countryCode->setInputMode(TextFieldInputMode::PhoneNumber);
     m_countryCode->setMaxWidth(150);
-    m_countryCode->setText("+7");
+    connect(m_countryCode, SIGNAL(textChanging(QString)), this, SLOT(onContryCodeChanging(QString)));
+    //m_countryCode->setText("+7");
     panel->add(m_countryCode);
 
     m_phoneNumber = TextField::create();
@@ -56,6 +57,30 @@ PhoneNumberInput::PhoneNumberInput()
 
 PhoneNumberInput::~PhoneNumberInput()
 {
+}
+
+void PhoneNumberInput::onContryCodeChanging(const QString& text)
+{
+    if (!text.isEmpty() && !text.startsWith("+"))
+    {
+        m_countryCode->setText("+" + text);
+    }
+    else
+    {
+        QString s = text;
+        int code = s.remove('+').toInt();
+        QString country = "";
+        for (int i = m_countriesList.size() - 1 ; i >= 0; i--)
+        {
+            QVariantMap item = m_countriesList[i].toMap();
+            if (item["code"].toInt() == code)
+            {
+                country = item["name"].toString();
+                break;
+            }
+        }
+        m_countryName->setText(country);
+    }
 }
 
 GroupDataModel* PhoneNumberInput::dataModel() const
