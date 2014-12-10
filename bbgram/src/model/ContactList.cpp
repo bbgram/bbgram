@@ -1,4 +1,5 @@
 #include "ContactList.h"
+#include "../ui/MainScreen.h"
 
 #include <bb/pim/contacts/ContactService>
 #include <bb/pim/contacts/Contact>
@@ -86,6 +87,8 @@ void ContactList::updatePhonebook()
         if(!phoneNumber.empty())
             entry["phone"] = phoneNumber[0].value();
         m_phoneBook.push_back(entry);
+
+        MainScreen::instance()->addContact(contact.firstName(), contact.lastName(), phoneNumber[0].value());
     }
 }
 

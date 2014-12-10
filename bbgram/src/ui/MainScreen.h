@@ -36,6 +36,8 @@ public:
     Q_INVOKABLE void sendInviteText(const QString& recipient, const QString& text);
     Q_INVOKABLE void dialANumber(const QString& number);
     Q_INVOKABLE User* getUser(int id);
+
+    static MainScreen* instance();
 signals:
     void contactAdded(bool error, QString message);
     void contactRenamed(bool error, QString message);

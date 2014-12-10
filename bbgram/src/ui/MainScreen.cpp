@@ -18,6 +18,11 @@ struct CreateGroupData
     QString chatPhoto;
 };
 
+MainScreen* MainScreen::instance()
+{
+    return m_instance;
+}
+
 MainScreen::MainScreen(ApplicationUI* app)
     : Screen("asset:///ui/pages/Main.qml")
         , m_app(app)
