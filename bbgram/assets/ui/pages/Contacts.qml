@@ -12,7 +12,6 @@ NavigationPane {
                     layout: DockLayout {}
                     leftPadding: 20
                     rightPadding: 20
-                    topPadding: 10
                     Label {
                         id: contactsLabel
                         text: "Contacts"
@@ -39,7 +38,7 @@ NavigationPane {
                         layout: StackLayout {
                             orientation: LayoutOrientation.LeftToRight
                         }
-                        
+                        verticalAlignment: VerticalAlignment.Center
                         TextField {
                             topPadding: 10
                             id: searchField

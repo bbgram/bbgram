@@ -29,7 +29,6 @@ NavigationPane {
                     layout: DockLayout { }
                     leftPadding: 20
                     rightPadding: 20
-                    topPadding: 15
                     Label {
                         id: chatsLabel
                         text: "Chats"
@@ -55,7 +54,7 @@ NavigationPane {
                         layout: StackLayout {
                             orientation: LayoutOrientation.LeftToRight
                         }
-                        
+                        verticalAlignment: VerticalAlignment.Center
                         TextField {
                             topPadding: 10
                             id: searchField
