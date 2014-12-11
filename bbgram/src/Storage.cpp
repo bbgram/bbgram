@@ -211,9 +211,7 @@ Chat* Storage::getPeer(int type, int id)
 
 void Storage::deleteMessage(long long id)
 {
-    long long* msg_id = new long long();
-    *msg_id = id;
-    tgl_do_delete_msg(gTLS, id, Storage::_deleteMessageCallback, msg_id);
+    tgl_do_delete_msg(gTLS, id, Storage::_deleteMessageCallback, (void*)(int)id);
 }
 
 void Storage::addContact(User* contact)
@@ -566,6 +564,12 @@ void Storage::markedReadHandler(struct tgl_state *TLS, int num, struct tgl_messa
     //! update db
 }
 
+void Storage::messagesDeletedHandler(struct tgl_state *TLS, int num, int list[])
+{
+    for (int i = 0; i < num; i++)
+        _deleteMessageCallback(TLS, (void*)list[i], 1);
+}
+
 QListDataModel<User*>* Storage::contacts() const
 {
     return m_contacts;
@@ -724,8 +728,7 @@ void Storage::_getHistoryCallback(struct tgl_state *TLS, void *callback_extra, i
 
 void Storage::_deleteMessageCallback(struct tgl_state *TLS, void *callback_extra, int success)
 {
-    long long id = *(long long*)callback_extra;
-    delete (long long*)callback_extra;
+    long long id = (int)callback_extra;
 
     Message* msg = m_instance->getMessage(id);
 

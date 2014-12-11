@@ -212,8 +212,17 @@ void tglu_work_update (struct tgl_state *TLS, struct connection *c, long long ms
     {
       assert (fetch_int () == CODE_vector);
       int n = fetch_int ();
-      fetch_skip (n);
+      int *ids = talloc (4 * n);
+      int i;
+      for (i = 0; i < n; i++) {
+        ids[i] = fetch_int ();
+      }
       tglu_fetch_pts (TLS);
+
+      if (TLS->callback.msg_delete) {
+          TLS->callback.msg_delete (TLS, n, ids);
+      }
+      tfree(ids, 4 * n);
     }
     break;
   case CODE_update_chat_participants:

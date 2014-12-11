@@ -1,4 +1,4 @@
-/* 
+/*
     This file is part of tgl-library
 
     This library is free software; you can redistribute it and/or
@@ -97,6 +97,7 @@ struct tgl_update_callback {
   void (*user_status_update)(struct tgl_state *TLS, struct tgl_user *U);
   char *(*create_print_name) (struct tgl_state *TLS, tgl_peer_id_t id, const char *a1, const char *a2, const char *a3, const char *a4);
   void (*notify_settings_update) (struct tgl_state *TLS, struct tgl_notify_peer *notify_peer, int mute_until, char* sound, int show_previews, int events_masks);
+  void (*msg_delete)(struct tgl_state *TLS, int num, int list[]);
 };
 
 struct tgl_net_methods {
@@ -148,14 +149,14 @@ struct tgl_state {
   int date;
   int seq;
   int binlog_enabled;
-  int test_mode; 
+  int test_mode;
   int verbosity;
   int unread_messages;
   int active_queries;
   int max_msg_id;
   int started;
 
-  long long locks; 
+  long long locks;
   struct tgl_dc *DC_list[TGL_MAX_DC_NUM];
   struct tgl_dc *DC_working;
   int max_dc_num;
@@ -206,8 +207,8 @@ struct tgl_state {
 
   struct tree_query *queries_tree;
 
-  char *base_path; 
-  
+  char *base_path;
+
   struct tree_user *online_updates;
 
   struct tgl_timer *online_updates_timer;

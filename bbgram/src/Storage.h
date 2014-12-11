@@ -23,6 +23,7 @@ public:
     static void userTypingHandler(struct tgl_state *TLS, struct tgl_user *U, enum tgl_typing_status status);
     static void updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsigned flags);
     static void markedReadHandler(struct tgl_state *TLS, int num, struct tgl_message *list[]);
+    static void messagesDeletedHandler(struct tgl_state *TLS, int num, int list[]);
 
     bb::cascades::QListDataModel<User*>* contacts() const;
     bb::cascades::QListDataModel<Chat*>* dialogs() const;
