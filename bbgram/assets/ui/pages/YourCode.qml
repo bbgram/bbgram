@@ -24,6 +24,13 @@ Page {
         timer.start();
     }
     
+    function onIncorrectCode()
+    {
+        _owner.wrongCode.disconnect(onIncorrectCode);
+        
+        incorrectLabel.visible = true;
+    }
+    
     titleBar: TitleBar {
         title: "Your code"
     }
@@ -50,6 +57,10 @@ Page {
             inputMode: TextFieldInputMode.NumbersAndPunctuation
             preferredWidth: 400
             horizontalAlignment: HorizontalAlignment.Center
+            
+            onTextChanging: {
+                submitButton.enabled = text.length > 0;
+            }
         }
         
         Label {
@@ -69,11 +80,25 @@ Page {
             horizontalAlignment: HorizontalAlignment.Center
         }
         
+        Label {
+            id: incorrectLabel
+            visible: false
+            horizontalAlignment: HorizontalAlignment.Center
+            text: "Incorrect code. Please try again!"
+            textStyle{
+                color: Color.Red
+            }
+        }
+        
         
         Button {
+            id: submitButton
+            enabled: false
             horizontalAlignment: HorizontalAlignment.Center
             text: "Next"
             onClicked: {
+                incorrectLabel.visible = false;
+                _owner.wrongCode.connect(onIncorrectCode);
                 _owner.submitCode(code.text)
             }
         }

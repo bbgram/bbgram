@@ -565,7 +565,7 @@ static int sign_in_on_answer (struct tgl_state *TLS, struct query *q) {
 static int sign_in_on_error (struct tgl_state *TLS, struct query *q, int error_code, int l, char *error) {
     vlogprintf (E_ERROR, "error_code = %d, error = %.*s\n", error_code, l, error);
     if (q->callback) {
-        ((void (*)(void *, int, struct tgl_user *))q->callback) (q->callback_extra, 0, NULL);
+        ((void (*)(struct tgl_state *TLS, void *, int, struct tgl_user *))q->callback) (TLS, q->callback_extra, 0, NULL);
     }
     return 0;
 }
