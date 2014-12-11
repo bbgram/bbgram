@@ -21,18 +21,15 @@ public slots:
 
     void onReady();
 signals:
-    void mainDCAuthorized();
-    void allDCAuthorized();
-
     void ready();
 protected slots:
-    void checkAllAuthorized();
     void writeState();
 protected:
     static Telegraph* m_instance;
 
     tgl_update_callback m_updateCallbacks;
+    tgl_timer_methods   m_timerMethods;
+    tgl_net_methods     m_netMethods;
 
-    QTimer* m_checkAllAuthorizedTimer;
     QTimer* m_writeStateTimer;
 };

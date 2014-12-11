@@ -10,6 +10,9 @@ extern "C"
 #include <tgl-binlog.h>
 }
 
+#include "telegraph/timers.h"
+#include "telegraph/net.h"
+
 tgl_state* gTLS = 0;
 
 int APP_ID = 14121;
@@ -224,9 +227,6 @@ bool read_state_file (struct tgl_state *TLS)
     return true;
 }
 
-#include "telegraph/timers.h"
-#include "telegraph/net.h"
-
 
 Telegraph* Telegraph::m_instance = 0;
 
@@ -247,38 +247,6 @@ Telegraph* Telegraph::instance()
     return m_instance;
 }
 
-#include <QDebug>
-
-tgl_timer_methods timer_methods;
-tgl_net_methods net_methods;
-
-bool e = false;
-void Telegraph::checkAllAuthorized()
-{
-    if (!e && gTLS->DC_working && tgl_authorized_dc(gTLS, gTLS->DC_working))
-    {
-        e =true;
-        emit mainDCAuthorized();
-    }
-    for (int i = 0; i <= gTLS->max_dc_num; i++)
-    {
-        if (gTLS->DC_list[i])
-        {
-            if (!tgl_authorized_dc(gTLS, gTLS->DC_list[i]))
-            {
-                //qDebug() << i << "/" << gTLS->max_dc_num << "dc not authorized :(";
-                return;
-            }
-        }
-    }
-
-    qDebug() << "All dc authorized!";
-    emit allDCAuthorized();
-    m_checkAllAuthorizedTimer->stop();
-    delete m_checkAllAuthorizedTimer;
-    m_checkAllAuthorizedTimer = 0;
-}
-
 void Telegraph::start()
 {
     m_updateCallbacks.logprintf = logprintf;
@@ -293,22 +261,22 @@ void Telegraph::start()
     m_updateCallbacks.msg_delete = Storage::messagesDeletedHandler;
 
 
-    memset(&timer_methods, 0, sizeof(tgl_timer_methods));
-    timer_methods.alloc = tgl_timer::alloc;
-    timer_methods.insert = tgl_timer::insert;
-    timer_methods.remove = tgl_timer::remove;
-    timer_methods.free = tgl_timer::free;
+    memset(&m_timerMethods, 0, sizeof(tgl_timer_methods));
+    m_timerMethods.alloc = tgl_timer::alloc;
+    m_timerMethods.insert = tgl_timer::insert;
+    m_timerMethods.remove = tgl_timer::remove;
+    m_timerMethods.free = tgl_timer::free;
 
-    memset(&net_methods, 0, sizeof(tgl_net_methods));
-    net_methods.create_connection = connection_create;
-    net_methods.write_out = connection_write_out;
-    net_methods.read_in = connection_read_in;
-    net_methods.read_in_lookup = connection_read_in_lookup;
-    net_methods.flush_out = connection_flush_out;
-    net_methods.incr_out_packet_num = connection_incr_out_packet_num;
-    net_methods.free = connection_free;
-    net_methods.get_dc = connection_get_dc;
-    net_methods.get_session = connection_get_session;
+    memset(&m_netMethods, 0, sizeof(tgl_net_methods));
+    m_netMethods.create_connection = connection_create;
+    m_netMethods.write_out = connection_write_out;
+    m_netMethods.read_in = connection_read_in;
+    m_netMethods.read_in_lookup = connection_read_in_lookup;
+    m_netMethods.flush_out = connection_flush_out;
+    m_netMethods.incr_out_packet_num = connection_incr_out_packet_num;
+    m_netMethods.free = connection_free;
+    m_netMethods.get_dc = connection_get_dc;
+    m_netMethods.get_session = connection_get_session;
 
     gTLS = tgl_state_alloc();
     //gTLS->test_mode = 1;
@@ -316,17 +284,11 @@ void Telegraph::start()
     tgl_set_verbosity(gTLS, 0);
     tgl_set_rsa_key(gTLS, RSA_KEY_PATH);
 
-    //event_base* ev = event_base_new();
-    //tgl_set_ev_base(gTLS, ev);
-    /*char download_dir[256];
-    getcwd(download_dir, 256);
-    strcat(download_dir, "/");
-    strcat(download_dir, DOWNLOAD_DIRECTORY);*/
     int r = mkdir(DOWNLOAD_DIRECTORY, 0700);
     tgl_set_download_directory(gTLS, DOWNLOAD_DIRECTORY);
 
-    tgl_set_net_methods(gTLS, &net_methods);
-    tgl_set_timer_methods(gTLS, &timer_methods);
+    tgl_set_net_methods(gTLS, &m_netMethods);
+    tgl_set_timer_methods(gTLS, &m_timerMethods);
     tgl_set_callback(gTLS, &m_updateCallbacks);
     tgl_register_app_id(gTLS, APP_ID, (char*)APP_HASH);
 
@@ -336,11 +298,6 @@ void Telegraph::start()
         empty_auth_file(gTLS);
     read_state_file(gTLS);
 
-
-    m_checkAllAuthorizedTimer = new QTimer(this);
-    connect(m_checkAllAuthorizedTimer, SIGNAL(timeout()), this, SLOT(checkAllAuthorized()));
-    m_checkAllAuthorizedTimer->start(100);
-
     m_writeStateTimer = new QTimer(this);
     connect(m_writeStateTimer, SIGNAL(timeout()), this, SLOT(writeState()));
 }
@@ -349,11 +306,6 @@ void Telegraph::stop()
 {
     tgl_free_all(gTLS);
     gTLS = 0;
-}
-
-void export_auth_callback (struct tgl_state *TLS, void *extra, int success)
-{
-    assert (success);
 }
 
 void Telegraph::exportAuthorization()
@@ -369,7 +321,7 @@ void Telegraph::exportAuthorization()
     for (int i = 0; i <= gTLS->max_dc_num; i++)
         if (gTLS->DC_list[i] && !tgl_signed_dc (gTLS, gTLS->DC_list[i]))
         {
-            tgl_do_export_auth (gTLS, i, export_auth_callback, (void*)(long)gTLS->DC_list[i]);
+            tgl_do_export_auth (gTLS, i, 0, 0);
             cur_a_dc = gTLS->DC_list[i];
             QTimer::singleShot(50, this, SLOT(exportAuthorization()));
             return;
