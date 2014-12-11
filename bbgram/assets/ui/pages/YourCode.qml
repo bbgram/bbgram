@@ -5,7 +5,7 @@ import bbgram.types.lib 0.1
 Page {
     property variant pageStack: []
     
-    property int time: 30
+    property int time: 120
     
     attachedObjects: [
         QTimer {
@@ -54,7 +54,17 @@ Page {
         
         Label {
             topMargin: 30
-            text: "<html><p style='text-align:center'>" + (time == 0 ? "Calling you..." : "We will call you in 0:%1".arg(time < 10 ? "0" + time : time)) + "</p></html>"
+            text: {
+                var s = ""
+                if (time == 0)
+                    s = "Calling you..."
+                else {
+                    var m = Math.floor(time / 60)
+                    var s = time % 60
+                    s = "We will call you in %1:%2".arg(m).arg(s < 10 ? "0" + s : s)
+                }
+                "<html><p style='text-align:center'>" + s + "</p></html>"   
+            }
             multiline: true
             horizontalAlignment: HorizontalAlignment.Center
         }
