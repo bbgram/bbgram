@@ -446,6 +446,11 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
     if (!messages->findExact(message).isEmpty())
         return;
 
+    if (chat->lastMessage()->dateTime() < message->dateTime() && message->from()->id() != TLS->our_id && !message->service())
+    {
+        emit m_instance->newMessageReceived(message);
+    }
+
     messages->insert(message);
 
     Message* lastMessage = chat->lastMessage();

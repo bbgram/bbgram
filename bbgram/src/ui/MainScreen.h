@@ -45,11 +45,15 @@ signals:
     void groupCreated(GroupChat* groupChat);
 protected slots:
     void initialize();
+    void onAppFullScreen();
+    void onAppThumbnail();
+    void onMessageReceived(const Message* message);
 protected:
     static MainScreen*  m_instance;
     ApplicationUI*      m_app;
     ContactList*        m_contacts;
     ChatList*           m_dialogs;
+    bool                m_appFullScreen;
 
     bool contactExist(const QString& phone);
 

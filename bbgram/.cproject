@@ -24,6 +24,7 @@
 							<tool id="com.qnx.qcc.tool.compiler.2026161392" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compiler.optlevel.1832017051" name="Optimization Level" superClass="com.qnx.qcc.option.compiler.optlevel" value="com.qnx.qcc.option.compiler.optlevel.0" valueType="enumerated"/>
 								<option id="com.qnx.qcc.option.compiler.includePath.985652155" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/bb/platform"/>
 									<listOptionValue builtIn="false" value="${workspace_loc:/tgl/public}"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/tgl}&quot;"/>
 								</option>
@@ -40,6 +41,7 @@
 								<option id="com.qnx.qcc.option.linker.libraries.1715901739" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="tgl"/>
 									<listOptionValue builtIn="false" value="bbpim"/>
+									<listOptionValue builtIn="false" value="bbplatform"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraryPaths.1553522976" name="Library Paths (-L)" superClass="com.qnx.qcc.option.linker.libraryPaths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="${workspace_loc:/tgl}/Device-Debug"/>
@@ -89,6 +91,7 @@
 							<tool id="com.qnx.qcc.tool.compiler.1622296090" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compiler.optlevel.841565176" name="Optimization Level" superClass="com.qnx.qcc.option.compiler.optlevel" value="com.qnx.qcc.option.compiler.optlevel.0" valueType="enumerated"/>
 								<option id="com.qnx.qcc.option.compiler.includePath.811478318" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/bb/platform"/>
 									<listOptionValue builtIn="false" value="${workspace_loc:/tgl/public}"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/tgl}&quot;"/>
 								</option>
@@ -105,6 +108,7 @@
 								<option id="com.qnx.qcc.option.linker.libraries.697160576" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="tgl"/>
 									<listOptionValue builtIn="false" value="bbpim"/>
+									<listOptionValue builtIn="false" value="bbplatform"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraryPaths.1189315688" name="Library Paths (-L)" superClass="com.qnx.qcc.option.linker.libraryPaths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="${workspace_loc:/tgl}/Device-Release"/>
@@ -154,6 +158,7 @@
 							<tool id="com.qnx.qcc.tool.compiler.910783006" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compiler.optlevel.218102922" name="Optimization Level" superClass="com.qnx.qcc.option.compiler.optlevel" value="com.qnx.qcc.option.compiler.optlevel.0" valueType="enumerated"/>
 								<option id="com.qnx.qcc.option.compiler.includePath.2034174410" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/bb/platform"/>
 									<listOptionValue builtIn="false" value="${workspace_loc:/tgl/public}"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/tgl}&quot;"/>
 								</option>
@@ -170,6 +175,7 @@
 								<option id="com.qnx.qcc.option.linker.libraries.1926295038" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="tgl"/>
 									<listOptionValue builtIn="false" value="bbpim"/>
+									<listOptionValue builtIn="false" value="bbplatform"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraryPaths.1808601685" name="Library Paths (-L)" superClass="com.qnx.qcc.option.linker.libraryPaths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="${workspace_loc:/tgl}/Device-Release"/>
@@ -219,6 +225,7 @@
 							<tool id="com.qnx.qcc.tool.compiler.1632755054" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compiler.optlevel.1797712822" name="Optimization Level" superClass="com.qnx.qcc.option.compiler.optlevel" value="com.qnx.qcc.option.compiler.optlevel.0" valueType="enumerated"/>
 								<option id="com.qnx.qcc.option.compiler.includePath.875718744" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
+									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/bb/platform"/>
 									<listOptionValue builtIn="false" value="${workspace_loc:/tgl/public}"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/tgl}&quot;"/>
 								</option>
@@ -235,6 +242,7 @@
 								<option id="com.qnx.qcc.option.linker.libraries.1558828897" name="Libraries (-l)" superClass="com.qnx.qcc.option.linker.libraries" valueType="libs">
 									<listOptionValue builtIn="false" value="tgl"/>
 									<listOptionValue builtIn="false" value="bbpim"/>
+									<listOptionValue builtIn="false" value="bbplatform"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraryPaths.2030803795" name="Library Paths (-L)" superClass="com.qnx.qcc.option.linker.libraryPaths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="${workspace_loc:/tgl}/Simulator-Debug"/>

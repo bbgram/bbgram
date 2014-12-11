@@ -42,6 +42,8 @@ public:
 
     void loadAdditionalHistory(Chat* chat);
     void searchMessage(Chat* chat, int from, int to, int limit, int offset, const char *s);
+signals:
+    void newMessageReceived(const Message* message);
 protected slots:
     void saveUpdatesToDatabase();
 protected:

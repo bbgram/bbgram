@@ -2,13 +2,16 @@
 #include "../Storage.h"
 #include "../Telegraph.h"
 
+#include <bb/cascades/Application>
 #include <bb/system/InvokeManager>
 #include <bb/system/InvokeRequest>
 #include <bb/PpsObject>
+#include <bb/platform/Notification>
 
 
 using namespace bb::cascades;
 using namespace bb::system;
+using namespace bb::platform;
 
 MainScreen* MainScreen::m_instance = NULL;
 
@@ -25,7 +28,7 @@ MainScreen* MainScreen::instance()
 
 MainScreen::MainScreen(ApplicationUI* app)
     : Screen("asset:///ui/pages/Main.qml")
-        , m_app(app)
+        , m_app(app), m_appFullScreen(true)
 {
     Q_ASSERT(m_instance == NULL);
     m_instance = this;
@@ -36,6 +39,12 @@ MainScreen::MainScreen(ApplicationUI* app)
     m_dialogs->setParent(this);
     setContextProperty("_contacts", m_contacts);
     setContextProperty("_chats", m_dialogs);
+
+    QObject::connect(bb::Application::instance(), SIGNAL(thumbnail()), this, SLOT(onAppThumbnail()));
+    QObject::connect(bb::Application::instance(), SIGNAL(invisible()), this, SLOT(onAppThumbnail()));
+    QObject::connect(bb::Application::instance(), SIGNAL(fullscreen()), this, SLOT(onAppFullScreen()));
+
+    QObject::connect(Storage::instance(), SIGNAL(newMessageReceived(const Message*)), this, SLOT(onMessageReceived(const Message*)));
 
     Telegraph::instance()->exportAuthorization();
     initialize();
@@ -210,6 +219,41 @@ void MainScreen::initialize()
 
     User* currentUser = (User*)Storage::instance()->getPeer(TGL_PEER_USER, gTLS->our_id);
     setContextProperty("_currentUser", currentUser);
+}
+
+void MainScreen::onAppFullScreen()
+{
+    m_appFullScreen = true;
+
+    Notification::deleteAllFromInbox();
+    Notification::clearEffectsForAll();
+}
+
+void MainScreen::onAppThumbnail()
+{
+    m_appFullScreen = false;
+}
+
+void MainScreen::onMessageReceived(const Message* message)
+{
+    if (!m_appFullScreen)
+    {
+        Notification* notification = new Notification();
+        notification->setType(NotificationType::Default);
+        notification->setTitle("Telegram");
+        notification->setBody("You have new message from " + message->from()->title());
+
+        /*if (m_appFullScreen)
+        notification->setSoundUrl(QUrl("asset:///sounds/sound_a.wav"));*/
+
+        notification->notify();
+
+        /*if (m_appFullScreen)
+        {
+            notification->deleteFromInbox();
+            notification->clearEffects();
+        }*/
+    }
 }
 
 bool MainScreen::contactExist(const QString& phone)
