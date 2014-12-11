@@ -11,13 +11,16 @@ NavigationPane {
             property variant indicators: []
             
             layout: DockLayout {}
-            topPadding: 220 
-            bottomPadding: 60
             
-            ImageView {
-                id: icon_image
+            Container {
+                topPadding: 220 
                 horizontalAlignment: HorizontalAlignment.Center
-                verticalAlignment: VerticalAlignment.Top  
+                ImageView {
+                    id: icon_image
+                    
+                    verticalAlignment: VerticalAlignment.Top  
+                    touchPropagationMode: TouchPropagationMode.None
+                }
             }
             
             CarouselView {
@@ -49,14 +52,15 @@ NavigationPane {
                     }
                     icon_image.imageSource = visibleItemData ? visibleItemData.icon : ""
                 }
-                
+
                 listItemComponents: ListItemComponent {
                     type: "page"
         
-                    Container {                
-                        minHeight: ListItem.view.layoutFrame.height
+                    Container {               
+                        preferredHeight: ListItem.view.layoutFrame.height
                         preferredWidth: ListItem.view.layoutFrame.width
-                        topPadding: 240
+                        topPadding: 460
+                        
                         
                         Label {
                             text: ListItemData.title
@@ -83,11 +87,11 @@ NavigationPane {
                         }
                     }
                 }
-            }
+            }   
             
             Container {
                 horizontalAlignment: HorizontalAlignment.Center
-                topPadding: 500
+                topPadding: 720
                 Button {
                     text: "Start messaging"
                     onClicked: {
@@ -101,6 +105,7 @@ NavigationPane {
                 id: indicator_container
                 layout: StackLayout { orientation: LayoutOrientation.LeftToRight }
                 
+                bottomPadding: 60
                 horizontalAlignment: HorizontalAlignment.Center
                 verticalAlignment: VerticalAlignment.Bottom
             }

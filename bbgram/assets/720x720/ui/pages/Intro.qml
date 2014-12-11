@@ -11,15 +11,18 @@ NavigationPane {
             property variant indicators: []
             
             layout: DockLayout {}
-            topPadding: 100 
-            bottomPadding: 40
             
-            ImageView {
-                id: icon_image
-                preferredWidth: 200
-                preferredHeight: 200
+            
+            Container {
+                topPadding: 100 
                 horizontalAlignment: HorizontalAlignment.Center
-                verticalAlignment: VerticalAlignment.Top  
+                ImageView {
+                    id: icon_image
+                    preferredWidth: 200
+                    preferredHeight: 200
+                    
+                    verticalAlignment: VerticalAlignment.Top  
+                }
             }
             
             CarouselView {
@@ -58,7 +61,7 @@ NavigationPane {
                     Container {                
                         minHeight: ListItem.view.layoutFrame.height
                         preferredWidth: ListItem.view.layoutFrame.width
-                        topPadding: 240
+                        topPadding: 340
                         
                         Label {
                             text: ListItemData.title
@@ -89,7 +92,7 @@ NavigationPane {
             
             Container {
                 horizontalAlignment: HorizontalAlignment.Center
-                topPadding: 425
+                topPadding: 525
                 Button {
                     text: "Start messaging"
                     onClicked: {
@@ -103,6 +106,7 @@ NavigationPane {
                 id: indicator_container
                 layout: StackLayout { orientation: LayoutOrientation.LeftToRight }
                 
+                bottomPadding: 40
                 horizontalAlignment: HorizontalAlignment.Center
                 verticalAlignment: VerticalAlignment.Bottom
             }
