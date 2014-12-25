@@ -36,9 +36,6 @@ ApplicationUI::ApplicationUI(bb::cascades::Application* app) :
 
     m_storage = new Storage(this);
 
-    QObject::connect(Telegraph::instance(), SIGNAL(mainDCAuthorized()), this, SLOT(onMainAuthorized()));
-    QObject::connect(Telegraph::instance(), SIGNAL(allDCAuthorized()), this, SLOT(onAllAuthorized()));
-
     if (gTLS->DC_working && tgl_signed_dc(gTLS, gTLS->DC_working))
         showMainScreen();
     else
