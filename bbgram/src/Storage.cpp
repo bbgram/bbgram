@@ -783,7 +783,16 @@ void Storage::_updateGroupPhoto(struct tgl_state *TLS, void *callback_extra, int
     {
         groupChat->setPhotoId(newPhotoId);
         if (C->photo.sizes_num != 0)
-                tgl_do_load_photo(gTLS, &C->photo, Storage::_loadPhotoCallback, groupChat);
+        {
+            int min = 0;
+            for (int i = 0; i < C->photo.sizes_num; i++)
+            {
+                if (C->photo.sizes[i].h + C->photo.sizes[i].w < C->photo.sizes[min].h + C->photo.sizes[min].w)
+                    min = i;
+            }
+            tgl_do_load_photo_size(gTLS, &C->photo.sizes[min], Storage::_loadPhotoCallback, groupChat);
+            //tgl_do_load_photo(gTLS, &C->photo, Storage::_loadPhotoCallback, groupChat);
+        }
         else
             groupChat->setPhoto("");
     }
@@ -804,7 +813,16 @@ void Storage::_updateContactPhoto(struct tgl_state *TLS, void *callback_extra, i
     {
         user->setPhotoId(newPhotoId);
         if (U->photo.sizes_num != 0)
-            tgl_do_load_photo(gTLS, &U->photo, Storage::_loadPhotoCallback, user);
+        {
+            int min = 0;
+            for (int i = 0; i < U->photo.sizes_num; i++)
+            {
+                if (U->photo.sizes[i].h + U->photo.sizes[i].w < U->photo.sizes[min].h + U->photo.sizes[min].w)
+                    min = i;
+            }
+            tgl_do_load_photo_size(gTLS, &U->photo.sizes[min], Storage::_loadPhotoCallback, user);
+            //tgl_do_load_photo(gTLS, &U->photo, Storage::_loadPhotoCallback, user);
+        }
         else
             user->setPhoto("");
     }
