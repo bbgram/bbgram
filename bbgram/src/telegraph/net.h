@@ -27,34 +27,34 @@ public slots:
     void onReadyRead();
     void onError(QAbstractSocket::SocketError socketError);
 public:
-    struct tgl_state *TLS;
-    char *host;
-    int port;
-    struct tgl_session *session;
-    struct tgl_dc *dc;
-    struct mtproto_methods *methods;
-
-    int last_connect_time;
-    double last_receive_time;
-    int out_packet_num;
-    conn_state state;
-
-    QByteArray buffer;
+    static struct connection *create(struct tgl_state *TLS, const char *host, int port, struct tgl_session *session, struct tgl_dc *dc, struct mtproto_methods *methods);
+    static int write_out(struct connection *c, const void *data, int len);
+    static int read_in(struct connection *c, void *data, int len);
+    static int read_in_lookup(struct connection *c, void *data, int len);
+    static void flush_out(struct connection *c);
+    static void incr_out_packet_num(struct connection *c);
+    static void free(struct connection *c);
+    static struct tgl_dc *get_dc(struct connection *c);
+    static struct tgl_session *get_session(struct connection *c);
 protected:
+    struct tgl_state *m_TLS;
+    char *m_host;
+    int m_port;
+    struct tgl_session *m_session;
+    struct tgl_dc *m_dc;
+    struct mtproto_methods *m_methods;
+
+    int m_lastConnectTime;
+    double m_lastReceiveTime;
+    int m_outPacketNum;
+    conn_state m_state;
+
+    QByteArray m_buffer;
     QTimer* m_pingTimer;
 
+    void rotatePort();
 protected slots:
     void failConnection();
     void restartConnection();
     void tryRpcRead();
 };
-
-struct connection *connection_create(struct tgl_state *TLS, const char *host, int port, struct tgl_session *session, struct tgl_dc *dc, struct mtproto_methods *methods);
-int connection_write_out(struct connection *c, const void *data, int len);
-int connection_read_in(struct connection *c, void *data, int len);
-int connection_read_in_lookup(struct connection *c, void *data, int len);
-void connection_flush_out(struct connection *c);
-void connection_incr_out_packet_num(struct connection *c);
-void connection_free(struct connection *c);
-struct tgl_dc *connection_get_dc(struct connection *c);
-struct tgl_session *connection_get_session(struct connection *c);

@@ -15,7 +15,6 @@ public:
     static void free(struct tgl_timer *t);
 public slots:
     void onTimeout();
-
 protected:
     struct tgl_state *m_TLS;
     void (*m_callback)(struct tgl_state *, void *);

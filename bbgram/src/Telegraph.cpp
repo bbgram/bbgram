@@ -268,15 +268,15 @@ void Telegraph::start()
     m_timerMethods.free = tgl_timer::free;
 
     memset(&m_netMethods, 0, sizeof(tgl_net_methods));
-    m_netMethods.create_connection = connection_create;
-    m_netMethods.write_out = connection_write_out;
-    m_netMethods.read_in = connection_read_in;
-    m_netMethods.read_in_lookup = connection_read_in_lookup;
-    m_netMethods.flush_out = connection_flush_out;
-    m_netMethods.incr_out_packet_num = connection_incr_out_packet_num;
-    m_netMethods.free = connection_free;
-    m_netMethods.get_dc = connection_get_dc;
-    m_netMethods.get_session = connection_get_session;
+    m_netMethods.create_connection = connection::create;
+    m_netMethods.write_out = connection::write_out;
+    m_netMethods.read_in = connection::read_in;
+    m_netMethods.read_in_lookup = connection::read_in_lookup;
+    m_netMethods.flush_out = connection::flush_out;
+    m_netMethods.incr_out_packet_num = connection::incr_out_packet_num;
+    m_netMethods.free = connection::free;
+    m_netMethods.get_dc = connection::get_dc;
+    m_netMethods.get_session = connection::get_session;
 
     gTLS = tgl_state_alloc();
     //gTLS->test_mode = 1;

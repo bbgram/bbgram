@@ -8,25 +8,9 @@
 
 #define PING_TIMEOUT 10
 
-static void rotate_port (struct connection *c)
-{
-    switch (c->port)
-    {
-        case 443:
-            c->port = 80;
-            break;
-        case 80:
-            c->port = 25;
-            break;
-        case 25:
-            c->port = 443;
-            break;
-    }
-}
-
 void connection::restartConnection()
 {
-    if (last_connect_time == time(0))
+    if (m_lastConnectTime == time(0))
     {
         QTimer::singleShot(10*1000, this, SLOT(restartConnection()));
         return;
@@ -36,15 +20,15 @@ void connection::restartConnection()
 
 void connection::failConnection()
 {
-    if (state == conn_ready)
+    if (m_state == conn_ready)
     {
         m_pingTimer->stop();
     }
 
-    qDebug() << "Lost connection to server... " << host << ":" << port;
-    state = conn_failed;
-    rotate_port (this);
+    qDebug() << "Lost connection to server... " << m_host << ":" << m_port;
+    m_state = conn_failed;
 
+    rotatePort();
     restartConnection();
 }
 
@@ -61,34 +45,34 @@ connection::~connection()
 
 void connection::checkPingTimeout()
 {
-    if (tglt_get_double_time () - last_receive_time > 6 * PING_TIMEOUT)
+    if (tglt_get_double_time () - m_lastReceiveTime > 6 * PING_TIMEOUT)
     {
         //vlogprintf(E_WARNING, "fail connection: reason: ping timeout\n");
         failConnection();
     }
-    else if (tglt_get_double_time () - last_receive_time > 3 * PING_TIMEOUT && state == conn_ready)
+    else if (tglt_get_double_time () - m_lastReceiveTime > 3 * PING_TIMEOUT && m_state == conn_ready)
     {
-        tgl_do_send_ping(TLS, this);
+        tgl_do_send_ping(m_TLS, this);
     }
 }
 
 void connection::onConnected()
 {
     char byte = 0xef;
-    assert (connection_write_out(this, &byte, 1) == 1);
+    assert (connection::write_out(this, &byte, 1) == 1);
 
-    last_receive_time = tglt_get_double_time();
+    m_lastReceiveTime = tglt_get_double_time();
     m_pingTimer->start();
 
-    state = conn_ready;
-    methods->ready(TLS, this);
+    m_state = conn_ready;
+    m_methods->ready(m_TLS, this);
 }
 
 void connection::onDisconnected()
 {
     close();
-    last_connect_time = time(0);
-    connectToHost(host, port);
+    m_lastConnectTime = time(0);
+    connectToHost(m_host, m_port);
 }
 
 
@@ -96,25 +80,25 @@ void connection::tryRpcRead()
 {
     forever
     {
-        if (buffer.length() < 1)
+        if (m_buffer.length() < 1)
             return;
 
         unsigned len = 0;
 
-        assert (connection_read_in_lookup (this, &len, 1) == 1);
+        assert (connection::read_in_lookup (this, &len, 1) == 1);
         if (len >= 1 && len <= 0x7e)
         {
-            if (buffer.length() < (int)(1 + 4 * len))
+            if (m_buffer.length() < (int)(1 + 4 * len))
                 return;
         }
         else
         {
-            if (buffer.length() < 4)
+            if (m_buffer.length() < 4)
                 return;
 
-            assert (connection_read_in_lookup (this, &len, 4) == 4);
+            assert (connection::read_in_lookup (this, &len, 4) == 4);
             len = (len >> 8);
-            if (buffer.length() < (int)(4 + 4 * len))
+            if (m_buffer.length() < (int)(4 + 4 * len))
                 return;
 
             len = 0x7f;
@@ -123,21 +107,21 @@ void connection::tryRpcRead()
         unsigned t = 0;
         if (len >= 1 && len <= 0x7e)
         {
-            assert (connection_read_in (this, &t, 1) == 1);
+            assert (connection::read_in (this, &t, 1) == 1);
             assert (t == len);
             assert (len >= 1);
         }
         else
         {
             assert (len == 0x7f);
-            assert (connection_read_in (this, &len, 4) == 4);
+            assert (connection::read_in (this, &len, 4) == 4);
             len = (len >> 8);
             assert (len >= 1);
         }
         len *= 4;
         int op;
-        assert (connection_read_in_lookup (this, &op, 4) == 4);
-        if (this->methods->execute (TLS, this, op, len) < 0)
+        assert (connection::read_in_lookup (this, &op, 4) == 4);
+        if (m_methods->execute (m_TLS, this, op, len) < 0)
             return;
     }
 }
@@ -145,12 +129,12 @@ void connection::tryRpcRead()
 
 void connection::onReadyRead()
 {
-    last_receive_time = tglt_get_double_time();
+    m_lastReceiveTime = tglt_get_double_time();
     m_pingTimer->stop();
     m_pingTimer->start();
 
     QByteArray bytes = readAll();
-    buffer.append(bytes);
+    m_buffer.append(bytes);
     tryRpcRead();
 }
 
@@ -172,22 +156,22 @@ void connection::onError(QAbstractSocket::SocketError socketError)
  }
 
 
-struct connection *connection_create(struct tgl_state *TLS, const char *host, int port, struct tgl_session *session, struct tgl_dc *dc, struct mtproto_methods *methods)
+struct connection *connection::create(struct tgl_state *TLS, const char *host, int port, struct tgl_session *session, struct tgl_dc *dc, struct mtproto_methods *methods)
 {
     connection* conn = new connection();
     conn->setParent(Telegraph::instance());
 
-    conn->TLS = TLS;
-    conn->host = (char*)malloc(strlen(host)+1);
-    strcpy(conn->host, host);
-    conn->port = port;
-    conn->session = session;
-    conn->dc = dc;
-    conn->methods = methods;
+    conn->m_TLS = TLS;
+    conn->m_host = (char*)malloc(strlen(host)+1);
+    strcpy(conn->m_host, host);
+    conn->m_port = port;
+    conn->m_session = session;
+    conn->m_dc = dc;
+    conn->m_methods = methods;
 
-    conn->last_receive_time = tglt_get_double_time();
-    conn->out_packet_num = 0;
-    conn-> state = conn_connecting;
+    conn->m_lastReceiveTime = tglt_get_double_time();
+    conn->m_outPacketNum = 0;
+    conn->m_state = conn_connecting;
 
     QObject::connect(conn, SIGNAL(connected()), conn, SLOT(onConnected()));
     QObject::connect(conn, SIGNAL(disconnected()), conn, SLOT(onDisconnected()));
@@ -195,69 +179,84 @@ struct connection *connection_create(struct tgl_state *TLS, const char *host, in
     QObject::connect(conn, SIGNAL(error(QAbstractSocket::SocketError)),
             conn, SLOT(onError(QAbstractSocket::SocketError)));
 
-    conn->last_connect_time = time(0);
+    conn->m_lastConnectTime = time(0);
     conn->connectToHost(host, port);
 
     return conn;
 }
 
-int connection_write_out(struct connection *c, const void *data, int len)
+int connection::write_out(struct connection *conn, const void *data, int len)
 {
     //if (((QAbstractSocket*)c)->state() != QAbstractSocket::ConnectedState)
     //    return 0;
 
-    qint64 written = c->write((const char*)data, (qint64)len);
+    qint64 written = conn->write((const char*)data, (qint64)len);
     return (int)written;
 }
 
 
-int connection_read_in(struct connection *c, void *data, int len)
+int connection::read_in(struct connection *conn, void *data, int len)
 {
-    if (!len || !c->buffer.length())
+    if (!len || !conn->m_buffer.length())
         return 0;
     assert (len > 0);
-    if (len > c->buffer.length())
-        len = c->buffer.length();
-    memcpy(data, c->buffer.data(), len);
-    c->buffer.remove(0, len);
+    if (len > conn->m_buffer.length())
+        len = conn->m_buffer.length();
+    memcpy(data, conn->m_buffer.data(), len);
+    conn->m_buffer.remove(0, len);
     return len;
 }
 
-int connection_read_in_lookup(struct connection *c, void *data, int len)
+int connection::read_in_lookup(struct connection *conn, void *data, int len)
 {
-    if (!len || !c->buffer.length())
+    if (!len || !conn->m_buffer.length())
         return 0;
     assert (len > 0);
-    if (len > c->buffer.length())
-      len = c->buffer.length();
+    if (len > conn->m_buffer.length())
+      len = conn->m_buffer.length();
 
-    memcpy(data, c->buffer.data(), len);
+    memcpy(data, conn->m_buffer.data(), len);
     return len;
 }
 
-void connection_flush_out(struct connection *c)
+void connection::flush_out(struct connection *conn)
 {
-    c->flush();
+    conn->flush();
 }
 
-void connection_incr_out_packet_num(struct connection *c)
+void connection::incr_out_packet_num(struct connection *conn)
 {
-    c->out_packet_num++;
+    conn->m_outPacketNum++;
 }
 
-void connection_free(struct connection *c)
+void connection::free(struct connection *conn)
 {
-    free(c->host);
-    delete c;
+    ::free(conn->m_host);
+    delete conn;
 }
 
-struct tgl_dc *connection_get_dc(struct connection *c)
+struct tgl_dc *connection::get_dc(struct connection *conn)
 {
-    return c->dc;
+    return conn->m_dc;
 }
 
-struct tgl_session *connection_get_session(struct connection *c)
+struct tgl_session *connection::get_session(struct connection *conn)
 {
-    return c->session;
+    return conn->m_session;
 }
 
+void connection::rotatePort()
+{
+    switch (m_port)
+    {
+        case 443:
+            m_port = 80;
+            break;
+        case 80:
+            m_port = 25;
+            break;
+        case 25:
+            m_port = 443;
+            break;
+    }
+}
