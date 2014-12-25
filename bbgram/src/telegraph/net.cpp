@@ -70,6 +70,7 @@ void connection::onConnected()
 
 void connection::onDisconnected()
 {
+    m_methods->close(m_TLS, this);
     close();
     m_lastConnectTime = time(0);
     connectToHost(m_host, m_port);
