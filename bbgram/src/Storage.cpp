@@ -201,14 +201,19 @@ void Storage::deleteMessage(long long id)
 
 void Storage::addContact(User* contact)
 {
-    QSqlDatabase &db = m_instance->m_db;
-    QSqlQuery query(db);
-    query.prepare("REPLACE INTO contacts(user_id) VALUES(:id)");
-    query.bindValue(":id", contact->id());
-    query.exec();
+    if (m_contacts->indexOf(contact) == -1 && contact->id() != gTLS->our_id)
+    {
+        QSqlDatabase &db = m_instance->m_db;
+        QSqlQuery query(db);
+        query.prepare("REPLACE INTO contacts(user_id) VALUES(:id)");
+        query.bindValue(":id", contact->id());
+        query.exec();
 
-    if (m_contacts->indexOf(contact) == -1)
         m_contacts->append(contact);
+
+        if (m_updatedPeers.indexOf(contact) == -1)
+            m_updatedPeers.append(contact);
+    }
 }
 
 void Storage::deleteContact(User* contact)
@@ -301,6 +306,9 @@ void Storage::userUpdateHandler(struct tgl_state *TLS, struct tgl_user *U, unsig
     qDebug() << "update_user_handler user=" << QString::fromUtf8(U->first_name) << " flags=" << flags << str;*/
 
     User* user = (User*)m_instance->getPeer(TGL_PEER_USER, U->id.id);
+
+    if (flags & TGL_UPDATE_CREATED)
+        m_instance->addContact(user);
 
     if (flags & TGL_UPDATE_PHONE)
         user->setPhone(QString::fromUtf8(U->phone));
