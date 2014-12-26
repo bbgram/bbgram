@@ -346,6 +346,7 @@ void Storage::saveUpdatesToDatabase()
 
     if (m_updatedPeers.size() > 0)
     {
+        db.transaction();
         QSqlQuery query(db);
         query.prepare("REPLACE INTO peers(id, data) VALUES(:id, :data)");
 
@@ -359,6 +360,7 @@ void Storage::saveUpdatesToDatabase()
             query.exec();
         }
         m_updatedPeers.clear();
+        db.commit();
     }
 }
 
@@ -551,6 +553,7 @@ void Storage::_getDialogsCallback(struct tgl_state *TLS, void *callback_extra, i
     while (query.next())
         dialogs.append(query.value(0).toLongLong());
 
+    db.transaction();
     query.prepare("REPLACE INTO dialogs(id) VALUES(:id)");
     for (int i = 0; i < size; i++)
     {
@@ -629,6 +632,7 @@ void Storage::_getDialogsCallback(struct tgl_state *TLS, void *callback_extra, i
             }
         }
     }
+    db.commit();
 }
 
 void Storage::_getHistoryCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[])
@@ -648,6 +652,9 @@ void Storage::_getHistoryCallback(struct tgl_state *TLS, void *callback_extra, i
             if (markers[i] >= begin && markers[i] <= end)
                 markers.removeAt(i);
 
+        QSqlDatabase &db = m_instance->m_db;
+        db.transaction();
+
         GroupDataModel* messages = peer->m_messages;
         for (int i = 0; i < size; i++)
         {
@@ -662,6 +669,7 @@ void Storage::_getHistoryCallback(struct tgl_state *TLS, void *callback_extra, i
             messages->insert(message);
             idx = messages->findExact(message);
         }
+        db.commit();
 
         if (insert_marker)
         {
@@ -704,6 +712,7 @@ void Storage::_deleteHistoryCallback(struct tgl_state *TLS, void *callback_extra
         Peer* peer = (Peer*)callback_extra;
 
         QSqlDatabase &db = m_instance->m_db;
+        db.transaction();
         QSqlQuery query(db);
         query.prepare("DELETE FROM messages WHERE to_id=:to_id");
         query.bindValue(":to_id", peer->id());
@@ -720,6 +729,7 @@ void Storage::_deleteHistoryCallback(struct tgl_state *TLS, void *callback_extra
             msg->setParent(0);//delete analogue
         }
         messages->clear();
+        db.commit();
     }
 }
 
