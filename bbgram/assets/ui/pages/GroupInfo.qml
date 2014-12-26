@@ -118,7 +118,7 @@ Page {
                     checked: !muted
                     onCheckedChanged: {
                         if (muted == checked)
-                            user.mute(!checked)
+                            chat.mute(!checked)
                     }
                 }
                 SettingsRow {
