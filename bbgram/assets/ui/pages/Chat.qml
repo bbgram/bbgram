@@ -239,6 +239,7 @@ Page {
                 horizontalAlignment: HorizontalAlignment.Fill
                 verticalAlignment: VerticalAlignment.Fill
                 imageSource: "asset:///images/background_hd.jpg"
+                loadEffect: ImageViewLoadEffect.DefaultDeferred
                 scalingMethod: ScalingMethod.AspectFill
             }
             MessageList {
