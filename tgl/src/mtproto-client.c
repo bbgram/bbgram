@@ -458,6 +458,8 @@ static int check_prime (struct tgl_state *TLS, BIGNUM *p) {
 }
 
 int tglmp_check_DH_params (struct tgl_state *TLS, BIGNUM *p, int g) {
+    return 0;
+    //@
   if (g < 2 || g > 7) { return -1; }
   if (BN_num_bits (p) != 2048) { return -1; }
   BIGNUM t;
