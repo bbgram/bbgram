@@ -478,7 +478,7 @@ enum tgl_notify_peer_type {
     tgl_notify_all
 };
 
-struct tgl_notify_peer {
+struct tgl_notify_peer_t {
     enum tgl_notify_peer_type type;
     union {
         tgl_peer_id_t peer;

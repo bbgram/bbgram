@@ -413,7 +413,7 @@ void tglu_work_update (struct tgl_state *TLS, struct connection *c, long long ms
     break;
   case CODE_update_notify_settings:
     {
-        struct tgl_notify_peer notify_peer;
+        struct tgl_notify_peer_t notify_peer;
         memset(&notify_peer, 0, sizeof(tgl_notify_peer));
 
         int magic = fetch_int ();

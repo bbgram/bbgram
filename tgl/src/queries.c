@@ -4286,7 +4286,7 @@ static struct query_methods update_notify_settings_methods  = {
   .type = TYPE_TO_PARAM(bool)
 };
 
-void tgl_do_update_notify_settings (struct tgl_state *TLS, struct tgl_notify_peer *notify_peer, int mute_until, char* sound, int show_previews, int events_mask, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success), void *callback_extra) {
+void tgl_do_update_notify_settings (struct tgl_state *TLS, struct tgl_notify_peer_t *notify_peer, int mute_until, char* sound, int show_previews, int events_mask, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success), void *callback_extra) {
     clear_packet ();
     tgl_do_insert_header (TLS);
     out_int (CODE_account_update_notify_settings);
@@ -4323,7 +4323,7 @@ void tgl_do_update_notify_settings (struct tgl_state *TLS, struct tgl_notify_pee
     out_int(show_previews ? CODE_bool_true : CODE_bool_false);
     out_int(events_mask);
 
-    tglq_send_query (TLS, TLS->DC_working, packet_ptr - packet_buffer, packet_buffer, &help_get_config_methods, 0, callback, callback_extra);
+    tglq_send_query (TLS, TLS->DC_working, packet_ptr - packet_buffer, packet_buffer, &update_notify_settings_methods, 0, callback, callback_extra);
 }
 
 void tgl_do_get_history_maxid (struct tgl_state *TLS, tgl_peer_id_t id, int offset, int max_id, int limit, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]), void *callback_extra)
