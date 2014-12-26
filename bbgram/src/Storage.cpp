@@ -7,13 +7,14 @@
 
 Storage* Storage::m_instance = 0;
 
+const int MAX_PHOTOS_TO_LOAD = 5;
 const int HISTORY_LIMIT = 20;
 const char* DATABASE_NAME = "data/storage.db";
 
 using namespace bb::cascades;
 
 Storage::Storage(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), m_photosInQuoue(0)
 {
     m_instance = this;
 
@@ -262,12 +263,47 @@ void Storage::deleteChat(Peer* peer)
 
 void Storage::_loadPhotoCallback(struct tgl_state *TLS, void *callback_extra, int success, char *filename)
 {
+    m_instance->_PhotoLoaded();
     if (!success)
         return;
 
     Peer* peer = (Peer*)callback_extra;
     peer->setPhoto(filename);
     m_instance->markPeerDirty(peer);
+}
+
+void Storage::_AsyncPhotoLoad(Peer* peer)
+{
+    m_photosToLoad.append(peer);
+
+    _LoadNextPhoto();
+}
+
+void Storage::_LoadNextPhoto()
+{
+    if (m_photosToLoad.isEmpty() || m_photosInQuoue >= MAX_PHOTOS_TO_LOAD)
+        return;
+
+    m_photosInQuoue++;
+
+    Peer* peer = m_photosToLoad.first();
+    m_photosToLoad.removeFirst();
+
+    switch(peer->type())
+    {
+        case TGL_PEER_USER:
+            tgl_do_get_user_info(gTLS, {TGL_PEER_USER, peer->id()}, 0, _updateContactPhoto, NULL);
+            break;
+        case TGL_PEER_CHAT:
+            tgl_do_get_chat_info(gTLS, {TGL_PEER_CHAT, peer->id()}, 0, _updateGroupPhoto, NULL);
+            break;
+    }
+}
+
+void Storage::_PhotoLoaded()
+{
+    m_photosInQuoue--;
+    _LoadNextPhoto();
 }
 
 void Storage::userUpdateHandler(struct tgl_state *TLS, struct tgl_user *U, unsigned flags)
@@ -323,7 +359,8 @@ void Storage::userUpdateHandler(struct tgl_state *TLS, struct tgl_user *U, unsig
     {
         long long newPhotoId = (long long)U->photo_big.local_id << 32 | U->photo_small.local_id;
         if (user->getPhotoId() != newPhotoId)
-            tgl_do_get_user_info(gTLS, {user->type(), user->id()}, 0, _updateContactPhoto, NULL);
+            m_instance->_AsyncPhotoLoad(user);
+            //tgl_do_get_user_info(gTLS, {user->type(), user->id()}, 0, _updateContactPhoto, NULL);
 
         if ((flags & TGL_UPDATE_PHOTO) == flags)
             return;
@@ -501,7 +538,8 @@ void Storage::updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsig
     {
         long long newPhotoId = (long long)C->photo_big.local_id << 32 | C->photo_small.local_id;
         if (groupChat->getPhotoId() != newPhotoId)
-            tgl_do_get_chat_info(gTLS, {groupChat->type(), groupChat->id()}, 0, _updateGroupPhoto, NULL);
+            m_instance->_AsyncPhotoLoad(groupChat);
+            //tgl_do_get_chat_info(gTLS, {groupChat->type(), groupChat->id()}, 0, _updateGroupPhoto, NULL);
 
         if ((flags & TGL_UPDATE_PHOTO) == flags)
             return;
@@ -769,7 +807,10 @@ void Storage::_deleteHistoryCallback(struct tgl_state *TLS, void *callback_extra
 void Storage::_updateGroupPhoto(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_chat *C)
 {
     if (!success)
+    {
+        m_instance->_PhotoLoaded();
         return;
+    }
 
     GroupChat* groupChat = (GroupChat*)m_instance->getPeer(TGL_PEER_CHAT, C->id.id);
 
@@ -789,8 +830,13 @@ void Storage::_updateGroupPhoto(struct tgl_state *TLS, void *callback_extra, int
             //tgl_do_load_photo(gTLS, &C->photo, Storage::_loadPhotoCallback, groupChat);
         }
         else
+        {
+            m_instance->_PhotoLoaded();
             groupChat->setPhoto("");
+        }
     }
+    else
+        m_instance->_PhotoLoaded();
 
     m_instance->markPeerDirty(groupChat);
 }
@@ -798,7 +844,10 @@ void Storage::_updateGroupPhoto(struct tgl_state *TLS, void *callback_extra, int
 void Storage::_updateContactPhoto(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *U)
 {
     if (!success)
+    {
+        m_instance->_PhotoLoaded();
         return;
+    }
 
     User* user = (User*)m_instance->getPeer(TGL_PEER_USER, U->id.id);
 
@@ -818,8 +867,13 @@ void Storage::_updateContactPhoto(struct tgl_state *TLS, void *callback_extra, i
             //tgl_do_load_photo(gTLS, &U->photo, Storage::_loadPhotoCallback, user);
         }
         else
+        {
+            m_instance->_PhotoLoaded();
             user->setPhoto("");
+        }
     }
+    else
+        m_instance->_PhotoLoaded();
 
     m_instance->markPeerDirty(user);
 }

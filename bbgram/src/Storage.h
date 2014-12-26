@@ -60,7 +60,9 @@ protected:
     QMap<long long, Message*>               m_messages;
 
     QList<Peer*>    m_updatedPeers;
+    QList<Peer*>    m_photosToLoad;
     QTimer*         m_saveTimer;
+    int             m_photosInQuoue;
 
     static void _getDialogsCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, tgl_peer_id_t peers[], int last_msg_id[], int unread_count[]);
     static void _getHistoryCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]);
@@ -70,4 +72,8 @@ protected:
     static void _updateContactPhoto(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *U);
     static void _searchMessageCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]);
     static void _loadPhotoCallback(struct tgl_state *TLS, void *callback_extra, int success, char *filename);
+
+    void _AsyncPhotoLoad(Peer* peer);
+    void _LoadNextPhoto();
+    void _PhotoLoaded();
 };
