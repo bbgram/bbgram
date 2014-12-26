@@ -56,6 +56,7 @@ Container {
                     ControlDelegate {
                         sourceComponent: senderAvatarCompDef
                         delegateActive: author != null
+                        minWidth: author != null ? 90 : 0
                     }
                     Container { // body
                         layout: StackLayout {
