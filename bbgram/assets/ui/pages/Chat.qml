@@ -76,11 +76,20 @@ Page {
                 }
                 
                 ImageView {
+                    id: avatar
                     image: peer ? peer.photo : null
                     //imageSource: "asset:///images/placeholders/user_placeholder_purple.png"
                     scalingMethod: ScalingMethod.AspectFit
-                    maxWidth: 110
                 }
+                
+                attachedObjects: [
+                    LayoutUpdateHandler {
+                        onLayoutFrameChanged: {
+                            avatar.maxWidth = layoutFrame.height
+                            avatar.maxHeight = layoutFrame.height
+                        }
+                    }
+                ]
                 
                 Container {
                     layout: StackLayout {
