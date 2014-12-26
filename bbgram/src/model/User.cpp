@@ -4,7 +4,7 @@
 using namespace bb::cascades;
 
 User::User(int id)
-    : Chat(TGL_PEER_USER, id), m_online(false), m_typingStatus(tgl_typing_none), m_photoId(0)
+    : Peer(TGL_PEER_USER, id), m_online(false), m_typingStatus(tgl_typing_none), m_photoId(0)
 {
     setPhoto("");
 
@@ -19,7 +19,7 @@ User::~User()
 
 void User::load(const QVariantMap& map)
 {
-    Chat::load(map);
+    Peer::load(map);
 
     QVariantMap::const_iterator it;
 
@@ -39,17 +39,21 @@ void User::load(const QVariantMap& map)
     it = map.find("photoId");
     if (it != map.end())
         setPhotoId(it.value().toLongLong());
+    it = map.find("lastSeen");
+   if (it != map.end())
+       setStatus(0, QDateTime::fromTime_t(it.value().toUInt()));
 }
 
 void User::save(QVariantMap& map) const
 {
-    Chat::save(map);
+    Peer::save(map);
 
     map.insert("phone", m_phone);
     map.insert("firstName", m_firstName);
     map.insert("lastName", m_lastName);
     map.insert("photo", m_photoFilename);
     map.insert("photoId", m_photoId);
+    map.insert("lastSeen", m_lastSeen.toTime_t());
 }
 
 int User::id() const

@@ -235,7 +235,7 @@ NavigationPane {
                 
                 function openChat(chat) {
                     var page = chatPageDef.createObject()//this, {"dialog": chat})
-                    page.chat = chat
+                    page.peer = chat
                     navigationPane.push(page)
                 }
                 

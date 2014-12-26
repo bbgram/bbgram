@@ -3,9 +3,9 @@
 #include <QMap>
 #include <bb/cascades/Image>
 
-#include "Chat.h"
+#include "Peer.h"
 
-class User : public Chat
+class User : public Peer
 {
     Q_OBJECT
 

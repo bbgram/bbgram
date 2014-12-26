@@ -14,7 +14,7 @@ class ChatList : public QObject
     Q_PROPERTY(int filter READ filter NOTIFY filterChanged)
     //Q_PROPERTY(int telegramContactsCount READ telegramContactsCount NOTIFY contentUpdated)
 public:
-    ChatList(bb::cascades::QListDataModel<Chat*>* dialogs);
+    ChatList(bb::cascades::QListDataModel<Peer*>* dialogs);
     ~ChatList();
 
     bb::cascades::GroupDataModel* model() const;
@@ -30,6 +30,6 @@ protected:
     bb::cascades::GroupDataModel*           m_model;
     int                                     m_filter;
     QString                                 m_searchText;
-    bb::cascades::QListDataModel<Chat*>*    m_dialogs;
+    bb::cascades::QListDataModel<Peer*>*    m_dialogs;
 };
 

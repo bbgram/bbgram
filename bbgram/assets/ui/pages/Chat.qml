@@ -7,13 +7,14 @@ import "chats"
 
 Page {
     objectName: "Chat"
-    property Chat chat: null
+    id: me
+    property Peer peer: null
     
     function messageAdded(indexPath) {
         if (indexPath.length != 0 && indexPath[0] == 0)
             messageList.scrollToPosition(ScrollPosition.Beginning, ScrollAnimation.None);
         if (!messageList.dataModel.data(indexPath).our)
-            _owner.markRead(chat);
+            _owner.markRead(peer);
     }
     
     function onPop() {
@@ -21,30 +22,30 @@ Page {
     }
     
     function onPush() {
-        _owner.markRead(chat);
+        _owner.markRead(peer);
         
         messageList.dataModel.itemAdded.connect(messageAdded)
     }
     
     function sendMessage() {
-        _owner.sendMessage(chat, message.text)
+        _owner.sendMessage(peer, message.text)
         message.text = ""
     }
     
     function clearHistory() {
-        _owner.deleteHistory(chat)
+        _owner.deleteHistory(peer)
     }
     
     function about() {
-        if (chat.type == 1) {// user
+        if (peer.type == 1) {// user
             var page = contactPageDef.createObject()
-            page.user = chat
+            page.user = peer
             var navigationPane = Application.scene.activeTab.content 
             navigationPane.push(page)
         }
-        else if (chat.type == 2) { // group
+        else if (peer.type == 2) { // group
             var page = groupPageDef.createObject()
-            page.chat = chat
+            page.chat = peer
             var navigationPane = Application.scene.activeTab.content 
             navigationPane.push(page)
         }
@@ -55,7 +56,7 @@ Page {
         sheet.userSelected.disconnect(addParticipant)
         
         if (user)
-            _owner.addUserToGroup(chat, user)
+            _owner.addUserToGroup(peer, user)
     }
     
     titleBar: TitleBar {
@@ -75,7 +76,7 @@ Page {
                 }
                 
                 ImageView {
-                    image: chat ? chat.photo : null
+                    image: peer ? peer.photo : null
                     //imageSource: "asset:///images/placeholders/user_placeholder_purple.png"
                     scalingMethod: ScalingMethod.AspectFit
                     maxWidth: 110
@@ -87,7 +88,7 @@ Page {
                     verticalAlignment: VerticalAlignment.Center
                     leftPadding: 20
                     Label {
-                        text: chat ? chat.title : ""
+                        text: peer ? peer.title : ""
                         //text: "Anastasiya Shy"
                         textStyle.base: titleTextStyle.style
                         bottomMargin: 0
@@ -95,14 +96,14 @@ Page {
                     }
                     Label {
                         text: 
-                        if(chat) {
-                            if (chat.type == 1)
-                                chat.online ? "online" : "last seen " + chat.lastSeenFormatted
-                            else if (chat.type == 2) {
-                                var n = chat.members.size();
+                        if (peer) {
+                            if (peer.type == 1)
+                                peer.online ? "online" : "last seen " + peer.lastSeenFormatted
+                            else if (peer.type == 2) {
+                                var n = peer.members.size();
                                 var o = 0;
                                 for (var i = 0; i < n; i++) {
-                                    var user = chat.members.data([i])
+                                    var user = peer.members.data([i])
                                     if (user.online)
                                         o++
                                 }
@@ -140,7 +141,7 @@ Page {
                     mode: FilePickerMode.Picker
                     directories : ["/accounts/1000/shared/"]
                     onFileSelected : {
-                        _owner.sendPhoto(chat, selectedFiles[0]);
+                        _owner.sendPhoto(peer, selectedFiles[0]);
                     }
                 }
             ]
@@ -162,7 +163,7 @@ Page {
             imageSource: "asset:///images/menu_phone.png"
             ActionBar.placement: ActionBarPlacement.InOverflow
             onTriggered: {
-                _owner.dialANumber("+" + chat.phone)
+                _owner.dialANumber("+" + peer.phone)
             }
         },
         ActionItem {
@@ -214,14 +215,14 @@ Page {
         }
     ]
     
-    onChatChanged: {
-        if (!chat)
+    onPeerChanged: {
+        if (!peer)
             return
-        if (chat.type != 1)    // User
+        if (peer.type != 1)    // User
             removeAction(callAction)
-        if (chat.type != 2)  // Group
+        if (peer.type != 2)  // Group
             removeAction(addParticipantAction)
-        if (chat.type == 2) {
+        if (peer.type == 2) {
             clearHistoryAction.title = "Clear Conversation"
             aboutAction.imageSource = "asset:///images/menu_group.png"
         }
@@ -242,7 +243,7 @@ Page {
             }
             MessageList {
                 id: messageList
-                peer: chat
+                peer: me.peer
             }
         }
         Container {

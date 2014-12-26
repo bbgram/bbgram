@@ -136,7 +136,7 @@ void ContactList::updateContent()
 
         while(!it.empty())
         {
-            Chat* contact =  (Chat*)m_model->data(it).value<QObject*>();
+            Peer* contact =  (Peer*)m_model->data(it).value<QObject*>();
             bool found = false;
             if (contact)
             {

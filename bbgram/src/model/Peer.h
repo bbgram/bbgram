@@ -5,7 +5,7 @@
 
 #include "Message.h"
 
-class Chat : public QObject
+class Peer : public QObject
 {
     Q_OBJECT
 
@@ -18,8 +18,8 @@ class Chat : public QObject
     Q_PROPERTY(Message* lastMessage READ lastMessage NOTIFY messagesChanged)
     Q_PROPERTY(QDateTime lastMessageDate READ lastMessageDate NOTIFY messagesChanged)
 public:
-    Chat(int type = 0, int id = 0);
-    ~Chat();
+    Peer(int type = 0, int id = 0);
+    ~Peer();
 
     int type() const;
     int id() const;
@@ -42,6 +42,10 @@ public:
     void deleteMessage(Message* message);
 
     Q_INVOKABLE void loadAdditionalHistory();
+
+    virtual void setPhoto(const QString &) {}
+    virtual void setPhotoId(long long) {}
+    virtual long long getPhotoId() const { return 0; }
 signals:
     void titleChanged();
     void statusChanged();
@@ -58,4 +62,4 @@ protected:
     bool        m_loadingHistory;
 };
 
-Q_DECLARE_METATYPE(Chat*);
+Q_DECLARE_METATYPE(Peer*);

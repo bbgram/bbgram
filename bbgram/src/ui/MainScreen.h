@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Screen.h"
-#include "../model/Chat.h"
+#include "../model/Peer.h"
 #include "../model/ContactList.h"
 #include "../model/ChatList.h"
 #include "../model/User.h"
@@ -22,16 +22,16 @@ public:
     Q_INVOKABLE void renameContact(const QString& firstName, const QString& lastName, const QString& phone);
     Q_INVOKABLE void deleteContact(User* contact);
     Q_INVOKABLE void setProfilePhoto(const QString& fileName);
-    Q_INVOKABLE void sendMessage(Chat* chat, const QString& message);
-    Q_INVOKABLE void sendPhoto(Chat* chat, const QString& fileName);
+    Q_INVOKABLE void sendMessage(Peer* peer, const QString& message);
+    Q_INVOKABLE void sendPhoto(Peer* peer, const QString& fileName);
     Q_INVOKABLE void deleteMessage(long long id);
-    Q_INVOKABLE void markRead(Chat* chat);
+    Q_INVOKABLE void markRead(Peer* peer);
     Q_INVOKABLE void createGroup(QVariantList users, const QString& title, const QString& chatPhoto);
     Q_INVOKABLE void setGroupName(GroupChat* group, const QString& title);
     Q_INVOKABLE void addUserToGroup(GroupChat* group, User* user);
     Q_INVOKABLE void deleteMemberFromGroup(GroupChat* group, User* member);
-    Q_INVOKABLE void deleteHistory(Chat* chat);
-    Q_INVOKABLE void deleteChat(Chat* chat);
+    Q_INVOKABLE void deleteHistory(Peer* peer);
+    Q_INVOKABLE void deleteChat(Peer* peer);
     Q_INVOKABLE void openFAQ();
     Q_INVOKABLE void sendInviteText(const QString& recipient, const QString& text);
     Q_INVOKABLE void dialANumber(const QString& number);

@@ -3,7 +3,7 @@
 
 using namespace bb::cascades;
 
-ChatList::ChatList(QListDataModel<Chat*>* dialogs)
+ChatList::ChatList(QListDataModel<Peer*>* dialogs)
     : m_filter(3), m_dialogs(dialogs)
 {
     m_model = new GroupDataModel(this);
@@ -59,7 +59,7 @@ void ChatList::updateContent()
 
         while(!it.empty())
         {
-            Chat* contact =  (Chat*)m_model->data(it).value<QObject*>();
+            Peer* contact =  (Peer*)m_model->data(it).value<QObject*>();
             if (contact->title().indexOf(m_searchText) == -1)
             {
                 QVariantList toRemove = it;

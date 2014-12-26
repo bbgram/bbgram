@@ -5,10 +5,10 @@ TabbedPane {
     showTabsOnActionBar: true
     activeTab: chatsTab
 
-    function openChat(chat) {
+    function openChat(peer) {
         activeTab = chatsTab
         var page = chatPageDef.createObject()
-        page.chat = chat
+        page.peer = peer
         activeTab.content.push(page)
     }
     

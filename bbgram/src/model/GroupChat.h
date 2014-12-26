@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Chat.h"
+#include "Peer.h"
 #include "User.h"
 
 #include <bb/cascades/DataModel>
 #include <bb/cascades/QListDataModel>
 
-class GroupChat : public Chat
+class GroupChat : public Peer
 {
     Q_OBJECT
 

@@ -5,7 +5,7 @@
 using namespace bb::cascades;
 
 GroupChat::GroupChat(int id)
-    : Chat(TGL_PEER_CHAT, id), m_photoId(0), m_adminId(0)
+    : Peer(TGL_PEER_CHAT, id), m_photoId(0), m_adminId(0)
 {
     setPhoto("");
 
@@ -21,7 +21,7 @@ GroupChat::~GroupChat()
 
 void GroupChat::load(const QVariantMap& map)
 {
-    Chat::load(map);
+    Peer::load(map);
 
     QVariantMap::const_iterator it;
 
@@ -45,7 +45,7 @@ void GroupChat::load(const QVariantMap& map)
 
 void GroupChat::save(QVariantMap& map) const
 {
-    Chat::save(map);
+    Peer::save(map);
 
     map.insert("title", m_title);
     map.insert("adminId", m_adminId);

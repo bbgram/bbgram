@@ -84,19 +84,15 @@ void MainScreen::setProfilePhoto(const QString& fileName)
     tgl_do_set_profile_photo(gTLS, fileName.toUtf8().data(), NULL, NULL);
 }
 
-void MainScreen::sendMessage(Chat* chat, const QString& message)
+void MainScreen::sendMessage(Peer* peer, const QString& message)
 {
-    tgl_peer_id_t peer;
-    peer.type = chat->type();
-    peer.id = chat->id();
     QByteArray bytes = message.toUtf8();
-    tgl_do_send_message(gTLS, peer, (const char*)bytes.data(), bytes.length(), 0, 0);
+    tgl_do_send_message(gTLS, {peer->type(), peer->id()}, (const char*)bytes.data(), bytes.length(), 0, 0);
 }
 
-void MainScreen::sendPhoto(Chat* chat, const QString& fileName)
+void MainScreen::sendPhoto(Peer* peer, const QString& fileName)
 {
-    tgl_peer_id_t peer = {chat->type(), chat->id()};
-    tgl_do_send_photo(gTLS, tgl_message_media_photo, peer, fileName.toUtf8().data(), NULL, NULL);
+    tgl_do_send_photo(gTLS, tgl_message_media_photo, {peer->type(), peer->id()}, fileName.toUtf8().data(), NULL, NULL);
 }
 
 void MainScreen::deleteMessage(long long id)
@@ -104,12 +100,9 @@ void MainScreen::deleteMessage(long long id)
     Storage::instance()->deleteMessage(id);
 }
 
-void MainScreen::markRead(Chat* chat)
+void MainScreen::markRead(Peer* peer)
 {
-    tgl_peer_id_t peer;
-    peer.type = chat->type();
-    peer.id = chat->id();
-    tgl_do_mark_read(gTLS, peer, 0, 0);
+    tgl_do_mark_read(gTLS, {peer->type(), peer->id()}, 0, 0);
 }
 
 void MainScreen::createGroup(QVariantList users, const QString& title, const QString& chatPhoto)
@@ -146,22 +139,22 @@ void MainScreen::deleteMemberFromGroup(GroupChat* group, User* member)
     tgl_do_del_user_from_chat(gTLS, {group->type(), group->id()}, {member->type(), member->id()}, MainScreen::_deleteMemberCallback, member);
 }
 
-void MainScreen::deleteHistory(Chat* chat)
+void MainScreen::deleteHistory(Peer* peer)
 {
-    Storage::instance()->deleteHistory(chat);
+    Storage::instance()->deleteHistory(peer);
 }
 
-void MainScreen::deleteChat(Chat* chat)
+void MainScreen::deleteChat(Peer* peer)
 {
     User* currentUser = (User*)Storage::instance()->getPeer(TGL_PEER_USER, gTLS->our_id);
-    if (chat->type() == TGL_PEER_CHAT)
+    if (peer->type() == TGL_PEER_CHAT)
     {
-        tgl_do_del_user_from_chat(gTLS, {chat->type(), chat->id()}, {currentUser->type(), currentUser->id()}, MainScreen::_deleteSelfFromGroupCallback, chat);
+        tgl_do_del_user_from_chat(gTLS, {peer->type(), peer->id()}, {currentUser->type(), currentUser->id()}, MainScreen::_deleteSelfFromGroupCallback, peer);
     }
     else
     {
-        Storage::instance()->deleteHistory(chat);
-        Storage::instance()->deleteChat(chat);
+        Storage::instance()->deleteHistory(peer);
+        Storage::instance()->deleteChat(peer);
     }
 }
 
@@ -327,8 +320,8 @@ void MainScreen::_deleteSelfFromGroupCallback(struct tgl_state *TLS, void *callb
         GroupChat* groupChat = (GroupChat*)Storage::instance()->getPeer(TGL_PEER_CHAT, M->to_id.id);
         groupChat->deleteMember(currentUser);
     }
-    Storage::instance()->deleteHistory((Chat*)callback_extra);
-    Storage::instance()->deleteChat((Chat*)callback_extra);
+    Storage::instance()->deleteHistory((Peer*)callback_extra);
+    Storage::instance()->deleteChat((Peer*)callback_extra);
 }
 
 void MainScreen::_contactAddHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[])

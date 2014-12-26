@@ -3,7 +3,7 @@
 #include <QtSql>
 #include <bb/cascades/QListDataModel>
 
-#include "model/Chat.h"
+#include "model/Peer.h"
 #include "model/GroupChat.h"
 #include "model/Message.h"
 #include "model/User.h"
@@ -26,23 +26,23 @@ public:
     static void messagesDeletedHandler(struct tgl_state *TLS, int num, int list[]);
 
     bb::cascades::QListDataModel<User*>* contacts() const;
-    bb::cascades::QListDataModel<Chat*>* dialogs() const;
+    bb::cascades::QListDataModel<Peer*>* dialogs() const;
 
     Message* getMessage(long long id);
-    Chat* getPeer(int type, int id);
+    Peer* getPeer(int type, int id);
 
     void deleteMessage(long long id);
     void addContact(User* contact);
     void deleteContact(User* contact);
 
-    void deleteHistory(Chat* chat);
-    void deleteChat(Chat* chat);
+    void deleteHistory(Peer* peer);
+    void deleteChat(Peer* peer);
 
     void updateChats();
     void updateUserInfo();
 
-    void loadAdditionalHistory(Chat* chat);
-    void searchMessage(Chat* chat, int from, int to, int limit, int offset, const char *s);
+    void loadAdditionalHistory(Peer* peer);
+    void searchMessage(Peer* peer, int from, int to, int limit, int offset, const char *s);
 signals:
     void newMessageReceived(const Message* message);
 protected slots:
@@ -52,13 +52,12 @@ protected:
     QSqlDatabase    m_db;
 
     bb::cascades::QListDataModel<User*>*    m_contacts;
-    bb::cascades::QListDataModel<Chat*>*    m_dialogs;
+    bb::cascades::QListDataModel<Peer*>*    m_dialogs;
 
-    QMap<long long, Chat*>                  m_peers;
+    QMap<long long, Peer*>                  m_peers;
     QMap<long long, Message*>               m_messages;
 
-    QList<User*>    m_updatedUsers;
-    QList<GroupChat*> m_updatedGroupChats;
+    QList<Peer*>    m_updatedPeers;
     QTimer*         m_saveTimer;
 
     static void _getDialogsCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, tgl_peer_id_t peers[], int last_msg_id[], int unread_count[]);

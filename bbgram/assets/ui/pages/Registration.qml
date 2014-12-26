@@ -45,7 +45,6 @@ Page {
                 id: photoImageView
                 verticalAlignment: VerticalAlignment.Center
                 
-                //image: chat ? chat.photo : null
                 imageSource: "asset:///images/menu_plus.png"
                 scalingMethod: ScalingMethod.AspectFit
                 preferredHeight: 180

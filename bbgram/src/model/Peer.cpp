@@ -1,10 +1,10 @@
-#include "Chat.h"
+#include "Peer.h"
 #include "MessagesDataModel.h"
 #include "../Storage.h"
 
 using namespace bb::cascades;
 
-Chat::Chat(int type, int id)
+Peer::Peer(int type, int id)
     : m_type(type), m_id(id), m_loadingHistory(false)
 {
     m_messages = new MessagesDataModel(this);
@@ -14,21 +14,21 @@ Chat::Chat(int type, int id)
     connect(m_messages, SIGNAL(itemRemoved(QVariantList)), this, SIGNAL(messagesChanged()));
 }
 
-Chat::~Chat()
+Peer::~Peer()
 {
 }
 
-int Chat::type() const
+int Peer::type() const
 {
     return m_type;
 }
 
-int Chat::id() const
+int Peer::id() const
 {
     return m_id;
 }
 
-void Chat::deserialize(QByteArray& data)
+void Peer::deserialize(QByteArray& data)
 {
     QDataStream stream(&data, QIODevice::ReadOnly);
 
@@ -38,7 +38,7 @@ void Chat::deserialize(QByteArray& data)
     load(map);
 }
 
-QByteArray Chat::serialize() const
+QByteArray Peer::serialize() const
 {
     QVariantMap map;
     save(map);
@@ -49,27 +49,27 @@ QByteArray Chat::serialize() const
     return data;
 }
 
-bb::cascades::DataModel* Chat::messages() const
+bb::cascades::DataModel* Peer::messages() const
 {
     return m_messages;
 }
 
-QString Chat::title() const
+QString Peer::title() const
 {
     return QString();
 }
 
-QString Chat::status() const
+QString Peer::status() const
 {
     return QString();
 }
 
-QVariant Chat::photo() const
+QVariant Peer::photo() const
 {
     return QVariant();
 }
 
-Message* Chat::lastMessage() const
+Message* Peer::lastMessage() const
 {
     if (m_messages->size() > 0)
     {
@@ -79,23 +79,23 @@ Message* Chat::lastMessage() const
     return 0;
 }
 
-QDateTime Chat::lastMessageDate() const
+QDateTime Peer::lastMessageDate() const
 {
     Message* last = lastMessage();
     return last ? last->dateTime() : QDateTime();
 }
 
-void Chat::addMessage(Message* message)
+void Peer::addMessage(Message* message)
 {
     m_messages->insert(message);
 }
 
-void Chat::deleteMessage(Message* message)
+void Peer::deleteMessage(Message* message)
 {
     m_messages->remove(message);
 }
 
-void Chat::save(QVariantMap& map) const
+void Peer::save(QVariantMap& map) const
 {
     QList<QVariant> list;
     for (int i = 0; i < m_lapseMarkers.size(); i++)
@@ -103,7 +103,7 @@ void Chat::save(QVariantMap& map) const
     map.insert("lapseMarkers", list);
 }
 
-void Chat::load(const QVariantMap& map)
+void Peer::load(const QVariantMap& map)
 {
     QVariantMap::const_iterator it;
     it = map.find("lapseMarkers");
@@ -117,7 +117,7 @@ void Chat::load(const QVariantMap& map)
     }
 }
 
-void Chat::loadAdditionalHistory()
+void Peer::loadAdditionalHistory()
 {
     if (!m_loadingHistory && m_lapseMarkers.length() > 0)
         Storage::instance()->loadAdditionalHistory(this);
