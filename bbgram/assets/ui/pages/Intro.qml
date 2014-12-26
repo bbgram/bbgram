@@ -17,7 +17,7 @@ NavigationPane {
                 horizontalAlignment: HorizontalAlignment.Center
                 ImageView {
                     id: icon_image
-                    
+                    loadEffect: ImageViewLoadEffect.DefaultDeferred
                     verticalAlignment: VerticalAlignment.Top  
                     touchPropagationMode: TouchPropagationMode.None
                 }

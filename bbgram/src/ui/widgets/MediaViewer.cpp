@@ -84,4 +84,6 @@ void MediaViewer::updateImageView(float maxWidth){
     float w = std::min((float)m_width, maxWidth);
     setPreferredWidth(w);
     setPreferredHeight(w * m_aspectRatio);
+    setMaxWidth(w);
+    setMaxHeight(w * m_aspectRatio);
 }
