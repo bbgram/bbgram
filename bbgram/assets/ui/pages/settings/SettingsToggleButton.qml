@@ -3,6 +3,7 @@ import bb.cascades 1.2
 Container {
     id: me
     property string text: "Text"
+    property bool checked: false
     
     layout: DockLayout {}
     Container {
@@ -24,6 +25,11 @@ Container {
         ToggleButton {
             horizontalAlignment: HorizontalAlignment.Right
             verticalAlignment: VerticalAlignment.Center
+            checked: me.checked
+            onCheckedChanged: {
+                if (me.checked != checked)
+                    me.checked = checked
+            }
         }
     }
     Divider { verticalAlignment: VerticalAlignment.Bottom }

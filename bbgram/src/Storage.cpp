@@ -194,6 +194,12 @@ Peer* Storage::getPeer(int type, int id)
     }
 }
 
+void Storage::markPeerDirty(Peer* peer)
+{
+    if (m_updatedPeers.indexOf(peer) == -1)
+        m_updatedPeers.append(peer);
+}
+
 void Storage::deleteMessage(long long id)
 {
     tgl_do_delete_msg(gTLS, id, Storage::_deleteMessageCallback, (void*)(int)id);
@@ -210,9 +216,7 @@ void Storage::addContact(User* contact)
         query.exec();
 
         m_contacts->append(contact);
-
-        if (m_updatedPeers.indexOf(contact) == -1)
-            m_updatedPeers.append(contact);
+        markPeerDirty(contact);
     }
 }
 
@@ -263,8 +267,7 @@ void Storage::_loadPhotoCallback(struct tgl_state *TLS, void *callback_extra, in
 
     Peer* peer = (Peer*)callback_extra;
     peer->setPhoto(filename);
-    if (m_instance->m_updatedPeers.indexOf(peer) == -1)
-        m_instance->m_updatedPeers.append(peer);
+    m_instance->markPeerDirty(peer);
 }
 
 void Storage::userUpdateHandler(struct tgl_state *TLS, struct tgl_user *U, unsigned flags)
@@ -344,8 +347,7 @@ void Storage::userUpdateHandler(struct tgl_state *TLS, struct tgl_user *U, unsig
         tgl_do_get_user_info(gTLS, peer, false, NULL, NULL);
     }
 
-    if (m_instance->m_updatedPeers.indexOf(user) == -1)
-        m_instance->m_updatedPeers.append(user);
+    m_instance->markPeerDirty(user);
 }
 
 void Storage::saveUpdatesToDatabase()
@@ -515,8 +517,7 @@ void Storage::updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsig
         groupChat->setMembers(C->user_list, C->user_list_size);
     }
 
-    if (m_instance->m_updatedPeers.indexOf(groupChat) == -1)
-        m_instance->m_updatedPeers.append(groupChat);
+    m_instance->markPeerDirty(groupChat);
 }
 
 void Storage::markedReadHandler(struct tgl_state *TLS, int num, struct tgl_message *list[])
@@ -533,6 +534,31 @@ void Storage::messagesDeletedHandler(struct tgl_state *TLS, int num, int list[])
 {
     for (int i = 0; i < num; i++)
         _deleteMessageCallback(TLS, (void*)list[i], 1);
+}
+
+void Storage::notifySettingsUpdateHandler(struct tgl_state *TLS, struct tgl_notify_peer_t *notify_peer, int mute_until, char* sound, int show_previews, int events_masks)
+{
+    if (notify_peer->type == tgl_notify_peer)
+    {
+        Peer* peer = m_instance->getPeer(notify_peer->peer.type, notify_peer->peer.id);
+        peer->updateNotifySettings(mute_until, sound, show_previews, events_masks);
+        m_instance->markPeerDirty(peer);
+    }
+    else
+    {
+        QMap<long long, Peer*>::iterator it;
+        for (it = m_instance->m_peers.begin(); it != m_instance->m_peers.end(); ++it)
+        {
+            Peer* peer = it.value();
+            if (notify_peer->type == tgl_notify_all ||
+                    notify_peer->type == tgl_notify_users && peer->type() == TGL_PEER_USER ||
+                    notify_peer->type == tgl_notify_chats && peer->type() != TGL_PEER_USER)
+            {
+                peer->updateNotifySettings(mute_until, sound, show_previews, events_masks);
+            }
+            m_instance->markPeerDirty(peer);
+        }
+    }
 }
 
 QListDataModel<User*>* Storage::contacts() const
@@ -689,8 +715,7 @@ void Storage::_getHistoryCallback(struct tgl_state *TLS, void *callback_extra, i
         }
     }
 
-    if (m_instance->m_updatedPeers.indexOf(peer) == -1)
-        m_instance->m_updatedPeers.append(peer);
+    m_instance->markPeerDirty(peer);
     peer->m_loadingHistory = false;
 }
 
@@ -767,8 +792,7 @@ void Storage::_updateGroupPhoto(struct tgl_state *TLS, void *callback_extra, int
             groupChat->setPhoto("");
     }
 
-    if (m_instance->m_updatedPeers.indexOf(groupChat) == -1)
-        m_instance->m_updatedPeers.append(groupChat);
+    m_instance->markPeerDirty(groupChat);
 }
 
 void Storage::_updateContactPhoto(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *U)
@@ -797,8 +821,7 @@ void Storage::_updateContactPhoto(struct tgl_state *TLS, void *callback_extra, i
             user->setPhoto("");
     }
 
-    if (m_instance->m_updatedPeers.indexOf(user) == -1)
-        m_instance->m_updatedPeers.append(user);
+    m_instance->markPeerDirty(user);
 }
 
 void Storage::_searchMessageCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[])

@@ -8,6 +8,7 @@ import "chats"
 Page {
     id: me
     property GroupChat chat
+    property bool muted: chat ? chat.muted : false
     
     actions: [
         ActionItem {
@@ -114,6 +115,11 @@ Page {
                 }
                 SettingsToggleButton {
                     text: "Notifications"
+                    checked: !muted
+                    onCheckedChanged: {
+                        if (muted == checked)
+                            user.mute(!checked)
+                    }
                 }
                 SettingsRow {
                     text: "Shared Media"

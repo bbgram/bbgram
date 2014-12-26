@@ -6,6 +6,7 @@ import "contacts"
 
 Page {
     property User user
+    property bool muted: user ? user.muted : false
     
     actions: [
         ActionItem {
@@ -134,6 +135,11 @@ Page {
                 }
                 SettingsToggleButton {
                     text: "Notifications"
+                    checked: !muted
+                    onCheckedChanged: {
+                        if (muted == checked)
+                            user.mute(!checked)
+                    }
                 }
                 SettingsRow {
                     text: "Shared Media"

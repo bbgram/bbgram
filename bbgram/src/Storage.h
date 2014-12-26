@@ -24,12 +24,14 @@ public:
     static void updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsigned flags);
     static void markedReadHandler(struct tgl_state *TLS, int num, struct tgl_message *list[]);
     static void messagesDeletedHandler(struct tgl_state *TLS, int num, int list[]);
+    static void notifySettingsUpdateHandler(struct tgl_state *TLS, struct tgl_notify_peer_t *notify_peer, int mute_until, char* sound, int show_previews, int events_masks);
 
     bb::cascades::QListDataModel<User*>* contacts() const;
     bb::cascades::QListDataModel<Peer*>* dialogs() const;
 
     Message* getMessage(long long id);
     Peer* getPeer(int type, int id);
+    void markPeerDirty(Peer* peer);
 
     void deleteMessage(long long id);
     void addContact(User* contact);
