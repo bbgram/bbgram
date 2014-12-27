@@ -5,10 +5,8 @@
 using namespace bb::cascades;
 
 GroupChat::GroupChat(int id)
-    : Peer(TGL_PEER_CHAT, id), m_photoId(0), m_adminId(0)
+    : Peer(TGL_PEER_CHAT, id), m_adminId(0)
 {
-    setPhoto("");
-
     m_members = new GroupDataModel();
     m_members->setParent(this);
     m_members->setSortingKeys(QStringList() << "firstName");
@@ -32,12 +30,6 @@ void GroupChat::load(const QVariantMap& map)
     it = map.find("adminId");
     if (it != map.end())
         m_adminId = it.value().toInt();
-    it = map.find("photo");
-    if (it != map.end())
-        setPhoto(it.value().toString());
-    it = map.find("photoId");
-    if (it != map.end())
-        setPhotoId(it.value().toLongLong());
 
     //map.insert("members", ??);
     //map.insert("invites", ??);
@@ -51,8 +43,6 @@ void GroupChat::save(QVariantMap& map) const
     map.insert("adminId", m_adminId);
     //map.insert("members", ??);
     //map.insert("invites", ??);
-    map.insert("photo", m_photoFilename);
-    map.insert("photoId", m_photoId);
 }
 
 QString GroupChat::title() const
@@ -72,42 +62,6 @@ QString GroupChat::status() const
     if (message)
         return "<p>" + message->text() + "</p>";
     return "";
-}
-
-QVariant GroupChat::photo() const
-{
-    return QVariant::fromValue(m_photo);
-}
-
-void GroupChat::setPhoto(const QString &filename)
-{
-    if (!m_photo.isNull() && m_photoFilename.compare(filename) == 0)
-        return;
-    m_photoFilename = filename;
-    QString path;
-    if (filename.length() != 0)
-        path = filename;
-    else
-        path = Colorizer::groupPlaceholder(m_id);
-
-    QFile file(path);
-    if (!file.open(QIODevice::ReadOnly))
-        return;
-    QByteArray bytes = file.readAll();
-    file.close();
-    m_photo = Image(bytes);
-
-    emit photoChanged();
-}
-
-void GroupChat::setPhotoId(long long photoId)
-{
-    m_photoId = photoId;
-}
-
-long long GroupChat::getPhotoId() const
-{
-    return m_photoId;
 }
 
 int GroupChat::getAdmin() const

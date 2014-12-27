@@ -47,11 +47,6 @@ public:
     QString typingStatus() const;
     void setTypingStatus(tgl_typing_status status);
 
-    void setPhoto(const QString &filename);
-    QVariant photo() const;
-    void setPhotoId(long long photoId);
-    long long getPhotoId() const;
-
     const QString& sortingKey() const;
     QString color() const;
 public slots:
@@ -71,10 +66,6 @@ protected:
     QDateTime   m_lastSeen;
 
     tgl_typing_status   m_typingStatus;
-
-    QString                 m_photoFilename;
-    bb::cascades::Image     m_photo;
-    long long               m_photoId;
 };
 
 Q_DECLARE_METATYPE(User*);

@@ -4,10 +4,8 @@
 using namespace bb::cascades;
 
 User::User(int id)
-    : Peer(TGL_PEER_USER, id), m_online(false), m_typingStatus(tgl_typing_none), m_photoId(0)
+    : Peer(TGL_PEER_USER, id), m_online(false), m_typingStatus(tgl_typing_none)
 {
-    setPhoto("");
-
     connect(this, SIGNAL(titleChanged()), this, SIGNAL(nameChanged()));
     connect(this, SIGNAL(typingStatusChanged()), this, SIGNAL(statusChanged()));
     connect(this, SIGNAL(messagesChanged()), this, SIGNAL(statusChanged()));
@@ -33,15 +31,9 @@ void User::load(const QVariantMap& map)
     if (it != map.end())
         m_lastName = it.value().toString();
     emit nameChanged();
-    it = map.find("photo");
-    if (it != map.end())
-        setPhoto(it.value().toString());
-    it = map.find("photoId");
-    if (it != map.end())
-        setPhotoId(it.value().toLongLong());
     it = map.find("lastSeen");
-   if (it != map.end())
-       setStatus(0, QDateTime::fromTime_t(it.value().toUInt()));
+    if (it != map.end())
+        setStatus(0, QDateTime::fromTime_t(it.value().toUInt()));
 }
 
 void User::save(QVariantMap& map) const
@@ -51,8 +43,6 @@ void User::save(QVariantMap& map) const
     map.insert("phone", m_phone);
     map.insert("firstName", m_firstName);
     map.insert("lastName", m_lastName);
-    map.insert("photo", m_photoFilename);
-    map.insert("photoId", m_photoId);
     map.insert("lastSeen", m_lastSeen.toTime_t());
 }
 
@@ -185,42 +175,6 @@ void User::resetTypingStatus()
 {
     m_typingStatus = tgl_typing_none;
     emit typingStatusChanged();
-}
-
-QVariant User::photo() const
-{
-    return QVariant::fromValue(m_photo);
-}
-
-void User::setPhotoId(long long photoId)
-{
-    m_photoId = photoId;
-}
-
-long long User::getPhotoId() const
-{
-    return m_photoId;
-}
-
-void User::setPhoto(const QString &filename)
-{
-    if (!m_photo.isNull() && m_photoFilename.compare(filename) == 0)
-        return;
-    m_photoFilename = filename;
-    QString path;
-    if (filename.length() != 0)
-        path = filename;
-    else
-        path = Colorizer::userPlaceholder(m_id);
-
-    QFile file(path);
-    if (!file.open(QIODevice::ReadOnly))
-        return;
-    QByteArray bytes = file.readAll();
-    file.close();
-    m_photo = Image(bytes);
-
-    emit photoChanged();
 }
 
 const QString& User::sortingKey() const

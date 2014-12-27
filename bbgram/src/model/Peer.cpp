@@ -1,12 +1,15 @@
 #include "Peer.h"
 #include "MessagesDataModel.h"
 #include "../Storage.h"
+#include "../utils/Colorizer.h"
 
 using namespace bb::cascades;
 
 Peer::Peer(int type, int id)
-    : m_type(type), m_id(id), m_muteUntil(0), m_loadingHistory(false)
+    : m_type(type), m_id(id), m_muteUntil(0), m_loadingHistory(false), m_photoId(0)
 {
+    setPhoto("");
+
     m_messages = new MessagesDataModel(this);
     m_messages->setSortingKeys(QStringList() << "date" << "dateTime");
     m_messages->setSortedAscending(false);
@@ -93,6 +96,9 @@ void Peer::save(QVariantMap& map) const
     notifySettings["showPreviews"] = m_showPreviews;
     notifySettings["eventsMasks"] = m_eventsMasks;
     map.insert("notifySettings", notifySettings);
+
+    map.insert("photo", m_photoFilename);
+    map.insert("photoId", m_photoId);
 }
 
 void Peer::load(const QVariantMap& map)
@@ -128,12 +134,66 @@ void Peer::load(const QVariantMap& map)
         if (it != notifySettings.end())
             m_eventsMasks = it.value().toInt();
     }
+
+    it = map.find("photo");
+    if (it != map.end())
+        setPhoto(it.value().toString());
+    it = map.find("photoId");
+    if (it != map.end())
+        setPhotoId(it.value().toLongLong());
 }
 
 void Peer::loadAdditionalHistory()
 {
     if (!m_loadingHistory && m_lapseMarkers.length() > 0)
         Storage::instance()->loadAdditionalHistory(this);
+}
+
+QVariant Peer::photo() const
+{
+    return QVariant::fromValue(m_photo);
+}
+
+void Peer::setPhoto(const QString &filename)
+{
+
+    if (!m_photo.isNull() && m_photoFilename.compare(filename) == 0)
+        return;
+    m_photoFilename = filename;
+    QString path;
+    if (filename.length() != 0)
+        path = filename;
+    else
+    {
+        switch(m_type)
+        {
+            case TGL_PEER_USER:
+                path = Colorizer::userPlaceholder(m_id);
+                break;
+            case TGL_PEER_CHAT:
+                path = Colorizer::groupPlaceholder(m_id);
+                break;
+        }
+    }
+
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly))
+        return;
+    QByteArray bytes = file.readAll();
+    file.close();
+    m_photo = Image(bytes);
+
+    emit photoChanged();
+}
+
+void Peer::setPhotoId(long long photoId)
+{
+    m_photoId = photoId;
+}
+
+long long Peer::getPhotoId() const
+{
+    return m_photoId;
 }
 
 bool Peer::muted() const

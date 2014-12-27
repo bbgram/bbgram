@@ -2,6 +2,7 @@
 
 #include <QObject>
 #include <bb/cascades/GroupDataModel>
+#include <bb/cascades/Image>
 
 #include <tgl.h>
 
@@ -45,10 +46,10 @@ public:
 
     Q_INVOKABLE void loadAdditionalHistory();
 
-    virtual QVariant photo() const { return QVariant(); }
-    virtual void setPhoto(const QString &) {}
-    virtual void setPhotoId(long long) {}
-    virtual long long getPhotoId() const { return 0; }
+    QVariant photo() const;
+    void setPhoto(const QString & filename);
+    void setPhotoId(long long photoId);
+    long long getPhotoId() const;
 
     bool muted() const;
     void updateNotifySettings(uint mute_until, char* sound, int show_previews, int events_masks);
@@ -73,6 +74,9 @@ protected:
     QList<int>    m_lapseMarkers;
 
     bool        m_loadingHistory;
+    QString                 m_photoFilename;
+    bb::cascades::Image     m_photo;
+    long long               m_photoId;
 };
 
 Q_DECLARE_METATYPE(Peer*);
