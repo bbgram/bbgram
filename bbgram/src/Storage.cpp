@@ -210,11 +210,12 @@ void Storage::addContact(User* contact)
 {
     if (m_contacts->indexOf(contact) == -1 && contact->id() != gTLS->our_id)
     {
+        /*
         QSqlDatabase &db = m_instance->m_db;
         QSqlQuery query(db);
         query.prepare("REPLACE INTO contacts(user_id) VALUES(:id)");
         query.bindValue(":id", contact->id());
-        query.exec();
+        query.exec();*/
 
         m_contacts->append(contact);
         markPeerDirty(contact);
@@ -381,7 +382,8 @@ void Storage::userUpdateHandler(struct tgl_state *TLS, struct tgl_user *U, unsig
         tgl_peer_id_t peer;
         peer.type = user->type();
         peer.id = user->id();
-        tgl_do_get_user_info(gTLS, peer, false, NULL, NULL);
+        //todo somthing like async photo loader?
+        //tgl_do_get_user_info(gTLS, peer, false, NULL, NULL);
     }
 
     m_instance->markPeerDirty(user);
@@ -528,7 +530,8 @@ void Storage::updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsig
     GroupChat* groupChat = (GroupChat*)m_instance->getPeer(TGL_PEER_CHAT, C->id.id);
 
     if (flags & TGL_UPDATE_CREATED)
-        tgl_do_get_chat_info(gTLS, {groupChat->type(), groupChat->id()}, 0, NULL, NULL);
+        //todo somthing like async photo loader?
+        //tgl_do_get_chat_info(gTLS, {groupChat->type(), groupChat->id()}, 0, NULL, NULL);
 
 
     if (flags & TGL_UPDATE_TITLE)

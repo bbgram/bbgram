@@ -25,6 +25,8 @@ public:
 
     int telegramContactsCount() const;
 private slots:
+    void itemAdded(const QVariantList& index);
+    void itemRemoved(const QVariantList& index);
     void updateContent();
 signals:
     void filterChanged();

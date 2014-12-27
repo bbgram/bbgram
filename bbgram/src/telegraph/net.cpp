@@ -144,6 +144,7 @@ void connection::onError(QAbstractSocket::SocketError socketError)
      switch (socketError)
      {
      case QAbstractSocket::RemoteHostClosedError:
+         qDebug() << "Remote Server Close Connection";
          break;
      case QAbstractSocket::HostNotFoundError:
          qDebug() << "The host was not found";

@@ -15,10 +15,10 @@ ContactList::ContactList(QListDataModel<User*>* telegramContacts)
     m_model = new GroupDataModel(this);
     m_model->setSortingKeys(QStringList() << "sortingKey" << "firstName");
 
-    connect(m_telegramContacts, SIGNAL(itemAdded(QVariantList)), SLOT(updateContent()));
+    connect(m_telegramContacts, SIGNAL(itemAdded(QVariantList)), SLOT(itemAdded(QVariantList)));
     //connect(m_telegramContacts, SIGNAL(itemMoved(QVariantList, QVariantList)), SLOT(updateContent()));
-    connect(m_telegramContacts, SIGNAL(itemRemoved(QVariantList)), SLOT(updateContent()));
-    connect(m_telegramContacts, SIGNAL(itemUpdated(QVariantList)), SLOT(updateContent()));
+    connect(m_telegramContacts, SIGNAL(itemRemoved(QVariantList)), SLOT(itemRemoved(QVariantList)));
+    //connect(m_telegramContacts, SIGNAL(itemUpdated(QVariantList)), SLOT(updateContent()));
     connect(this, SIGNAL(filterChanged()), SLOT(updateContent()));
 
     updatePhonebook();
@@ -36,6 +36,7 @@ GroupDataModel* ContactList::model() const
 
 void ContactList::updatePhonebook()
 {
+    return;
     ContactService service;
 
     QSet<ContactId> excludedContacts;
@@ -107,6 +108,18 @@ void ContactList::setFilter(int filter, const QString& text)
 int ContactList::telegramContactsCount() const
 {
     return m_telegramContacts->size();
+}
+
+void ContactList::itemAdded(const QVariantList& index)
+{
+    User* user = m_telegramContacts->data(index).value<User*>();
+    m_model->insert(user);
+}
+
+void ContactList::itemRemoved(const QVariantList& index)
+{
+    User* user = m_telegramContacts->data(index).value<User*>();
+    m_model->remove(user);
 }
 
 void ContactList::updateContent()
