@@ -208,7 +208,7 @@ void MainScreen::initialize()
     tgl_do_get_difference(gTLS, 0, 0, 0);
     Storage::instance()->updateUserInfo();
     Storage::instance()->updateChats();
-    tgl_do_update_contact_list(gTLS, NULL, NULL);
+    Storage::instance()->updateContacts();
 
     User* currentUser = (User*)Storage::instance()->getPeer(TGL_PEER_USER, gTLS->our_id);
     setContextProperty("_currentUser", currentUser);

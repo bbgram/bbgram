@@ -41,6 +41,7 @@ public:
     void deleteChat(Peer* peer);
 
     void updateChats();
+    void updateContacts();
     void updateUserInfo();
 
     void loadAdditionalHistory(Peer* peer);
@@ -68,6 +69,7 @@ protected:
     static void _getHistoryCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]);
     static void _deleteMessageCallback(struct tgl_state *TLS, void *callback_extra, int success);
     static void _deleteHistoryCallback(struct tgl_state *TLS, void *callback_extra, int success, int offset);
+    static void _updateContactsCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *contacts[]);
     static void _updateGroupPhoto(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_chat *C);
     static void _updateContactPhoto(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *U);
     static void _searchMessageCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]);

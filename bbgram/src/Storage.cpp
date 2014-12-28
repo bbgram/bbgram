@@ -210,13 +210,6 @@ void Storage::addContact(User* contact)
 {
     if (m_contacts->indexOf(contact) == -1 && contact->id() != gTLS->our_id)
     {
-        /*
-        QSqlDatabase &db = m_instance->m_db;
-        QSqlQuery query(db);
-        query.prepare("REPLACE INTO contacts(user_id) VALUES(:id)");
-        query.bindValue(":id", contact->id());
-        query.exec();*/
-
         m_contacts->append(contact);
         markPeerDirty(contact);
     }
@@ -347,8 +340,8 @@ void Storage::userUpdateHandler(struct tgl_state *TLS, struct tgl_user *U, unsig
 
     User* user = (User*)m_instance->getPeer(TGL_PEER_USER, U->id.id);
 
-    if (flags & TGL_UPDATE_CREATED)
-        m_instance->addContact(user);
+    /*if (flags & TGL_UPDATE_CREATED)
+        m_instance->addContact(user);*/
 
     if (flags & TGL_UPDATE_PHONE)
         user->setPhone(QString::fromUtf8(U->phone));
@@ -450,14 +443,16 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
     if (!messages->findExact(message).isEmpty())
         return;
 
-    if (peer->lastMessage()->dateTime() < message->dateTime() && message->from()->id() != TLS->our_id && !message->service())
+    Message* lastMessage = peer->lastMessage();
+    if ((!lastMessage || peer->lastMessage()->dateTime() < message->dateTime()) && message->from()->id() != TLS->our_id && !message->service())
     {
         emit m_instance->newMessageReceived(message);
     }
 
     messages->insert(message);
+    lastMessage = peer->lastMessage();
 
-    Message* lastMessage = peer->lastMessage();
+    messages->insert(message);
 
     QListDataModel<Peer*>* dialogs = m_instance->m_dialogs;
     int chatIdx = -1;
@@ -807,6 +802,20 @@ void Storage::_deleteHistoryCallback(struct tgl_state *TLS, void *callback_extra
     }
 }
 
+void Storage::_updateContactsCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *contacts[])
+{
+    QSqlDatabase &db = m_instance->m_db;
+    db.transaction();
+    QSqlQuery query(db);
+    query.prepare("REPLACE INTO contacts(user_id) VALUES(:id)");
+    for (int i = 0; i < size; i++)
+    {
+        query.bindValue(":id", contacts[i]->id.id);
+        query.exec();
+    }
+    db.commit();
+}
+
 void Storage::_updateGroupPhoto(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_chat *C)
 {
     if (!success)
@@ -891,6 +900,11 @@ void Storage::_searchMessageCallback(struct tgl_state *TLS, void *callback_extra
 void Storage::updateChats()
 {
     tgl_do_get_dialog_list(gTLS, _getDialogsCallback, this);
+}
+
+void Storage::updateContacts()
+{
+    tgl_do_update_contact_list(gTLS, _updateContactsCallback, NULL);
 }
 
 void Storage::updateUserInfo()
