@@ -270,7 +270,7 @@ void Storage::_loadPhotoCallback(struct tgl_state *TLS, void *callback_extra, in
     m_instance->markPeerDirty(peer);
 }
 
-void Storage::_AsyncPhotoLoad(Peer* peer)
+void Storage::AsyncPhotoLoad(Peer* peer)
 {
     m_photosToLoad.append(peer);
 
@@ -357,7 +357,7 @@ void Storage::userUpdateHandler(struct tgl_state *TLS, struct tgl_user *U, unsig
     {
         long long newPhotoId = (long long)U->photo_big.local_id << 32 | U->photo_small.local_id;
         if (user->getPhotoId() != newPhotoId)
-            m_instance->_AsyncPhotoLoad(user);
+            m_instance->AsyncPhotoLoad(user);
             //tgl_do_get_user_info(gTLS, {user->type(), user->id()}, 0, _updateContactPhoto, NULL);
 
         if ((flags & TGL_UPDATE_PHOTO) == flags)
@@ -540,7 +540,7 @@ void Storage::updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsig
     {
         long long newPhotoId = (long long)C->photo_big.local_id << 32 | C->photo_small.local_id;
         if (groupChat->getPhotoId() != newPhotoId)
-            m_instance->_AsyncPhotoLoad(groupChat);
+            m_instance->AsyncPhotoLoad(groupChat);
             //tgl_do_get_chat_info(gTLS, {groupChat->type(), groupChat->id()}, 0, _updateGroupPhoto, NULL);
 
         if ((flags & TGL_UPDATE_PHOTO) == flags)

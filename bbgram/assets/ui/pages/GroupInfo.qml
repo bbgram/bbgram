@@ -73,7 +73,7 @@ Page {
                 ImageView {
                     verticalAlignment: VerticalAlignment.Center
                     
-                    image: chat ? chat.photo : null
+                    imageSource: chat ? chat.photo : ""
                     //imageSource: "asset:///images/placeholders/user_placeholder_purple.png"
                     scalingMethod: ScalingMethod.Fill
                     preferredHeight: 200

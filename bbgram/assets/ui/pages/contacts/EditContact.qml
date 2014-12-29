@@ -40,7 +40,7 @@ Sheet {
                 ImageView {
                     verticalAlignment: VerticalAlignment.Center
                     
-                    image: user ? user.photo : null
+                    imageSource: user ? user.photo : ""
                     //imageSource: "asset:///images/placeholders/user_placeholder_purple.png"
                     scalingMethod: ScalingMethod.AspectFit
                     preferredHeight: 180

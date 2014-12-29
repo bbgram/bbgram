@@ -87,7 +87,7 @@ NavigationPane {
                         id: photo
                         verticalAlignment: VerticalAlignment.Center
                         
-                        image: _currentUser ? _currentUser.photo : null
+                        imageSource: _currentUser ? _currentUser.photo : ""
                         //imageSource: "asset:///images/placeholders/user_placeholder_purple.png"
                         scalingMethod: ScalingMethod.Fill
                         preferredHeight: 200

@@ -35,9 +35,8 @@ CustomListItem {
         
         ImageView {
             verticalAlignment: VerticalAlignment.Center
-            
-            image: if (!fromPhone) ListItemData.photo
-            imageSource: if (fromPhone) "asset:///images/placeholders/user_placeholder_grayscale.png"
+
+            imageSource: fromPhone ? "asset:///images/placeholders/user_placeholder_grayscale.png" : ListItemData.photo
             
             scalingMethod: ScalingMethod.AspectFit
             preferredHeight: 100

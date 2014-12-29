@@ -12,7 +12,7 @@ Container {
             Container {
                 topPadding: 10
                 ImageView {
-                    image: contact.photo
+                    imageSource: contact.photo
                     //imageSource: "asset:///images/placeholders/user_placeholder_purple.png"                            
                     minWidth: 80
                     minHeight: 80                

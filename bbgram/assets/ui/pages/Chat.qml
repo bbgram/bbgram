@@ -77,7 +77,7 @@ Page {
                 
                 ImageView {
                     id: avatar
-                    image: peer ? peer.photo : null
+                    imageSource: peer ? peer.photo : ""
                     //imageSource: "asset:///images/placeholders/user_placeholder_purple.png"
                     scalingMethod: ScalingMethod.AspectFit
                 }

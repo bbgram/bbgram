@@ -8,13 +8,14 @@ using namespace bb::cascades;
 Peer::Peer(int type, int id)
     : m_type(type), m_id(id), m_muteUntil(0), m_loadingHistory(false), m_photoId(0)
 {
-    setPhoto("");
-
     m_messages = new MessagesDataModel(this);
     m_messages->setSortingKeys(QStringList() << "date" << "dateTime");
     m_messages->setSortedAscending(false);
     connect(m_messages, SIGNAL(itemAdded(QVariantList)), this, SIGNAL(messagesChanged()));
     connect(m_messages, SIGNAL(itemRemoved(QVariantList)), this, SIGNAL(messagesChanged()));
+
+
+    m_photoFilename = _getDefaultPlaceholder();
 }
 
 Peer::~Peer()
@@ -149,39 +150,32 @@ void Peer::loadAdditionalHistory()
         Storage::instance()->loadAdditionalHistory(this);
 }
 
-QVariant Peer::photo() const
+QUrl Peer::photo() const
 {
-    return QVariant::fromValue(m_photo);
+    return QUrl("file://" + QDir::currentPath() + "/" + m_photoFilename);
 }
 
 void Peer::setPhoto(const QString &filename)
 {
-
-    if (!m_photo.isNull() && m_photoFilename.compare(filename) == 0)
+    if (m_photoFilename.compare(filename) == 0)
         return;
-    m_photoFilename = filename;
-    QString path;
-    if (filename.length() != 0)
-        path = filename;
+
+    if (filename == "")
+    {
+        setPhotoId(0);
+        m_photoFilename = _getDefaultPlaceholder();
+    }
     else
     {
-        switch(m_type)
+        if (QFile::exists(filename))
+            m_photoFilename = filename;
+        else
         {
-            case TGL_PEER_USER:
-                path = Colorizer::userPlaceholder(m_id);
-                break;
-            case TGL_PEER_CHAT:
-                path = Colorizer::groupPlaceholder(m_id);
-                break;
+            setPhotoId(0);
+            m_photoFilename = _getDefaultPlaceholder();
+            Storage::instance()->AsyncPhotoLoad(this);
         }
     }
-
-    QFile file(path);
-    if (!file.open(QIODevice::ReadOnly))
-        return;
-    QByteArray bytes = file.readAll();
-    file.close();
-    m_photo = Image(bytes);
 
     emit photoChanged();
 }
@@ -233,4 +227,17 @@ void Peer::mute(bool value)
 
     Storage::instance()->markPeerDirty(this);
     emit notifySettingsChanged();
+}
+
+QString Peer::_getDefaultPlaceholder()
+{
+    switch(m_type)
+    {
+        case TGL_PEER_USER:
+            return Colorizer::userPlaceholder(m_id);
+        case TGL_PEER_CHAT:
+            return Colorizer::groupPlaceholder(m_id);
+    }
+
+    return QString();
 }

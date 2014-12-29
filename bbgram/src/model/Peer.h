@@ -16,7 +16,7 @@ class Peer : public QObject
     Q_PROPERTY(int id READ id CONSTANT)
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(QString status READ status NOTIFY statusChanged)
-    Q_PROPERTY(QVariant photo READ photo NOTIFY photoChanged)
+    Q_PROPERTY(QUrl photo READ photo NOTIFY photoChanged)
     Q_PROPERTY(bb::cascades::DataModel* messages READ messages CONSTANT)
     Q_PROPERTY(Message* lastMessage READ lastMessage NOTIFY messagesChanged)
     Q_PROPERTY(QDateTime lastMessageDate READ lastMessageDate NOTIFY messagesChanged)
@@ -46,7 +46,7 @@ public:
 
     Q_INVOKABLE void loadAdditionalHistory();
 
-    QVariant photo() const;
+    QUrl photo() const;
     void setPhoto(const QString & filename);
     void setPhotoId(long long photoId);
     long long getPhotoId() const;
@@ -61,6 +61,7 @@ signals:
     void messagesChanged();
     void notifySettingsChanged();
 protected:
+    QString _getDefaultPlaceholder();
     int             m_type;
     int             m_id;
 
@@ -75,7 +76,6 @@ protected:
 
     bool        m_loadingHistory;
     QString                 m_photoFilename;
-    bb::cascades::Image     m_photo;
     long long               m_photoId;
 };
 

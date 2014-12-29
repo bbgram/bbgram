@@ -46,6 +46,8 @@ public:
 
     void loadAdditionalHistory(Peer* peer);
     void searchMessage(Peer* peer, int from, int to, int limit, int offset, const char *s);
+
+    void AsyncPhotoLoad(Peer* peer);
 signals:
     void newMessageReceived(const Message* message);
 protected slots:
@@ -75,7 +77,6 @@ protected:
     static void _searchMessageCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]);
     static void _loadPhotoCallback(struct tgl_state *TLS, void *callback_extra, int success, char *filename);
 
-    void _AsyncPhotoLoad(Peer* peer);
     void _LoadNextPhoto();
     void _PhotoLoaded();
 };

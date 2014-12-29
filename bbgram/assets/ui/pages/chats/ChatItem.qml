@@ -25,8 +25,8 @@ CustomListItem {
         ImageView {
             verticalAlignment: VerticalAlignment.Center
             
-            image: ListItemData.photo
-            //imageSource: "asset:///images/placeholders/user_placeholder_purple.png"
+            //image: ListItemData.photo
+            imageSource: ListItemData.photo
             scalingMethod: ScalingMethod.AspectFit
             preferredHeight: 100
             preferredWidth: 100
