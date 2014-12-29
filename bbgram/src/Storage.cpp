@@ -31,6 +31,10 @@ Storage::Storage(QObject* parent)
         query.exec("CREATE TABLE contacts(user_id INTEGER PRIMARY KEY)");
         query.exec("CREATE TABLE dialogs(id INTEGER PRIMARY KEY)");
         query.exec("CREATE TABLE messages(id INTEGER PRIMARY KEY, from_id INTEGER, to_id INTEGER, to_type INTEGER, text TEXT, date INTEGER, data BLOB)");
+
+        query.exec("CREATE INDEX messages_to_id_idx ON messages(to_id);");
+        query.exec("CREATE INDEX messages_to_id_to_type_idx ON messages(to_id, to_type);");
+        query.exec("CREATE INDEX messages_to_id_to_type_from_id_idx ON messages(to_id, to_type, from_id);");
     }
 
     m_contacts = new QListDataModel<User*>();
