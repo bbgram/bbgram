@@ -11,10 +11,8 @@ ChatList::ChatList(QListDataModel<Peer*>* dialogs)
     m_model->setSortingKeys(QStringList() << "lastMessageDate");
     m_model->setSortedAscending(false);
 
-    connect(m_dialogs, SIGNAL(itemAdded(QVariantList)), SLOT(updateContent()));
-    //connect(m_telegramContacts, SIGNAL(itemMoved(QVariantList, QVariantList)), SLOT(updateContent()));
-    connect(m_dialogs, SIGNAL(itemRemoved(QVariantList)), SLOT(updateContent()));
-    connect(m_dialogs, SIGNAL(itemUpdated(QVariantList)), SLOT(updateContent()));
+    connect(m_dialogs, SIGNAL(itemAdded(QVariantList)), SLOT(itemAdded(QVariantList)));
+    connect(m_dialogs, SIGNAL(itemRemoved(QVariantList)), SLOT(itemRemoved(QVariantList)));
     connect(this, SIGNAL(filterChanged()), SLOT(updateContent()));
 
     updateContent();
@@ -40,6 +38,19 @@ void ChatList::setFilter(int filter, const QString& text)
     m_searchText = text;
     emit filterChanged();
 }
+
+void ChatList::itemAdded(const QVariantList& index)
+{
+    Peer* user = m_dialogs->data(index).value<Peer*>();
+    m_model->insert(user);
+}
+
+void ChatList::itemRemoved(const QVariantList& index)
+{
+    Peer* user = m_dialogs->data(index).value<Peer*>();
+    m_model->remove(user);
+}
+
 
 void ChatList::updateContent()
 {

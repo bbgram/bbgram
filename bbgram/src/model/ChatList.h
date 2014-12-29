@@ -22,6 +22,8 @@ public:
     int filter() const;
     Q_INVOKABLE void setFilter(int filter, const QString& text = "");
 private slots:
+    void itemAdded(const QVariantList& index);
+    void itemRemoved(const QVariantList& index);
     void updateContent();
 signals:
     void filterChanged();
