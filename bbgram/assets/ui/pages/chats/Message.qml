@@ -143,7 +143,7 @@ Container {
                 topPadding: 8
                 bottomPadding: 8
                 ImageView {
-                    image: author ? author.photo : null
+                    imageSource: author ? author.photo : ""
                     //imageSource: "asset:///images/placeholders/user_placeholder_purple.png"                            
                     minWidth: 80
                     minHeight: 80                
