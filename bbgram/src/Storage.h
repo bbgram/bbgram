@@ -8,6 +8,8 @@
 #include "model/Message.h"
 #include "model/User.h"
 
+#include "utils/PeerDataModel.h"
+
 class Storage: public QObject
 {
     Q_OBJECT
@@ -26,8 +28,8 @@ public:
     static void messagesDeletedHandler(struct tgl_state *TLS, int num, int list[]);
     static void notifySettingsUpdateHandler(struct tgl_state *TLS, struct tgl_notify_peer_t *notify_peer, int mute_until, char* sound, int show_previews, int events_masks);
 
-    bb::cascades::QListDataModel<User*>* contacts() const;
-    bb::cascades::QListDataModel<Peer*>* dialogs() const;
+    PeerDataModel* contacts() const;
+    PeerDataModel* dialogs() const;
 
     Message* getMessage(long long id);
     Peer* getPeer(int type, int id);
@@ -56,8 +58,8 @@ protected:
     static Storage* m_instance;
     QSqlDatabase    m_db;
 
-    bb::cascades::QListDataModel<User*>*    m_contacts;
-    bb::cascades::QListDataModel<Peer*>*    m_dialogs;
+    PeerDataModel*    m_contacts;
+    PeerDataModel*    m_dialogs;
 
     QMap<long long, Peer*>                  m_peers;
     QMap<long long, Message*>               m_messages;

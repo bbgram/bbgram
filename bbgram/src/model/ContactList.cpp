@@ -9,7 +9,7 @@
 using namespace bb::cascades;
 using namespace bb::pim::contacts;
 
-ContactList::ContactList(QListDataModel<User*>* telegramContacts)
+ContactList::ContactList(PeerDataModel* telegramContacts)
     : m_filter(3), m_telegramContacts(telegramContacts)
 {
     m_model = new GroupDataModel(this);
@@ -17,7 +17,7 @@ ContactList::ContactList(QListDataModel<User*>* telegramContacts)
 
     connect(m_telegramContacts, SIGNAL(itemAdded(QVariantList)), SLOT(itemAdded(QVariantList)));
     //connect(m_telegramContacts, SIGNAL(itemMoved(QVariantList, QVariantList)), SLOT(updateContent()));
-    connect(m_telegramContacts, SIGNAL(itemRemoved(QVariantList)), SLOT(itemRemoved(QVariantList)));
+    connect(m_telegramContacts, SIGNAL(itemRemoved(Peer*)), SLOT(itemRemoved(Peer*)));
     //connect(m_telegramContacts, SIGNAL(itemUpdated(QVariantList)), SLOT(updateContent()));
     connect(this, SIGNAL(filterChanged()), SLOT(updateContent()));
 
@@ -43,7 +43,7 @@ void ContactList::updatePhonebook()
 
     for (int i = 0; i < m_telegramContacts->size(); i++)
     {
-        User* user = m_telegramContacts->value(i);
+        User* user = (User*)m_telegramContacts->value(i);
         ContactSearchFilters phoneSearch;
         phoneSearch.setHasAttribute(AttributeKind::Phone);
         phoneSearch.setSearchValue(QString("+") + user->phone());
@@ -112,14 +112,13 @@ int ContactList::telegramContactsCount() const
 
 void ContactList::itemAdded(const QVariantList& index)
 {
-    User* user = m_telegramContacts->data(index).value<User*>();
+    Peer* user = m_telegramContacts->data(index).value<Peer*>();
     m_model->insert(user);
 }
 
-void ContactList::itemRemoved(const QVariantList& index)
+void ContactList::itemRemoved(Peer* peer)
 {
-    User* user = m_telegramContacts->data(index).value<User*>();
-    m_model->remove(user);
+    m_model->remove(peer);
 }
 
 void ContactList::updateContent()
@@ -129,7 +128,7 @@ void ContactList::updateContent()
     {
         for (int i = 0; i < m_telegramContacts->size(); i++)
         {
-            User* user = m_telegramContacts->value(i);
+            User* user = (User*)m_telegramContacts->value(i);
             m_model->insert(user);
         }
     }

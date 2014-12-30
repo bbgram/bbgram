@@ -3,7 +3,7 @@
 
 using namespace bb::cascades;
 
-ChatList::ChatList(QListDataModel<Peer*>* dialogs)
+ChatList::ChatList(PeerDataModel* dialogs)
     : m_filter(3), m_dialogs(dialogs)
 {
     m_model = new GroupDataModel(this);
@@ -12,7 +12,7 @@ ChatList::ChatList(QListDataModel<Peer*>* dialogs)
     m_model->setSortedAscending(false);
 
     connect(m_dialogs, SIGNAL(itemAdded(QVariantList)), SLOT(itemAdded(QVariantList)));
-    connect(m_dialogs, SIGNAL(itemRemoved(QVariantList)), SLOT(itemRemoved(QVariantList)));
+    connect(m_dialogs, SIGNAL(itemRemoved(Peer*)), SLOT(itemRemoved(Peer*)));
     connect(this, SIGNAL(filterChanged()), SLOT(updateContent()));
 
     updateContent();
@@ -45,10 +45,9 @@ void ChatList::itemAdded(const QVariantList& index)
     m_model->insert(dialog);
 }
 
-void ChatList::itemRemoved(const QVariantList& index)
+void ChatList::itemRemoved(Peer* peer)
 {
-    Peer* dialog = m_dialogs->data(index).value<Peer*>();
-    m_model->remove(dialog);
+    m_model->remove(peer);
 }
 
 void ChatList::updateContent()

@@ -6,6 +6,8 @@
 #include "User.h"
 #include "GroupChat.h"
 
+#include "../utils/PeerDataModel.h"
+
 class ChatList : public QObject
 {
     Q_OBJECT
@@ -14,7 +16,7 @@ class ChatList : public QObject
     Q_PROPERTY(int filter READ filter NOTIFY filterChanged)
     //Q_PROPERTY(int telegramContactsCount READ telegramContactsCount NOTIFY contentUpdated)
 public:
-    ChatList(bb::cascades::QListDataModel<Peer*>* dialogs);
+    ChatList(PeerDataModel* dialogs);
     ~ChatList();
 
     bb::cascades::GroupDataModel* model() const;
@@ -23,7 +25,7 @@ public:
     Q_INVOKABLE void setFilter(int filter, const QString& text = "");
 private slots:
     void itemAdded(const QVariantList& index);
-    void itemRemoved(const QVariantList& index);
+    void itemRemoved(Peer* peer);
     void updateContent();
 signals:
     void filterChanged();
@@ -32,6 +34,6 @@ protected:
     bb::cascades::GroupDataModel*           m_model;
     int                                     m_filter;
     QString                                 m_searchText;
-    bb::cascades::QListDataModel<Peer*>*    m_dialogs;
+    PeerDataModel*    m_dialogs;
 };
 

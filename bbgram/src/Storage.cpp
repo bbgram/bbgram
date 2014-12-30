@@ -37,9 +37,9 @@ Storage::Storage(QObject* parent)
         query.exec("CREATE INDEX messages_to_id_to_type_from_id_idx ON messages(to_id, to_type, from_id);");
     }
 
-    m_contacts = new QListDataModel<User*>();
+    m_contacts = new PeerDataModel();
     m_contacts->setParent(this);
-    m_dialogs = new QListDataModel<Peer*>();
+    m_dialogs = new PeerDataModel();
     m_dialogs->setParent(this);
 
     QSqlQuery query(m_db);
@@ -227,10 +227,9 @@ void Storage::deleteContact(User* contact)
     query.bindValue(":id", contact->id());
     query.exec();
 
-    QListDataModel<User*>* contacts = m_instance->m_contacts;
-    int idx = contacts->indexOf(contact);
+    int idx = m_instance->m_contacts->indexOf(contact);
     if (idx != -1)
-        contacts->removeAt(idx);
+        m_instance->m_contacts->removeAt(idx);
 }
 
 void Storage::deleteHistory(Peer* peer)
@@ -455,37 +454,9 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
     }
 
     messages->insert(message);
-    lastMessage = peer->lastMessage();
 
-    QListDataModel<Peer*>* dialogs = m_instance->m_dialogs;
-    int chatIdx = -1;
-    for (int i = 0; i < dialogs->size(); i++)
-    {
-        if (dialogs->value(i) == peer)
-        {
-            chatIdx = i;
-            break;
-        }
-    }
-
-    int newPos = dialogs->size();
-    if (lastMessage == message)
-    {
-        for (int j = 0; j < dialogs->size(); j++)
-        {
-            Message* lm = dialogs->value(j)->lastMessage();
-            if (lm && lm->dateTime() < message->dateTime())
-            {
-                newPos = j;
-                break;
-            }
-        }
-    }
-
-    if (chatIdx == -1)
-        dialogs->insert(newPos, peer);
-    else
-        dialogs->move(chatIdx, newPos);
+    if (m_instance->m_dialogs->indexOf(peer) == -1)
+        m_instance->m_dialogs->append(peer);
 }
 
 void Storage::updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsigned flags)
@@ -600,12 +571,12 @@ void Storage::notifySettingsUpdateHandler(struct tgl_state *TLS, struct tgl_noti
     }
 }
 
-QListDataModel<User*>* Storage::contacts() const
+PeerDataModel* Storage::contacts() const
 {
     return m_contacts;
 }
 
-QListDataModel<Peer*>* Storage::dialogs() const
+PeerDataModel* Storage::dialogs() const
 {
     return m_dialogs;
 }

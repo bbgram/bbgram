@@ -4,6 +4,7 @@
 #include <bb/cascades/QListDataModel>
 
 #include "User.h"
+#include "../utils/PeerDataModel.h"
 
 class ContactList : public QObject
 {
@@ -13,7 +14,7 @@ class ContactList : public QObject
     Q_PROPERTY(int filter READ filter NOTIFY filterChanged)
     Q_PROPERTY(int telegramContactsCount READ telegramContactsCount NOTIFY contentUpdated)
 public:
-    ContactList(bb::cascades::QListDataModel<User*>* telegramContacts);
+    ContactList(PeerDataModel* telegramContacts);
     ~ContactList();
 
     bb::cascades::GroupDataModel* model() const;
@@ -26,7 +27,7 @@ public:
     int telegramContactsCount() const;
 private slots:
     void itemAdded(const QVariantList& index);
-    void itemRemoved(const QVariantList& index);
+    void itemRemoved(Peer* peer);
     void updateContent();
 signals:
     void filterChanged();
@@ -35,7 +36,7 @@ protected:
     bb::cascades::GroupDataModel*           m_model;
     int                                     m_filter;
     QString                                 m_searchText;
-    bb::cascades::QListDataModel<User*>*    m_telegramContacts;
+    PeerDataModel*                          m_telegramContacts;
     QList<QVariantMap>                      m_phoneBook;
 };
 

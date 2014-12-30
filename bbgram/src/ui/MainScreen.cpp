@@ -251,7 +251,7 @@ void MainScreen::onMessageReceived(const Message* message)
 
 bool MainScreen::contactExist(const QString& phone)
 {
-    bb::cascades::QListDataModel<User*>* contacts = Storage::instance()->contacts();
+    PeerDataModel* contacts = Storage::instance()->contacts();
 
     QString phone_filtred(phone);
     phone_filtred.replace("+","");
@@ -260,7 +260,7 @@ bool MainScreen::contactExist(const QString& phone)
     bool found = false;
     for (int i = 0; i < contacts->size(); i++)
     {
-        User* contact = contacts->value(i);
+        User* contact = (User*)contacts->value(i);
         if (contact->phone() == phone_filtred)
         {
             found = true;
