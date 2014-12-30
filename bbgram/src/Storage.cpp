@@ -272,7 +272,8 @@ void Storage::_loadPhotoCallback(struct tgl_state *TLS, void *callback_extra, in
 
 void Storage::AsyncPhotoLoad(Peer* peer)
 {
-    m_photosToLoad.append(peer);
+    if (!m_photosToLoad.contains(peer))
+        m_photosToLoad.append(peer);
 
     _LoadNextPhoto();
 }
@@ -455,8 +456,6 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
 
     messages->insert(message);
     lastMessage = peer->lastMessage();
-
-    messages->insert(message);
 
     QListDataModel<Peer*>* dialogs = m_instance->m_dialogs;
     int chatIdx = -1;

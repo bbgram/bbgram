@@ -41,16 +41,15 @@ void ChatList::setFilter(int filter, const QString& text)
 
 void ChatList::itemAdded(const QVariantList& index)
 {
-    Peer* user = m_dialogs->data(index).value<Peer*>();
-    m_model->insert(user);
+    Peer* dialog = m_dialogs->data(index).value<Peer*>();
+    m_model->insert(dialog);
 }
 
 void ChatList::itemRemoved(const QVariantList& index)
 {
-    Peer* user = m_dialogs->data(index).value<Peer*>();
-    m_model->remove(user);
+    Peer* dialog = m_dialogs->data(index).value<Peer*>();
+    m_model->remove(dialog);
 }
-
 
 void ChatList::updateContent()
 {
