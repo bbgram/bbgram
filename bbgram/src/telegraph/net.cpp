@@ -10,29 +10,16 @@
 
 void connection::restartConnection()
 {
-    if (m_lastConnectTime == time(0))
-    {
-        QTimer::singleShot(10*1000, this, SLOT(restartConnection()));
-        return;
-    }
-    disconnectFromHost();
-}
+    //if (((QAbstractSocket*)this)->state() != QAbstractSocket::UnconnectedState)
 
-void connection::failConnection()
-{
-    if (m_state == conn_ready)
-    {
-        m_pingTimer->stop();
-    }
-
-    qDebug() << "Lost connection to server... " << m_host << ":" << m_port;
-    m_state = conn_failed;
-
+    m_pingTimer->stop();
+    close();
     rotatePort();
-    restartConnection();
+    connectToHost(m_host, m_port);
 }
 
 connection::connection()
+    :m_bufferOffset(0)
 {
     m_pingTimer = new QTimer(this);
     m_pingTimer->setInterval(PING_TIMEOUT * 1000);
@@ -47,10 +34,9 @@ void connection::checkPingTimeout()
 {
     if (tglt_get_double_time () - m_lastReceiveTime > 6 * PING_TIMEOUT)
     {
-        //vlogprintf(E_WARNING, "fail connection: reason: ping timeout\n");
-        failConnection();
+        restartConnection();
     }
-    else if (tglt_get_double_time () - m_lastReceiveTime > 3 * PING_TIMEOUT && m_state == conn_ready)
+    else if (tglt_get_double_time () - m_lastReceiveTime > 3 * PING_TIMEOUT && this->state() == QAbstractSocket::ConnectedState)
     {
         tgl_do_send_ping(m_TLS, this);
     }
@@ -64,18 +50,18 @@ void connection::onConnected()
     m_lastReceiveTime = tglt_get_double_time();
     m_pingTimer->start();
 
-    m_state = conn_ready;
     m_methods->ready(m_TLS, this);
+
+    writeBuffer();
 }
 
 void connection::onDisconnected()
 {
-    m_methods->close(m_TLS, this);
-    close();
-    m_lastConnectTime = time(0);
-    connectToHost(m_host, m_port);
-}
+    m_bufferOffset = 0;
+    m_writeBuffers.clear();
+    restartConnection();
 
+}
 
 void connection::tryRpcRead()
 {
@@ -127,6 +113,30 @@ void connection::tryRpcRead()
     }
 }
 
+void connection::bytesWritten(qint64 bytes)
+{
+    //if (bytes != m_writeBuffers[0].size())
+    //    gTLS->callback.logprintf("bytesWritten wrong %d, %d", bytes, m_writeBuffers[0].size());
+
+    if (bytes + m_bufferOffset > m_writeBuffers[0].size())
+    {
+        gTLS->callback.logprintf("bytesWritten wrong %d, %d", bytes, m_writeBuffers[0].size());
+        assert(0);
+    }
+
+
+    if ((bytes + m_bufferOffset) < m_writeBuffers[0].size())
+    {
+        m_bufferOffset += bytes;
+    }
+    else if ((bytes + m_bufferOffset) == m_writeBuffers[0].size())
+    {
+        m_writeBuffers.removeFirst();
+        m_bufferOffset = 0;
+    }
+
+    writeBuffer();
+}
 
 void connection::onReadyRead()
 {
@@ -173,11 +183,11 @@ struct connection *connection::create(struct tgl_state *TLS, const char *host, i
 
     conn->m_lastReceiveTime = tglt_get_double_time();
     conn->m_outPacketNum = 0;
-    conn->m_state = conn_connecting;
 
     QObject::connect(conn, SIGNAL(connected()), conn, SLOT(onConnected()));
     QObject::connect(conn, SIGNAL(disconnected()), conn, SLOT(onDisconnected()));
     QObject::connect(conn, SIGNAL(readyRead()), conn, SLOT(onReadyRead()));
+    QObject::connect(conn, SIGNAL(bytesWritten(qint64)), conn, SLOT(bytesWritten(qint64)));
     QObject::connect(conn, SIGNAL(error(QAbstractSocket::SocketError)),
             conn, SLOT(onError(QAbstractSocket::SocketError)));
 
@@ -189,11 +199,9 @@ struct connection *connection::create(struct tgl_state *TLS, const char *host, i
 
 int connection::write_out(struct connection *conn, const void *data, int len)
 {
-    //if (((QAbstractSocket*)c)->state() != QAbstractSocket::ConnectedState)
-    //    return 0;
-
-    qint64 written = conn->write((const char*)data, (qint64)len);
-    return (int)written;
+    conn->m_writeBuffers.append(QByteArray((const char*)data, len));
+    conn->writeBuffer();
+    return len;
 }
 
 
@@ -223,7 +231,7 @@ int connection::read_in_lookup(struct connection *conn, void *data, int len)
 
 void connection::flush_out(struct connection *conn)
 {
-    conn->flush();
+    //conn->flush();
 }
 
 void connection::incr_out_packet_num(struct connection *conn)
@@ -245,6 +253,16 @@ struct tgl_dc *connection::get_dc(struct connection *conn)
 struct tgl_session *connection::get_session(struct connection *conn)
 {
     return conn->m_session;
+}
+
+void connection::writeBuffer()
+{
+    if (this->state() != QAbstractSocket::ConnectedState || m_writeBuffers.empty())
+        return;
+
+    QByteArray data = m_writeBuffers.first();
+    write(data.data() + m_bufferOffset, data.size() - m_bufferOffset);
+    flush();
 }
 
 void connection::rotatePort()

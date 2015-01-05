@@ -47,14 +47,16 @@ protected:
     int m_lastConnectTime;
     double m_lastReceiveTime;
     int m_outPacketNum;
-    conn_state m_state;
 
     QByteArray m_buffer;
+    QList<QByteArray>   m_writeBuffers;
+    qint64              m_bufferOffset;
     QTimer* m_pingTimer;
 
     void rotatePort();
+    void writeBuffer();
 protected slots:
-    void failConnection();
     void restartConnection();
     void tryRpcRead();
+    void bytesWritten(qint64 bytes);
 };
