@@ -6,7 +6,6 @@
 #include <bb/system/InvokeManager>
 #include <bb/system/InvokeRequest>
 #include <bb/PpsObject>
-#include <bb/platform/Notification>
 
 
 using namespace bb::cascades;
@@ -45,6 +44,11 @@ MainScreen::MainScreen(ApplicationUI* app)
     QObject::connect(bb::Application::instance(), SIGNAL(fullscreen()), this, SLOT(onAppFullScreen()));
 
     QObject::connect(Storage::instance(), SIGNAL(newMessageReceived(const Message*)), this, SLOT(onMessageReceived(const Message*)));
+
+    QObject::connect(&m_notificationTimer, SIGNAL(timeout()), this, SLOT(showNotifications()));
+
+    m_notificationTimer.setSingleShot(false);
+
 
     Telegraph::instance()->exportAuthorization();
     initialize();
@@ -220,26 +224,42 @@ void MainScreen::onAppFullScreen()
 
     Notification::deleteAllFromInbox();
     Notification::clearEffectsForAll();
+    m_notificationTimer.stop();
+    m_notificationList.clear();
 }
 
 void MainScreen::onAppThumbnail()
 {
     m_appFullScreen = false;
+
+    m_notificationTimer.start(1000);
+}
+
+void MainScreen::showNotifications()
+{
+    foreach(Notification* n, m_notificationList)
+    {
+        n->notify();
+    }
+
+    m_notificationList.clear();
 }
 
 void MainScreen::onMessageReceived(const Message* message)
 {
-    if (!m_appFullScreen)
+    if (!m_appFullScreen && !message->from()->muted())
     {
         Notification* notification = new Notification();
         notification->setType(NotificationType::Default);
         notification->setTitle("Telegram");
         notification->setBody("You have new message from " + message->from()->title());
 
+        m_notificationList.append(notification);
+
         /*if (m_appFullScreen)
         notification->setSoundUrl(QUrl("asset:///sounds/sound_a.wav"));*/
 
-        notification->notify();
+        //notification->notify();
 
         /*if (m_appFullScreen)
         {

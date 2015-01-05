@@ -8,6 +8,7 @@
 #include "../model/GroupChat.h"
 
 #include <bb/cascades/TabbedPane>
+#include <bb/platform/Notification>
 
 class ApplicationUI;
 
@@ -47,12 +48,17 @@ protected slots:
     void initialize();
     void onAppFullScreen();
     void onAppThumbnail();
+    void showNotifications();
     void onMessageReceived(const Message* message);
 protected:
     static MainScreen*  m_instance;
     ApplicationUI*      m_app;
     ContactList*        m_contacts;
     ChatList*           m_dialogs;
+
+    QTimer m_notificationTimer;
+    QList<bb::platform::Notification*> m_notificationList;
+
     bool                m_appFullScreen;
 
     bool contactExist(const QString& phone);
