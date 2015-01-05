@@ -136,6 +136,18 @@ Page {
                     property variant currentUser : null
                     property variant currentChat : me.chat
                     
+                    preferredHeight: dataModel ? dataModel.childCount(0) * 100 : 0 // ContactItem height
+                    
+                    signal itemAddedOrRemoved()
+                    onItemAddedOrRemoved: {
+                        preferredHeight =  dataModel.childCount(0) * 100
+                    }
+                    
+                    onDataModelChanged: {
+                        dataModel.itemAdded.connect(itemAddedOrRemoved)
+                        dataModel.itemRemoved.connect(itemAddedOrRemoved)
+                    }
+                    
                     multiSelectHandler {
                         actions: [
                             ActionItem {
