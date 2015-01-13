@@ -91,7 +91,31 @@ void MainScreen::setProfilePhoto(const QString& fileName)
 void MainScreen::sendMessage(Peer* peer, const QString& message)
 {
     QByteArray bytes = message.toUtf8();
-    tgl_do_send_message(gTLS, {peer->type(), peer->id()}, (const char*)bytes.data(), bytes.length(), 0, 0);
+    if (peer->type() == TGL_BROADCAST_CHAT)
+    {
+        BroadcastChat* chat = (BroadcastChat*)peer;
+
+        GroupDataModel* members = (GroupDataModel*)chat->members();
+
+        tgl_peer_id_t* peers = new tgl_peer_id_t[members->size()];
+
+        int idx = 0;
+        for (QVariantList indexPath = members->first(); !indexPath.isEmpty(); indexPath = members->after(indexPath))
+        {
+            User* user = (User*)members->data(indexPath).value<QObject*>();
+            peers[idx].type = user->type();
+            peers[idx].id = user->id();
+            idx++;
+        }
+
+        tgl_do_send_broadcast(gTLS, members->size(), peers, bytes.data(), bytes.length(), MainScreen::_broadcastSended, chat);
+
+        delete[] peers;
+
+        //void tgl_do_send_broadcast (struct tgl_state *TLS, int num, tgl_peer_id_t id[], const char *text, int text_len, void (*callback)(struct tgl_state *TLS, void *extra, int success, int num, struct tgl_message *ML[]), void *callback_extra);
+    }
+    else
+        tgl_do_send_message(gTLS, {peer->type(), peer->id()}, (const char*)bytes.data(), bytes.length(), 0, 0);
 }
 
 void MainScreen::sendPhoto(Peer* peer, const QString& fileName)
@@ -106,6 +130,9 @@ void MainScreen::deleteMessage(long long id)
 
 void MainScreen::markRead(Peer* peer)
 {
+    if (peer->type() == TGL_BROADCAST_CHAT)
+        return;
+
     tgl_do_mark_read(gTLS, {peer->type(), peer->id()}, 0, 0);
 }
 
@@ -128,9 +155,26 @@ void MainScreen::createGroup(QVariantList users, const QString& title, const QSt
     tgl_do_create_group_chat_ex(gTLS, users.size(), data->peers, title.toUtf8().data(), MainScreen::_createGroupCallback, data);
 }
 
+void MainScreen::createBroadcast(QVariantList users)
+{
+    BroadcastChat* chat = (BroadcastChat*)Storage::instance()->getPeer(TGL_BROADCAST_CHAT, 0);
+    chat->setTitle("New Broadcast");
+
+    foreach(QVariant v, users)
+    {
+        User* user = (User*)v.value<QObject*>();
+        chat->addMember(user, gTLS->our_id);
+    }
+
+    Storage::instance()->dialogs()->append(chat);
+}
+
 void MainScreen::setGroupName(GroupChat* group, const QString& title)
 {
-    tgl_do_rename_chat(gTLS, {group->type(), group->id()}, title.toUtf8().data(), NULL, NULL);
+    if (group->type() == TGL_BROADCAST_CHAT)
+        group->setTitle(title);
+    else
+        tgl_do_rename_chat(gTLS, {group->type(), group->id()}, title.toUtf8().data(), NULL, NULL);
 }
 
 void MainScreen::addUserToGroup(GroupChat* group, User* user)
@@ -366,6 +410,17 @@ void MainScreen::_contactDeleteHandler(struct tgl_state *TLS, void *callback_ext
     }
 
     emit m_instance->contactDeleted(!success, "Something wrong");
+}
+
+void MainScreen::_broadcastSended(struct tgl_state *TLS, void *extra, int success, int num, struct tgl_message *ML[])
+{
+    BroadcastChat* chat = (BroadcastChat*)extra;
+    if (success)
+    {
+        Message* message = new Message(ML[0]->id, ML[0]);
+        message->setParent(Storage::instance());
+        chat->addMessage(message);
+    }
 }
 
 User* MainScreen::getUser(int id)

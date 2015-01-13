@@ -139,12 +139,13 @@ NavigationPane {
                     },
                     ListItemComponent {
                         type: "item"
-                        ContactItem { }
+                        ContactItem {
+                        }
                     }
                 ]
                 
                 onSelectionChanged: {
-                    //multiSelectHandler.status = "Selected " + selectionList().length;
+                    multiSelectHandler.status = "Selected " + selectionList().length;
                 }
                 
                 onTriggered: {
@@ -196,7 +197,14 @@ NavigationPane {
                                 title: "New Broadcast"
                                 imageSource: "asset:///images/menu_broadcast.png"
                                 onTriggered: {
-                                    console.log("Briadcast invite")
+                                    //console.log("Briadcast invite")
+                                    var list = []
+                                    for (var i = 0; i < contacts_list.selectionList().length; i++)
+                                    {
+                                        list.push(contacts_list.dataModel.data(contacts_list.selectionList()[i]));
+                                    }
+
+                                    _owner.createBroadcast(list);
                                 }
                             }
                         ]

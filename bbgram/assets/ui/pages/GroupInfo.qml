@@ -95,7 +95,7 @@ Page {
                     }
                     
                     Label {
-                        text: "Members Online"
+                        text: chat.type == 2 ? "Members Online" : "Broadcast"
                         //text: "last seen ..."
                         textStyle {
                             color: Color.Gray
@@ -112,9 +112,11 @@ Page {
                 
                 SettingsHeader {
                     text: "Settings"
+                    visible: chat.type == 2
                 }
                 SettingsToggleButton {
                     text: "Notifications"
+                    visible: chat.type == 2
                     checked: !muted
                     onCheckedChanged: {
                         if (muted == checked)
@@ -122,6 +124,7 @@ Page {
                     }
                 }
                 SettingsRow {
+                    visible: chat.type == 2
                     text: "Shared Media"
                 }
                 

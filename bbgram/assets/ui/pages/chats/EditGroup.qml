@@ -10,7 +10,7 @@ Sheet {
     
     Page {
         titleBar: TitleBar {
-            title: "Edit Group"
+            title: chat.type == 2 ? "Edit Group" : "Edit Broadcast"
             acceptAction: ActionItem {
                 title: "Done"
                 onTriggered: {
@@ -58,6 +58,7 @@ Sheet {
             }
             
             Container {
+                visible: chat.type == 2
                 layout: StackLayout {
                 }
                 horizontalAlignment: HorizontalAlignment.Fill

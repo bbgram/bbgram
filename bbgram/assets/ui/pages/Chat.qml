@@ -43,7 +43,7 @@ Page {
             var navigationPane = Application.scene.activeTab.content 
             navigationPane.push(page)
         }
-        else if (peer.type == 2) { // group
+        else if (peer.type == 2 || peer.type == 255) { // group or broadcast
             var page = groupPageDef.createObject()
             page.chat = peer
             var navigationPane = Application.scene.activeTab.content 

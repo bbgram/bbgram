@@ -197,10 +197,6 @@ NavigationPane {
                             
                             id: itemContainer
                             
-                            ListItem.onSelectionChanged: {
-                                itemContainer.selected = selected;
-                            }
-                            
                             gestureHandlers: [
                                 TapHandler {
                                     onTapped: {

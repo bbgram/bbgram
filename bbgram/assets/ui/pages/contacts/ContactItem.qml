@@ -11,21 +11,11 @@ import bb.cascades 1.2
  }*/
 
 CustomListItem {
-    property bool selected : false
     property bool fromPhone: ListItemData.sortingKey != "!"
     
-    preferredHeight: 100
+    highlightAppearance: HighlightAppearance.Full
     
-    onSelectedChanged: {
-        if (selected) {
-            background.background = Color.create("#31A3DD")
-            opacity = 0.2
-        }
-        else {
-            background.background = Color.White
-            background.opacity = 1
-        }
-    }
+    preferredHeight: 100
     
     content: Container {
         id:background

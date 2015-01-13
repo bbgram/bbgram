@@ -6,6 +6,7 @@
 #include "../model/ChatList.h"
 #include "../model/User.h"
 #include "../model/GroupChat.h"
+#include "../model/BroadcastChat.h"
 
 #include <bb/cascades/TabbedPane>
 #include <bb/platform/Notification>
@@ -28,6 +29,7 @@ public:
     Q_INVOKABLE void deleteMessage(long long id);
     Q_INVOKABLE void markRead(Peer* peer);
     Q_INVOKABLE void createGroup(QVariantList users, const QString& title, const QString& chatPhoto);
+    Q_INVOKABLE void createBroadcast(QVariantList users);
     Q_INVOKABLE void setGroupName(GroupChat* group, const QString& title);
     Q_INVOKABLE void addUserToGroup(GroupChat* group, User* user);
     Q_INVOKABLE void deleteMemberFromGroup(GroupChat* group, User* member);
@@ -70,4 +72,5 @@ protected:
     static void _contactAddHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[]);
     static void _contactRenameHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[]);
     static void _contactDeleteHandler(struct tgl_state *TLS, void *callback_extra, int success);
+    static void _broadcastSended(struct tgl_state *TLS, void *extra, int success, int num, struct tgl_message *ML[]);
 };

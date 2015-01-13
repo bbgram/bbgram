@@ -1,20 +1,8 @@
 import bb.cascades 1.2
 
 CustomListItem {
-    property bool selected : false
     preferredHeight: 100
-    
-    
-    onSelectedChanged: {
-        if (selected) {
-            background.background = Color.create("#31A3DD")
-            opacity = 0.2
-        }
-        else {
-            background.background = Color.White
-            background.opacity = 1
-        }
-    }
+    highlightAppearance: HighlightAppearance.Full
     
     content: Container {
         id:background

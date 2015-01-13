@@ -2,6 +2,7 @@
 
 #include "model/User.h"
 #include "model/GroupChat.h"
+#include "model/BroadcastChat.h"
 
 #include <QDateTime>
 
@@ -190,6 +191,8 @@ Peer* Storage::getPeer(int type, int id)
             peer = new User(id);
         if (type == TGL_PEER_CHAT)
             peer = new GroupChat(id);
+        if (type == TGL_BROADCAST_CHAT)
+            peer = new BroadcastChat();
         if (peer)
         {
             m_peers.insert(peerId, peer);
@@ -932,6 +935,9 @@ void Storage::loadAdditionalHistory(Peer* peer)
             peer->addMessage(message);
         n++;
     }
+
+    if (peer->type() == TGL_BROADCAST_CHAT)
+            return;
 
     if (n < HISTORY_LIMIT)
         tgl_do_get_history_maxid(gTLS, {peer->type(), peer->id()}, -1, msg_id, HISTORY_LIMIT, _getHistoryCallback, peer);
