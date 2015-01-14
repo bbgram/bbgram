@@ -15,7 +15,7 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-    Copyright Vitaly Valtman 2013-2014
+    Copyright Vitaly Valtman 2013-2015
 */
 
 #ifdef HAVE_CONFIG_H
@@ -127,10 +127,12 @@ static int fetch_comb_binlog_dc_salt (struct tgl_state *TLS, void *extra) {
 }
       
 static int fetch_comb_binlog_set_dh_params (struct tgl_state *TLS, void *extra) {
-  if (TLS->encr_prime) { tfree (TLS->encr_prime, 256); }
+  if (TLS->encr_prime) { tfree (TLS->encr_prime, 256); BN_free (TLS->encr_prime_bn); }
   TLS->encr_root = fetch_int ();
   TLS->encr_prime = talloc (256);
   fetch_ints (TLS->encr_prime, 64);
+  TLS->encr_prime_bn = BN_new ();
+  BN_bin2bn ((void *)TLS->encr_prime, 256, TLS->encr_prime_bn);
   TLS->encr_param_version = fetch_int ();
 
   return 0;

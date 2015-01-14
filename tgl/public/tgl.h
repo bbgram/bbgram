@@ -1,4 +1,4 @@
-/*
+/* 
     This file is part of tgl-library
 
     This library is free software; you can redistribute it and/or
@@ -15,7 +15,7 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-    Copyright Vitaly Valtman 2014
+    Copyright Vitaly Valtman 2014-2015
 */
 #ifndef __TGL_H__
 #define __TGL_H__
@@ -30,19 +30,28 @@
 #define TG_SERVER_3 "174.140.142.6"
 #define TG_SERVER_4 "149.154.167.91"
 #define TG_SERVER_5 "149.154.171.5"
-#define TG_SERVER_DEFAULT 4
+
+#define TG_SERVER_IPV6_1 "2001:b28:f23d:f001::a"
+#define TG_SERVER_IPV6_2 "2001:67c:4e8:f002::a"
+#define TG_SERVER_IPV6_3 "2001:b28:f23d:f003::a"
+#define TG_SERVER_IPV6_4 "2001:67c:4e8:f004::a"
+#define TG_SERVER_IPV6_5 "2001:b28:f23f:f005::a"
+#define TG_SERVER_DEFAULT 2
 
 #define TG_SERVER_TEST_1 "173.240.5.253"
 #define TG_SERVER_TEST_2 "149.154.167.40"
 #define TG_SERVER_TEST_3 "174.140.142.5"
+#define TG_SERVER_TEST_IPV6_1 "2001:b28:f23d:f001::e"
+#define TG_SERVER_TEST_IPV6_2 "2001:67c:4e8:f002::e"
+#define TG_SERVER_TEST_IPV6_3 "2001:b28:f23d:f003::e"
 #define TG_SERVER_TEST_DEFAULT 2
 
 // JUST RANDOM STRING
-#define TGL_BUILD "2590"
-#define TGL_VERSION "1.1.1"
+#define TGL_BUILD "7832"
+#define TGL_VERSION "1.2.0"
 
 #define TGL_ENCRYPTED_LAYER 17
-#define TGL_SCHEME_LAYER 19
+#define TGL_SCHEME_LAYER 22
 
 struct connection;
 struct mtproto_methods;
@@ -81,6 +90,9 @@ struct tgl_update_callback {
   void (*new_msg)(struct tgl_state *TLS, struct tgl_message *M);
   void (*marked_read)(struct tgl_state *TLS, int num, struct tgl_message *list[]);
   void (*logprintf)(const char *format, ...)  __attribute__ ((format (printf, 1, 2)));
+  void (*get_string)(struct tgl_state *TLS, const char *prompt, int flags, void (*callback)(struct tgl_state *TLS, char *string, void *arg), void *arg);
+  void (*logged_in)(struct tgl_state *TLS);
+  void (*started)(struct tgl_state *TLS);
   void (*type_notification)(struct tgl_state *TLS, struct tgl_user *U, enum tgl_typing_status status);
   void (*type_in_chat_notification)(struct tgl_state *TLS, struct tgl_user *U, struct tgl_chat *C, enum tgl_typing_status status);
   void (*type_in_secret_chat_notification)(struct tgl_state *TLS, struct tgl_secret_chat *E);
@@ -134,6 +146,7 @@ struct tgl_timer_methods {
 #define E_DEBUG 6
 
 #define TGL_LOCK_DIFF 1
+#define TGL_LOCK_PASSWORD 2
 
 #define TGL_MAX_RSA_KEYS_NUM 10
 // Do not modify this structure, unless you know what you do
@@ -143,20 +156,21 @@ struct tgl_state {
   int our_id; // ID of logged in user
   int encr_root;
   unsigned char *encr_prime;
+  void *encr_prime_bn;
   int encr_param_version;
   int pts;
   int qts;
   int date;
   int seq;
   int binlog_enabled;
-  int test_mode;
+  int test_mode; 
   int verbosity;
   int unread_messages;
   int active_queries;
   int max_msg_id;
   int started;
 
-  long long locks;
+  long long locks; 
   struct tgl_dc *DC_list[TGL_MAX_DC_NUM];
   struct tgl_dc *DC_working;
   int max_dc_num;
@@ -178,6 +192,8 @@ struct tgl_state {
   void *ev_base;
 
   char *rsa_key_list[TGL_MAX_RSA_KEYS_NUM];
+  void *rsa_key_loaded[TGL_MAX_RSA_KEYS_NUM];
+  long long rsa_key_fingerprint[TGL_MAX_RSA_KEYS_NUM];
   int rsa_key_num;
   struct bignum_ctx *BN_ctx;
 
@@ -203,18 +219,21 @@ struct tgl_state {
 
   struct tgl_timer_methods *timer_methods;
 
-  void *pubKey;
-
   struct tree_query *queries_tree;
 
-  char *base_path;
-
+  char *base_path; 
+  
   struct tree_user *online_updates;
 
   struct tgl_timer *online_updates_timer;
 
   int app_id;
   char *app_hash;
+
+  void *ev_login;
+
+  char *app_version;
+  int ipv6_enabled;
 };
 #pragma pack(pop)
 //extern struct tgl_state tgl_state;
@@ -252,7 +271,7 @@ void tgl_set_auth_file_path (struct tgl_state *TLS, const char *path);
 void tgl_set_download_directory (struct tgl_state *TLS, const char *path);
 void tgl_set_callback (struct tgl_state *TLS, struct tgl_update_callback *cb);
 void tgl_set_rsa_key (struct tgl_state *TLS, const char *key);
-
+void tgl_set_app_version (struct tgl_state *TLS, const char *app_version);
 
 static inline int tgl_get_peer_type (tgl_peer_id_t id) {
   return id.type;
@@ -273,33 +292,13 @@ static inline int tgl_cmp_peer_id (tgl_peer_id_t a, tgl_peer_id_t b) {
   return memcmp (&a, &b, sizeof (a));
 }
 
-static inline void tgl_incr_verbosity (struct tgl_state *TLS) {
-  TLS->verbosity ++;
-}
-
-static inline void tgl_set_verbosity (struct tgl_state *TLS, int val) {
-  TLS->verbosity = val;
-}
-
-static inline void tgl_enable_pfs (struct tgl_state *TLS) {
-  TLS->enable_pfs = 1;
-}
-
-static inline void tgl_set_test_mode (struct tgl_state *TLS) {
-  TLS->test_mode ++;
-}
-
-static inline void tgl_set_net_methods (struct tgl_state *TLS, struct tgl_net_methods *methods) {
-  TLS->net_methods = methods;
-}
-
-static inline void tgl_set_timer_methods (struct tgl_state *TLS, struct tgl_timer_methods *methods) {
-  TLS->timer_methods = methods;
-}
-
-static inline void tgl_set_ev_base (struct tgl_state *TLS, void *ev_base) {
-  TLS->ev_base = ev_base;
-}
+void tgl_incr_verbosity (struct tgl_state *TLS);
+void tgl_set_verbosity (struct tgl_state *TLS, int val);
+void tgl_enable_pfs (struct tgl_state *TLS);
+void tgl_set_test_mode (struct tgl_state *TLS);
+void tgl_set_net_methods (struct tgl_state *TLS, struct tgl_net_methods *methods);
+void tgl_set_timer_methods (struct tgl_state *TLS, struct tgl_timer_methods *methods);
+void tgl_set_ev_base (struct tgl_state *TLS, void *ev_base);
 
 //struct pollfd;
 //int tgl_connections_make_poll_array (struct tgl_state *TLS, struct pollfd *fds, int max);
@@ -319,6 +318,7 @@ void tgl_do_get_history (struct tgl_state *TLS, tgl_peer_id_t id, int limit, int
 void tgl_do_get_history_ext (struct tgl_state *TLS, tgl_peer_id_t id, int offset, int limit, int offline_mode, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]), void *callback_extra);
 void tgl_do_get_dialog_list (struct tgl_state *TLS, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, int size, tgl_peer_id_t peers[], int last_msg_id[], int unread_count[]), void *callback_extra);
 void tgl_do_send_photo (struct tgl_state *TLS, enum tgl_message_media_type type, tgl_peer_id_t to_id, char *file_name, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M), void *callback_extra);
+void tgl_do_send_document (struct tgl_state *TLS, int flags, tgl_peer_id_t to_id, char *file_name, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M), void *callback_extra);
 void tgl_do_set_chat_photo (struct tgl_state *TLS, tgl_peer_id_t chat_id, char *file_name, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M), void *callback_extra);
 void tgl_do_set_profile_photo (struct tgl_state *TLS, char *file_name, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success), void *callback_extra);
 void tgl_do_set_profile_name (struct tgl_state *TLS, char *first_name, char *last_name, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *U), void *callback_extra);
@@ -329,12 +329,12 @@ void tgl_do_get_chat_info (struct tgl_state *TLS, tgl_peer_id_t id, int offline_
 void tgl_do_get_user_info (struct tgl_state *TLS, tgl_peer_id_t id, int offline_mode, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *U), void *callback_extra);
 void tgl_do_load_photo (struct tgl_state *TLS, struct tgl_photo *photo, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, char *filename), void *callback_extra);
 void tgl_do_load_photo_size (struct tgl_state *TLS, struct tgl_photo_size *P, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, char *filename), void *callback_extra);
-void tgl_do_load_video_thumb (struct tgl_state *TLS, struct tgl_video *video, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, char *filename), void *callback_extra);
-void tgl_do_load_audio (struct tgl_state *TLS, struct tgl_audio *V, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, char *filename), void *callback_extra);
-void tgl_do_load_video (struct tgl_state *TLS, struct tgl_video *V, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, char *filename), void *callback_extra);
+void tgl_do_set_password (struct tgl_state *TLS, char *hint, void (*callback)(struct tgl_state *TLS, void *extra, int success), void *extra);
+void tgl_do_check_password (struct tgl_state *TLS, void (*callback)(struct tgl_state *TLS, void *extra, int success), void *callback_extra);
+
+void tgl_do_load_encr_document (struct tgl_state *TLS, struct tgl_encr_document *V, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, char *filename), void *callback_extra);
 void tgl_do_load_document (struct tgl_state *TLS, struct tgl_document *V, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, char *filename), void *callback_extra);
 void tgl_do_load_document_thumb (struct tgl_state *TLS, struct tgl_document *video, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, char *filename), void *callback_extra);
-void tgl_do_load_encr_video (struct tgl_state *TLS, struct tgl_encr_video *V, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, char *filename), void *callback_extra);
 void tgl_do_export_auth (struct tgl_state *TLS, int num, void (*callback) (struct tgl_state *TLS, void *callback_extra, int success), void *callback_extra);
 void tgl_do_add_contact (struct tgl_state *TLS, const char *phone, int phone_len, const char *first_name, int first_name_len, const char *last_name, int last_name_len, int force, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[]), void *callback_extra);
 void tgl_do_msg_search (struct tgl_state *TLS, tgl_peer_id_t id, int from, int to, int limit, int offset, const char *s, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]), void *callback_extra);
@@ -401,11 +401,8 @@ char *tglf_extf_fetch (struct tgl_state *TLS, struct paramed_type *T);
 void tgl_free_all (struct tgl_state *TLS);
 void tgl_register_app_id (struct tgl_state *TLS, int app_id, char *app_hash);
 
-static inline struct tgl_state *tgl_state_alloc (void) {
-  struct tgl_state *TLS = (struct tgl_state *)malloc (sizeof (*TLS));
-  if (!TLS) { return NULL; }
-  memset (TLS, 0, sizeof (*TLS));
-  return TLS;
-}
+void tgl_login (struct tgl_state *TLS);
+void tgl_enable_ipv6 (struct tgl_state *TLS);
 
+struct tgl_state *tgl_state_alloc (void);
 #endif

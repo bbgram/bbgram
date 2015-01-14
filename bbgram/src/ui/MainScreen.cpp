@@ -120,7 +120,7 @@ void MainScreen::sendMessage(Peer* peer, const QString& message)
 
 void MainScreen::sendPhoto(Peer* peer, const QString& fileName)
 {
-    tgl_do_send_photo(gTLS, tgl_message_media_photo, {peer->type(), peer->id()}, fileName.toUtf8().data(), NULL, NULL);
+    tgl_do_send_document(gTLS, 0, {peer->type(), peer->id()}, fileName.toUtf8().data(), NULL, NULL);
 }
 
 void MainScreen::deleteMessage(long long id)

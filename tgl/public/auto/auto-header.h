@@ -66,6 +66,10 @@ int skip_constructor_chat_photo (struct paramed_type *T);
 int store_constructor_chat_photo (struct paramed_type *T);
 int fetch_constructor_chat_photo (struct paramed_type *T);
 int autocomplete_constructor_chat_photo (struct paramed_type *T);
+int skip_constructor_client_d_h_inner_data (struct paramed_type *T);
+int store_constructor_client_d_h_inner_data (struct paramed_type *T);
+int fetch_constructor_client_d_h_inner_data (struct paramed_type *T);
+int autocomplete_constructor_client_d_h_inner_data (struct paramed_type *T);
 int skip_constructor_config (struct paramed_type *T);
 int store_constructor_config (struct paramed_type *T);
 int fetch_constructor_config (struct paramed_type *T);
@@ -194,14 +198,6 @@ int skip_constructor_decrypted_message_media_audio (struct paramed_type *T);
 int store_constructor_decrypted_message_media_audio (struct paramed_type *T);
 int fetch_constructor_decrypted_message_media_audio (struct paramed_type *T);
 int autocomplete_constructor_decrypted_message_media_audio (struct paramed_type *T);
-int skip_constructor_decrypted_message_media_video_l12 (struct paramed_type *T);
-int store_constructor_decrypted_message_media_video_l12 (struct paramed_type *T);
-int fetch_constructor_decrypted_message_media_video_l12 (struct paramed_type *T);
-int autocomplete_constructor_decrypted_message_media_video_l12 (struct paramed_type *T);
-int skip_constructor_decrypted_message_media_audio_l12 (struct paramed_type *T);
-int store_constructor_decrypted_message_media_audio_l12 (struct paramed_type *T);
-int fetch_constructor_decrypted_message_media_audio_l12 (struct paramed_type *T);
-int autocomplete_constructor_decrypted_message_media_audio_l12 (struct paramed_type *T);
 int skip_constructor_dialog (struct paramed_type *T);
 int store_constructor_dialog (struct paramed_type *T);
 int fetch_constructor_dialog (struct paramed_type *T);
@@ -214,6 +210,34 @@ int skip_constructor_document (struct paramed_type *T);
 int store_constructor_document (struct paramed_type *T);
 int fetch_constructor_document (struct paramed_type *T);
 int autocomplete_constructor_document (struct paramed_type *T);
+int skip_constructor_document_l19 (struct paramed_type *T);
+int store_constructor_document_l19 (struct paramed_type *T);
+int fetch_constructor_document_l19 (struct paramed_type *T);
+int autocomplete_constructor_document_l19 (struct paramed_type *T);
+int skip_constructor_document_attribute_image_size (struct paramed_type *T);
+int store_constructor_document_attribute_image_size (struct paramed_type *T);
+int fetch_constructor_document_attribute_image_size (struct paramed_type *T);
+int autocomplete_constructor_document_attribute_image_size (struct paramed_type *T);
+int skip_constructor_document_attribute_animated (struct paramed_type *T);
+int store_constructor_document_attribute_animated (struct paramed_type *T);
+int fetch_constructor_document_attribute_animated (struct paramed_type *T);
+int autocomplete_constructor_document_attribute_animated (struct paramed_type *T);
+int skip_constructor_document_attribute_sticker (struct paramed_type *T);
+int store_constructor_document_attribute_sticker (struct paramed_type *T);
+int fetch_constructor_document_attribute_sticker (struct paramed_type *T);
+int autocomplete_constructor_document_attribute_sticker (struct paramed_type *T);
+int skip_constructor_document_attribute_video (struct paramed_type *T);
+int store_constructor_document_attribute_video (struct paramed_type *T);
+int fetch_constructor_document_attribute_video (struct paramed_type *T);
+int autocomplete_constructor_document_attribute_video (struct paramed_type *T);
+int skip_constructor_document_attribute_audio (struct paramed_type *T);
+int store_constructor_document_attribute_audio (struct paramed_type *T);
+int fetch_constructor_document_attribute_audio (struct paramed_type *T);
+int autocomplete_constructor_document_attribute_audio (struct paramed_type *T);
+int skip_constructor_document_attribute_filename (struct paramed_type *T);
+int store_constructor_document_attribute_filename (struct paramed_type *T);
+int fetch_constructor_document_attribute_filename (struct paramed_type *T);
+int autocomplete_constructor_document_attribute_filename (struct paramed_type *T);
 int skip_constructor_double (struct paramed_type *T);
 int store_constructor_double (struct paramed_type *T);
 int fetch_constructor_double (struct paramed_type *T);
@@ -562,6 +586,14 @@ int skip_constructor_int (struct paramed_type *T);
 int store_constructor_int (struct paramed_type *T);
 int fetch_constructor_int (struct paramed_type *T);
 int autocomplete_constructor_int (struct paramed_type *T);
+int skip_constructor_int128 (struct paramed_type *T);
+int store_constructor_int128 (struct paramed_type *T);
+int fetch_constructor_int128 (struct paramed_type *T);
+int autocomplete_constructor_int128 (struct paramed_type *T);
+int skip_constructor_int256 (struct paramed_type *T);
+int store_constructor_int256 (struct paramed_type *T);
+int fetch_constructor_int256 (struct paramed_type *T);
+int autocomplete_constructor_int256 (struct paramed_type *T);
 int skip_constructor_long (struct paramed_type *T);
 int store_constructor_long (struct paramed_type *T);
 int fetch_constructor_long (struct paramed_type *T);
@@ -698,6 +730,14 @@ int skip_constructor_null (struct paramed_type *T);
 int store_constructor_null (struct paramed_type *T);
 int fetch_constructor_null (struct paramed_type *T);
 int autocomplete_constructor_null (struct paramed_type *T);
+int skip_constructor_p_q_inner_data (struct paramed_type *T);
+int store_constructor_p_q_inner_data (struct paramed_type *T);
+int fetch_constructor_p_q_inner_data (struct paramed_type *T);
+int autocomplete_constructor_p_q_inner_data (struct paramed_type *T);
+int skip_constructor_p_q_inner_data_temp (struct paramed_type *T);
+int store_constructor_p_q_inner_data_temp (struct paramed_type *T);
+int fetch_constructor_p_q_inner_data_temp (struct paramed_type *T);
+int autocomplete_constructor_p_q_inner_data_temp (struct paramed_type *T);
 int skip_constructor_peer_user (struct paramed_type *T);
 int store_constructor_peer_user (struct paramed_type *T);
 int fetch_constructor_peer_user (struct paramed_type *T);
@@ -770,6 +810,10 @@ int skip_constructor_privacy_value_disallow_users (struct paramed_type *T);
 int store_constructor_privacy_value_disallow_users (struct paramed_type *T);
 int fetch_constructor_privacy_value_disallow_users (struct paramed_type *T);
 int autocomplete_constructor_privacy_value_disallow_users (struct paramed_type *T);
+int skip_constructor_res_p_q (struct paramed_type *T);
+int store_constructor_res_p_q (struct paramed_type *T);
+int fetch_constructor_res_p_q (struct paramed_type *T);
+int autocomplete_constructor_res_p_q (struct paramed_type *T);
 int skip_constructor_send_message_typing_action (struct paramed_type *T);
 int store_constructor_send_message_typing_action (struct paramed_type *T);
 int fetch_constructor_send_message_typing_action (struct paramed_type *T);
@@ -810,6 +854,34 @@ int skip_constructor_send_message_choose_contact_action (struct paramed_type *T)
 int store_constructor_send_message_choose_contact_action (struct paramed_type *T);
 int fetch_constructor_send_message_choose_contact_action (struct paramed_type *T);
 int autocomplete_constructor_send_message_choose_contact_action (struct paramed_type *T);
+int skip_constructor_server_d_h_params_fail (struct paramed_type *T);
+int store_constructor_server_d_h_params_fail (struct paramed_type *T);
+int fetch_constructor_server_d_h_params_fail (struct paramed_type *T);
+int autocomplete_constructor_server_d_h_params_fail (struct paramed_type *T);
+int skip_constructor_server_d_h_params_ok (struct paramed_type *T);
+int store_constructor_server_d_h_params_ok (struct paramed_type *T);
+int fetch_constructor_server_d_h_params_ok (struct paramed_type *T);
+int autocomplete_constructor_server_d_h_params_ok (struct paramed_type *T);
+int skip_constructor_server_d_h_inner_data (struct paramed_type *T);
+int store_constructor_server_d_h_inner_data (struct paramed_type *T);
+int fetch_constructor_server_d_h_inner_data (struct paramed_type *T);
+int autocomplete_constructor_server_d_h_inner_data (struct paramed_type *T);
+int skip_constructor_dh_gen_ok (struct paramed_type *T);
+int store_constructor_dh_gen_ok (struct paramed_type *T);
+int fetch_constructor_dh_gen_ok (struct paramed_type *T);
+int autocomplete_constructor_dh_gen_ok (struct paramed_type *T);
+int skip_constructor_dh_gen_retry (struct paramed_type *T);
+int store_constructor_dh_gen_retry (struct paramed_type *T);
+int fetch_constructor_dh_gen_retry (struct paramed_type *T);
+int autocomplete_constructor_dh_gen_retry (struct paramed_type *T);
+int skip_constructor_dh_gen_fail (struct paramed_type *T);
+int store_constructor_dh_gen_fail (struct paramed_type *T);
+int fetch_constructor_dh_gen_fail (struct paramed_type *T);
+int autocomplete_constructor_dh_gen_fail (struct paramed_type *T);
+int skip_constructor_sticker_pack (struct paramed_type *T);
+int store_constructor_sticker_pack (struct paramed_type *T);
+int fetch_constructor_sticker_pack (struct paramed_type *T);
+int autocomplete_constructor_sticker_pack (struct paramed_type *T);
 int skip_constructor_string (struct paramed_type *T);
 int store_constructor_string (struct paramed_type *T);
 int fetch_constructor_string (struct paramed_type *T);
@@ -922,6 +994,10 @@ int skip_constructor_update_privacy (struct paramed_type *T);
 int store_constructor_update_privacy (struct paramed_type *T);
 int fetch_constructor_update_privacy (struct paramed_type *T);
 int autocomplete_constructor_update_privacy (struct paramed_type *T);
+int skip_constructor_update_user_phone (struct paramed_type *T);
+int store_constructor_update_user_phone (struct paramed_type *T);
+int fetch_constructor_update_user_phone (struct paramed_type *T);
+int autocomplete_constructor_update_user_phone (struct paramed_type *T);
 int skip_constructor_updates_too_long (struct paramed_type *T);
 int store_constructor_updates_too_long (struct paramed_type *T);
 int fetch_constructor_updates_too_long (struct paramed_type *T);
@@ -1026,10 +1102,22 @@ int skip_constructor_wall_paper_solid (struct paramed_type *T);
 int store_constructor_wall_paper_solid (struct paramed_type *T);
 int fetch_constructor_wall_paper_solid (struct paramed_type *T);
 int autocomplete_constructor_wall_paper_solid (struct paramed_type *T);
+int skip_constructor_account_no_password (struct paramed_type *T);
+int store_constructor_account_no_password (struct paramed_type *T);
+int fetch_constructor_account_no_password (struct paramed_type *T);
+int autocomplete_constructor_account_no_password (struct paramed_type *T);
+int skip_constructor_account_password (struct paramed_type *T);
+int store_constructor_account_password (struct paramed_type *T);
+int fetch_constructor_account_password (struct paramed_type *T);
+int autocomplete_constructor_account_password (struct paramed_type *T);
 int skip_constructor_account_privacy_rules (struct paramed_type *T);
 int store_constructor_account_privacy_rules (struct paramed_type *T);
 int fetch_constructor_account_privacy_rules (struct paramed_type *T);
 int autocomplete_constructor_account_privacy_rules (struct paramed_type *T);
+int skip_constructor_account_sent_change_phone_code (struct paramed_type *T);
+int store_constructor_account_sent_change_phone_code (struct paramed_type *T);
+int fetch_constructor_account_sent_change_phone_code (struct paramed_type *T);
+int autocomplete_constructor_account_sent_change_phone_code (struct paramed_type *T);
 int skip_constructor_auth_authorization (struct paramed_type *T);
 int store_constructor_auth_authorization (struct paramed_type *T);
 int fetch_constructor_auth_authorization (struct paramed_type *T);
@@ -1362,14 +1450,14 @@ int skip_constructor_contacts_blocked_slice (struct paramed_type *T);
 int store_constructor_contacts_blocked_slice (struct paramed_type *T);
 int fetch_constructor_contacts_blocked_slice (struct paramed_type *T);
 int autocomplete_constructor_contacts_blocked_slice (struct paramed_type *T);
-int skip_constructor_contacts_contacts (struct paramed_type *T);
-int store_constructor_contacts_contacts (struct paramed_type *T);
-int fetch_constructor_contacts_contacts (struct paramed_type *T);
-int autocomplete_constructor_contacts_contacts (struct paramed_type *T);
 int skip_constructor_contacts_contacts_not_modified (struct paramed_type *T);
 int store_constructor_contacts_contacts_not_modified (struct paramed_type *T);
 int fetch_constructor_contacts_contacts_not_modified (struct paramed_type *T);
 int autocomplete_constructor_contacts_contacts_not_modified (struct paramed_type *T);
+int skip_constructor_contacts_contacts (struct paramed_type *T);
+int store_constructor_contacts_contacts (struct paramed_type *T);
+int fetch_constructor_contacts_contacts (struct paramed_type *T);
+int autocomplete_constructor_contacts_contacts (struct paramed_type *T);
 int skip_constructor_contacts_foreign_link_unknown (struct paramed_type *T);
 int store_constructor_contacts_foreign_link_unknown (struct paramed_type *T);
 int fetch_constructor_contacts_foreign_link_unknown (struct paramed_type *T);
@@ -1446,6 +1534,14 @@ int skip_constructor_messages_affected_history (struct paramed_type *T);
 int store_constructor_messages_affected_history (struct paramed_type *T);
 int fetch_constructor_messages_affected_history (struct paramed_type *T);
 int autocomplete_constructor_messages_affected_history (struct paramed_type *T);
+int skip_constructor_messages_all_stickers_not_modified (struct paramed_type *T);
+int store_constructor_messages_all_stickers_not_modified (struct paramed_type *T);
+int fetch_constructor_messages_all_stickers_not_modified (struct paramed_type *T);
+int autocomplete_constructor_messages_all_stickers_not_modified (struct paramed_type *T);
+int skip_constructor_messages_all_stickers (struct paramed_type *T);
+int store_constructor_messages_all_stickers (struct paramed_type *T);
+int fetch_constructor_messages_all_stickers (struct paramed_type *T);
+int autocomplete_constructor_messages_all_stickers (struct paramed_type *T);
 int skip_constructor_messages_chat (struct paramed_type *T);
 int store_constructor_messages_chat (struct paramed_type *T);
 int fetch_constructor_messages_chat (struct paramed_type *T);
@@ -1522,6 +1618,14 @@ int skip_constructor_messages_stated_messages_links (struct paramed_type *T);
 int store_constructor_messages_stated_messages_links (struct paramed_type *T);
 int fetch_constructor_messages_stated_messages_links (struct paramed_type *T);
 int autocomplete_constructor_messages_stated_messages_links (struct paramed_type *T);
+int skip_constructor_messages_stickers_not_modified (struct paramed_type *T);
+int store_constructor_messages_stickers_not_modified (struct paramed_type *T);
+int fetch_constructor_messages_stickers_not_modified (struct paramed_type *T);
+int autocomplete_constructor_messages_stickers_not_modified (struct paramed_type *T);
+int skip_constructor_messages_stickers (struct paramed_type *T);
+int store_constructor_messages_stickers (struct paramed_type *T);
+int fetch_constructor_messages_stickers (struct paramed_type *T);
+int autocomplete_constructor_messages_stickers (struct paramed_type *T);
 int skip_constructor_photos_photo (struct paramed_type *T);
 int store_constructor_photos_photo (struct paramed_type *T);
 int fetch_constructor_photos_photo (struct paramed_type *T);
@@ -1684,6 +1788,15 @@ int fetch_type_bare_chat_photo (struct paramed_type *T);
 int autocomplete_type_chat_photo (struct paramed_type *T);
 int do_autocomplete_type_chat_photo (const char *text, int len, int index, char **R);
 int autocomplete_type_bare_chat_photo (struct paramed_type *T);
+int skip_type_client_d_h_inner_data (struct paramed_type *T);
+int skip_type_bare_client_d_h_inner_data (struct paramed_type *T);
+int store_type_client_d_h_inner_data (struct paramed_type *T);
+int store_type_bare_client_d_h_inner_data (struct paramed_type *T);
+int fetch_type_client_d_h_inner_data (struct paramed_type *T);
+int fetch_type_bare_client_d_h_inner_data (struct paramed_type *T);
+int autocomplete_type_client_d_h_inner_data (struct paramed_type *T);
+int do_autocomplete_type_client_d_h_inner_data (const char *text, int len, int index, char **R);
+int autocomplete_type_bare_client_d_h_inner_data (struct paramed_type *T);
 int skip_type_config (struct paramed_type *T);
 int skip_type_bare_config (struct paramed_type *T);
 int store_type_config (struct paramed_type *T);
@@ -1801,6 +1914,15 @@ int fetch_type_bare_document (struct paramed_type *T);
 int autocomplete_type_document (struct paramed_type *T);
 int do_autocomplete_type_document (const char *text, int len, int index, char **R);
 int autocomplete_type_bare_document (struct paramed_type *T);
+int skip_type_document_attribute (struct paramed_type *T);
+int skip_type_bare_document_attribute (struct paramed_type *T);
+int store_type_document_attribute (struct paramed_type *T);
+int store_type_bare_document_attribute (struct paramed_type *T);
+int fetch_type_document_attribute (struct paramed_type *T);
+int fetch_type_bare_document_attribute (struct paramed_type *T);
+int autocomplete_type_document_attribute (struct paramed_type *T);
+int do_autocomplete_type_document_attribute (const char *text, int len, int index, char **R);
+int autocomplete_type_bare_document_attribute (struct paramed_type *T);
 int skip_type_double (struct paramed_type *T);
 int skip_type_bare_double (struct paramed_type *T);
 int store_type_double (struct paramed_type *T);
@@ -2089,6 +2211,24 @@ int fetch_type_bare_int (struct paramed_type *T);
 int autocomplete_type_int (struct paramed_type *T);
 int do_autocomplete_type_int (const char *text, int len, int index, char **R);
 int autocomplete_type_bare_int (struct paramed_type *T);
+int skip_type_int128 (struct paramed_type *T);
+int skip_type_bare_int128 (struct paramed_type *T);
+int store_type_int128 (struct paramed_type *T);
+int store_type_bare_int128 (struct paramed_type *T);
+int fetch_type_int128 (struct paramed_type *T);
+int fetch_type_bare_int128 (struct paramed_type *T);
+int autocomplete_type_int128 (struct paramed_type *T);
+int do_autocomplete_type_int128 (const char *text, int len, int index, char **R);
+int autocomplete_type_bare_int128 (struct paramed_type *T);
+int skip_type_int256 (struct paramed_type *T);
+int skip_type_bare_int256 (struct paramed_type *T);
+int store_type_int256 (struct paramed_type *T);
+int store_type_bare_int256 (struct paramed_type *T);
+int fetch_type_int256 (struct paramed_type *T);
+int fetch_type_bare_int256 (struct paramed_type *T);
+int autocomplete_type_int256 (struct paramed_type *T);
+int do_autocomplete_type_int256 (const char *text, int len, int index, char **R);
+int autocomplete_type_bare_int256 (struct paramed_type *T);
 int skip_type_long (struct paramed_type *T);
 int skip_type_bare_long (struct paramed_type *T);
 int store_type_long (struct paramed_type *T);
@@ -2161,6 +2301,15 @@ int fetch_type_bare_null (struct paramed_type *T);
 int autocomplete_type_null (struct paramed_type *T);
 int do_autocomplete_type_null (const char *text, int len, int index, char **R);
 int autocomplete_type_bare_null (struct paramed_type *T);
+int skip_type_p_q_inner_data (struct paramed_type *T);
+int skip_type_bare_p_q_inner_data (struct paramed_type *T);
+int store_type_p_q_inner_data (struct paramed_type *T);
+int store_type_bare_p_q_inner_data (struct paramed_type *T);
+int fetch_type_p_q_inner_data (struct paramed_type *T);
+int fetch_type_bare_p_q_inner_data (struct paramed_type *T);
+int autocomplete_type_p_q_inner_data (struct paramed_type *T);
+int do_autocomplete_type_p_q_inner_data (const char *text, int len, int index, char **R);
+int autocomplete_type_bare_p_q_inner_data (struct paramed_type *T);
 int skip_type_peer (struct paramed_type *T);
 int skip_type_bare_peer (struct paramed_type *T);
 int store_type_peer (struct paramed_type *T);
@@ -2224,6 +2373,15 @@ int fetch_type_bare_privacy_rule (struct paramed_type *T);
 int autocomplete_type_privacy_rule (struct paramed_type *T);
 int do_autocomplete_type_privacy_rule (const char *text, int len, int index, char **R);
 int autocomplete_type_bare_privacy_rule (struct paramed_type *T);
+int skip_type_res_p_q (struct paramed_type *T);
+int skip_type_bare_res_p_q (struct paramed_type *T);
+int store_type_res_p_q (struct paramed_type *T);
+int store_type_bare_res_p_q (struct paramed_type *T);
+int fetch_type_res_p_q (struct paramed_type *T);
+int fetch_type_bare_res_p_q (struct paramed_type *T);
+int autocomplete_type_res_p_q (struct paramed_type *T);
+int do_autocomplete_type_res_p_q (const char *text, int len, int index, char **R);
+int autocomplete_type_bare_res_p_q (struct paramed_type *T);
 int skip_type_send_message_action (struct paramed_type *T);
 int skip_type_bare_send_message_action (struct paramed_type *T);
 int store_type_send_message_action (struct paramed_type *T);
@@ -2233,6 +2391,42 @@ int fetch_type_bare_send_message_action (struct paramed_type *T);
 int autocomplete_type_send_message_action (struct paramed_type *T);
 int do_autocomplete_type_send_message_action (const char *text, int len, int index, char **R);
 int autocomplete_type_bare_send_message_action (struct paramed_type *T);
+int skip_type_server_d_h_params (struct paramed_type *T);
+int skip_type_bare_server_d_h_params (struct paramed_type *T);
+int store_type_server_d_h_params (struct paramed_type *T);
+int store_type_bare_server_d_h_params (struct paramed_type *T);
+int fetch_type_server_d_h_params (struct paramed_type *T);
+int fetch_type_bare_server_d_h_params (struct paramed_type *T);
+int autocomplete_type_server_d_h_params (struct paramed_type *T);
+int do_autocomplete_type_server_d_h_params (const char *text, int len, int index, char **R);
+int autocomplete_type_bare_server_d_h_params (struct paramed_type *T);
+int skip_type_server_d_h_inner_data (struct paramed_type *T);
+int skip_type_bare_server_d_h_inner_data (struct paramed_type *T);
+int store_type_server_d_h_inner_data (struct paramed_type *T);
+int store_type_bare_server_d_h_inner_data (struct paramed_type *T);
+int fetch_type_server_d_h_inner_data (struct paramed_type *T);
+int fetch_type_bare_server_d_h_inner_data (struct paramed_type *T);
+int autocomplete_type_server_d_h_inner_data (struct paramed_type *T);
+int do_autocomplete_type_server_d_h_inner_data (const char *text, int len, int index, char **R);
+int autocomplete_type_bare_server_d_h_inner_data (struct paramed_type *T);
+int skip_type_set_client_d_h_params_answer (struct paramed_type *T);
+int skip_type_bare_set_client_d_h_params_answer (struct paramed_type *T);
+int store_type_set_client_d_h_params_answer (struct paramed_type *T);
+int store_type_bare_set_client_d_h_params_answer (struct paramed_type *T);
+int fetch_type_set_client_d_h_params_answer (struct paramed_type *T);
+int fetch_type_bare_set_client_d_h_params_answer (struct paramed_type *T);
+int autocomplete_type_set_client_d_h_params_answer (struct paramed_type *T);
+int do_autocomplete_type_set_client_d_h_params_answer (const char *text, int len, int index, char **R);
+int autocomplete_type_bare_set_client_d_h_params_answer (struct paramed_type *T);
+int skip_type_sticker_pack (struct paramed_type *T);
+int skip_type_bare_sticker_pack (struct paramed_type *T);
+int store_type_sticker_pack (struct paramed_type *T);
+int store_type_bare_sticker_pack (struct paramed_type *T);
+int fetch_type_sticker_pack (struct paramed_type *T);
+int fetch_type_bare_sticker_pack (struct paramed_type *T);
+int autocomplete_type_sticker_pack (struct paramed_type *T);
+int do_autocomplete_type_sticker_pack (const char *text, int len, int index, char **R);
+int autocomplete_type_bare_sticker_pack (struct paramed_type *T);
 int skip_type_string (struct paramed_type *T);
 int skip_type_bare_string (struct paramed_type *T);
 int store_type_string (struct paramed_type *T);
@@ -2323,6 +2517,15 @@ int fetch_type_bare_wall_paper (struct paramed_type *T);
 int autocomplete_type_wall_paper (struct paramed_type *T);
 int do_autocomplete_type_wall_paper (const char *text, int len, int index, char **R);
 int autocomplete_type_bare_wall_paper (struct paramed_type *T);
+int skip_type_account_password (struct paramed_type *T);
+int skip_type_bare_account_password (struct paramed_type *T);
+int store_type_account_password (struct paramed_type *T);
+int store_type_bare_account_password (struct paramed_type *T);
+int fetch_type_account_password (struct paramed_type *T);
+int fetch_type_bare_account_password (struct paramed_type *T);
+int autocomplete_type_account_password (struct paramed_type *T);
+int do_autocomplete_type_account_password (const char *text, int len, int index, char **R);
+int autocomplete_type_bare_account_password (struct paramed_type *T);
 int skip_type_account_privacy_rules (struct paramed_type *T);
 int skip_type_bare_account_privacy_rules (struct paramed_type *T);
 int store_type_account_privacy_rules (struct paramed_type *T);
@@ -2332,6 +2535,15 @@ int fetch_type_bare_account_privacy_rules (struct paramed_type *T);
 int autocomplete_type_account_privacy_rules (struct paramed_type *T);
 int do_autocomplete_type_account_privacy_rules (const char *text, int len, int index, char **R);
 int autocomplete_type_bare_account_privacy_rules (struct paramed_type *T);
+int skip_type_account_sent_change_phone_code (struct paramed_type *T);
+int skip_type_bare_account_sent_change_phone_code (struct paramed_type *T);
+int store_type_account_sent_change_phone_code (struct paramed_type *T);
+int store_type_bare_account_sent_change_phone_code (struct paramed_type *T);
+int fetch_type_account_sent_change_phone_code (struct paramed_type *T);
+int fetch_type_bare_account_sent_change_phone_code (struct paramed_type *T);
+int autocomplete_type_account_sent_change_phone_code (struct paramed_type *T);
+int do_autocomplete_type_account_sent_change_phone_code (const char *text, int len, int index, char **R);
+int autocomplete_type_bare_account_sent_change_phone_code (struct paramed_type *T);
 int skip_type_auth_authorization (struct paramed_type *T);
 int skip_type_bare_auth_authorization (struct paramed_type *T);
 int store_type_auth_authorization (struct paramed_type *T);
@@ -2530,6 +2742,15 @@ int fetch_type_bare_messages_affected_history (struct paramed_type *T);
 int autocomplete_type_messages_affected_history (struct paramed_type *T);
 int do_autocomplete_type_messages_affected_history (const char *text, int len, int index, char **R);
 int autocomplete_type_bare_messages_affected_history (struct paramed_type *T);
+int skip_type_messages_all_stickers (struct paramed_type *T);
+int skip_type_bare_messages_all_stickers (struct paramed_type *T);
+int store_type_messages_all_stickers (struct paramed_type *T);
+int store_type_bare_messages_all_stickers (struct paramed_type *T);
+int fetch_type_messages_all_stickers (struct paramed_type *T);
+int fetch_type_bare_messages_all_stickers (struct paramed_type *T);
+int autocomplete_type_messages_all_stickers (struct paramed_type *T);
+int do_autocomplete_type_messages_all_stickers (const char *text, int len, int index, char **R);
+int autocomplete_type_bare_messages_all_stickers (struct paramed_type *T);
 int skip_type_messages_chat (struct paramed_type *T);
 int skip_type_bare_messages_chat (struct paramed_type *T);
 int store_type_messages_chat (struct paramed_type *T);
@@ -2629,6 +2850,15 @@ int fetch_type_bare_messages_stated_messages (struct paramed_type *T);
 int autocomplete_type_messages_stated_messages (struct paramed_type *T);
 int do_autocomplete_type_messages_stated_messages (const char *text, int len, int index, char **R);
 int autocomplete_type_bare_messages_stated_messages (struct paramed_type *T);
+int skip_type_messages_stickers (struct paramed_type *T);
+int skip_type_bare_messages_stickers (struct paramed_type *T);
+int store_type_messages_stickers (struct paramed_type *T);
+int store_type_bare_messages_stickers (struct paramed_type *T);
+int fetch_type_messages_stickers (struct paramed_type *T);
+int fetch_type_bare_messages_stickers (struct paramed_type *T);
+int autocomplete_type_messages_stickers (struct paramed_type *T);
+int do_autocomplete_type_messages_stickers (const char *text, int len, int index, char **R);
+int autocomplete_type_bare_messages_stickers (struct paramed_type *T);
 int skip_type_photos_photo (struct paramed_type *T);
 int skip_type_bare_photos_photo (struct paramed_type *T);
 int store_type_photos_photo (struct paramed_type *T);
@@ -2683,6 +2913,8 @@ int fetch_type_bare_upload_file (struct paramed_type *T);
 int autocomplete_type_upload_file (struct paramed_type *T);
 int do_autocomplete_type_upload_file (const char *text, int len, int index, char **R);
 int autocomplete_type_bare_upload_file (struct paramed_type *T);
+struct paramed_type *store_function_account_change_phone (void);
+struct paramed_type *autocomplete_function_account_change_phone (void);
 struct paramed_type *store_function_account_check_username (void);
 struct paramed_type *autocomplete_function_account_check_username (void);
 struct paramed_type *store_function_account_delete_account (void);
@@ -2691,6 +2923,8 @@ struct paramed_type *store_function_account_get_account_t_t_l (void);
 struct paramed_type *autocomplete_function_account_get_account_t_t_l (void);
 struct paramed_type *store_function_account_get_notify_settings (void);
 struct paramed_type *autocomplete_function_account_get_notify_settings (void);
+struct paramed_type *store_function_account_get_password (void);
+struct paramed_type *autocomplete_function_account_get_password (void);
 struct paramed_type *store_function_account_get_privacy (void);
 struct paramed_type *autocomplete_function_account_get_privacy (void);
 struct paramed_type *store_function_account_get_wall_papers (void);
@@ -2699,8 +2933,12 @@ struct paramed_type *store_function_account_register_device (void);
 struct paramed_type *autocomplete_function_account_register_device (void);
 struct paramed_type *store_function_account_reset_notify_settings (void);
 struct paramed_type *autocomplete_function_account_reset_notify_settings (void);
+struct paramed_type *store_function_account_send_change_phone_code (void);
+struct paramed_type *autocomplete_function_account_send_change_phone_code (void);
 struct paramed_type *store_function_account_set_account_t_t_l (void);
 struct paramed_type *autocomplete_function_account_set_account_t_t_l (void);
+struct paramed_type *store_function_account_set_password (void);
+struct paramed_type *autocomplete_function_account_set_password (void);
 struct paramed_type *store_function_account_set_privacy (void);
 struct paramed_type *autocomplete_function_account_set_privacy (void);
 struct paramed_type *store_function_account_unregister_device (void);
@@ -2715,6 +2953,8 @@ struct paramed_type *store_function_account_update_username (void);
 struct paramed_type *autocomplete_function_account_update_username (void);
 struct paramed_type *store_function_auth_bind_temp_auth_key (void);
 struct paramed_type *autocomplete_function_auth_bind_temp_auth_key (void);
+struct paramed_type *store_function_auth_check_password (void);
+struct paramed_type *autocomplete_function_auth_check_password (void);
 struct paramed_type *store_function_auth_check_phone (void);
 struct paramed_type *autocomplete_function_auth_check_phone (void);
 struct paramed_type *store_function_auth_export_authorization (void);
@@ -2757,10 +2997,16 @@ struct paramed_type *store_function_contacts_import_card (void);
 struct paramed_type *autocomplete_function_contacts_import_card (void);
 struct paramed_type *store_function_contacts_import_contacts (void);
 struct paramed_type *autocomplete_function_contacts_import_contacts (void);
+struct paramed_type *store_function_contacts_resolve_username (void);
+struct paramed_type *autocomplete_function_contacts_resolve_username (void);
 struct paramed_type *store_function_contacts_search (void);
 struct paramed_type *autocomplete_function_contacts_search (void);
 struct paramed_type *store_function_contacts_unblock (void);
 struct paramed_type *autocomplete_function_contacts_unblock (void);
+struct paramed_type *store_function_decrypted_message_media_audio_l12 (void);
+struct paramed_type *autocomplete_function_decrypted_message_media_audio_l12 (void);
+struct paramed_type *store_function_decrypted_message_media_video_l12 (void);
+struct paramed_type *autocomplete_function_decrypted_message_media_video_l12 (void);
 struct paramed_type *store_function_geochats_checkin (void);
 struct paramed_type *autocomplete_function_geochats_checkin (void);
 struct paramed_type *store_function_geochats_create_geo_chat (void);
@@ -2827,6 +3073,8 @@ struct paramed_type *store_function_messages_forward_message (void);
 struct paramed_type *autocomplete_function_messages_forward_message (void);
 struct paramed_type *store_function_messages_forward_messages (void);
 struct paramed_type *autocomplete_function_messages_forward_messages (void);
+struct paramed_type *store_function_messages_get_all_stickers (void);
+struct paramed_type *autocomplete_function_messages_get_all_stickers (void);
 struct paramed_type *store_function_messages_get_chats (void);
 struct paramed_type *autocomplete_function_messages_get_chats (void);
 struct paramed_type *store_function_messages_get_dh_config (void);
@@ -2839,6 +3087,8 @@ struct paramed_type *store_function_messages_get_history (void);
 struct paramed_type *autocomplete_function_messages_get_history (void);
 struct paramed_type *store_function_messages_get_messages (void);
 struct paramed_type *autocomplete_function_messages_get_messages (void);
+struct paramed_type *store_function_messages_get_stickers (void);
+struct paramed_type *autocomplete_function_messages_get_stickers (void);
 struct paramed_type *store_function_messages_read_encrypted_history (void);
 struct paramed_type *autocomplete_function_messages_read_encrypted_history (void);
 struct paramed_type *store_function_messages_read_history (void);
@@ -2871,12 +3121,20 @@ struct paramed_type *store_function_messages_set_encrypted_typing (void);
 struct paramed_type *autocomplete_function_messages_set_encrypted_typing (void);
 struct paramed_type *store_function_messages_set_typing (void);
 struct paramed_type *autocomplete_function_messages_set_typing (void);
+struct paramed_type *store_function_photos_delete_photos (void);
+struct paramed_type *autocomplete_function_photos_delete_photos (void);
 struct paramed_type *store_function_photos_get_user_photos (void);
 struct paramed_type *autocomplete_function_photos_get_user_photos (void);
 struct paramed_type *store_function_photos_update_profile_photo (void);
 struct paramed_type *autocomplete_function_photos_update_profile_photo (void);
 struct paramed_type *store_function_photos_upload_profile_photo (void);
 struct paramed_type *autocomplete_function_photos_upload_profile_photo (void);
+struct paramed_type *store_function_req_d_h_params (void);
+struct paramed_type *autocomplete_function_req_d_h_params (void);
+struct paramed_type *store_function_req_pq (void);
+struct paramed_type *autocomplete_function_req_pq (void);
+struct paramed_type *store_function_set_client_d_h_params (void);
+struct paramed_type *autocomplete_function_set_client_d_h_params (void);
 struct paramed_type *store_function_updates_get_difference (void);
 struct paramed_type *autocomplete_function_updates_get_difference (void);
 struct paramed_type *store_function_updates_get_state (void);
@@ -3037,6 +3295,20 @@ static struct tl_type_descr tl_type_bare_chat_photo = {
   .params_num = 0,
   .params_types = 0
 };
+static struct tl_type_descr tl_type_client_d_h_inner_data __attribute__ ((unused));
+static struct tl_type_descr tl_type_client_d_h_inner_data = {
+  .name = 0x6643b654,
+  .id = "Client_DH_Inner_Data"
+,  .params_num = 0,
+  .params_types = 0
+};
+static struct tl_type_descr tl_type_bare_client_d_h_inner_data __attribute__ ((unused));
+static struct tl_type_descr tl_type_bare_client_d_h_inner_data = {
+  .name = 0x99bc49ab,
+  .id = "Bare_Client_DH_Inner_Data",
+  .params_num = 0,
+  .params_types = 0
+};
 static struct tl_type_descr tl_type_config __attribute__ ((unused));
 static struct tl_type_descr tl_type_config = {
   .name = 0x2e54dd74,
@@ -3179,14 +3451,14 @@ static struct tl_type_descr tl_type_bare_decrypted_message_layer = {
 };
 static struct tl_type_descr tl_type_decrypted_message_media __attribute__ ((unused));
 static struct tl_type_descr tl_type_decrypted_message_media = {
-  .name = 0xce7566a9,
+  .name = 0xe21b7dd5,
   .id = "DecryptedMessageMedia"
 ,  .params_num = 0,
   .params_types = 0
 };
 static struct tl_type_descr tl_type_bare_decrypted_message_media __attribute__ ((unused));
 static struct tl_type_descr tl_type_bare_decrypted_message_media = {
-  .name = 0x318a9956,
+  .name = 0x1de4822a,
   .id = "Bare_DecryptedMessageMedia",
   .params_num = 0,
   .params_types = 0
@@ -3207,15 +3479,29 @@ static struct tl_type_descr tl_type_bare_dialog = {
 };
 static struct tl_type_descr tl_type_document __attribute__ ((unused));
 static struct tl_type_descr tl_type_document = {
-  .name = 0xa804ab57,
+  .name = 0x51a73418,
   .id = "Document"
 ,  .params_num = 0,
   .params_types = 0
 };
 static struct tl_type_descr tl_type_bare_document __attribute__ ((unused));
 static struct tl_type_descr tl_type_bare_document = {
-  .name = 0x57fb54a8,
+  .name = 0xae58cbe7,
   .id = "Bare_Document",
+  .params_num = 0,
+  .params_types = 0
+};
+static struct tl_type_descr tl_type_document_attribute __attribute__ ((unused));
+static struct tl_type_descr tl_type_document_attribute = {
+  .name = 0xcfd59b04,
+  .id = "DocumentAttribute"
+,  .params_num = 0,
+  .params_types = 0
+};
+static struct tl_type_descr tl_type_bare_document_attribute __attribute__ ((unused));
+static struct tl_type_descr tl_type_bare_document_attribute = {
+  .name = 0x302a64fb,
+  .id = "Bare_DocumentAttribute",
   .params_num = 0,
   .params_types = 0
 };
@@ -3501,14 +3787,14 @@ static struct tl_type_descr tl_type_bare_input_geo_point = {
 };
 static struct tl_type_descr tl_type_input_media __attribute__ ((unused));
 static struct tl_type_descr tl_type_input_media = {
-  .name = 0x827efa09,
+  .name = 0x3670cf17,
   .id = "InputMedia"
 ,  .params_num = 0,
   .params_types = 0
 };
 static struct tl_type_descr tl_type_bare_input_media __attribute__ ((unused));
 static struct tl_type_descr tl_type_bare_input_media = {
-  .name = 0x7d8105f6,
+  .name = 0xc98f30e8,
   .id = "Bare_InputMedia",
   .params_num = 0,
   .params_types = 0
@@ -3667,6 +3953,34 @@ static struct tl_type_descr tl_type_bare_int = {
   .params_num = 0,
   .params_types = 0
 };
+static struct tl_type_descr tl_type_int128 __attribute__ ((unused));
+static struct tl_type_descr tl_type_int128 = {
+  .name = 0x7d36c439,
+  .id = "Int128"
+,  .params_num = 0,
+  .params_types = 0
+};
+static struct tl_type_descr tl_type_bare_int128 __attribute__ ((unused));
+static struct tl_type_descr tl_type_bare_int128 = {
+  .name = 0x82c93bc6,
+  .id = "Bare_Int128",
+  .params_num = 0,
+  .params_types = 0
+};
+static struct tl_type_descr tl_type_int256 __attribute__ ((unused));
+static struct tl_type_descr tl_type_int256 = {
+  .name = 0xf2c798b3,
+  .id = "Int256"
+,  .params_num = 0,
+  .params_types = 0
+};
+static struct tl_type_descr tl_type_bare_int256 __attribute__ ((unused));
+static struct tl_type_descr tl_type_bare_int256 = {
+  .name = 0x0d38674c,
+  .id = "Bare_Int256",
+  .params_num = 0,
+  .params_types = 0
+};
 static struct tl_type_descr tl_type_long __attribute__ ((unused));
 static struct tl_type_descr tl_type_long = {
   .name = 0x22076cba,
@@ -3779,6 +4093,20 @@ static struct tl_type_descr tl_type_bare_null = {
   .params_num = 0,
   .params_types = 0
 };
+static struct tl_type_descr tl_type_p_q_inner_data __attribute__ ((unused));
+static struct tl_type_descr tl_type_p_q_inner_data = {
+  .name = 0xbfa3de38,
+  .id = "P_Q_inner_data"
+,  .params_num = 0,
+  .params_types = 0
+};
+static struct tl_type_descr tl_type_bare_p_q_inner_data __attribute__ ((unused));
+static struct tl_type_descr tl_type_bare_p_q_inner_data = {
+  .name = 0x405c21c7,
+  .id = "Bare_P_Q_inner_data",
+  .params_num = 0,
+  .params_types = 0
+};
 static struct tl_type_descr tl_type_peer __attribute__ ((unused));
 static struct tl_type_descr tl_type_peer = {
   .name = 0x276159d6,
@@ -3877,6 +4205,20 @@ static struct tl_type_descr tl_type_bare_privacy_rule = {
   .params_num = 0,
   .params_types = 0
 };
+static struct tl_type_descr tl_type_res_p_q __attribute__ ((unused));
+static struct tl_type_descr tl_type_res_p_q = {
+  .name = 0x05162463,
+  .id = "ResPQ"
+,  .params_num = 0,
+  .params_types = 0
+};
+static struct tl_type_descr tl_type_bare_res_p_q __attribute__ ((unused));
+static struct tl_type_descr tl_type_bare_res_p_q = {
+  .name = 0xfae9db9c,
+  .id = "Bare_ResPQ",
+  .params_num = 0,
+  .params_types = 0
+};
 static struct tl_type_descr tl_type_send_message_action __attribute__ ((unused));
 static struct tl_type_descr tl_type_send_message_action = {
   .name = 0x88a65ee1,
@@ -3888,6 +4230,62 @@ static struct tl_type_descr tl_type_bare_send_message_action __attribute__ ((unu
 static struct tl_type_descr tl_type_bare_send_message_action = {
   .name = 0x7759a11e,
   .id = "Bare_SendMessageAction",
+  .params_num = 0,
+  .params_types = 0
+};
+static struct tl_type_descr tl_type_server_d_h_params __attribute__ ((unused));
+static struct tl_type_descr tl_type_server_d_h_params = {
+  .name = 0xa9230301,
+  .id = "Server_DH_Params"
+,  .params_num = 0,
+  .params_types = 0
+};
+static struct tl_type_descr tl_type_bare_server_d_h_params __attribute__ ((unused));
+static struct tl_type_descr tl_type_bare_server_d_h_params = {
+  .name = 0x56dcfcfe,
+  .id = "Bare_Server_DH_Params",
+  .params_num = 0,
+  .params_types = 0
+};
+static struct tl_type_descr tl_type_server_d_h_inner_data __attribute__ ((unused));
+static struct tl_type_descr tl_type_server_d_h_inner_data = {
+  .name = 0xb5890dba,
+  .id = "Server_DH_inner_data"
+,  .params_num = 0,
+  .params_types = 0
+};
+static struct tl_type_descr tl_type_bare_server_d_h_inner_data __attribute__ ((unused));
+static struct tl_type_descr tl_type_bare_server_d_h_inner_data = {
+  .name = 0x4a76f245,
+  .id = "Bare_Server_DH_inner_data",
+  .params_num = 0,
+  .params_types = 0
+};
+static struct tl_type_descr tl_type_set_client_d_h_params_answer __attribute__ ((unused));
+static struct tl_type_descr tl_type_set_client_d_h_params_answer = {
+  .name = 0xdb8a468f,
+  .id = "Set_client_DH_params_answer"
+,  .params_num = 0,
+  .params_types = 0
+};
+static struct tl_type_descr tl_type_bare_set_client_d_h_params_answer __attribute__ ((unused));
+static struct tl_type_descr tl_type_bare_set_client_d_h_params_answer = {
+  .name = 0x2475b970,
+  .id = "Bare_Set_client_DH_params_answer",
+  .params_num = 0,
+  .params_types = 0
+};
+static struct tl_type_descr tl_type_sticker_pack __attribute__ ((unused));
+static struct tl_type_descr tl_type_sticker_pack = {
+  .name = 0x12b299d4,
+  .id = "StickerPack"
+,  .params_num = 0,
+  .params_types = 0
+};
+static struct tl_type_descr tl_type_bare_sticker_pack __attribute__ ((unused));
+static struct tl_type_descr tl_type_bare_sticker_pack = {
+  .name = 0xed4d662b,
+  .id = "Bare_StickerPack",
   .params_num = 0,
   .params_types = 0
 };
@@ -3907,14 +4305,14 @@ static struct tl_type_descr tl_type_bare_string = {
 };
 static struct tl_type_descr tl_type_update __attribute__ ((unused));
 static struct tl_type_descr tl_type_update = {
-  .name = 0x6c0b5b50,
+  .name = 0x7eb21a2b,
   .id = "Update"
 ,  .params_num = 0,
   .params_types = 0
 };
 static struct tl_type_descr tl_type_bare_update __attribute__ ((unused));
 static struct tl_type_descr tl_type_bare_update = {
-  .name = 0x93f4a4af,
+  .name = 0x814de5d4,
   .id = "Bare_Update",
   .params_num = 0,
   .params_types = 0
@@ -4031,6 +4429,20 @@ static struct tl_type_descr tl_type_bare_wall_paper = {
   .params_num = 0,
   .params_types = 0
 };
+static struct tl_type_descr tl_type_account_password __attribute__ ((unused));
+static struct tl_type_descr tl_type_account_password = {
+  .name = 0x24eeb8db,
+  .id = "account.Password"
+,  .params_num = 0,
+  .params_types = 0
+};
+static struct tl_type_descr tl_type_bare_account_password __attribute__ ((unused));
+static struct tl_type_descr tl_type_bare_account_password = {
+  .name = 0xdb114724,
+  .id = "Bare_account.Password",
+  .params_num = 0,
+  .params_types = 0
+};
 static struct tl_type_descr tl_type_account_privacy_rules __attribute__ ((unused));
 static struct tl_type_descr tl_type_account_privacy_rules = {
   .name = 0x554abb6f,
@@ -4042,6 +4454,20 @@ static struct tl_type_descr tl_type_bare_account_privacy_rules __attribute__ ((u
 static struct tl_type_descr tl_type_bare_account_privacy_rules = {
   .name = 0xaab54490,
   .id = "Bare_account.PrivacyRules",
+  .params_num = 0,
+  .params_types = 0
+};
+static struct tl_type_descr tl_type_account_sent_change_phone_code __attribute__ ((unused));
+static struct tl_type_descr tl_type_account_sent_change_phone_code = {
+  .name = 0xa4f58c4c,
+  .id = "account.SentChangePhoneCode"
+,  .params_num = 0,
+  .params_types = 0
+};
+static struct tl_type_descr tl_type_bare_account_sent_change_phone_code __attribute__ ((unused));
+static struct tl_type_descr tl_type_bare_account_sent_change_phone_code = {
+  .name = 0x5b0a73b3,
+  .id = "Bare_account.SentChangePhoneCode",
   .params_num = 0,
   .params_types = 0
 };
@@ -4353,6 +4779,20 @@ static struct tl_type_descr tl_type_bare_messages_affected_history = {
   .params_num = 0,
   .params_types = 0
 };
+static struct tl_type_descr tl_type_messages_all_stickers __attribute__ ((unused));
+static struct tl_type_descr tl_type_messages_all_stickers = {
+  .name = 0x348933c1,
+  .id = "messages.AllStickers"
+,  .params_num = 0,
+  .params_types = 0
+};
+static struct tl_type_descr tl_type_bare_messages_all_stickers __attribute__ ((unused));
+static struct tl_type_descr tl_type_bare_messages_all_stickers = {
+  .name = 0xcb76cc3e,
+  .id = "Bare_messages.AllStickers",
+  .params_num = 0,
+  .params_types = 0
+};
 static struct tl_type_descr tl_type_messages_chat __attribute__ ((unused));
 static struct tl_type_descr tl_type_messages_chat = {
   .name = 0x40e9002a,
@@ -4504,6 +4944,20 @@ static struct tl_type_descr tl_type_bare_messages_stated_messages __attribute__ 
 static struct tl_type_descr tl_type_bare_messages_stated_messages = {
   .name = 0x571f7282,
   .id = "Bare_messages.StatedMessages",
+  .params_num = 0,
+  .params_types = 0
+};
+static struct tl_type_descr tl_type_messages_stickers __attribute__ ((unused));
+static struct tl_type_descr tl_type_messages_stickers = {
+  .name = 0x7bfa5710,
+  .id = "messages.Stickers"
+,  .params_num = 0,
+  .params_types = 0
+};
+static struct tl_type_descr tl_type_bare_messages_stickers __attribute__ ((unused));
+static struct tl_type_descr tl_type_bare_messages_stickers = {
+  .name = 0x8405a8ef,
+  .id = "Bare_messages.Stickers",
   .params_num = 0,
   .params_types = 0
 };

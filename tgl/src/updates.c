@@ -1,4 +1,4 @@
-/*
+/* 
     This file is part of tgl-library
 
     This library is free software; you can redistribute it and/or
@@ -15,7 +15,7 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-    Copyright Vitaly Valtman 2013-2014
+    Copyright Vitaly Valtman 2013-2015
 */
 #include "tgl.h"
 #include "updates.h"
@@ -85,7 +85,7 @@ void tglu_work_update (struct tgl_state *TLS, struct connection *c, long long ms
     {
       assert (fetch_int () == (int)CODE_vector);
       int n = fetch_int ();
-
+      
       //int p = 0;
       int i;
       for (i = 0; i < n; i++) {
@@ -118,7 +118,7 @@ void tglu_work_update (struct tgl_state *TLS, struct connection *c, long long ms
       tgl_peer_t *C = tgl_peer_get (TLS, chat_id);
       tgl_peer_t *U = tgl_peer_get (TLS, id);
       enum tgl_typing_status status = tglf_fetch_typing ();
-
+      
       if (U && C) {
         if (TLS->callback.type_in_chat_notification) {
           TLS->callback.type_in_chat_notification (TLS, (void *)U, (void *)C, status);
@@ -212,17 +212,8 @@ void tglu_work_update (struct tgl_state *TLS, struct connection *c, long long ms
     {
       assert (fetch_int () == CODE_vector);
       int n = fetch_int ();
-      int *ids = talloc (4 * n);
-      int i;
-      for (i = 0; i < n; i++) {
-        ids[i] = fetch_int ();
-      }
+      fetch_skip (n);
       tglu_fetch_pts (TLS);
-
-      if (TLS->callback.msg_delete) {
-          TLS->callback.msg_delete (TLS, n, ids);
-      }
-      tfree(ids, 4 * n);
     }
     break;
   case CODE_update_chat_participants:
@@ -245,7 +236,7 @@ void tglu_work_update (struct tgl_state *TLS, struct connection *c, long long ms
             users[i].inviter_id = fetch_int ();
             users[i].date = fetch_int ();
           }
-          int version = fetch_int ();
+          int version = fetch_int (); 
           bl_do_chat_set_participants (TLS, &C->chat, version, n, users);
         }
       } else {
@@ -290,7 +281,7 @@ void tglu_work_update (struct tgl_state *TLS, struct connection *c, long long ms
     {
       tgl_peer_id_t user_id = TGL_MK_USER (fetch_int ());
       tgl_peer_t *U = tgl_peer_get (TLS, user_id);
-
+     
       if (TLS->callback.user_activated && U) {
         TLS->callback.user_activated (TLS, (void *)U);
       }
@@ -338,7 +329,7 @@ void tglu_work_update (struct tgl_state *TLS, struct connection *c, long long ms
     {
       tgl_peer_id_t id = TGL_MK_ENCR_CHAT (fetch_int ());
       tgl_peer_t *P = tgl_peer_get (TLS, id);
-
+      
       if (P) {
         if (TLS->callback.type_in_secret_chat_notification) {
           TLS->callback.type_in_secret_chat_notification (TLS, (void *)P);
@@ -370,8 +361,8 @@ void tglu_work_update (struct tgl_state *TLS, struct connection *c, long long ms
       tgl_peer_id_t chat_id = TGL_MK_CHAT (fetch_int ());
       tgl_peer_id_t user_id = TGL_MK_USER (fetch_int ());
       tgl_peer_id_t inviter_id = TGL_MK_USER (fetch_int ());
-      int  version = fetch_int ();
-
+      int  version = fetch_int (); 
+      
       tgl_peer_t *C = tgl_peer_get (TLS, chat_id);
       if (C && (C->flags & FLAG_CREATED)) {
         bl_do_chat_add_user (TLS, &C->chat, version, tgl_get_peer_id (user_id), tgl_get_peer_id (inviter_id), time (0));
@@ -383,7 +374,7 @@ void tglu_work_update (struct tgl_state *TLS, struct connection *c, long long ms
       tgl_peer_id_t chat_id = TGL_MK_CHAT (fetch_int ());
       tgl_peer_id_t user_id = TGL_MK_USER (fetch_int ());
       int version = fetch_int ();
-
+      
       tgl_peer_t *C = tgl_peer_get (TLS, chat_id);
       if (C && (C->flags & FLAG_CREATED)) {
         bl_do_chat_del_user (TLS, &C->chat, version, tgl_get_peer_id (user_id));
@@ -476,6 +467,18 @@ void tglu_work_update (struct tgl_state *TLS, struct connection *c, long long ms
     assert (skip_type_vector (TYPE_TO_PARAM_1 (vector, TYPE_TO_PARAM (privacy_rule))) >= 0);
     vlogprintf (E_NOTICE, "privacy change update\n");
     break;
+  case CODE_update_user_phone:
+    {
+      int id = fetch_int ();
+      int l = prefetch_strlen ();
+      char *phone = fetch_str (l);
+      tgl_peer_t *U = tgl_peer_get (TLS, TGL_MK_USER (id));
+      if (U && (U->flags & FLAG_CREATED)) {
+         bl_do_user_set_phone (TLS, &U->user, phone, l);
+      }
+    }
+    break;
+
   default:
     vlogprintf (E_ERROR, "Unknown update type %08x\n", op);
     ;
@@ -491,10 +494,10 @@ void tglu_work_update_short (struct tgl_state *TLS, struct connection *c, long l
   assert (fetch_int () == CODE_update_short);
   tglu_work_update (TLS, c, msg_id);
   tglu_fetch_date (TLS);
-
+  
   assert (save_end == in_ptr);
 }
-
+  
 static int do_skip_seq (struct tgl_state *TLS, int seq) {
   if (TLS->seq) {
     if (seq <= TLS->seq) {
@@ -553,7 +556,7 @@ void tglu_work_updates (struct tgl_state *TLS, struct connection *c, long long m
 
 void tglu_work_update_short_message (struct tgl_state *TLS, struct connection *c, long long msg_id) {
   int *save = in_ptr;
-  assert (!skip_type_any (TYPE_TO_PARAM (updates)));
+  assert (!skip_type_any (TYPE_TO_PARAM (updates)));  
   if (do_skip_seq (TLS, *(in_ptr - 1)) < 0) {
     return;
   }
@@ -561,7 +564,7 @@ void tglu_work_update_short_message (struct tgl_state *TLS, struct connection *c
   in_ptr = save;
 
   assert (fetch_int () == (int)CODE_update_short_message);
-  struct tgl_message *M = tglf_fetch_alloc_message_short (TLS);
+  struct tgl_message *M = tglf_fetch_alloc_message_short (TLS);  
   assert (M);
 
   assert (save_end == in_ptr);
@@ -572,7 +575,7 @@ void tglu_work_update_short_message (struct tgl_state *TLS, struct connection *c
 
 void tglu_work_update_short_chat_message (struct tgl_state *TLS, struct connection *c, long long msg_id) {
   int *save = in_ptr;
-  assert (!skip_type_any (TYPE_TO_PARAM (updates)));
+  assert (!skip_type_any (TYPE_TO_PARAM (updates)));  
   if (do_skip_seq (TLS, *(in_ptr - 1)) < 0) {
     return;
   }
@@ -580,7 +583,7 @@ void tglu_work_update_short_chat_message (struct tgl_state *TLS, struct connecti
   in_ptr = save;
 
   assert (fetch_int () == CODE_update_short_chat_message);
-  struct tgl_message *M = tglf_fetch_alloc_message_short_chat (TLS);
+  struct tgl_message *M = tglf_fetch_alloc_message_short_chat (TLS);  
   assert (M);
   assert (save_end == in_ptr);
 
@@ -635,7 +638,7 @@ static void user_expire (struct tgl_state *TLS, void *arg) {
 void tgl_insert_status_expire (struct tgl_state *TLS, struct tgl_user *U) {
   assert (!U->status.ev);
   U->status.ev = TLS->timer_methods->alloc (TLS, user_expire, U);
-  TLS->timer_methods->insert (U->status.ev, U->status.when - tglt_get_double_time ());
+  TLS->timer_methods->insert (U->status.ev, U->status.when - tglt_get_double_time ()); 
 }
 
 void tgl_remove_status_expire (struct tgl_state *TLS, struct tgl_user *U) {

@@ -1,4 +1,4 @@
-/*
+/* 
     This file is part of tgl-library
 
     This library is free software; you can redistribute it and/or
@@ -15,7 +15,7 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-    Copyright Vitaly Valtman 2013-2014
+    Copyright Vitaly Valtman 2013-2015
 */
 
 #ifdef HAVE_CONFIG_H
@@ -125,7 +125,7 @@ void tgl_free_release (void *ptr, int size) {
 
 void *tgl_realloc_debug (void *ptr, size_t old_size __attribute__ ((unused)), size_t size) {
   void *p = talloc (size);
-  memcpy (p, ptr, size >= old_size ? old_size : size);
+  memcpy (p, ptr, size >= old_size ? old_size : size); 
   tfree (ptr, old_size);
   return p;
 }
@@ -190,7 +190,7 @@ int tgl_inflate (void *input, int ilen, void *output, int olen) {
   strm.next_in = input;
   strm.avail_out = olen ;
   strm.next_out = output;
-  int err = inflate (&strm, Z_FINISH);
+  int err = inflate (&strm, Z_FINISH); 
   int total_out = strm.total_out;
 
   if (err != Z_OK && err != Z_STREAM_END) {
@@ -207,7 +207,7 @@ void tgl_check_debug (void) {
   for (i = 0; i < used_blocks; i++) {
     void *ptr = blocks[i];
     int size = (*(int *)ptr) ^ 0xbedabeda;
-    if (!(*(int *)(ptr + 4) == size) ||
+    if (!(*(int *)(ptr + 4) == size) || 
         !(*(int *)(ptr + RES_PRE + size) == (size ^ 0x7bed7bed)) ||
         !(*(int *)(ptr + RES_PRE + 4 + size) == i)) {
       logprintf ("Bad block at address %p (size %d, num %d)\n", ptr, size, i);
@@ -220,7 +220,7 @@ void tgl_check_debug (void) {
     int j = 0;
     for (j = 0; j < l; j++) {
       if (*(char *)(ptr + 4 + j)) {
-        hexdump (ptr + 8, ptr + 8 + l + ((-l) & 3));
+        hexdump (ptr + 8, ptr + 8 + l + ((-l) & 3)); 
         logprintf ("Used freed memory size = %d. ptr = %p\n", l + 4 - RES_PRE - RES_AFTER, ptr);
         assert (0);
       }

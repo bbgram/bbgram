@@ -293,6 +293,8 @@ void Telegraph::start()
     tgl_set_timer_methods(gTLS, &m_timerMethods);
     tgl_set_callback(gTLS, &m_updateCallbacks);
     tgl_register_app_id(gTLS, APP_ID, (char*)APP_HASH);
+    tgl_set_app_version(gTLS, "bbgram");
+
 
     tgl_init(gTLS);
 

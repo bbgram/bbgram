@@ -201,10 +201,10 @@ QString Message::text() const
         {
             case tgl_message_media_photo:
                 return "photo";
-            case tgl_message_media_video:
+            /*case tgl_message_media_video:
                 return "#Unsupported media: video";
             case tgl_message_media_audio:
-                return "#Unsupported media: audio";
+                return "#Unsupported media: audio";*/
             case tgl_message_media_document:
                 return "#Unsupported media: document";
             case tgl_message_media_geo:
@@ -213,10 +213,10 @@ QString Message::text() const
                 return "contact";
             case tgl_message_media_photo_encr:
                 return "#Unsupported media: photo encr";
-            case tgl_message_media_video_encr:
+            /*case tgl_message_media_video_encr:
                 return "#Unsupported media: video encr";
             case tgl_message_media_audio_encr:
-                return "#Unsupported media: audio encr";
+                return "#Unsupported media: audio encr";*/
             case tgl_message_media_document_encr:
                 return "#Unsupported media: document encr";
         }
