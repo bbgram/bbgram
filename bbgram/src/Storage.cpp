@@ -263,15 +263,27 @@ void Storage::deleteChat(Peer* peer)
     }
 }
 
+struct photo_data
+{
+    long long photo_id;
+    Peer* peer;
+};
+
 void Storage::_loadPhotoCallback(struct tgl_state *TLS, void *callback_extra, int success, char *filename)
 {
+    photo_data* data = (photo_data*)callback_extra;
     m_instance->_PhotoLoaded();
     if (!success)
+    {
+        delete data;
         return;
+    }
 
-    Peer* peer = (Peer*)callback_extra;
+    Peer* peer = data->peer;
     peer->setPhoto(filename);
+    peer->setPhotoId(data->photo_id);
     m_instance->markPeerDirty(peer);
+    delete data;
 }
 
 void Storage::AsyncPhotoLoad(Peer* peer)
@@ -858,7 +870,6 @@ void Storage::_updateGroupPhoto(struct tgl_state *TLS, void *callback_extra, int
     long long newPhotoId = (long long)C->photo_big.local_id << 32 | C->photo_small.local_id;
     if (groupChat->getPhotoId() != newPhotoId)
     {
-        groupChat->setPhotoId(newPhotoId);
         if (C->photo.sizes_num != 0)
         {
             int min = 0;
@@ -867,7 +878,10 @@ void Storage::_updateGroupPhoto(struct tgl_state *TLS, void *callback_extra, int
                 if (C->photo.sizes[i].h + C->photo.sizes[i].w < C->photo.sizes[min].h + C->photo.sizes[min].w)
                     min = i;
             }
-            tgl_do_load_photo_size(gTLS, &C->photo.sizes[min], Storage::_loadPhotoCallback, groupChat);
+            photo_data* data = new photo_data;
+            data->peer = groupChat;
+            data->photo_id = newPhotoId;
+            tgl_do_load_photo_size(gTLS, &C->photo.sizes[min], Storage::_loadPhotoCallback, data);
             //tgl_do_load_photo(gTLS, &C->photo, Storage::_loadPhotoCallback, groupChat);
         }
         else
@@ -895,7 +909,6 @@ void Storage::_updateContactPhoto(struct tgl_state *TLS, void *callback_extra, i
     long long newPhotoId = (long long)U->photo_big.local_id << 32 | U->photo_small.local_id;
     if (user->getPhotoId() != newPhotoId)
     {
-        user->setPhotoId(newPhotoId);
         if (U->photo.sizes_num != 0)
         {
             int min = 0;
@@ -904,7 +917,10 @@ void Storage::_updateContactPhoto(struct tgl_state *TLS, void *callback_extra, i
                 if (U->photo.sizes[i].h + U->photo.sizes[i].w < U->photo.sizes[min].h + U->photo.sizes[min].w)
                     min = i;
             }
-            tgl_do_load_photo_size(gTLS, &U->photo.sizes[min], Storage::_loadPhotoCallback, user);
+            photo_data* data = new photo_data;
+            data->peer = user;
+            data->photo_id = newPhotoId;
+            tgl_do_load_photo_size(gTLS, &U->photo.sizes[min], Storage::_loadPhotoCallback, data);
             //tgl_do_load_photo(gTLS, &U->photo, Storage::_loadPhotoCallback, user);
         }
         else
