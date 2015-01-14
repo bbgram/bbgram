@@ -46,11 +46,6 @@ void User::save(QVariantMap& map) const
     map.insert("lastSeen", m_lastSeen.toTime_t());
 }
 
-int User::id() const
-{
-    return m_id;
-}
-
 const QString& User::phone() const
 {
     return m_phone;

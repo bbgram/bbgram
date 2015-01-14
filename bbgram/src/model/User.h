@@ -26,8 +26,6 @@ public:
     void load(const QVariantMap& map);
     void save(QVariantMap& map) const;
 
-    int id() const;
-
     const QString& phone() const;
     void setPhone(const QString& phone);
 

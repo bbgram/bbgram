@@ -7,6 +7,7 @@
 #include "model/GroupChat.h"
 #include "model/Message.h"
 #include "model/User.h"
+#include "model/EncrChat.h"
 
 #include "utils/PeerDataModel.h"
 
@@ -27,6 +28,7 @@ public:
     static void markedReadHandler(struct tgl_state *TLS, int num, struct tgl_message *list[]);
     static void messagesDeletedHandler(struct tgl_state *TLS, int num, int list[]);
     static void notifySettingsUpdateHandler(struct tgl_state *TLS, struct tgl_notify_peer_t *notify_peer, int mute_until, char* sound, int show_previews, int events_masks);
+    static void encrChatUpdate(struct tgl_state *TLS, struct tgl_secret_chat *C, unsigned flags);
 
     PeerDataModel* contacts() const;
     PeerDataModel* dialogs() const;

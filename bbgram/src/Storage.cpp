@@ -193,6 +193,8 @@ Peer* Storage::getPeer(int type, int id)
             peer = new GroupChat(id);
         if (type == TGL_BROADCAST_CHAT)
             peer = new BroadcastChat();
+        if (type == TGL_PEER_ENCR_CHAT)
+            peer = new EncrChat(id);
         if (peer)
         {
             m_peers.insert(peerId, peer);
@@ -433,6 +435,9 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
     int peer_type = M->to_id.type;
     int peer_id = M->to_id.id;
 
+    if (peer_type == 0 || peer_id == 0)
+        return;
+
     if (M->to_id.type == TGL_PEER_USER && M->to_id.id == gTLS->our_id)
     {
         peer_id = M->from_id.id;    // in
@@ -572,6 +577,53 @@ void Storage::notifySettingsUpdateHandler(struct tgl_state *TLS, struct tgl_noti
             m_instance->markPeerDirty(peer);
         }
     }
+}
+
+void Storage::encrChatUpdate(struct tgl_state *TLS, struct tgl_secret_chat *C, unsigned flags)
+{
+    QString str;
+#define CHECK_FLAG(FLAGS,F) if ((FLAGS & F) == F) str += " " #F;
+
+    CHECK_FLAG(flags, TGL_UPDATE_CREATED)
+    CHECK_FLAG(flags, TGL_UPDATE_DELETED)
+    CHECK_FLAG(flags, TGL_UPDATE_PHONE)
+    CHECK_FLAG(flags, TGL_UPDATE_CONTACT)
+    CHECK_FLAG(flags, TGL_UPDATE_PHOTO)
+    CHECK_FLAG(flags, TGL_UPDATE_BLOCKED)
+    CHECK_FLAG(flags, TGL_UPDATE_REAL_NAME)
+    CHECK_FLAG(flags, TGL_UPDATE_WORKING)
+    CHECK_FLAG(flags, TGL_UPDATE_FLAGS)
+    CHECK_FLAG(flags, TGL_UPDATE_TITLE)
+    CHECK_FLAG(flags, TGL_UPDATE_ADMIN)
+    CHECK_FLAG(flags, TGL_UPDATE_MEMBERS)
+    CHECK_FLAG(flags, TGL_UPDATE_ACCESS_HASH)
+    CHECK_FLAG(flags, TGL_UPDATE_USERNAME)
+    CHECK_FLAG(flags, TGL_UPDATE_REQUESTED)
+    str += "  %  ";
+
+    CHECK_FLAG(C->flags, FLAG_MESSAGE_EMPTY)
+    CHECK_FLAG(C->flags, FLAG_DELETED)
+    CHECK_FLAG(C->flags, FLAG_FORBIDDEN)
+    CHECK_FLAG(C->flags, FLAG_HAS_PHOTO)
+    CHECK_FLAG(C->flags, FLAG_CREATED)
+    CHECK_FLAG(C->flags, FLAG_SESSION_OUTBOUND)
+    CHECK_FLAG(C->flags, FLAG_USER_SELF)
+    CHECK_FLAG(C->flags, FLAG_USER_FOREIGN)
+    CHECK_FLAG(C->flags, FLAG_USER_CONTACT)
+    CHECK_FLAG(C->flags, FLAG_USER_IN_CONTACT)
+    CHECK_FLAG(C->flags, FLAG_USER_OUT_CONTACT)
+    CHECK_FLAG(C->flags, FLAG_ENCRYPTED)
+    CHECK_FLAG(C->flags, FLAG_PENDING)
+
+    qDebug() << "Storage::encrChatUpdate user=" << QString::fromUtf8(C->print_name) << " flags=" << flags << str;
+
+
+    if (flags & TGL_UPDATE_REQUESTED)
+    {
+        tgl_do_accept_encr_chat_request(gTLS, C, NULL, NULL);
+    }
+
+
 }
 
 PeerDataModel* Storage::contacts() const

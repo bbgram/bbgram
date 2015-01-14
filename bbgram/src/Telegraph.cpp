@@ -260,6 +260,7 @@ void Telegraph::start()
     m_updateCallbacks.marked_read = Storage::markedReadHandler;
     m_updateCallbacks.msg_delete = Storage::messagesDeletedHandler;
     m_updateCallbacks.notify_settings_update = Storage::notifySettingsUpdateHandler;
+    m_updateCallbacks.secret_chat_update = Storage::encrChatUpdate;
 
 
     memset(&m_timerMethods, 0, sizeof(tgl_timer_methods));
