@@ -319,9 +319,16 @@ static inline void fetch_data (void *data, int size) {
   in_ptr += (size >> 2);
 }
 
+static inline long long get_longlong(void* src)
+{
+    long long result = 0;
+    memcpy(&result, src, sizeof(long long));
+    return result;
+}
+
 static inline long long fetch_long (void) {
   assert (in_ptr + 2 <= in_end);
-  long long r = *(long long *)in_ptr;
+  long long r = get_longlong(in_ptr);
   in_ptr += 2;
   return r;
 }

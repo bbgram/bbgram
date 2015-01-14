@@ -1330,12 +1330,12 @@ void tglf_fetch_encrypted_message (struct tgl_state *TLS, struct tgl_message *M)
   decr_end = decr_ptr + (len / 4);
   int ok = 0;
   if (P) {
-    if (P->encr_chat.exchange_state == tgl_sce_committed && P->encr_chat.key_fingerprint == *(long long *)decr_ptr) {
+    if (P->encr_chat.exchange_state == tgl_sce_committed && P->encr_chat.key_fingerprint == get_longlong(decr_ptr)) {
       tgl_do_confirm_exchange (TLS, (void *)P, 0);
       assert (P->encr_chat.exchange_state == tgl_sce_none);
     }
     long long key_fingerprint = P->encr_chat.exchange_state != tgl_sce_committed ? P->encr_chat.key_fingerprint : P->encr_chat.exchange_key_fingerprint;
-    if (*(long long *)decr_ptr != key_fingerprint) {
+    if (get_longlong(decr_ptr) != key_fingerprint) {
       vlogprintf (E_WARNING, "Encrypted message with bad fingerprint to chat %s\n", P->print_name);
       P = 0;
     }
