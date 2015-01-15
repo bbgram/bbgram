@@ -237,9 +237,33 @@ void Storage::deleteContact(User* contact)
         m_instance->m_contacts->removeAt(idx);
 }
 
+void Storage::createBroadcast(QVariantList users)
+{
+    BroadcastChat* chat = (BroadcastChat*)Storage::instance()->getPeer(TGL_BROADCAST_CHAT, 0);
+    chat->setTitle("New Broadcast");
+
+    foreach(QVariant v, users)
+    {
+        User* user = (User*)v.value<QObject*>();
+        chat->addMember(user, gTLS->our_id);
+    }
+
+    m_dialogs->append(chat);
+    markPeerDirty(chat);
+
+    tgl_peer_id_t peer;
+    peer.id = chat->id();
+    peer.type = chat->type();
+
+    Storage::_getDialogsCallback(gTLS, this, 1, 1, &peer, 0, 0);
+}
+
 void Storage::deleteHistory(Peer* peer)
 {
-    tgl_do_delete_history(gTLS, {peer->type(), peer->id()}, 0, Storage::_deleteHistoryCallback, peer);
+    if (peer->type() != TGL_BROADCAST_CHAT)
+        tgl_do_delete_history(gTLS, {peer->type(), peer->id()}, 0, Storage::_deleteHistoryCallback, peer);
+    else
+        Storage::_deleteHistoryCallback(gTLS, peer, 1, 0);
 }
 
 void Storage::deleteChat(Peer* peer)
@@ -684,6 +708,8 @@ void Storage::_getDialogsCallback(struct tgl_state *TLS, void *callback_extra, i
             tgl_do_get_user_info(gTLS, _peer, 0, 0, 0);
         else if (_peer.type == TGL_PEER_CHAT)
             tgl_do_get_chat_info(gTLS, _peer, 0, 0, 0);
+        else if (_peer.type == TGL_BROADCAST_CHAT)
+            return;
 
 
         Peer* peer = m_instance->getPeer(peers[i].type, peers[i].id);
@@ -882,7 +908,6 @@ void Storage::_updateGroupPhoto(struct tgl_state *TLS, void *callback_extra, int
             data->peer = groupChat;
             data->photo_id = newPhotoId;
             tgl_do_load_photo_size(gTLS, &C->photo.sizes[min], Storage::_loadPhotoCallback, data);
-            //tgl_do_load_photo(gTLS, &C->photo, Storage::_loadPhotoCallback, groupChat);
         }
         else
         {
@@ -921,7 +946,6 @@ void Storage::_updateContactPhoto(struct tgl_state *TLS, void *callback_extra, i
             data->peer = user;
             data->photo_id = newPhotoId;
             tgl_do_load_photo_size(gTLS, &U->photo.sizes[min], Storage::_loadPhotoCallback, data);
-            //tgl_do_load_photo(gTLS, &U->photo, Storage::_loadPhotoCallback, user);
         }
         else
         {

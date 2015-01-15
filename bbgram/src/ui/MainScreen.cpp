@@ -157,16 +157,7 @@ void MainScreen::createGroup(QVariantList users, const QString& title, const QSt
 
 void MainScreen::createBroadcast(QVariantList users)
 {
-    BroadcastChat* chat = (BroadcastChat*)Storage::instance()->getPeer(TGL_BROADCAST_CHAT, 0);
-    chat->setTitle("New Broadcast");
-
-    foreach(QVariant v, users)
-    {
-        User* user = (User*)v.value<QObject*>();
-        chat->addMember(user, gTLS->our_id);
-    }
-
-    Storage::instance()->dialogs()->append(chat);
+    Storage::instance()->createBroadcast(users);
 }
 
 void MainScreen::setGroupName(GroupChat* group, const QString& title)

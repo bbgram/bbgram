@@ -31,8 +31,30 @@ void GroupChat::load(const QVariantMap& map)
     if (it != map.end())
         m_adminId = it.value().toInt();
 
-    //map.insert("members", ??);
-    //map.insert("invites", ??);
+    it = map.find("members");
+    if (it != map.end())
+    {
+        QVariantList members;
+        members = it.value().toList();
+
+        for (int i = 0; i < members.size(); i++)
+        {
+            Peer* user = Storage::instance()->getPeer(TGL_PEER_USER, members[i].value<int>());
+            m_members->insert(user);
+        }
+    }
+
+    it = map.find("invites");
+    if (it != map.end())
+    {
+        QVariantList inviters;
+        inviters = it.value().toList();
+
+        for (int i = 0; i < inviters.size(); i += 2)
+        {
+            m_invites.insert(inviters[i].value<int>(), inviters[i + 1].value<int>());
+        }
+    }
 }
 
 void GroupChat::save(QVariantMap& map) const
@@ -41,8 +63,21 @@ void GroupChat::save(QVariantMap& map) const
 
     map.insert("title", m_title);
     map.insert("adminId", m_adminId);
-    //map.insert("members", ??);
-    //map.insert("invites", ??);
+
+    QVariantList members;
+    for (QVariantList indexPath = m_members->first(); !indexPath.isEmpty(); indexPath = m_members->after(indexPath))
+    {
+        members.append(((User*)m_members->data(indexPath).value<QObject*>())->id());
+    }
+    map.insert("members", members);
+
+    QVariantList inviters;
+    for (QMap<int, int>::const_iterator it = m_invites.begin(); it != m_invites.end(); ++it)
+    {
+        inviters.append(it.key());
+        inviters.append(it.value());
+    }
+    map.insert("invites", inviters);
 }
 
 QString GroupChat::title() const

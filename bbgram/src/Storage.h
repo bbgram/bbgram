@@ -41,6 +41,8 @@ public:
     void addContact(User* contact);
     void deleteContact(User* contact);
 
+    void createBroadcast(QVariantList users);
+
     void deleteHistory(Peer* peer);
     void deleteChat(Peer* peer);
 
