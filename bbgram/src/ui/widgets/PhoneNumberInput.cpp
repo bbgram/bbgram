@@ -110,8 +110,8 @@ void PhoneNumberInput::setFilter(const QString& filter)
 
 void PhoneNumberInput::setCountry(const QString& name, const QString& code)
 {
-    m_countryName->setText(name);
     m_countryCode->setText("+" + code);
+    m_countryName->setText(name);
 
     NavigationPane* navigationPane = static_cast<NavigationPane*>(Application::instance()->scene());
     if (navigationPane)
