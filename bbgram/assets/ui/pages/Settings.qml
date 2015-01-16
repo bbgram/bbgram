@@ -223,7 +223,7 @@ NavigationPane {
                     ]
                 }
                 Label {
-                    text: "Telegram for Blackberry v0.1"
+                    text: "Telegram for Blackberry v%1".arg(_owner.getAppVersion())
                     textStyle {
                         fontSize: FontSize.Small
                         color: Color.Gray

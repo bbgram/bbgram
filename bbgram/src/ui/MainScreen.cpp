@@ -2,6 +2,7 @@
 #include "../Storage.h"
 #include "../Telegraph.h"
 
+#include <bb/ApplicationInfo>
 #include <bb/cascades/Application>
 #include <bb/system/InvokeManager>
 #include <bb/system/InvokeRequest>
@@ -417,4 +418,10 @@ void MainScreen::_broadcastSended(struct tgl_state *TLS, void *extra, int succes
 User* MainScreen::getUser(int id)
 {
     return (User*)Storage::instance()->getPeer(TGL_PEER_USER, id);
+}
+
+QString MainScreen::getAppVersion() const
+{
+    bb::ApplicationInfo info;
+    return info.version();
 }
