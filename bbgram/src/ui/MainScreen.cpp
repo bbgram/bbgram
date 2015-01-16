@@ -109,11 +109,9 @@ void MainScreen::sendMessage(Peer* peer, const QString& message)
             idx++;
         }
 
-        tgl_do_send_broadcast(gTLS, members->size(), peers, bytes.data(), bytes.length(), MainScreen::_broadcastSended, chat);
+        tgl_do_send_broadcast(gTLS, members->size(), peers, bytes.data(), bytes.length(), Storage::_broadcastSended, chat);
 
         delete[] peers;
-
-        //void tgl_do_send_broadcast (struct tgl_state *TLS, int num, tgl_peer_id_t id[], const char *text, int text_len, void (*callback)(struct tgl_state *TLS, void *extra, int success, int num, struct tgl_message *ML[]), void *callback_extra);
     }
     else
         tgl_do_send_message(gTLS, {peer->type(), peer->id()}, (const char*)bytes.data(), bytes.length(), 0, 0);
@@ -121,7 +119,7 @@ void MainScreen::sendMessage(Peer* peer, const QString& message)
 
 void MainScreen::sendPhoto(Peer* peer, const QString& fileName)
 {
-    tgl_do_send_document(gTLS, 0, {peer->type(), peer->id()}, fileName.toUtf8().data(), NULL, NULL);
+    tgl_do_send_document(gTLS, -1, {peer->type(), peer->id()}, fileName.toUtf8().data(), NULL, NULL);
 }
 
 void MainScreen::deleteMessage(long long id)
@@ -156,9 +154,9 @@ void MainScreen::createGroup(QVariantList users, const QString& title, const QSt
     tgl_do_create_group_chat_ex(gTLS, users.size(), data->peers, title.toUtf8().data(), MainScreen::_createGroupCallback, data);
 }
 
-void MainScreen::createBroadcast(QVariantList users)
+QVariant MainScreen::createBroadcast(QVariantList users)
 {
-    Storage::instance()->createBroadcast(users);
+    return QVariant::fromValue((Peer*)Storage::instance()->createBroadcast(users));
 }
 
 void MainScreen::setGroupName(GroupChat* group, const QString& title)
@@ -402,17 +400,6 @@ void MainScreen::_contactDeleteHandler(struct tgl_state *TLS, void *callback_ext
     }
 
     emit m_instance->contactDeleted(!success, "Something wrong");
-}
-
-void MainScreen::_broadcastSended(struct tgl_state *TLS, void *extra, int success, int num, struct tgl_message *ML[])
-{
-    BroadcastChat* chat = (BroadcastChat*)extra;
-    if (success)
-    {
-        Message* message = new Message(ML[0]->id, ML[0]);
-        message->setParent(Storage::instance());
-        chat->addMessage(message);
-    }
 }
 
 User* MainScreen::getUser(int id)

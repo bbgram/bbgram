@@ -203,8 +203,8 @@ NavigationPane {
                                     {
                                         list.push(contacts_list.dataModel.data(contacts_list.selectionList()[i]));
                                     }
-
-                                    _owner.createBroadcast(list);
+                                    if (list.length > 0)
+                                        Application.scene.openChat(_owner.createBroadcast(list));
                                 }
                             }
                         ]

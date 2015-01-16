@@ -8,6 +8,7 @@
 #include "model/Message.h"
 #include "model/User.h"
 #include "model/EncrChat.h"
+#include "model/BroadcastChat.h"
 
 #include "utils/PeerDataModel.h"
 
@@ -41,7 +42,7 @@ public:
     void addContact(User* contact);
     void deleteContact(User* contact);
 
-    void createBroadcast(QVariantList users);
+    BroadcastChat* createBroadcast(QVariantList users);
 
     void deleteHistory(Peer* peer);
     void deleteChat(Peer* peer);
@@ -85,4 +86,6 @@ protected:
 
     void _LoadNextPhoto();
     void _PhotoLoaded();
+public:
+    static void _broadcastSended(struct tgl_state *TLS, void *extra, int success, int num, struct tgl_message *ML[]);
 };

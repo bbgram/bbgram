@@ -4,8 +4,8 @@
 
 using namespace bb::cascades;
 
-BroadcastChat::BroadcastChat()
-    : GroupChat(0)
+BroadcastChat::BroadcastChat(int id)
+    : GroupChat(id)
 {
     m_type = TGL_BROADCAST_CHAT;
 }

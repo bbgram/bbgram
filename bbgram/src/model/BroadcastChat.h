@@ -13,7 +13,7 @@ class BroadcastChat : public GroupChat
 {
     Q_OBJECT
 public:
-    BroadcastChat();
+    BroadcastChat(int id);
     ~BroadcastChat();
 
     void load(const QVariantMap& map);
