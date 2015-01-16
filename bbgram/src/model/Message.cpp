@@ -17,6 +17,9 @@ Message::Message(long long id, tgl_message* M)
     m_toType = M->to_id.type;
     m_unread = M->unread;
     m_service = M->service;
+    m_fwdDate = QDateTime::fromTime_t(M->fwd_date);
+    m_fwdFromId = M->fwd_from_id.id;
+
     if (m_service)
     {
         m_action.insert("type", M->action.type);
@@ -96,8 +99,14 @@ void Message::deserialize(QByteArray& data)
     if (it != map.end())
         m_mediaType = it.value().toInt();
     it = map.find("media");
-        if (it != map.end())
-            m_media = it.value().toMap();
+    if (it != map.end())
+        m_media = it.value().toMap();
+    it = map.find("fwdDate");
+    if (it != map.end())
+        m_fwdDate = QDateTime::fromTime_t(it.value().toInt());
+    it = map.find("fwdFromId");
+    if (it != map.end())
+        m_fwdFromId = it.value().toInt();
 }
 
 QByteArray Message::serialize() const
@@ -109,6 +118,9 @@ QByteArray Message::serialize() const
     map.insert("action", m_action);
     map.insert("mediaType", m_mediaType);
     map.insert("media", m_media);
+
+    map.insert("fwdDate", m_fwdDate.toTime_t());
+    map.insert("fwdFromId", m_fwdFromId);
 
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
@@ -270,7 +282,19 @@ QVariantMap& Message::media()
 
 User* Message::from() const
 {
-    return (User*)Storage::instance()->getPeer(TGL_PEER_USER, m_fromId);
+    if (m_fromId > 0)
+        return (User*)Storage::instance()->getPeer(TGL_PEER_USER, m_fromId);
+    return 0;
+}
+
+const QDateTime& Message::forwardedDate() const
+{
+    return m_fwdDate;
+}
+
+User* Message::forwardedFrom() const
+{
+    return (User*)Storage::instance()->getPeer(TGL_PEER_USER, m_fwdFromId);
 }
 
 QString Message::formatDateTime(const QDateTime& date, const QString& format)

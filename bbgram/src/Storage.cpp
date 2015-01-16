@@ -11,6 +11,8 @@ Storage* Storage::m_instance = 0;
 const int MAX_PHOTOS_TO_LOAD = 5;
 const int HISTORY_LIMIT = 20;
 const char* DATABASE_NAME = "data/storage.db";
+const char* DATABASE_INFO_NAME = "data/storage.info";
+const int DATABASE_VERSION = 2;
 
 using namespace bb::cascades;
 
@@ -19,13 +21,23 @@ Storage::Storage(QObject* parent)
 {
     m_instance = this;
 
+    QFile dbInfoFile(DATABASE_INFO_NAME);
+    int version = -1;
+    if (dbInfoFile.open(QFile::ReadOnly))
+    {
+        QDataStream stream(&dbInfoFile);
+        stream >> version;
+    }
+    if (version != DATABASE_VERSION)
+        QFile::remove(DATABASE_NAME);
+
     QFile dbFile(DATABASE_NAME);
-    bool createTables = !dbFile.exists();
+    bool dbExists = dbFile.exists();
     m_db = QSqlDatabase::addDatabase("QSQLITE", "storage");
     m_db.setDatabaseName(DATABASE_NAME);
     m_db.open();
 
-    if (m_db.isOpen() && createTables)
+    if (m_db.isOpen() && !dbExists)
     {
         QSqlQuery query(m_db);
         query.exec("CREATE TABLE peers(id INTEGER PRIMARY KEY, data BLOB)");
@@ -36,6 +48,11 @@ Storage::Storage(QObject* parent)
         query.exec("CREATE INDEX messages_to_id_idx ON messages(to_id);");
         query.exec("CREATE INDEX messages_to_id_to_type_idx ON messages(to_id, to_type);");
         query.exec("CREATE INDEX messages_to_id_to_type_from_id_idx ON messages(to_id, to_type, from_id);");
+
+        QFile dbInfoFile(DATABASE_INFO_NAME);
+        dbInfoFile.open(QFile::WriteOnly | QFile::Truncate);
+        QDataStream stream(&dbInfoFile);
+        stream << DATABASE_VERSION;
     }
 
     m_contacts = new PeerDataModel();

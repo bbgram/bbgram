@@ -7,6 +7,8 @@ Container {
     property string text: ListItemData.text
     property variant date: ListItemData.dateTime
     property bool unread: ListItemData.unread
+    property variant fwdFrom: ListItemData.forwardedFrom
+    property variant fwdDate: ListItemData.forwardedDate
     
     property bool selected : false
     onSelectedChanged: {
@@ -67,6 +69,10 @@ Container {
                             delegateActive: author != null
                             
                             bottomMargin: 4
+                        }
+                        ControlDelegate {
+                            sourceComponent: fwdNameCompDef
+                            delegateActive: fwdFrom != null
                         }
                         Container {   
                             //preferredHeight: Infinity
@@ -157,6 +163,15 @@ Container {
             Label {
                 text: author ? author.firstName + " " + author.lastName : ""
                 textStyle.color: author ? Color.create(author.color) : Color.Black
+            }
+        },
+        ComponentDefinition {
+            id: fwdNameCompDef
+            Label {
+                text: "Forwarded message<br/>From <b>" + fwdFrom.firstName + " " + fwdFrom.lastName + "</b>"
+                multiline: true
+                textFormat: TextFormat.Html
+                textStyle.color: Color.Blue
             }
         },
         ComponentDefinition {

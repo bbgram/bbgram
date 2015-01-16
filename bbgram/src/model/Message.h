@@ -18,6 +18,8 @@ class Message: public QObject
     Q_PROPERTY(QVariantMap media READ media CONSTANT)
     Q_PROPERTY(int mediaType READ mediaType CONSTANT)
     Q_PROPERTY(User* from READ from CONSTANT)
+    Q_PROPERTY(QDateTime forwardedDate READ forwardedDate CONSTANT)
+    Q_PROPERTY(User* forwardedFrom READ forwardedFrom CONSTANT)
 public:
     Message(long long id = 0, tgl_message* M = 0);
     ~Message();
@@ -41,6 +43,9 @@ public:
 
     User* from() const;
 
+    const QDateTime& forwardedDate() const;
+    User* forwardedFrom() const;
+
     Q_INVOKABLE QString formatDateTime(const QDateTime& date, const QString& format);
 signals:
     void markedRead();
@@ -51,6 +56,9 @@ protected:
     int         m_fromId;
     int         m_toId;
     int         m_toType;
+
+    int         m_fwdFromId;
+    QDateTime   m_fwdDate;
 
     QString     m_text;
     QDateTime   m_date;
