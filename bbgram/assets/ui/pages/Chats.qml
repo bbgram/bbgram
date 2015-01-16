@@ -149,7 +149,7 @@ NavigationPane {
                     
                     if (users.length > 0)
                     {
-                        //open broadcasts
+                        Application.scene.openChat(_owner.createBroadcast(users));
                     }
                 }
                 

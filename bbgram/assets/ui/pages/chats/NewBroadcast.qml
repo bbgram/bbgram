@@ -28,7 +28,7 @@ Sheet {
                     var result = [];
                     for (var i = 0; i < contactsList.selectionList().length; i++)
                     {
-                        result.push(contactsList.dataModel.data(indexPath))
+                        result.push(contactsList.dataModel.data(contactsList.selectionList()[i]))
                     }
                     usersSelected(result, me)
                     me.close()
