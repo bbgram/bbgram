@@ -282,9 +282,7 @@ QVariantMap& Message::media()
 
 User* Message::from() const
 {
-    if (m_fromId > 0)
-        return (User*)Storage::instance()->getPeer(TGL_PEER_USER, m_fromId);
-    return 0;
+    return (User*)Storage::instance()->getPeer(TGL_PEER_USER, m_fromId);
 }
 
 const QDateTime& Message::forwardedDate() const
@@ -294,7 +292,9 @@ const QDateTime& Message::forwardedDate() const
 
 User* Message::forwardedFrom() const
 {
-    return (User*)Storage::instance()->getPeer(TGL_PEER_USER, m_fwdFromId);
+    if (m_fwdFromId > 0)
+        return (User*)Storage::instance()->getPeer(TGL_PEER_USER, m_fwdFromId);
+    return 0;
 }
 
 QString Message::formatDateTime(const QDateTime& date, const QString& format)
