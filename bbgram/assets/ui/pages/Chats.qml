@@ -32,11 +32,7 @@ NavigationPane {
                     Label {
                         id: chatsLabel
                         text: "Chats"
-                        
-                        textStyle {
-                            color: SystemDefaults.TextStyles.TitleText.color
-                            fontSize: FontSize.Large
-                        }
+                        textStyle.base: titleTextStyle.style
                         horizontalAlignment: HorizontalAlignment.Left
                         verticalAlignment: VerticalAlignment.Center
                     }
@@ -265,6 +261,10 @@ NavigationPane {
             }
         }
         attachedObjects: [
+            TitleTextStyleDefinition {
+                id: titleTextStyle
+                fontSize: FontSize.Large
+            },
             ComponentDefinition {
                 id: contactPickerSheetDef
                 source: "contacts/ContactPicker.qml"

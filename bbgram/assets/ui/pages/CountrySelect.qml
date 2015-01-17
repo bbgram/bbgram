@@ -16,9 +16,7 @@ Page {
                 Label {
                     id: label
                     text: "Choose a country"
-                    textStyle {
-                        fontSize: FontSize.Large
-                    }
+                    textStyle.base: titleTextStyle.style
                     horizontalAlignment: HorizontalAlignment.Center
                     verticalAlignment: VerticalAlignment.Center
                 }
@@ -96,4 +94,11 @@ Page {
             }
         }
     }
+    
+    attachedObjects: [
+        TitleTextStyleDefinition {
+            id: titleTextStyle
+            fontSize: FontSize.Large
+        }
+    ]
 }

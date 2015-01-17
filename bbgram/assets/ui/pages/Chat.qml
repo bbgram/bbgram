@@ -300,14 +300,12 @@ Page {
     }
     
     attachedObjects: [
-        TextStyleDefinition {
+        TitleTextStyleDefinition {
             id: titleTextStyle
-            color: SystemDefaults.TextStyles.TitleText.color
             fontSize: FontSize.Large
         },
-        TextStyleDefinition {
+        TitleTextStyleDefinition {
             id: titleStatusTextStyle
-            color: SystemDefaults.TextStyles.TitleText.color
             fontSize: FontSize.Small
         },
         ComponentDefinition {
