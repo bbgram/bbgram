@@ -33,6 +33,7 @@ PhoneNumberInput::PhoneNumberInput()
     m_countryCode->setHintText("");
     panel->add(m_countryCode);
 
+
     m_phoneNumber = TextField::create();
     m_phoneNumber->setInputMode(TextFieldInputMode::PhoneNumber);
     m_phoneNumber->setHintText("");
@@ -42,7 +43,7 @@ PhoneNumberInput::PhoneNumberInput()
 
     setRoot(container);
 
-    QObject::connect(m_countryName, SIGNAL(focusedChanged(bool)), this, SLOT(onCountryFocusChanged(bool)));
+    QObject::connect(m_countryName, SIGNAL(touch(bb::cascades::TouchEvent *)), this, SLOT(onCountryFocusChanged(bb::cascades::TouchEvent *)));
 
     m_dataModel = new GroupDataModel(this);
     m_dataModel->setSortingKeys(QStringList() << "name");
@@ -116,6 +117,8 @@ void PhoneNumberInput::setCountry(const QString& name, const QString& code)
     NavigationPane* navigationPane = static_cast<NavigationPane*>(Application::instance()->scene());
     if (navigationPane)
        navigationPane->pop();
+
+    //m_countryName->focus
 }
 
 QString PhoneNumberInput::phone() const
@@ -123,9 +126,9 @@ QString PhoneNumberInput::phone() const
     return m_countryCode->text() + m_phoneNumber->text();
 }
 
-void PhoneNumberInput::onCountryFocusChanged(bool focused)
+void PhoneNumberInput::onCountryFocusChanged(bb::cascades::TouchEvent* event)
 {
-    if (focused)
+    if (event->touchType() == TouchType::Down)
     {
         NavigationPane* navigationPane = static_cast<NavigationPane*>(Application::instance()->scene());
         if (navigationPane)

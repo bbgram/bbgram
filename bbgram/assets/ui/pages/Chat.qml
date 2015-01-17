@@ -302,12 +302,12 @@ Page {
     attachedObjects: [
         TextStyleDefinition {
             id: titleTextStyle
-            color: Color.White
+            color: SystemDefaults.TextStyles.TitleText.color
             fontSize: FontSize.Large
         },
         TextStyleDefinition {
             id: titleStatusTextStyle
-            color: Color.White
+            color: SystemDefaults.TextStyles.TitleText.color
             fontSize: FontSize.Small
         },
         ComponentDefinition {

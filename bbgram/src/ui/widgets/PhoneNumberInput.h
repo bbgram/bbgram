@@ -32,5 +32,5 @@ protected:
     QVariantList    m_countriesList;
 protected slots:
     void onContryCodeChanging(const QString& text);
-    void onCountryFocusChanged(bool focused);
+    void onCountryFocusChanged(bb::cascades::TouchEvent *);
 };

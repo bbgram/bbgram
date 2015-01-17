@@ -16,7 +16,7 @@ NavigationPane {
                         id: contactsLabel
                         text: "Contacts"
                         textStyle {
-                            color: Color.White
+                            color: SystemDefaults.TextStyles.TitleText.color
                             fontSize: FontSize.Large
                         }
                         horizontalAlignment: HorizontalAlignment.Left
@@ -57,7 +57,7 @@ NavigationPane {
                             visible: false
                             text: "Cancel"
                             textStyle {
-                                color: Color.White
+                                color: SystemDefaults.TextStyles.TitleText.color
                             }
                             verticalAlignment: VerticalAlignment.Center
                             

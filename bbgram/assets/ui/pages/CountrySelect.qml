@@ -18,7 +18,6 @@ Page {
                     text: "Choose a country"
                     textStyle {
                         fontSize: FontSize.Large
-                        color: Color.White
                     }
                     horizontalAlignment: HorizontalAlignment.Center
                     verticalAlignment: VerticalAlignment.Center

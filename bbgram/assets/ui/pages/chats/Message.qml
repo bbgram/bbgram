@@ -168,7 +168,7 @@ Container {
         ComponentDefinition {
             id: fwdNameCompDef
             Label {
-                text: "Forwarded message<br/>From <b>" + fwdFrom.firstName + " " + fwdFrom.lastName + "</b>"
+                text: fwdFrom ? "Forwarded message<br/>From <b>" + fwdFrom.firstName + " " + fwdFrom.lastName + "</b>" : ""
                 multiline: true
                 textFormat: TextFormat.Html
                 textStyle.color: Color.Blue

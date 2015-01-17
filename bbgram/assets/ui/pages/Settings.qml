@@ -33,7 +33,7 @@ NavigationPane {
                     Label {
                         text: "Settings"
                         textStyle {
-                            color: Color.White
+                            color: SystemDefaults.TextStyles.TitleText.color
                             fontSize: FontSize.Large
                         }
                         horizontalAlignment: HorizontalAlignment.Left
