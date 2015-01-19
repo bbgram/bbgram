@@ -30,6 +30,7 @@
     <configuration name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="arm/o.le-v7-g/bbgram" entry="true" type="Qnx/Elf">bbgram</asset>
+       <asset path="../bbgramHeadless/arm/bbgramHeadless" type="Qnx/Elf">bbgramHeadless</asset>
     </configuration>
     <configuration name="Device-Release">
        <entryPointType>Qnx/Cascades</entryPointType>
@@ -43,6 +44,7 @@
     <configuration name="Simulator-Debug">
        <platformArchitecture>x86</platformArchitecture>
        <asset path="x86/o-g/bbgram" entry="true" type="Qnx/Elf">bbgram</asset>
+       <asset path="../bbgramHeadless/arm/bbgramHeadless" type="Qnx/Elf">bbgramHeadless</asset>
     </configuration>
 
     <!-- The name that is displayed in the BlackBerry 10 application installer.
@@ -94,6 +96,32 @@
     <asset path="translations" dest="qm">
         <include name="*.qm"/>
     </asset>
+    
+    <entryPoint id="bbgram">
+    	<name>bbgram</name>
+	</entryPoint>
+	
+	<entryPoint id="bbgramHeadless">
+    	<name>bbgramHeadless</name>
+    	<entryPointType>Qnx/Elf</entryPointType>
+	</entryPoint>
+	
+	<invoke-target id="com.bigboss.bbgram">
+    	<invoke-target-type>application</invoke-target-type>
+    	<invoke-target-name>bbgram</invoke-target-name>
+    	<entry-point-id>bbgram</entry-point-id>
+	</invoke-target>
+	
+	<invoke-target id="com.bigboss.bbgramHeadless">
+	    <invoke-target-type>application.headless</invoke-target-type>
+	    <invoke-target-name>bbgramHeadless</invoke-target-name>
+	    <entry-point-id>bbgramHeadless</entry-point-id>
+	    <filter>
+	        <action>bb.action.system.STARTED</action>
+	        <mime-type>application/vnd.blackberry.system.event.STARTED</mime-type>
+	        <property var="uris" value="data://local"/>
+	    </filter>
+	</invoke-target>
 
     <!-- Request permission to execute native code.  Required for native applications. -->
     <permission system="true">run_native</permission>
@@ -101,6 +129,7 @@
     <permission>access_shared</permission>
     <permission>post_notification</permission>
     <permission>access_internet</permission>
+    <permission system="true">_sys_run_headless</permission>
     <env var="LD_LIBRARY_PATH" value="app/native/lib:/usr/lib/qt4/lib"/>
     <env var="CASCADES_THEME" value="default?primaryColor=0x5374A0&amp;primaryBase=0x5374A0"/>
 
