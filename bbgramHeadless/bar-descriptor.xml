@@ -26,7 +26,7 @@
 
     <!-- A universally unique application identifier. Must be unique across all BlackBerry 10 applications.
          Using a reverse DNS-style name as the id is recommended. (Eg. com.example.ExampleApplication.) Required. -->
-    <id>com.bigboss.bbgram</id>
+    <id>com.bigboss.bomogramHeadless</id>
     <configuration name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset path="arm/o.le-v7-g/bbgram" entry="true" type="Qnx/Elf">bbgram</asset>
@@ -42,22 +42,21 @@
     </configuration>
     <configuration name="Simulator-Debug">
        <platformArchitecture>x86</platformArchitecture>
-       <asset entryPointId="bomogram" path="x86/o-g/bbgram" entry="true" type="Qnx/Elf">bomogram</asset>
-       <asset entryPointId="bomogramHeadless" path="../bbgramHeadless/x86/bbgramHeadless" type="Qnx/Elf">bomogramHeadless</asset>
+       <asset entry="true" path="x86/bbgramHeadless" type="Qnx/Elf">bomogramHeadless</asset>
     </configuration>
 
     <!-- The name that is displayed in the BlackBerry 10 application installer.
          May have multiple values for each language. See samples or xsd schema file. Optional. -->
-    <name>bomogram</name>
+    <name>bomogramHeadless</name>
 
     <!-- A string value of the format <0-999>.<0-999>.<0-999> that represents application version which can be used to check for application upgrade.
          Values can also be 1-part or 2-part. It is not necessary to have a 3-part value.
          An updated version of application must have a versionNumber value higher than the previous version. Required. -->
-    <versionNumber>0.1.13</versionNumber>
+    <versionNumber>0.1.2</versionNumber>
 
     <!-- Fourth digit segment of the package version. First three segments are taken from the
          <versionNumber> element.  Must be an integer from 0 to 2^16-1 -->
-    <buildId>22</buildId>
+    <buildId>9</buildId>
 
     <!-- A string value (such as "v1", "2.5", or "Alpha 1") that represents the version of the application, as it should be shown to users. Optional. -->
     <!-- <versionLabel></versionLabel> -->
@@ -70,6 +69,7 @@
     <!-- <copyright></copyright> -->
 
     <!--  Name of author which is used for signing. Must match the developer name of your development certificate. -->
+    <category>core.media</category>
     <authorId>gYAAgNnvQFlrcX44UpUVATsL-2E</authorId>
     <author>Big Boss</author>
 
@@ -94,41 +94,8 @@
     <asset path="translations" dest="qm">
         <include name="*.qm"/>
     </asset>
-    
-    <entryPoint id="bomogram">
-    	<name>bomogram</name>
-	</entryPoint>
-	
-	<entryPoint id="bomogramHeadless">
-    	<name>bomogramHeadless</name>
-    	<entryPointType>Qnx/Elf</entryPointType>
-	</entryPoint>
-	
-	<!--<invoke-target id="com.bigboss.bbgram">
-    	<invoke-target-type>application</invoke-target-type>
-    	<invoke-target-name>bomogram</invoke-target-name>
-    	<entry-point-id>bomogram</entry-point-id>
-	</invoke-target>-->
-	
-	<invoke-target id="com.bigboss.bomogramHeadless">
-	    <invoke-target-type>application.headless</invoke-target-type>
-	    <invoke-target-name>bomogramHeadless</invoke-target-name>
-	    <entry-point-id>bomogramHeadless</entry-point-id>
-	    <filter>
-	        <action>bb.action.system.STARTED</action>
-	        <mime-type>application/vnd.blackberry.system.event.STARTED</mime-type>
-	        <property var="uris" value="data://local"/>
-	    </filter>
-	</invoke-target>
 
     <!-- Request permission to execute native code.  Required for native applications. -->
     <permission system="true">run_native</permission>
-    <permission>access_pimdomain_contacts</permission>
-    <permission>access_shared</permission>
-    <permission>post_notification</permission>
-    <permission>access_internet</permission>
-    <permission system="true">_sys_run_headless</permission>
     <env var="LD_LIBRARY_PATH" value="app/native/lib:/usr/lib/qt4/lib"/>
-    <env var="CASCADES_THEME" value="default?primaryColor=0x5374A0&amp;primaryBase=0x5374A0"/>
-
 </qnx>

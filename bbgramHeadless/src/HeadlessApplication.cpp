@@ -5,7 +5,9 @@ HeadlessApplication::HeadlessApplication(bb::Application *app) :
 {
     _invokeManager->setParent(this);
 
-    connect(_invokeManager, SIGNAL(invoked(const bb::system::InvokeRequest&)), this, SLOT(onInvoked(const bb::system::InvokeRequest&)));
+    QObject::connect(_invokeManager, SIGNAL(invoked(const bb::system::InvokeRequest&)), this, SLOT(onInvoked(const bb::system::InvokeRequest&)));
+
+    qDebug() << "HeadlessApplication::HeadlessApplication" << endl;
 }
 
 void HeadlessApplication::onInvoked(const bb::system::InvokeRequest& request)

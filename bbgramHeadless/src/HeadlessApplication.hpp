@@ -9,7 +9,6 @@ using namespace bb::system;
 class HeadlessApplication : public QObject
 {
     Q_OBJECT
-
 public:
     HeadlessApplication(bb::Application *app);
 
