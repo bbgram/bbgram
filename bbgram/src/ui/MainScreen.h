@@ -73,4 +73,5 @@ protected:
     static void _contactAddHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[]);
     static void _contactRenameHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[]);
     static void _contactDeleteHandler(struct tgl_state *TLS, void *callback_extra, int success);
+    static void _markReaded(struct tgl_state *TLS, void *callback_extra, int success);
 };

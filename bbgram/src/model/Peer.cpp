@@ -6,7 +6,7 @@
 using namespace bb::cascades;
 
 Peer::Peer(int type, int id)
-    : m_type(type), m_id(id), m_muteUntil(0), m_loadingHistory(false), m_photoId(0)
+    : m_type(type), m_id(id), m_muteUntil(0), m_loadingHistory(false), m_photoId(0), m_unreadCount(0)
 {
     m_messages = new MessagesDataModel(this);
     m_messages->setSortingKeys(QStringList() << "date" << "dateTime");
@@ -76,12 +76,40 @@ QDateTime Peer::lastMessageDate() const
 
 void Peer::addMessage(Message* message)
 {
+    if (!message->our() && message->unread())
+    {
+        m_unreadCount++;
+        qDebug() << m_unreadCount;
+        emit unreadCountChanged();
+    }
+
     m_messages->insert(message);
 }
 
 void Peer::deleteMessage(Message* message)
 {
     m_messages->remove(message);
+}
+
+int Peer::unreadCount()
+{
+    return m_unreadCount;
+}
+
+void Peer::markRead()
+{
+    for (QVariantList indexPath = m_messages->first(); !indexPath.isEmpty(); indexPath = m_messages->after(indexPath))
+    {
+        Message* message = (Message*)m_messages->data(indexPath).value<QObject*>();
+        if (!message->our() && message->unread())
+        {
+            message->markAsRead();
+            Storage::instance()->saveMessage(message);
+        }
+    }
+
+    m_unreadCount = 0;
+    emit unreadCountChanged();
 }
 
 void Peer::save(QVariantMap& map) const

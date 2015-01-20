@@ -21,6 +21,7 @@ class Peer : public QObject
     Q_PROPERTY(Message* lastMessage READ lastMessage NOTIFY messagesChanged)
     Q_PROPERTY(QDateTime lastMessageDate READ lastMessageDate NOTIFY messagesChanged)
     Q_PROPERTY(bool muted READ muted NOTIFY notifySettingsChanged)
+    Q_PROPERTY(int unreadCount READ unreadCount NOTIFY unreadCountChanged)
 public:
     Peer(int type = 0, int id = 0);
     ~Peer();
@@ -43,6 +44,8 @@ public:
 
     void addMessage(Message* message);
     void deleteMessage(Message* message);
+    int unreadCount();
+    void markRead();
 
     Q_INVOKABLE void loadAdditionalHistory();
 
@@ -60,6 +63,7 @@ signals:
     void photoChanged();
     void messagesChanged();
     void notifySettingsChanged();
+    void unreadCountChanged();
 protected:
     QString _getDefaultPlaceholder();
     int             m_type;
@@ -69,6 +73,7 @@ protected:
     QString         m_sound;
     int             m_showPreviews;
     int             m_eventsMasks;
+    int             m_unreadCount;
 
     friend class Storage;
     bb::cascades::GroupDataModel* m_messages;

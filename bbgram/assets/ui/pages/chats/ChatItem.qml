@@ -73,6 +73,7 @@ CustomListItem {
                 Container {
                     layoutProperties: StackLayoutProperties  {
                         spaceQuota: 1
+                        
                     }
                     Label {
                         text: ListItemData.status
@@ -88,7 +89,7 @@ CustomListItem {
                 }
                 ControlDelegate {
                     sourceComponent: unreadCountCompDef
-                    delegateActive: false
+                    delegateActive: ListItemData.unreadCount == 0 ? false : true
                 }
             }
         }
@@ -116,7 +117,7 @@ CustomListItem {
                     verticalAlignment: VerticalAlignment.Bottom
                     
                     Label {
-                        text: "3"
+                        text: ListItemData.unreadCount;
                         horizontalAlignment: HorizontalAlignment.Center
                         verticalAlignment: VerticalAlignment.Center
                         textStyle {

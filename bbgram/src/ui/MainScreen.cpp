@@ -132,7 +132,7 @@ void MainScreen::markRead(Peer* peer)
     if (peer->type() == TGL_BROADCAST_CHAT)
         return;
 
-    tgl_do_mark_read(gTLS, {peer->type(), peer->id()}, 0, 0);
+    tgl_do_mark_read(gTLS, {peer->type(), peer->id()}, MainScreen::_markReaded, peer);
 }
 
 void MainScreen::createGroup(QVariantList users, const QString& title, const QString& chatPhoto)
@@ -400,6 +400,15 @@ void MainScreen::_contactDeleteHandler(struct tgl_state *TLS, void *callback_ext
     }
 
     emit m_instance->contactDeleted(!success, "Something wrong");
+}
+
+void MainScreen::_markReaded(struct tgl_state *TLS, void *callback_extra, int success)
+{
+    if (success)
+    {
+        Peer* peer = (Peer*)callback_extra;
+        peer->markRead();
+    }
 }
 
 User* MainScreen::getUser(int id)

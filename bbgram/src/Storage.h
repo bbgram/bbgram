@@ -39,6 +39,7 @@ public:
     void markPeerDirty(Peer* peer);
 
     void deleteMessage(long long id);
+    void saveMessage(Message* message);
     void addContact(User* contact);
     void deleteContact(User* contact);
 

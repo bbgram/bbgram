@@ -213,19 +213,7 @@ Message* Storage::getMessage(long long id)
             message->setParent(this);
 
             m_messages.insert(id, message);
-
-            QSqlDatabase &db = m_instance->m_db;
-            QSqlQuery query(db);
-            query.prepare("REPLACE INTO messages(id, from_id, to_id, to_type, text, date, data) VALUES(:id, :from_id, :to_id, :to_type, :text, :date, :data)");
-            query.bindValue(":id", message->id());
-            query.bindValue(":from_id", message->m_fromId);
-            query.bindValue(":to_id", message->m_toId);
-            query.bindValue(":to_type", message->m_toType);
-            query.bindValue(":text", message->text());
-            query.bindValue(":date", message->dateTime().toTime_t());
-            QByteArray data = message->serialize();
-            query.bindValue(":data", data);
-            query.exec();
+            saveMessage(message);
 
             return message;
         }
@@ -270,6 +258,21 @@ void Storage::markPeerDirty(Peer* peer)
 void Storage::deleteMessage(long long id)
 {
     tgl_do_delete_msg(gTLS, id, Storage::_deleteMessageCallback, (void*)(int)id);
+}
+
+void Storage::saveMessage(Message* message)
+{
+    QSqlQuery query(m_db);
+    query.prepare("REPLACE INTO messages(id, from_id, to_id, to_type, text, date, data) VALUES(:id, :from_id, :to_id, :to_type, :text, :date, :data)");
+    query.bindValue(":id", message->id());
+    query.bindValue(":from_id", message->m_fromId);
+    query.bindValue(":to_id", message->m_toId);
+    query.bindValue(":to_type", message->m_toType);
+    query.bindValue(":text", message->text());
+    query.bindValue(":date", message->dateTime().toTime_t());
+    QByteArray data = message->serialize();
+    query.bindValue(":data", data);
+    query.exec();
 }
 
 void Storage::addContact(User* contact)
@@ -593,7 +596,7 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
         emit m_instance->newMessageReceived(message);
     }
 
-    messages->insert(message);
+    peer->addMessage(message);
 
     if (m_instance->m_dialogs->indexOf(peer) == -1)
         m_instance->m_dialogs->append(peer);
