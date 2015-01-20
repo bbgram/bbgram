@@ -26,6 +26,7 @@ protected slots:
     void writeState();
 protected:
     static Telegraph* m_instance;
+    static void onLoginIn(struct tgl_state *TLS);
 
     tgl_update_callback m_updateCallbacks;
     tgl_timer_methods   m_timerMethods;

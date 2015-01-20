@@ -8,7 +8,6 @@
 #include <bb/system/InvokeRequest>
 #include <bb/PpsObject>
 
-
 using namespace bb::cascades;
 using namespace bb::system;
 using namespace bb::platform;
@@ -50,9 +49,8 @@ MainScreen::MainScreen(ApplicationUI* app)
 
     m_notificationTimer.setSingleShot(false);
 
-
-    Telegraph::instance()->exportAuthorization();
-    initialize();
+    tgl_login(gTLS);
+    //initialize();
 }
 
 MainScreen::~MainScreen()
@@ -237,13 +235,14 @@ void MainScreen::dialANumber(const QString& number)
 
 void MainScreen::initialize()
 {
-    if (!gTLS->DC_working || !tgl_signed_dc(gTLS, gTLS->DC_working))
+    /*if (!gTLS->DC_working || !tgl_signed_dc(gTLS, gTLS->DC_working))
     {
         QTimer::singleShot(200, this, SLOT(initialize()));
         return;
     }
 
-    tgl_do_get_difference(gTLS, 0, 0, 0);
+    tglm_send_all_unsent(gTLS);
+    tgl_do_get_difference(gTLS, 0, 0, 0);*/
     Storage::instance()->updateUserInfo();
     Storage::instance()->updateChats();
     Storage::instance()->updateContacts();

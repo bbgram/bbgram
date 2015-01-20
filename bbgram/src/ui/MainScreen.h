@@ -42,13 +42,13 @@ public:
     Q_INVOKABLE QString getAppVersion() const;
 
     static MainScreen* instance();
+    void initialize();
 signals:
     void contactAdded(bool error, QString message);
     void contactRenamed(bool error, QString message);
     void contactDeleted(bool error, QString message);
     void groupCreated(GroupChat* groupChat);
 protected slots:
-    void initialize();
     void onAppFullScreen();
     void onAppThumbnail();
     void showNotifications();

@@ -1,4 +1,5 @@
 #include "Telegraph.h"
+#include "ui/MainScreen.h"
 
 #include <assert.h>
 #include <stdio.h>
@@ -261,6 +262,7 @@ void Telegraph::start()
     m_updateCallbacks.msg_delete = Storage::messagesDeletedHandler;
     m_updateCallbacks.notify_settings_update = Storage::notifySettingsUpdateHandler;
     m_updateCallbacks.secret_chat_update = Storage::encrChatUpdate;
+    m_updateCallbacks.logged_in = Telegraph::onLoginIn;
 
 
     memset(&m_timerMethods, 0, sizeof(tgl_timer_methods));
@@ -295,6 +297,7 @@ void Telegraph::start()
     tgl_register_app_id(gTLS, APP_ID, (char*)APP_HASH);
     tgl_set_app_version(gTLS, "bbgram");
 
+    tgl_enable_pfs(gTLS);
 
     tgl_init(gTLS);
 
@@ -314,7 +317,7 @@ void Telegraph::stop()
 
 void Telegraph::exportAuthorization()
 {
-    static tgl_dc *cur_a_dc = 0;
+    /*static tgl_dc *cur_a_dc = 0;
     if (cur_a_dc && !tgl_signed_dc(gTLS, cur_a_dc))
     {
         QTimer::singleShot(50, this, SLOT(exportAuthorization()));
@@ -329,7 +332,7 @@ void Telegraph::exportAuthorization()
             cur_a_dc = gTLS->DC_list[i];
             QTimer::singleShot(50, this, SLOT(exportAuthorization()));
             return;
-        }
+        }*/
     write_auth_file(gTLS);
     Telegraph::instance()->onReady();
 }
@@ -343,4 +346,10 @@ void Telegraph::onReady()
 void Telegraph::writeState()
 {
     write_state_file(gTLS);
+}
+
+void Telegraph::onLoginIn(struct tgl_state *TLS)
+{
+    Telegraph::instance()->exportAuthorization();
+    MainScreen::instance()->initialize();
 }
