@@ -56,7 +56,7 @@ NavigationPane {
                 ActionBar.placement: ActionBarPlacement.InOverflow
             },
             ActionItem {
-                title: "Telegram FAQ"
+                title: "bomogram FAQ"
                 imageSource: "asset:///images/menu_FAQ.png"
                 ActionBar.placement: ActionBarPlacement.InOverflow
                 onTriggered: {
@@ -220,7 +220,7 @@ NavigationPane {
                     ]
                 }
                 Label {
-                    text: "Telegram for BlackBerry v%1".arg(_owner.getAppVersion())
+                    text: "bomogram for BlackBerry v%1".arg(_owner.getAppVersion())
                     textStyle {
                         fontSize: FontSize.Small
                         color: Color.Gray
