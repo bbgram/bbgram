@@ -1,4 +1,5 @@
 import bb.cascades 1.2
+import bbgram.control.lib 0.1
 
 Container {
     id: me
@@ -82,12 +83,23 @@ Container {
                             ControlDelegate {
                                 id: textDelegate
                                 source: "messages/Text.qml"
-                                delegateActive: ListItemData.mediaType != 6
+                                delegateActive: ListItemData.mediaType != 2 && ListItemData.mediaType != 4
+                            }
+                            ControlDelegate {
+                                id: documentDelegate
+                                delegateActive: ListItemData.mediaType == 2
+                                sourceComponent: viewerDef
+                                attachedObjects: [
+                                    ComponentDefinition {
+                                        id: viewerDef
+                                        DocumentViewer { message: ListItemData }
+                                    }
+                                ]
                             }
                             ControlDelegate {
                                 id: contactDelegate
                                 source: "messages/Contact.qml"
-                                delegateActive: ListItemData.mediaType == 6
+                                delegateActive: ListItemData.mediaType == 4
                             }
                             Container { // date and read status
                                 horizontalAlignment: HorizontalAlignment.Right

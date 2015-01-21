@@ -65,7 +65,37 @@ Message::Message(long long id, tgl_message* M)
         }
         else if (m_mediaType == tgl_message_media_document)
         {
-            int a = 1;
+            m_media.insert("id", M->media.document.id);
+            m_media.insert("access_hash", M->media.document.access_hash);
+            m_media.insert("user_id", M->media.document.user_id);
+            m_media.insert("date", M->media.document.date);
+            m_media.insert("size", M->media.document.size);
+            m_media.insert("dc_id", M->media.document.dc_id);
+
+            QVariantMap thumb;
+            thumb.insert("width", M->media.document.thumb.w);
+            thumb.insert("height", M->media.document.thumb.h);
+            thumb.insert("size", M->media.document.thumb.size);
+            thumb.insert("volume", M->media.document.thumb.loc.volume);
+            thumb.insert("dc", M->media.document.thumb.loc.dc);
+            thumb.insert("local_id", M->media.document.thumb.loc.local_id);
+            thumb.insert("secret", M->media.document.thumb.loc.secret);
+
+            m_media.insert("thumb", thumb);
+            m_media.insert("caption", QString::fromUtf8(M->media.document.caption));
+            m_media.insert("mime_type",  QString::fromUtf8(M->media.document.mime_type));
+            m_media.insert("w", M->media.document.w);
+            m_media.insert("h", M->media.document.h);
+            m_media.insert("flags", M->media.document.flags);
+            m_media.insert("duration", M->media.document.duration);
+
+            qDebug() << "document";
+            qDebug() << QString::fromUtf8(M->media.document.caption);
+            qDebug() << QString::fromUtf8(M->media.document.mime_type);
+            qDebug() << M->media.document.thumb.w << "x" << M->media.document.thumb.h;
+            qDebug() << M->media.document.size;
+            qDebug() << M->media.document.flags;
+            qDebug() << "====";
         }
        // tgl_do_load_photo()
 
@@ -218,7 +248,7 @@ QString Message::text() const
             case tgl_message_media_audio:
                 return "#Unsupported media: audio";*/
             case tgl_message_media_document:
-                return "#Unsupported media: document";
+                return "document";
             case tgl_message_media_geo:
                 return "#Unsupported media: geo";
             case tgl_message_media_contact:

@@ -4,8 +4,9 @@
 #include <bb/cascades/TabbedPane>
 #include <bb/cascades/QmlDocument>
 
-#include "ui/widgets/PhoneNumberInput.h"
+#include "ui/widgets/DocumentViewer.h"
 #include "ui/widgets/MediaViewer.h"
+#include "ui/widgets/PhoneNumberInput.h"
 
 #include "Telegraph.h"
 
@@ -25,6 +26,7 @@ ApplicationUI::ApplicationUI(bb::cascades::Application* app) :
 {
     qmlRegisterType<PhoneNumberInput>("bbgram.control.lib", 0, 1, "PhoneNumberInput");
     qmlRegisterType<MediaViewer>("bbgram.control.lib", 0, 1, "MediaViewer");
+    qmlRegisterType<DocumentViewer>("bbgram.control.lib", 0, 1, "DocumentViewer");
     qmlRegisterType<Peer>("bbgram.types.lib", 0, 1, "Peer");
     qmlRegisterType<GroupChat>("bbgram.types.lib", 0, 1, "GroupChat");
     qmlRegisterType<Message>("bbgram.types.lib", 0, 1, "Message");
