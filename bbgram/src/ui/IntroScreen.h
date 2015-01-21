@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Screen.h"
-
 #include <bb/cascades/NavigationPane>
 
 class ApplicationUI;
@@ -11,11 +10,13 @@ class IntroScreen : public Screen<bb::cascades::NavigationPane>
     Q_OBJECT
 
     Q_PROPERTY(QString phone READ phone NOTIFY phoneChanged)
+    Q_PROPERTY(bool authReady READ authReady NOTIFY authReadyChanged)
 public:
     IntroScreen(ApplicationUI* app);
     ~IntroScreen();
 
     const QString& phone() const;
+    bool authReady() const;
 
     Q_INVOKABLE void requestCode(const QString& phone);
     Q_INVOKABLE void requestPhoneCall();
@@ -24,8 +25,13 @@ public:
 signals:
     void phoneChanged();
     void wrongCode();
+    void authReadyChanged();
+protected slots:
+    void checkConnection();
 protected:
     ApplicationUI*  m_app;
+    QTimer          m_checkTimer;
+    bool            m_authReady;
 
     QString         m_phone;
     bool            m_registered;

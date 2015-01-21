@@ -9,22 +9,45 @@ using namespace bb::cascades;
 
 IntroScreen::IntroScreen(ApplicationUI* app)
     : Screen("asset:///ui/pages/Intro.qml")
-        , m_app(app)
+        , m_app(app), m_authReady(false)
 {
     m_phone = "";
     m_codeHash = "";
     m_registered = false;
+
+    QObject::connect(&m_checkTimer, SIGNAL(timeout()), this, SLOT(checkConnection()));
+    m_checkTimer.start();
+
+    setContextProperty("_introScreen", this);
 }
 
 IntroScreen::~IntroScreen()
 {
 }
 
-
-
 const QString& IntroScreen::phone() const
 {
     return m_phone;
+}
+
+bool IntroScreen::authReady() const
+{
+    return m_authReady;
+}
+
+void IntroScreen::checkConnection()
+{
+    for (int i = 0; i < sizeof(gTLS->DC_list) / sizeof(gTLS->DC_list[0]); i++)
+    {
+        if (gTLS->DC_list[i] && !gTLS->DC_list[i]->auth_key_id)
+        {
+            return;
+        }
+    }
+    m_checkTimer.stop();
+
+    m_authReady = true;
+    emit authReadyChanged();
 }
 
 void IntroScreen::_requestCodeCallback(struct tgl_state *TLS, void *callback_extra, int success, int registered, const char *hash)
@@ -53,8 +76,6 @@ void IntroScreen::requestPhoneCall()
     QByteArray _hash = m_codeHash.toLocal8Bit();
     tgl_do_phone_call(gTLS, _user.data(), _hash.data(), 0, 0);
 }
-
-
 
 void IntroScreen::_sendCodeCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *self)
 {

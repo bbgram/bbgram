@@ -93,7 +93,8 @@ NavigationPane {
                 horizontalAlignment: HorizontalAlignment.Center
                 topPadding: 720
                 Button {
-                    text: "Start messaging"
+                    enabled: _introScreen ? _introScreen.authReady : false
+                    text: _introScreen ? ( _introScreen.authReady ? "Start messaging" : "Please Wait") : "Please Wait"
                     onClicked: {
                         var page = loginPageDef.createObject()
                         navigationPane.push(page)
