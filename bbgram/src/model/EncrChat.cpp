@@ -129,13 +129,26 @@ void EncrChat::save(QVariantMap& map) const
 
 QString EncrChat::title() const
 {
-    return QString("Encr: ") + m_companion->title();
+    if (m_companion)
+        return QString("Encr: ") + m_companion->title();
+    else
+        return QString("Encr: ");
+}
+
+QString EncrChat::status() const
+{
+    if (lastMessage())
+        return "<p>" + lastMessage()->text() + "</p>";
+    return "";
 }
 
 void EncrChat::setCompanion(User* user)
 {
     m_companion = user;
     setPhoto(user->photoFileName());
+
+    emit titleChanged();
+    emit statusChanged();
 }
 
 void EncrChat::setSecretInfo(tgl_secret_chat* info)

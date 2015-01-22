@@ -179,12 +179,13 @@ NavigationPane {
                                 title: "New Secret Chat"
                                 imageSource: "asset:///images/menu_secretchat.png"
                                 onTriggered: {
-                                    console.log("SecretChat invite")
+                                    if (contacts_list.selectionList().length != 0)
+                                        _owner.createSecretChat(contacts_list.dataModel.data(contacts_list.selectionList()[0]));
                                 }
                             }
                         ]
                         onActiveChanged: {
-                            active ? _contacts.setFilter(1) : _contacts.setFilter = (3)
+                            active ? _contacts.setFilter(1) : _contacts.setFilter(3)
                         }
                     },
                     MultiSelectHandler {

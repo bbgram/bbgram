@@ -796,6 +796,12 @@ void Storage::encrChatUpdate(struct tgl_state *TLS, struct tgl_secret_chat *C, u
 
     EncrChat* chat = (EncrChat*)m_instance->getPeer(C->id.type, C->id.id);
 
+    if (flags & TGL_UPDATE_CREATED)
+    {
+        User* user = (User*)m_instance->getPeer(TGL_PEER_USER, C->user_id);
+        chat->setCompanion(user);
+    }
+
     if (flags & TGL_UPDATE_REQUESTED)
     {
         User* user = (User*)m_instance->getPeer(TGL_PEER_USER, C->user_id);

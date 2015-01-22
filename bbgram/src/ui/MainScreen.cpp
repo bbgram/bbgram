@@ -152,6 +152,12 @@ void MainScreen::createGroup(QVariantList users, const QString& title, const QSt
     tgl_do_create_group_chat_ex(gTLS, users.size(), data->peers, title.toUtf8().data(), MainScreen::_createGroupCallback, data);
 }
 
+void MainScreen::createSecretChat(Peer* peer)
+{
+    if (peer->type() == TGL_PEER_USER)
+        tgl_do_create_encr_chat_request(gTLS, peer->id(), NULL, NULL);
+}
+
 QVariant MainScreen::createBroadcast(QVariantList users)
 {
     return QVariant::fromValue((Peer*)Storage::instance()->createBroadcast(users));

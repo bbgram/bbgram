@@ -17,6 +17,7 @@ public:
     void save(QVariantMap& map) const;
 
     QString title() const;
+    QString status() const;
 
     void setCompanion(User* user);
     void setSecretInfo(tgl_secret_chat* info);

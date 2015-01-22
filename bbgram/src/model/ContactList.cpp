@@ -36,7 +36,6 @@ GroupDataModel* ContactList::model() const
 
 void ContactList::updatePhonebook()
 {
-    return;
     ContactService service;
 
     QSet<ContactId> excludedContacts;
@@ -89,7 +88,7 @@ void ContactList::updatePhonebook()
             entry["phone"] = phoneNumber[0].value();
         m_phoneBook.push_back(entry);
 
-        MainScreen::instance()->addContact(contact.firstName(), contact.lastName(), phoneNumber[0].value());
+        //MainScreen::instance()->addContact(contact.firstName(), contact.lastName(), phoneNumber[0].value());
     }
 }
 

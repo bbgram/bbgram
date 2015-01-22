@@ -29,6 +29,7 @@ public:
     Q_INVOKABLE void deleteMessage(long long id);
     Q_INVOKABLE void markRead(Peer* peer);
     Q_INVOKABLE void createGroup(QVariantList users, const QString& title, const QString& chatPhoto);
+    Q_INVOKABLE void createSecretChat(Peer* peer);
     Q_INVOKABLE QVariant createBroadcast(QVariantList users);
     Q_INVOKABLE void setGroupName(GroupChat* group, const QString& title);
     Q_INVOKABLE void addUserToGroup(GroupChat* group, User* user);
