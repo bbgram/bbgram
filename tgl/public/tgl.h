@@ -368,6 +368,8 @@ void tgl_do_delete_history (struct tgl_state *TLS, tgl_peer_id_t id, int offset,
 void tgl_do_update_notify_settings (struct tgl_state *TLS, struct tgl_notify_peer_t *notify_peer, int mute_until, char* sound, int show_previews, int events_mask, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success), void *callback_extra);
 void tgl_do_get_history_maxid (struct tgl_state *TLS, tgl_peer_id_t id, int offset, int max_id, int limit, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]), void *callback_extra);
 
+void tgl_do_import_contacts(struct tgl_state *TLS, int size, const char *phone[], const char *first_name[], const char *last_name[], int replace, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[]), void *callback_extra);
+
 void tgl_do_visualize_key (struct tgl_state *TLS, tgl_peer_id_t id, unsigned char buf[16]);
 
 void tgl_do_send_ping (struct tgl_state *TLS, struct connection *c);

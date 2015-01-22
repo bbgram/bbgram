@@ -4881,7 +4881,31 @@ void tgl_do_update_notify_settings (struct tgl_state *TLS, struct tgl_notify_pee
     tglq_send_query (TLS, TLS->DC_working, packet_ptr - packet_buffer, packet_buffer, &update_notify_settings_methods, 0, callback, callback_extra);
 }
 
-void tgl_do_get_history_maxid (struct tgl_state *TLS, tgl_peer_id_t id, int offset, int max_id, int limit, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]), void *callback_extra)
-{
+void tgl_do_get_history_maxid (struct tgl_state *TLS, tgl_peer_id_t id, int offset, int max_id, int limit, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]), void *callback_extra) {
     _tgl_do_get_history(TLS, id, limit, offset, max_id, 0, 0, 0, callback, callback_extra);
+}
+
+static struct query_methods import_contacts_methods = {
+    .on_answer = add_contact_on_answer,
+    .on_error = q_list_on_error,
+    .type = TYPE_TO_PARAM(contacts_imported_contacts)
+};
+
+void tgl_do_import_contacts(struct tgl_state *TLS, int size, const char *phone[], const char *first_name[], const char *last_name[], int replace, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[]), void *callback_extra) {
+    clear_packet ();
+    out_int (CODE_contacts_import_contacts);
+    out_int (CODE_vector);
+    out_int (size);
+    out_int (CODE_input_phone_contact);
+    long long r;
+    int i;
+    for (i = 0; i < size; i++) {
+        tglt_secure_random (&r, 8);
+        out_long (r);
+        out_cstring (phone[i], strlen(phone[i]));
+        out_cstring (first_name[i], strlen(first_name[i]));
+        out_cstring (last_name[i], strlen(last_name[i]));
+    }
+    out_int (replace ? CODE_bool_true : CODE_bool_false);
+    tglq_send_query(TLS, TLS->DC_working, packet_ptr - packet_buffer, packet_buffer, &import_contacts_methods, 0, callback, callback_extra);
 }
