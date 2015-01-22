@@ -183,6 +183,11 @@ QUrl Peer::photo() const
     return QUrl("file://" + QDir::currentPath() + "/" + m_photoFilename);
 }
 
+const QString& Peer::photoFileName()
+{
+    return m_photoFilename;
+}
+
 void Peer::setPhoto(const QString &filename)
 {
     if (m_photoFilename.compare(filename) == 0)

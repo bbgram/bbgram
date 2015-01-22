@@ -13,7 +13,7 @@ const int HISTORY_LIMIT = 20;
 
 const char* DATABASE_NAME = "data/storage.db";
 const char* DATABASE_INFO_NAME = "data/storage.info";
-const int DATABASE_VERSION = 4;
+const int DATABASE_VERSION = 5;
 
 using namespace bb::cascades;
 
@@ -46,6 +46,7 @@ Storage::Storage(QObject* parent)
         query.exec("CREATE TABLE dialogs(id INTEGER PRIMARY KEY)");
         query.exec("CREATE TABLE messages(id INTEGER PRIMARY KEY, from_id INTEGER, to_id INTEGER, to_type INTEGER, text TEXT, date INTEGER, data BLOB)");
         query.exec("CREATE TABLE broadcasts(id INTEGER, message_id INTEGER)");
+        query.exec("CREATE TABLE encr_chats(id INTEGER PRIMARY KEY, companion INTEGER)");
 
         query.exec("CREATE INDEX messages_to_id_idx ON messages(to_id);");
         query.exec("CREATE INDEX messages_to_id_to_type_idx ON messages(to_id, to_type);");
@@ -94,6 +95,18 @@ Storage::Storage(QObject* parent)
         int type = (peerId >> 32);
 
         Peer* peer = getPeer(type, id);
+        dialogs.append(peer);
+    }
+
+    query.exec("SELECT id, companion FROM encr_chats");
+    while (query.next())
+    {
+        long long peerId = query.value(0).toLongLong();
+        int id = (int)peerId;
+        int type = (peerId >> 32);
+
+        EncrChat* peer = (EncrChat*)getPeer(type, id);
+        peer->setCompanion((User*)getPeer(TGL_PEER_USER, query.value(1).toInt()));
         dialogs.append(peer);
     }
 
@@ -225,7 +238,7 @@ Message* Storage::getMessage(long long id)
 
 Peer* Storage::getPeer(int type, int id)
 {
-    long long peerId = ((long long)type << 32) | id;
+    long long peerId = ((long long)type << 32) | (unsigned int)id;
     QMap<long long, Peer*>::iterator it = m_peers.find(peerId);
 
     if (it != m_peers.end())
@@ -350,7 +363,7 @@ void Storage::deleteChat(Peer* peer)
     QSqlDatabase &db = m_instance->m_db;
     QSqlQuery query(db);
 
-    long long id = ((long long)peer->type() << 32) | peer->id();
+    long long id = ((long long)peer->type() << 32) | (unsigned int)peer->id();
     query.prepare("DELETE FROM dialogs WHERE id=:id");
     query.bindValue(":id", id);
     query.exec();
@@ -391,6 +404,26 @@ void Storage::_loadPhotoCallback(struct tgl_state *TLS, void *callback_extra, in
     peer->setPhotoId(data->photo_id);
     m_instance->markPeerDirty(peer);
     delete data;
+}
+
+void Storage::_secretChatAccepted(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_secret_chat *E)
+{
+    if (!success)
+        return;
+
+    QSqlDatabase &db = m_instance->m_db;
+    QSqlQuery query(db);
+
+    query.prepare("REPLACE INTO encr_chats(id, companion) VALUES(:id, :companion)");
+    long long peerId = ((long long)E->id.type << 32) | (unsigned int)E->id.id;
+    query.bindValue(":id", peerId);
+    query.bindValue(":companion", E->user_id);
+    query.exec();
+
+    EncrChat* chat = (EncrChat*)m_instance->getPeer(E->id.type, E->id.id);
+    chat->setSecretInfo(E);
+
+    m_instance->markPeerDirty(chat);
 }
 
 void Storage::_broadcastSended(struct tgl_state *TLS, void *extra, int success, int num, struct tgl_message *ML[])
@@ -540,7 +573,7 @@ void Storage::saveUpdatesToDatabase()
         for (int i = 0; i < m_updatedPeers.size(); i++)
         {
             Peer* peer = m_updatedPeers.value(i);
-            long long peerId = ((long long)peer->type() << 32) | peer->id();
+            long long peerId = ((long long)peer->type() << 32) | (unsigned int)peer->id();
             query.bindValue(":id", peerId);
             QByteArray data = peer->serialize();
             query.bindValue(":data", data);
@@ -572,7 +605,10 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
     int peer_id = M->to_id.id;
 
     if (peer_type == 0)
+    {
+        qDebug() << "Storage::messageReceivedHandler peer_type is 0";
         return;
+    }
 
     if (M->to_id.type == TGL_PEER_USER && M->to_id.id == gTLS->our_id)
     {
@@ -586,6 +622,11 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
 
     Peer* peer = m_instance->getPeer(peer_type, peer_id);
     Message* message = m_instance->getMessage(M->id);
+
+    if (peer_type = TGL_PEER_ENCR_CHAT)
+    {
+        m_instance->markPeerDirty(peer);
+    }
 
     GroupDataModel* messages = peer->m_messages;
     if (!messages->findExact(message).isEmpty())
@@ -753,11 +794,34 @@ void Storage::encrChatUpdate(struct tgl_state *TLS, struct tgl_secret_chat *C, u
 
     qDebug() << "Storage::encrChatUpdate user=" << QString::fromUtf8(C->print_name) << " flags=" << flags << str;
 
+    EncrChat* chat = (EncrChat*)m_instance->getPeer(C->id.type, C->id.id);
 
     if (flags & TGL_UPDATE_REQUESTED)
     {
-        tgl_do_accept_encr_chat_request(gTLS, C, NULL, NULL);
+        User* user = (User*)m_instance->getPeer(TGL_PEER_USER, C->user_id);
+        chat->setCompanion(user);
+
+        tgl_do_accept_encr_chat_request(gTLS, C, Storage::_secretChatAccepted, NULL);
     }
+
+    if (flags & TGL_UPDATE_WORKING)
+    {
+        int i = 1;
+        //chat->m_firstName =
+    }
+
+    if (flags & TGL_UPDATE_DELETED)
+    {
+        /*SqlDatabase &db = m_instance->m_db;
+        QSqlQuery query(db);
+
+        query.prepare("DELETE FROM encr_chats WHERE id = :id");
+        long long peerId = ((long long)chat->type() << 32) | (unsigned int)chat->id();
+        query.bindValue(":id", peerId);
+        query.exec();*/
+    }
+
+    m_instance->markPeerDirty(chat);
 }
 
 PeerDataModel* Storage::contacts() const
@@ -791,7 +855,7 @@ void Storage::_getDialogsCallback(struct tgl_state *TLS, void *callback_extra, i
     for (int i = 0; i < size; i++)
     {
         tgl_peer_id_t _peer = peers[i];
-        long long peerId = ((long long)_peer.type << 32) | _peer.id;
+        long long peerId = ((long long)_peer.type << 32) | (unsigned int)_peer.id;
 
         int idx = dialogs.indexOf(peerId);
         if (idx == -1)

@@ -4,6 +4,7 @@
 #include <bb/cascades/Image>
 
 #include "Peer.h"
+#include "User.h"
 
 class EncrChat : public Peer
 {
@@ -14,13 +15,14 @@ public:
 
     void load(const QVariantMap& map);
     void save(QVariantMap& map) const;
-protected:
-    QString     m_phone;
-    QString     m_firstName;
-    QString     m_lastName;
 
-    bool        m_online;
-    QDateTime   m_lastSeen;
+    QString title() const;
+
+    void setCompanion(User* user);
+    void setSecretInfo(tgl_secret_chat* info);
+protected:
+    tgl_secret_chat* m_secret_chat;
+    User* m_companion;
 
     tgl_typing_status   m_typingStatus;
 };

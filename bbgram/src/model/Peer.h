@@ -50,6 +50,7 @@ public:
     Q_INVOKABLE void loadAdditionalHistory();
 
     QUrl photo() const;
+    const QString& photoFileName();
     void setPhoto(const QString & filename);
     void setPhotoId(long long photoId);
     long long getPhotoId() const;
