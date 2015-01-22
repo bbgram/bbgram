@@ -88,14 +88,6 @@ Message::Message(long long id, tgl_message* M)
             m_media.insert("h", M->media.document.h);
             m_media.insert("flags", M->media.document.flags);
             m_media.insert("duration", M->media.document.duration);
-
-            qDebug() << "document";
-            qDebug() << QString::fromUtf8(M->media.document.caption);
-            qDebug() << QString::fromUtf8(M->media.document.mime_type);
-            qDebug() << M->media.document.thumb.w << "x" << M->media.document.thumb.h;
-            qDebug() << M->media.document.size;
-            qDebug() << M->media.document.flags;
-            qDebug() << "====";
         }
        // tgl_do_load_photo()
 
