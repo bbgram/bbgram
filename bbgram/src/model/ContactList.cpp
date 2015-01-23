@@ -40,21 +40,6 @@ void ContactList::updatePhonebook()
 
     QSet<ContactId> excludedContacts;
 
-    for (int i = 0; i < m_telegramContacts->size(); i++)
-    {
-        User* user = (User*)m_telegramContacts->value(i);
-        ContactSearchFilters phoneSearch;
-        phoneSearch.setHasAttribute(AttributeKind::Phone);
-        phoneSearch.setSearchValue(QString("+") + user->phone());
-        QList<Contact> users = service.searchContactsByPhoneNumber(phoneSearch);
-
-        foreach (Contact contact, users)
-        {
-            excludedContacts.insert(contact.id());
-        }
-
-    }
-
     ContactListFilters contactFilter;
     QSet<AttributeKind::Type> attrs;
     attrs.insert(AttributeKind::Name);
@@ -66,26 +51,18 @@ void ContactList::updatePhonebook()
 
     foreach (Contact contact, phonebook)
     {
-        bool found = false;
-        foreach (ContactId id, excludedContacts)
-            if (contact.id() == id)
-            {
-                found = true;
-                break;
-            }
-
-        if (found)
-            continue;
-
         QList<ContactAttribute> phoneNumber = contact.phoneNumbers();
+        if(phoneNumber.empty())
+            continue;
 
         QVariantMap entry;
         entry["sortingKey"] = contact.firstName();
         entry["firstName"] = contact.firstName();
         entry["lastName"] = contact.lastName();
         entry["online"] = true;
-        if(!phoneNumber.empty())
-            entry["phone"] = phoneNumber[0].value();
+        entry["phone"] = phoneNumber[0].value();
+
+        qDebug() << contact.firstName() << " " << contact.lastName();
         m_phoneBook.push_back(entry);
 
         //MainScreen::instance()->addContact(contact.firstName(), contact.lastName(), phoneNumber[0].value());
