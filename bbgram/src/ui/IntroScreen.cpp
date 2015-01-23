@@ -39,7 +39,7 @@ void IntroScreen::checkConnection()
 {
     for (int i = 0; i < sizeof(gTLS->DC_list) / sizeof(gTLS->DC_list[0]); i++)
     {
-        if (gTLS->DC_list[i] && !gTLS->DC_list[i]->auth_key_id)
+        if (gTLS->DC_list[i] && gTLS->DC_list[i]->state != st_authorized)
         {
             return;
         }
