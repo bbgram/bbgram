@@ -346,6 +346,11 @@ BroadcastChat* Storage::createBroadcast(QVariantList users)
     return chat;
 }
 
+void Storage::createEncrChar(Peer* peer)
+{
+    tgl_do_create_encr_chat_request(gTLS, peer->id(), Storage::_newSecretChatCallback, NULL);
+}
+
 void Storage::deleteHistory(Peer* peer)
 {
     if (peer->type() != TGL_BROADCAST_CHAT)
@@ -406,7 +411,7 @@ void Storage::_loadPhotoCallback(struct tgl_state *TLS, void *callback_extra, in
     delete data;
 }
 
-void Storage::_secretChatAccepted(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_secret_chat *E)
+void Storage::_newSecretChatCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_secret_chat *E)
 {
     if (!success)
         return;
@@ -807,13 +812,11 @@ void Storage::encrChatUpdate(struct tgl_state *TLS, struct tgl_secret_chat *C, u
         User* user = (User*)m_instance->getPeer(TGL_PEER_USER, C->user_id);
         chat->setCompanion(user);
 
-        tgl_do_accept_encr_chat_request(gTLS, C, Storage::_secretChatAccepted, NULL);
+        tgl_do_accept_encr_chat_request(gTLS, C, Storage::_newSecretChatCallback, NULL);
     }
 
     if (flags & TGL_UPDATE_WORKING)
     {
-        int i = 1;
-        //chat->m_firstName =
     }
 
     if (flags & TGL_UPDATE_DELETED)

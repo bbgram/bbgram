@@ -44,6 +44,7 @@ public:
     void deleteContact(User* contact);
 
     BroadcastChat* createBroadcast(QVariantList users);
+    void createEncrChar(Peer* peer);
 
     void deleteHistory(Peer* peer);
     void deleteChat(Peer* peer);
@@ -84,7 +85,7 @@ protected:
     static void _updateContactPhoto(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *U);
     static void _searchMessageCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]);
     static void _loadPhotoCallback(struct tgl_state *TLS, void *callback_extra, int success, char *filename);
-    static void _secretChatAccepted(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_secret_chat *E);
+    static void _newSecretChatCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_secret_chat *E);
 
     void _LoadNextPhoto();
     void _PhotoLoaded();

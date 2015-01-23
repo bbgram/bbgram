@@ -155,7 +155,7 @@ void MainScreen::createGroup(QVariantList users, const QString& title, const QSt
 void MainScreen::createSecretChat(Peer* peer)
 {
     if (peer->type() == TGL_PEER_USER)
-        tgl_do_create_encr_chat_request(gTLS, peer->id(), NULL, NULL);
+        Storage::instance()->createEncrChar(peer);
 }
 
 QVariant MainScreen::createBroadcast(QVariantList users)
