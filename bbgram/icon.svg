@@ -44,22 +44,6 @@
          offset="1"
          id="stop5795" />
     </linearGradient>
-    <pattern
-       inkscape:stockid="Stripes 1:1"
-       id="Strips1_1"
-       patternTransform="translate(0,0) scale(10,10)"
-       height="1"
-       width="2"
-       patternUnits="userSpaceOnUse"
-       inkscape:collect="always">
-      <rect
-         id="rect4923"
-         height="2"
-         width="1"
-         y="-0.5"
-         x="0"
-         style="fill:black;stroke:none" />
-    </pattern>
     <linearGradient
        id="linearGradient3911">
       <stop
@@ -84,7 +68,7 @@
        x2="237.97295"
        y2="316.1311"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.99878065,0,0,0.97645295,0.21774016,10.264952)" />
+       gradientTransform="matrix(0.99878065,0,0,0.97645295,12.036325,13.96838)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient3911-8"
@@ -128,14 +112,6 @@
        x2="89.689529"
        y2="322.13385"
        gradientUnits="userSpaceOnUse" />
-    <filter
-       inkscape:collect="always"
-       id="filter5845">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="2.34"
-         id="feGaussianBlur5847" />
-    </filter>
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath5851">
@@ -177,6 +153,602 @@
          inkscape:export-xdpi="87.589996"
          inkscape:export-ydpi="87.589996" />
     </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5791-3"
+       id="linearGradient5797-4"
+       x1="88.870583"
+       y1="321.92728"
+       x2="88.870583"
+       y2="436.95178"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient5791-3">
+      <stop
+         style="stop-color:#3d80d6;stop-opacity:1;"
+         offset="0"
+         id="stop5793-9" />
+      <stop
+         id="stop5799-8"
+         offset="0.71746951"
+         style="stop-color:#3072c9;stop-opacity:1;" />
+      <stop
+         style="stop-color:#2869be;stop-opacity:1;"
+         offset="1"
+         id="stop5795-8" />
+    </linearGradient>
+    <linearGradient
+       gradientTransform="matrix(1.6239316,0,0,1,-21.001524,143.31941)"
+       y2="436.95178"
+       x2="88.870583"
+       y1="321.92728"
+       x1="88.870583"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3102"
+       xlink:href="#linearGradient5791-3"
+       inkscape:collect="always" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath5858-4-3">
+      <rect
+         style="fill:#387cd5;fill-opacity:1;stroke:none"
+         id="rect5860-1-3"
+         width="117"
+         height="117"
+         x="130.20439"
+         y="572.58704"
+         rx="8.1374569"
+         ry="8.1374569"
+         inkscape:export-filename="D:\bb10\momentics-workspace\bbgram\icon.png"
+         inkscape:export-xdpi="87.589996"
+         inkscape:export-ydpi="87.589996" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4184">
+      <rect
+         style="fill:url(#linearGradient4188);fill-opacity:1;stroke:none"
+         id="rect4186"
+         width="190"
+         height="117"
+         x="27.955297"
+         y="464.76266"
+         rx="0"
+         ry="0"
+         inkscape:export-filename="D:\bb10\icon_480x480.png"
+         inkscape:export-xdpi="369.23001"
+         inkscape:export-ydpi="369.23001" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5791-3"
+       id="linearGradient4188"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6239316,0,0,1,-21.001524,143.31941)"
+       x1="88.870583"
+       y1="321.92728"
+       x2="88.870583"
+       y2="436.95178" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4190">
+      <rect
+         style="fill:url(#linearGradient4194);fill-opacity:1;stroke:none"
+         id="rect4192"
+         width="190"
+         height="117"
+         x="-150.61613"
+         y="148.65048"
+         rx="0"
+         ry="0"
+         inkscape:export-filename="D:\bb10\icon_480x480.png"
+         inkscape:export-xdpi="369.23001"
+         inkscape:export-ydpi="369.23001" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5791-3"
+       id="linearGradient4194"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6239316,0,0,1,-199.57295,-172.79277)"
+       x1="88.870583"
+       y1="321.92728"
+       x2="88.870583"
+       y2="436.95178" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4196">
+      <rect
+         style="fill:url(#linearGradient4200);fill-opacity:1;stroke:none"
+         id="rect4198"
+         width="190"
+         height="117"
+         x="-97.655235"
+         y="95.388641"
+         rx="0"
+         ry="0"
+         inkscape:export-filename="D:\bb10\icon_480x480.png"
+         inkscape:export-xdpi="369.23001"
+         inkscape:export-ydpi="369.23001" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5791-3"
+       id="linearGradient4200"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6239316,0,0,1,-146.61205,-226.05461)"
+       x1="88.870583"
+       y1="321.92728"
+       x2="88.870583"
+       y2="436.95178" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4202">
+      <rect
+         style="fill:url(#linearGradient4206);fill-opacity:1;stroke:none"
+         id="rect4204"
+         width="190"
+         height="117"
+         x="27.955297"
+         y="464.76266"
+         rx="0"
+         ry="0"
+         inkscape:export-filename="D:\bb10\icon_480x480.png"
+         inkscape:export-xdpi="369.23001"
+         inkscape:export-ydpi="369.23001" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5791-3"
+       id="linearGradient4206"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6239316,0,0,1,-21.001524,143.31941)"
+       x1="88.870583"
+       y1="321.92728"
+       x2="88.870583"
+       y2="436.95178" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4208">
+      <rect
+         style="fill:url(#linearGradient4212);fill-opacity:1;stroke:none"
+         id="rect4210"
+         width="190"
+         height="117"
+         x="27.955297"
+         y="464.76266"
+         rx="0"
+         ry="0"
+         inkscape:export-filename="D:\bb10\icon_480x480.png"
+         inkscape:export-xdpi="369.23001"
+         inkscape:export-ydpi="369.23001" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5791-3"
+       id="linearGradient4212"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6239316,0,0,1,-21.001524,143.31941)"
+       x1="88.870583"
+       y1="321.92728"
+       x2="88.870583"
+       y2="436.95178" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4214">
+      <rect
+         style="fill:url(#linearGradient4218);fill-opacity:1;stroke:none"
+         id="rect4216"
+         width="190"
+         height="117"
+         x="27.955297"
+         y="464.76266"
+         rx="0"
+         ry="0"
+         inkscape:export-filename="D:\bb10\icon_480x480.png"
+         inkscape:export-xdpi="369.23001"
+         inkscape:export-ydpi="369.23001" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5791-3"
+       id="linearGradient4218"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6239316,0,0,1,-21.001524,143.31941)"
+       x1="88.870583"
+       y1="321.92728"
+       x2="88.870583"
+       y2="436.95178" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4220">
+      <rect
+         style="fill:url(#linearGradient4224);fill-opacity:1;stroke:none"
+         id="rect4222"
+         width="190"
+         height="117"
+         x="27.955297"
+         y="464.76266"
+         rx="0"
+         ry="0"
+         inkscape:export-filename="D:\bb10\icon_480x480.png"
+         inkscape:export-xdpi="369.23001"
+         inkscape:export-ydpi="369.23001" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5791-3"
+       id="linearGradient4224"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6239316,0,0,1,-21.001524,143.31941)"
+       x1="88.870583"
+       y1="321.92728"
+       x2="88.870583"
+       y2="436.95178" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4226">
+      <rect
+         style="fill:url(#linearGradient4230);fill-opacity:1;stroke:none"
+         id="rect4228"
+         width="190"
+         height="117"
+         x="27.955297"
+         y="464.76266"
+         rx="0"
+         ry="0"
+         inkscape:export-filename="D:\bb10\icon_480x480.png"
+         inkscape:export-xdpi="369.23001"
+         inkscape:export-ydpi="369.23001" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5791-3"
+       id="linearGradient4230"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6239316,0,0,1,-21.001524,143.31941)"
+       x1="88.870583"
+       y1="321.92728"
+       x2="88.870583"
+       y2="436.95178" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4232">
+      <rect
+         style="fill:url(#linearGradient4236);fill-opacity:1;stroke:none"
+         id="rect4234"
+         width="190"
+         height="117"
+         x="27.955297"
+         y="464.76266"
+         rx="0"
+         ry="0"
+         inkscape:export-filename="D:\bb10\icon_480x480.png"
+         inkscape:export-xdpi="369.23001"
+         inkscape:export-ydpi="369.23001" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5791-3"
+       id="linearGradient4236"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6239316,0,0,1,-21.001524,143.31941)"
+       x1="88.870583"
+       y1="321.92728"
+       x2="88.870583"
+       y2="436.95178" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4238">
+      <rect
+         style="fill:url(#linearGradient4242);fill-opacity:1;stroke:none"
+         id="rect4240"
+         width="190"
+         height="117"
+         x="27.955297"
+         y="464.76266"
+         rx="0"
+         ry="0"
+         inkscape:export-filename="D:\bb10\icon_480x480.png"
+         inkscape:export-xdpi="369.23001"
+         inkscape:export-ydpi="369.23001" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5791-3"
+       id="linearGradient4242"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6239316,0,0,1,-21.001524,143.31941)"
+       x1="88.870583"
+       y1="321.92728"
+       x2="88.870583"
+       y2="436.95178" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4244">
+      <rect
+         style="fill:url(#linearGradient4248);fill-opacity:1;stroke:none"
+         id="rect4246"
+         width="190"
+         height="117"
+         x="27.955297"
+         y="464.76266"
+         rx="0"
+         ry="0"
+         inkscape:export-filename="D:\bb10\icon_480x480.png"
+         inkscape:export-xdpi="369.23001"
+         inkscape:export-ydpi="369.23001" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5791-3"
+       id="linearGradient4248"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6239316,0,0,1,-21.001524,143.31941)"
+       x1="88.870583"
+       y1="321.92728"
+       x2="88.870583"
+       y2="436.95178" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4250">
+      <rect
+         style="fill:url(#linearGradient4254);fill-opacity:1;stroke:none"
+         id="rect4252"
+         width="190"
+         height="117"
+         x="27.955297"
+         y="464.76266"
+         rx="0"
+         ry="0"
+         inkscape:export-filename="D:\bb10\icon_480x480.png"
+         inkscape:export-xdpi="369.23001"
+         inkscape:export-ydpi="369.23001" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5791-3"
+       id="linearGradient4254"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6239316,0,0,1,-21.001524,143.31941)"
+       x1="88.870583"
+       y1="321.92728"
+       x2="88.870583"
+       y2="436.95178" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4256">
+      <rect
+         style="fill:url(#linearGradient4260);fill-opacity:1;stroke:none"
+         id="rect4258"
+         width="190"
+         height="117"
+         x="27.955297"
+         y="464.76266"
+         rx="0"
+         ry="0"
+         inkscape:export-filename="D:\bb10\icon_480x480.png"
+         inkscape:export-xdpi="369.23001"
+         inkscape:export-ydpi="369.23001" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5791-3"
+       id="linearGradient4260"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6239316,0,0,1,-21.001524,143.31941)"
+       x1="88.870583"
+       y1="321.92728"
+       x2="88.870583"
+       y2="436.95178" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4262">
+      <rect
+         style="fill:url(#linearGradient4266);fill-opacity:1;stroke:none"
+         id="rect4264"
+         width="190"
+         height="117"
+         x="27.955297"
+         y="464.76266"
+         rx="0"
+         ry="0"
+         inkscape:export-filename="D:\bb10\icon_480x480.png"
+         inkscape:export-xdpi="369.23001"
+         inkscape:export-ydpi="369.23001" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5791-3"
+       id="linearGradient4266"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6239316,0,0,1,-21.001524,143.31941)"
+       x1="88.870583"
+       y1="321.92728"
+       x2="88.870583"
+       y2="436.95178" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4268">
+      <rect
+         style="fill:url(#linearGradient4272);fill-opacity:1;stroke:none"
+         id="rect4270"
+         width="190"
+         height="117"
+         x="27.955297"
+         y="464.76266"
+         rx="0"
+         ry="0"
+         inkscape:export-filename="D:\bb10\icon_480x480.png"
+         inkscape:export-xdpi="369.23001"
+         inkscape:export-ydpi="369.23001" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5791-3"
+       id="linearGradient4272"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6239316,0,0,1,-21.001524,143.31941)"
+       x1="88.870583"
+       y1="321.92728"
+       x2="88.870583"
+       y2="436.95178" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4274">
+      <rect
+         style="fill:url(#linearGradient4278);fill-opacity:1;stroke:none"
+         id="rect4276"
+         width="190"
+         height="117"
+         x="27.955297"
+         y="464.76266"
+         rx="0"
+         ry="0"
+         inkscape:export-filename="D:\bb10\icon_480x480.png"
+         inkscape:export-xdpi="369.23001"
+         inkscape:export-ydpi="369.23001" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5791-3"
+       id="linearGradient4278"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6239316,0,0,1,-21.001524,143.31941)"
+       x1="88.870583"
+       y1="321.92728"
+       x2="88.870583"
+       y2="436.95178" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4280">
+      <rect
+         style="fill:url(#linearGradient4284);fill-opacity:1;stroke:none"
+         id="rect4282"
+         width="190"
+         height="117"
+         x="27.955297"
+         y="464.76266"
+         rx="0"
+         ry="0"
+         inkscape:export-filename="D:\bb10\icon_480x480.png"
+         inkscape:export-xdpi="369.23001"
+         inkscape:export-ydpi="369.23001" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5791-3"
+       id="linearGradient4284"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6239316,0,0,1,-21.001524,143.31941)"
+       x1="88.870583"
+       y1="321.92728"
+       x2="88.870583"
+       y2="436.95178" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4286">
+      <rect
+         style="fill:url(#linearGradient4290);fill-opacity:1;stroke:none"
+         id="rect4288"
+         width="190"
+         height="117"
+         x="27.955297"
+         y="464.76266"
+         rx="0"
+         ry="0"
+         inkscape:export-filename="D:\bb10\icon_480x480.png"
+         inkscape:export-xdpi="369.23001"
+         inkscape:export-ydpi="369.23001" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5791-3"
+       id="linearGradient4290"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6239316,0,0,1,-21.001524,143.31941)"
+       x1="88.870583"
+       y1="321.92728"
+       x2="88.870583"
+       y2="436.95178" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4292">
+      <rect
+         style="fill:url(#linearGradient4296);fill-opacity:1;stroke:none"
+         id="rect4294"
+         width="210.64368"
+         height="129.71216"
+         x="40.026726"
+         y="469.505"
+         rx="0"
+         ry="0"
+         inkscape:export-filename="D:\bb10\icon_480x480.png"
+         inkscape:export-xdpi="369.23001"
+         inkscape:export-ydpi="369.23001" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5791-3"
+       id="linearGradient4296"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.8003732,0,0,1.1086509,-14.249299,113.13666)"
+       x1="88.870583"
+       y1="321.92728"
+       x2="88.870583"
+       y2="436.95178" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4298">
+      <rect
+         style="fill:url(#linearGradient4302);fill-opacity:1;stroke:none"
+         id="rect4300"
+         width="190"
+         height="117"
+         x="128.20439"
+         y="572.58704"
+         rx="0"
+         ry="0"
+         inkscape:export-filename="D:\bb10\icon_480x480.png"
+         inkscape:export-xdpi="369.23001"
+         inkscape:export-ydpi="369.23001" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5791-3"
+       id="linearGradient4302"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6239316,0,0,1,79.247566,251.14379)"
+       x1="88.870583"
+       y1="321.92728"
+       x2="88.870583"
+       y2="436.95178" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4304">
+      <rect
+         style="fill:url(#linearGradient4308);fill-opacity:1;stroke:none"
+         id="rect4306"
+         width="190"
+         height="117"
+         x="27.955297"
+         y="464.76266"
+         rx="0"
+         ry="0"
+         inkscape:export-filename="D:\bb10\icon_480x480.png"
+         inkscape:export-xdpi="369.23001"
+         inkscape:export-ydpi="369.23001" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5791-3"
+       id="linearGradient4308"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.6239316,0,0,1,-21.001524,143.31941)"
+       x1="88.870583"
+       y1="321.92728"
+       x2="88.870583"
+       y2="436.95178" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -185,9 +757,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="8.6111111"
-     inkscape:cx="-103.4286"
-     inkscape:cy="57.566798"
+     inkscape:zoom="0.53819444"
+     inkscape:cx="-287.15531"
+     inkscape:cy="-141.60271"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -234,8 +806,8 @@
        id="rect2996"
        width="117"
        height="117"
-       x="178.57143"
-       y="318.93362"
+       x="190.39001"
+       y="322.63702"
        rx="9.4513063"
        ry="9.4513063"
        inkscape:export-filename="C:\Users\moadib\Dropbox\Public\bbgram_icons.png"
@@ -243,16 +815,16 @@
        inkscape:export-ydpi="87.589996" />
     <path
        style="fill:#ffffff;stroke:#ffffff;stroke-width:0.92089325"
-       d="m 272.07752,346.6004 -74.30458,28.83547 22.677,6.61892 39.7423,-25.58356 -31.1377,29.38225 28.57646,22.70577 14.44652,-61.95885 z m -53.67081,38.70629 7.33837,20.11577 10.82049,-8.8636 -8.66215,-6.9067 -1.78423,12.17306 -6.04336,-16.0293 -1.66912,-0.48923 z"
+       d="m 283.89611,350.30383 -74.30458,28.83547 22.677,6.61892 39.7423,-25.58356 -31.1377,29.38225 28.57646,22.70577 14.44652,-61.95885 z m -53.67081,38.70629 7.33837,20.11577 10.82049,-8.8636 -8.66215,-6.9067 -1.78423,12.17306 -6.04336,-16.0293 -1.66912,-0.48923 z"
        id="path3790"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\Users\moadib\Dropbox\Public\bbgram_icons.png"
        inkscape:export-xdpi="87.589996"
        inkscape:export-ydpi="87.589996" />
     <rect
-       inkscape:export-ydpi="87.690002"
-       inkscape:export-xdpi="87.690002"
-       inkscape:export-filename="D:\bb10\momentics-workspace\bbgram\icon.png"
+       inkscape:export-ydpi="369.23001"
+       inkscape:export-xdpi="369.23001"
+       inkscape:export-filename="D:\bb10\icon_480x480.png"
        ry="7.9814777"
        rx="7.9814777"
        y="321.44324"
@@ -266,9 +838,9 @@
        style="opacity:0.75"
        clip-path="url(#clipPath5858)"
        id="g4152"
-       inkscape:export-filename="D:\bb10\momentics-workspace\bbgram\icon.png"
-       inkscape:export-xdpi="87.690002"
-       inkscape:export-ydpi="87.690002">
+       inkscape:export-filename="D:\bb10\icon_480x480.png"
+       inkscape:export-xdpi="369.23001"
+       inkscape:export-ydpi="369.23001">
       <path
          style="fill:none;stroke:#5e97e4;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          d="m -40,374.82144 0,-120"
@@ -408,68 +980,478 @@
        id="path4198"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccccccccccccccccc"
-       inkscape:export-filename="D:\bb10\momentics-workspace\bbgram\icon.png"
-       inkscape:export-xdpi="87.690002"
-       inkscape:export-ydpi="87.690002" />
+       inkscape:export-filename="D:\bb10\icon_480x480.png"
+       inkscape:export-xdpi="369.23001"
+       inkscape:export-ydpi="369.23001" />
     <path
        style="fill:none;stroke:#ecf2fa;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 77.577252,380.58944 -4.75272,10.63109"
        id="path5705"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="D:\bb10\momentics-workspace\bbgram\icon.png"
-       inkscape:export-xdpi="87.690002"
-       inkscape:export-ydpi="87.690002" />
+       inkscape:export-filename="D:\bb10\icon_480x480.png"
+       inkscape:export-xdpi="369.23001"
+       inkscape:export-ydpi="369.23001" />
     <path
        style="fill:none;stroke:#ecf2fa;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 81.390752,379.02605 -7.06654,15.88409"
        id="path5705-3"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="D:\bb10\momentics-workspace\bbgram\icon.png"
-       inkscape:export-xdpi="87.690002"
-       inkscape:export-ydpi="87.690002" />
+       inkscape:export-filename="D:\bb10\icon_480x480.png"
+       inkscape:export-xdpi="369.23001"
+       inkscape:export-ydpi="369.23001" />
     <path
        style="fill:none;stroke:#ecf2fa;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 85.330552,376.39953 -9.94319,22.45036"
        id="path5705-7"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="D:\bb10\momentics-workspace\bbgram\icon.png"
-       inkscape:export-xdpi="87.690002"
-       inkscape:export-ydpi="87.690002" />
+       inkscape:export-filename="D:\bb10\icon_480x480.png"
+       inkscape:export-xdpi="369.23001"
+       inkscape:export-ydpi="369.23001" />
     <path
        style="fill:none;stroke:#ecf2fa;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 88.983522,374.21078 -4.75272,10.63109"
        id="path5705-1"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="D:\bb10\momentics-workspace\bbgram\icon.png"
-       inkscape:export-xdpi="87.690002"
-       inkscape:export-ydpi="87.690002" />
+       inkscape:export-filename="D:\bb10\icon_480x480.png"
+       inkscape:export-xdpi="369.23001"
+       inkscape:export-ydpi="369.23001" />
     <path
        style="fill:none;stroke:#ecf2fa;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 93.110892,370.5837 -4.75272,10.63109"
        id="path5705-0"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="D:\bb10\momentics-workspace\bbgram\icon.png"
-       inkscape:export-xdpi="87.690002"
-       inkscape:export-ydpi="87.690002" />
+       inkscape:export-filename="D:\bb10\icon_480x480.png"
+       inkscape:export-xdpi="369.23001"
+       inkscape:export-ydpi="369.23001" />
     <path
        style="fill:none;stroke:#ecf2fa;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 96.686812,368.31281 -1.92202,4.29925 -2.25585,4.78416"
        id="path5705-0-7"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
-       inkscape:export-filename="D:\bb10\momentics-workspace\bbgram\icon.png"
-       inkscape:export-xdpi="87.690002"
-       inkscape:export-ydpi="87.690002" />
+       inkscape:export-filename="D:\bb10\icon_480x480.png"
+       inkscape:export-xdpi="369.23001"
+       inkscape:export-ydpi="369.23001" />
     <path
        style="fill:none;stroke:#ecf2fa;stroke-width:0.75000000000000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 100.35703,366.10184 -3.603018,7.66838"
        id="path5705-0-3"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="D:\bb10\momentics-workspace\bbgram\icon.png"
-       inkscape:export-xdpi="87.690002"
-       inkscape:export-ydpi="87.690002" />
+       inkscape:export-filename="D:\bb10\icon_480x480.png"
+       inkscape:export-xdpi="369.23001"
+       inkscape:export-ydpi="369.23001" />
+    <rect
+       inkscape:export-ydpi="912.30762"
+       inkscape:export-xdpi="912.30762"
+       inkscape:export-filename="D:\bb10\icon_1920x1186.png"
+       ry="0"
+       rx="0"
+       y="464.76266"
+       x="27.955297"
+       height="117"
+       width="190"
+       id="rect4150-0"
+       style="fill:url(#linearGradient3102);fill-opacity:1;stroke:none"
+       clip-path="url(#clipPath4304)" />
+    <g
+       transform="translate(-100.24909,-107.82438)"
+       style="opacity:0.75"
+       clip-path="url(#clipPath4298)"
+       id="g4152-8"
+       inkscape:export-filename="D:\bb10\icon_1920x1186.png"
+       inkscape:export-xdpi="912.30762"
+       inkscape:export-ydpi="912.30762">
+      <path
+         style="fill:none;stroke:#5e97e4;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m -40,374.82144 0,-120"
+         id="path4154-7"
+         inkscape:connector-curvature="0"
+         transform="translate(178.57143,316.11218)" />
+      <path
+         style="fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m -30,254.82144 0,120"
+         id="path4156-7"
+         inkscape:connector-curvature="0"
+         transform="translate(178.57143,316.11218)" />
+      <path
+         style="fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m -20,254.82144 0,125"
+         id="path4158-8"
+         inkscape:connector-curvature="0"
+         transform="translate(178.57143,316.11218)" />
+      <path
+         style="fill:none;stroke:#5e97e4;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 147,264.82144 -202,0"
+         id="path4176-4"
+         inkscape:connector-curvature="0"
+         transform="translate(178.57143,316.11218)"
+         sodipodi:nodetypes="cc" />
+      <path
+         style="fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m -10,379.82144 0,-130"
+         id="path4160-3"
+         inkscape:connector-curvature="0"
+         transform="translate(178.57143,316.11218)" />
+      <path
+         style="fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 0,249.82144 0,130"
+         id="path4162-8"
+         inkscape:connector-curvature="0"
+         transform="translate(178.57143,316.11218)" />
+      <path
+         style="fill:none;stroke:#5e97e4;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 10,249.82144 0,130"
+         id="path4164-3"
+         inkscape:connector-curvature="0"
+         transform="translate(178.57143,316.11218)" />
+      <path
+         style="fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 20,249.82144 0,130"
+         id="path4166-7"
+         inkscape:connector-curvature="0"
+         transform="translate(178.57143,316.11218)" />
+      <path
+         style="fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 30,249.82144 0,130"
+         id="path4168-1"
+         inkscape:connector-curvature="0"
+         transform="translate(178.57143,316.11218)" />
+      <path
+         style="fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 40,249.82144 0,130"
+         id="path4170-0"
+         inkscape:connector-curvature="0"
+         transform="translate(178.57143,316.11218)" />
+      <path
+         style="fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 50,249.82144 0,130"
+         id="path4172-7"
+         inkscape:connector-curvature="0"
+         transform="translate(178.57143,316.11218)" />
+      <path
+         style="fill:none;stroke:#5e97e4;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 60,249.82144 0,130"
+         id="path4174-3"
+         inkscape:connector-curvature="0"
+         transform="translate(178.57143,316.11218)" />
+      <path
+         style="fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m -55,274.82144 130,0"
+         id="path4178-9"
+         inkscape:connector-curvature="0"
+         transform="translate(178.57143,316.11218)" />
+      <path
+         style="fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 75,284.82144 -130,0"
+         id="path4180-6"
+         inkscape:connector-curvature="0"
+         transform="translate(178.57143,316.11218)" />
+      <path
+         style="fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m -55,294.82144 130,0"
+         id="path4182-5"
+         inkscape:connector-curvature="0"
+         transform="translate(178.57143,316.11218)" />
+      <path
+         style="fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 75,304.82144 -130,0"
+         id="path4184-1"
+         inkscape:connector-curvature="0"
+         transform="translate(178.57143,316.11218)" />
+      <path
+         style="fill:none;stroke:#5e97e4;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m -55,314.82144 202,0"
+         id="path4186-0"
+         inkscape:connector-curvature="0"
+         transform="translate(178.57143,316.11218)"
+         sodipodi:nodetypes="cc" />
+      <path
+         style="fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 75,324.82144 -130,0"
+         id="path4188-9"
+         inkscape:connector-curvature="0"
+         transform="translate(178.57143,316.11218)" />
+      <path
+         style="fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m -55,334.82144 130,0"
+         id="path4190-9"
+         inkscape:connector-curvature="0"
+         transform="translate(178.57143,316.11218)" />
+      <path
+         style="fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 75,344.82144 -130,0"
+         id="path4192-6"
+         inkscape:connector-curvature="0"
+         transform="translate(178.57143,316.11218)" />
+      <path
+         style="fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m -55,354.82144 130,0"
+         id="path4194-8"
+         inkscape:connector-curvature="0"
+         transform="translate(178.57143,316.11218)" />
+      <path
+         style="fill:none;stroke:#5e97e4;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 147,364.82144 -202,0"
+         id="path4196-3"
+         inkscape:connector-curvature="0"
+         transform="translate(178.57143,316.11218)"
+         sodipodi:nodetypes="cc" />
+    </g>
+    <g
+       id="g3311"
+       transform="matrix(0.9019972,0,0,0.9019972,-8.148696,41.270461)"
+       clip-path="url(#clipPath4292)"
+       inkscape:export-filename="D:\bb10\icon_1920x1186.png"
+       inkscape:export-xdpi="912.30762"
+       inkscape:export-ydpi="912.30762">
+      <g
+         id="g3302">
+        <path
+           style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#ecf2fa;fill-opacity:1;stroke:none;stroke-width:3;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+           d="m 125.5582,490.00691 -81.062498,31.46875 25.9375,7.5625 5.5,25 14.437496,-12.53125 19.562502,15.53125 z m -4.1875,4.84375 -13.28125,56.90625 -25.343748,-20.15625 30.766628,-30.78649 -41.891628,25.44274 -17.78125,-5.1875 z m -22.65625,17.53125 -19.656248,18.5625 -2.3125,12.71875 -3.3125,-15.03125 z m -17.249998,22.03125 6.531246,5.1875 -8.874996,7.6875 z"
+           id="path4198-4"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="ccccccccccccccccccccccc"
+           inkscape:export-filename="D:\bb10\icon_480x480.png"
+           inkscape:export-xdpi="369.23001"
+           inkscape:export-ydpi="369.23001" />
+        <path
+           style="fill:none;stroke:#ecf2fa;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 77.385452,523.90885 -4.75272,10.63109"
+           id="path5705-8"
+           inkscape:connector-curvature="0"
+           inkscape:export-filename="D:\bb10\icon_480x480.png"
+           inkscape:export-xdpi="369.23001"
+           inkscape:export-ydpi="369.23001" />
+        <path
+           style="fill:none;stroke:#ecf2fa;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 81.198952,522.34546 -7.06654,15.88409"
+           id="path5705-3-4"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="cc"
+           inkscape:export-filename="D:\bb10\icon_480x480.png"
+           inkscape:export-xdpi="369.23001"
+           inkscape:export-ydpi="369.23001" />
+        <path
+           style="fill:none;stroke:#ecf2fa;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 85.138752,519.71894 -9.94319,22.45036"
+           id="path5705-7-9"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="cc"
+           inkscape:export-filename="D:\bb10\icon_480x480.png"
+           inkscape:export-xdpi="369.23001"
+           inkscape:export-ydpi="369.23001" />
+        <path
+           style="fill:none;stroke:#ecf2fa;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 88.791718,517.53019 -4.752716,10.63109"
+           id="path5705-1-9"
+           inkscape:connector-curvature="0"
+           inkscape:export-filename="D:\bb10\icon_480x480.png"
+           inkscape:export-xdpi="369.23001"
+           inkscape:export-ydpi="369.23001" />
+        <path
+           style="fill:none;stroke:#ecf2fa;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 92.919088,513.90311 -4.75272,10.63109"
+           id="path5705-0-2"
+           inkscape:connector-curvature="0"
+           inkscape:export-filename="D:\bb10\icon_480x480.png"
+           inkscape:export-xdpi="369.23001"
+           inkscape:export-ydpi="369.23001" />
+        <path
+           style="fill:none;stroke:#ecf2fa;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 96.495008,511.63222 -1.92202,4.29925 -2.25585,4.78416"
+           id="path5705-0-7-5"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="ccc"
+           inkscape:export-filename="D:\bb10\icon_480x480.png"
+           inkscape:export-xdpi="369.23001"
+           inkscape:export-ydpi="369.23001" />
+      </g>
+      <path
+         inkscape:export-ydpi="369.23001"
+         inkscape:export-xdpi="369.23001"
+         inkscape:export-filename="D:\bb10\icon_480x480.png"
+         sodipodi:nodetypes="cc"
+         inkscape:connector-curvature="0"
+         id="path5705-0-3-5"
+         d="m 100.16523,509.42125 -3.603022,7.66838"
+         style="fill:none;stroke:#ecf2fa;stroke-width:0.75;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    </g>
+    <path
+       inkscape:connector-curvature="0"
+       id="path4156-7-4"
+       d="m 148.36616,463.15123 0,120"
+       style="opacity:0.75;fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       clip-path="url(#clipPath4286)"
+       inkscape:export-filename="D:\bb10\icon_1920x1186.png"
+       inkscape:export-xdpi="912.30762"
+       inkscape:export-ydpi="912.30762" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4158-8-3"
+       d="m 158.36616,463.15123 0,125"
+       style="opacity:0.75;fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       clip-path="url(#clipPath4280)"
+       inkscape:export-filename="D:\bb10\icon_1920x1186.png"
+       inkscape:export-xdpi="912.30762"
+       inkscape:export-ydpi="912.30762" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4160-3-8"
+       d="m 168.36616,588.15123 0,-130"
+       style="opacity:0.75;fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       clip-path="url(#clipPath4274)"
+       inkscape:export-filename="D:\bb10\icon_1920x1186.png"
+       inkscape:export-xdpi="912.30762"
+       inkscape:export-ydpi="912.30762" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4162-8-0"
+       d="m 178.36616,458.15123 0,130"
+       style="opacity:0.75;fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       clip-path="url(#clipPath4268)"
+       inkscape:export-filename="D:\bb10\icon_1920x1186.png"
+       inkscape:export-xdpi="912.30762"
+       inkscape:export-ydpi="912.30762" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4164-3-8"
+       d="m 188.36616,458.15123 0,130"
+       style="opacity:0.75;fill:none;stroke:#5e97e4;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       clip-path="url(#clipPath4262)"
+       inkscape:export-filename="D:\bb10\icon_1920x1186.png"
+       inkscape:export-xdpi="912.30762"
+       inkscape:export-ydpi="912.30762" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4166-7-8"
+       d="m 198.36616,458.15123 0,130"
+       style="opacity:0.75;fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       clip-path="url(#clipPath4256)"
+       inkscape:export-filename="D:\bb10\icon_1920x1186.png"
+       inkscape:export-xdpi="912.30762"
+       inkscape:export-ydpi="912.30762" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4168-1-0"
+       d="m 208.36616,458.15123 0,130"
+       style="opacity:0.75;fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       clip-path="url(#clipPath4250)"
+       inkscape:export-filename="D:\bb10\icon_1920x1186.png"
+       inkscape:export-xdpi="912.30762"
+       inkscape:export-ydpi="912.30762" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4178-9-8"
+       d="m 123.36616,483.15123 130,0"
+       style="opacity:0.75;fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       clip-path="url(#clipPath4244)"
+       inkscape:export-filename="D:\bb10\icon_1920x1186.png"
+       inkscape:export-xdpi="912.30762"
+       inkscape:export-ydpi="912.30762" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4180-6-9"
+       d="m 253.36616,493.15123 -130,0"
+       style="opacity:0.75;fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       clip-path="url(#clipPath4238)"
+       inkscape:export-filename="D:\bb10\icon_1920x1186.png"
+       inkscape:export-xdpi="912.30762"
+       inkscape:export-ydpi="912.30762" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4182-5-7"
+       d="m 123.36616,503.15123 130,0"
+       style="opacity:0.75;fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       clip-path="url(#clipPath4232)"
+       inkscape:export-filename="D:\bb10\icon_1920x1186.png"
+       inkscape:export-xdpi="912.30762"
+       inkscape:export-ydpi="912.30762" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4184-1-2"
+       d="m 253.36616,513.15123 -130,0"
+       style="opacity:0.75;fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       clip-path="url(#clipPath4226)"
+       inkscape:export-filename="D:\bb10\icon_1920x1186.png"
+       inkscape:export-xdpi="912.30762"
+       inkscape:export-ydpi="912.30762" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4188-9-8"
+       d="m 253.36616,533.15123 -130,0"
+       style="opacity:0.75;fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       clip-path="url(#clipPath4220)"
+       inkscape:export-filename="D:\bb10\icon_1920x1186.png"
+       inkscape:export-xdpi="912.30762"
+       inkscape:export-ydpi="912.30762" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4190-9-2"
+       d="m 123.36616,543.15123 130,0"
+       style="opacity:0.75;fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       clip-path="url(#clipPath4214)"
+       inkscape:export-filename="D:\bb10\icon_1920x1186.png"
+       inkscape:export-xdpi="912.30762"
+       inkscape:export-ydpi="912.30762" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4192-6-8"
+       d="m 253.36616,553.15123 -130,0"
+       style="opacity:0.75;fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       clip-path="url(#clipPath4208)"
+       inkscape:export-filename="D:\bb10\icon_1920x1186.png"
+       inkscape:export-xdpi="912.30762"
+       inkscape:export-ydpi="912.30762" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4194-8-9"
+       d="m 123.36616,563.15123 130,0"
+       style="opacity:0.75;fill:none;stroke:#5e97e4;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       clip-path="url(#clipPath4202)"
+       inkscape:export-filename="D:\bb10\icon_1920x1186.png"
+       inkscape:export-xdpi="912.30762"
+       inkscape:export-ydpi="912.30762" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3322"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ecf2fa;fill-opacity:1;stroke:none;font-family:LilyUPC;-inkscape-font-specification:LilyUPC"
+       transform="translate(125.61053,369.37402)"
+       clip-path="url(#clipPath4196)"
+       inkscape:export-filename="D:\bb10\icon_1920x1186.png"
+       inkscape:export-xdpi="912.30762"
+       inkscape:export-ydpi="912.30762"><flowRegion
+         id="flowRegion3324"><rect
+           id="rect3326"
+           width="144.85196"
+           height="92.954887"
+           x="-60.437099"
+           y="160.5508"
+           style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ecf2fa;fill-opacity:1;font-family:LilyUPC;-inkscape-font-specification:LilyUPC" /></flowRegion><flowPara
+         id="flowPara3328">bomogram</flowPara><flowPara
+         id="flowPara3330" /></flowRoot>    <path
+       style="fill:none;stroke:#ecf2fa;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:6, 6;stroke-dashoffset:0"
+       d="m -69.445162,165.11177 c 19.424125,-17.46323 76.1790792,-11.00661 80.593549,16.0258 4.870335,29.82394 -52.372423,59.93142 -78.672292,45.0484 -7.176407,-4.06111 -9.07527,-14.70714 -0.515207,-24.73207 20.94152,-26.67614 43.207229,12.4745 58.6542786,20.41342 20.3282644,9.50208 35.3977364,7.57993 35.3977364,7.57993"
+       id="path3400"
+       inkscape:connector-curvature="0"
+       transform="translate(178.57143,316.11218)"
+       sodipodi:nodetypes="caaccc"
+       clip-path="url(#clipPath4190)"
+       inkscape:export-filename="D:\bb10\icon_1920x1186.png"
+       inkscape:export-xdpi="912.30762"
+       inkscape:export-ydpi="912.30762" />
+    <path
+       style="fill:none;stroke:#ecf2fa;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:4, 4;stroke-dashoffset:0"
+       d="m 192.91156,537.86674 16.73084,6.18301 -14.20759,11.81356"
+       id="path4171"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc"
+       clip-path="url(#clipPath4184)"
+       inkscape:export-filename="D:\bb10\icon_1920x1186.png"
+       inkscape:export-xdpi="912.30762"
+       inkscape:export-ydpi="912.30762" />
   </g>
 </svg>
