@@ -260,7 +260,7 @@ void connection::writeBuffer()
     if (this->state() != QAbstractSocket::ConnectedState || m_writeBuffers.empty())
         return;
 
-    QByteArray data = m_writeBuffers.first();
+    const QByteArray& data = m_writeBuffers.first();
     write(data.data() + m_bufferOffset, data.size() - m_bufferOffset);
     flush();
 }
