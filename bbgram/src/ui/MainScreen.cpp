@@ -20,6 +20,15 @@ struct CreateGroupData
     QString chatPhoto;
 };
 
+struct ContactsData
+{
+    char** phones;
+    char** firstNames;
+    char** lastNames;
+
+    int count;
+};
+
 MainScreen* MainScreen::instance()
 {
     return m_instance;
@@ -255,6 +264,45 @@ void MainScreen::initialize()
 
     User* currentUser = (User*)Storage::instance()->getPeer(TGL_PEER_USER, gTLS->our_id);
     setContextProperty("_currentUser", currentUser);
+
+    const QList<QVariantMap>& phoneBook = m_contacts->getPhoneBook();
+
+    int count = phoneBook.size();
+
+    for (int i = 0; i < count; i++)
+    {
+        addContact(phoneBook[i]["firstName"].toString(), phoneBook[i]["lastName"].toString(), phoneBook[i]["phone"].toString());
+    }
+
+    /*if (count > 0)
+    {
+        char** phones = new char*[count];
+        char** firstNames = new char*[count];
+        char** lastNames = new char*[count];
+
+        for (int i = 0; i < count; i++)
+        {
+            int phoneDataSize = strlen(phoneBook[i]["phone"].toString().toUtf8().data()) + 1;
+            int firstNameDataSize = strlen(phoneBook[i]["firstName"].toString().toUtf8().data()) + 1;
+            int lastNameDataSize = strlen(phoneBook[i]["lastName"].toString().toUtf8().data()) + 1;
+
+            phones[i] = new char[phoneDataSize];
+            firstNames[i] = new char[firstNameDataSize];
+            lastNames[i] = new char[lastNameDataSize];
+
+            memcpy(phones[i], phoneBook[i]["phone"].toString().toUtf8().data(), phoneDataSize);
+            memcpy(firstNames[i], phoneBook[i]["firstName"].toString().toUtf8().data(), firstNameDataSize);
+            memcpy(lastNames[i], phoneBook[i]["lastName"].toString().toUtf8().data(), lastNameDataSize);
+        }
+
+        ContactsData* data = new ContactsData();
+        data->phones = phones;
+        data->firstNames = firstNames;
+        data->lastNames = lastNames;
+        data->count = count;
+
+        tgl_do_import_contacts(gTLS, count, (const char**)phones, (const char**)firstNames, (const char**)lastNames, 0, MainScreen::_contactsAdded, data);
+    }*/
 }
 
 void MainScreen::onAppFullScreen()
@@ -414,6 +462,24 @@ void MainScreen::_markReaded(struct tgl_state *TLS, void *callback_extra, int su
         Peer* peer = (Peer*)callback_extra;
         peer->markRead();
     }
+}
+
+void MainScreen::_contactsAdded(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[])
+{
+    /*ContactsData* data = (ContactsData*)callback_extra;
+
+    for (int i = 0; i < data->count; i++)
+    {
+        delete[] data->phones[i];
+        delete[] data->firstNames[i];
+        delete[] data->lastNames[i];
+    }
+
+    delete[] data->phones;
+    delete[] data->firstNames;
+    delete[] data->lastNames;
+
+    delete data;*/
 }
 
 User* MainScreen::getUser(int id)

@@ -20,6 +20,7 @@ public:
     bb::cascades::GroupDataModel* model() const;
 
     void updatePhonebook();
+    const QList<QVariantMap>& getPhoneBook();
 
     int filter() const;
     Q_INVOKABLE void setFilter(int filter, const QString& text = "");

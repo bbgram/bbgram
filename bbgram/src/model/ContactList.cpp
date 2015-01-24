@@ -62,11 +62,13 @@ void ContactList::updatePhonebook()
         entry["online"] = true;
         entry["phone"] = phoneNumber[0].value();
 
-        qDebug() << contact.firstName() << " " << contact.lastName();
         m_phoneBook.push_back(entry);
-
-        //MainScreen::instance()->addContact(contact.firstName(), contact.lastName(), phoneNumber[0].value());
     }
+}
+
+const QList<QVariantMap>& ContactList::getPhoneBook()
+{
+    return m_phoneBook;
 }
 
 int ContactList::filter() const
