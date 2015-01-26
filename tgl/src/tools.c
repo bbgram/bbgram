@@ -265,7 +265,7 @@ void tgl_my_clock_gettime (int clock_id, struct timespec *T) {
 double tglt_get_double_time (void) {
   struct timespec tv;
   tgl_my_clock_gettime (CLOCK_REALTIME, &tv);
-  return tv.tv_sec + 1e-9 * tv.tv_nsec;
+  return tv.tv_sec/* + 1e-9 * tv.tv_nsec*/;
 }
 
 void tglt_secure_random (void *s, int l) {
