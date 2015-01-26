@@ -24,9 +24,9 @@ const char* AUTH_FILE_PATH = "data/auth.dat";
 const char* STATE_FILE_PATH = "data/state.dat";
 const char* DOWNLOAD_DIRECTORY = "data/downloads";
 
-#define AUTH_FILE_MAGIC 0x868aa81d
-#define STATE_FILE_MAGIC 0x28949a93
-#define DC_SERIALIZED_MAGIC 0x868aa81d
+#define AUTH_FILE_MAGIC 0x868aa81e
+#define STATE_FILE_MAGIC 0x28949a94
+#define DC_SERIALIZED_MAGIC 0x868aa81e
 
 #include <QDebug>
 

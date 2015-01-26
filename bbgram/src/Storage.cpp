@@ -628,7 +628,7 @@ void Storage::messageReceivedHandler(struct tgl_state *TLS, struct tgl_message *
     Peer* peer = m_instance->getPeer(peer_type, peer_id);
     Message* message = m_instance->getMessage(M->id);
 
-    if (peer_type = TGL_PEER_ENCR_CHAT)
+    if (peer_type == TGL_PEER_ENCR_CHAT)
     {
         m_instance->markPeerDirty(peer);
     }

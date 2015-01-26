@@ -79,7 +79,6 @@ void Peer::addMessage(Message* message)
     if (!message->our() && message->unread())
     {
         m_unreadCount++;
-        qDebug() << m_unreadCount;
         emit unreadCountChanged();
     }
 
