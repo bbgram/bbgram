@@ -13,7 +13,7 @@ const int HISTORY_LIMIT = 20;
 
 const char* DATABASE_NAME = "data/storage.db";
 const char* DATABASE_INFO_NAME = "data/storage.info";
-const int DATABASE_VERSION = 5;
+const int DATABASE_VERSION = 6;
 
 using namespace bb::cascades;
 
