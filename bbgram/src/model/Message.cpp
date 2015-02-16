@@ -2,6 +2,7 @@
 #include "../Storage.h"
 #include "User.h"
 #include <QLocale>
+#include "UDSWrapper.h"
 
 Message::Message(long long id, tgl_message* M)
     : m_id(id)
@@ -182,6 +183,16 @@ bool Message::our() const
     return m_fromId == gTLS->our_id;
 }
 
+int Message::toId() const
+{
+    return m_toId;
+}
+
+int Message::toType() const
+{
+    return m_toType;
+}
+
 const QDate& Message::date() const
 {
     return m_date.date();
@@ -307,6 +318,9 @@ void Message::markAsRead()
 {
     m_unread = 0;
     emit markedRead();
+
+    if (!our() && from()->lastMessage() == this)
+        UDSWrapper::messageToHUB(this);
 }
 
 bool Message::service() const

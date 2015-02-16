@@ -2,6 +2,7 @@
 
 #include <QObject>
 #include <bb/cascades/Application>
+#include <bb/system/InvokeManager>
 
 #include "Storage.h"
 #include "Telegraph.h"
@@ -19,7 +20,9 @@ public:
 public slots:
     void onMainAuthorized();
     void onAllAuthorized();
+    void onInvoke(const bb::system::InvokeRequest& invoke);
 protected:
     Telegraph*  m_telegraph;
     Storage*    m_storage;
+    bb::system::InvokeManager* m_invokeManager;
 };

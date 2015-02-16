@@ -29,7 +29,8 @@
     <id>com.bigboss.bbgram</id>
     <configuration name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>
-       <asset path="arm/o.le-v7-g/bbgram" entry="true" type="Qnx/Elf">bbgram</asset>
+       <asset entryPointId="bomogram" path="arm/o.le-v7-g/bbgram" entry="true" type="Qnx/Elf">bomogram</asset>
+       <asset entryPointId="bomogramHeadless" path="../bbgramHeadless/arm/bbgramHeadless" type="Qnx/Elf">bomogramHeadless</asset>
     </configuration>
     <configuration name="Device-Release">
        <entryPointType>Qnx/Cascades</entryPointType>
@@ -70,6 +71,7 @@
     <!-- <copyright></copyright> -->
 
     <!--  Name of author which is used for signing. Must match the developer name of your development certificate. -->
+    <category>core.media</category>
     <authorId>gYAAgNnvQFlrcX44UpUVATsL-2E</authorId>
     <author>Big Boss</author>
 
@@ -104,16 +106,24 @@
     	<entryPointType>Qnx/Elf</entryPointType>
 	</entryPoint>
 	
-	<!--<invoke-target id="com.bigboss.bbgram">
+	<invoke-target id="com.bigboss.bbgram">
     	<invoke-target-type>application</invoke-target-type>
     	<invoke-target-name>bomogram</invoke-target-name>
     	<entry-point-id>bomogram</entry-point-id>
-	</invoke-target>-->
+    	<filter>
+        	<action>bb.action.OPEN</action>
+        	<mime-type>text/plain</mime-type>
+      	</filter>
+	</invoke-target>
 	
 	<invoke-target id="com.bigboss.bomogramHeadless">
 	    <invoke-target-type>application.headless</invoke-target-type>
 	    <invoke-target-name>bomogramHeadless</invoke-target-name>
 	    <entry-point-id>bomogramHeadless</entry-point-id>
+	    <filter>
+        	<action>bb.action.PUSH</action>
+        	<mime-type>application/vnd.push</mime-type>
+      	</filter>
 	    <filter>
 	        <action>bb.action.system.STARTED</action>
 	        <mime-type>application/vnd.blackberry.system.event.STARTED</mime-type>
@@ -128,6 +138,9 @@
     <permission>post_notification</permission>
     <permission>access_internet</permission>
     <permission system="true">_sys_run_headless</permission>
+    <permission system="true">_sys_use_consumer_push</permission>
+    <permission system="true">_sys_manage_pimdomain_external_accounts</permission>
+    <permission system="true">_sys_access_pim_unified</permission>
     <env var="LD_LIBRARY_PATH" value="app/native/lib:/usr/lib/qt4/lib"/>
     <env var="CASCADES_THEME" value="default?primaryColor=0x5374A0&amp;primaryBase=0x5374A0"/>
 

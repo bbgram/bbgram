@@ -1,9 +1,12 @@
 #pragma once
 
 #include <bb/system/InvokeManager>
+#include <bb/network/PushService>
+#include <bb/network/PushStatus>
 #include <bb/Application>
 #include <QObject>
 
+using namespace bb::network;
 using namespace bb::system;
 
 class HeadlessApplication : public QObject
@@ -14,7 +17,9 @@ public:
 
 private slots:
     void onInvoked(const bb::system::InvokeRequest& request);
-
+    void onCreateSessionCompleted(const bb::network::PushStatus& status);
+    void onCreateChannelCompleted(const bb::network::PushStatus& status, const QString token);
 private:
-    InvokeManager* _invokeManager;
+    InvokeManager* m_invokeManager;
+    PushService *m_pushService;
 };

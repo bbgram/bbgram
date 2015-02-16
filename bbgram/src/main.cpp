@@ -5,6 +5,8 @@
 
 void* TAILQ_END() { return 0; }
 
+#include "UDSWrapper.h"
+
 
 Q_DECL_EXPORT int main(int argc, char **argv)
 {
@@ -14,6 +16,8 @@ Q_DECL_EXPORT int main(int argc, char **argv)
     QCoreApplication::setApplicationName("bomogram");
 
     bb::cascades::Application app(argc, argv);
+
+    UDSWrapper::initialize();
 
     ApplicationUI appui(&app);
     int result = bb::cascades::Application::exec();

@@ -30,6 +30,9 @@ public:
     long long id() const;
     bool our() const;
 
+    int toId() const;
+    int toType() const;
+
     QString text() const;
     const QDate& date() const;
     const QDateTime& dateTime() const;

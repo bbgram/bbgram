@@ -1,5 +1,5 @@
 APP_NAME = bbgramHeadless
 
-LIBS += -lbbsystem -lbb
+LIBS += -lbbsystem -lbb -lbbnetwork -lbbplatform
 
 include(config.pri)

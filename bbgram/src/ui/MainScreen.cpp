@@ -3,6 +3,7 @@
 #include "../Settings.h"
 #include "../Storage.h"
 #include "../Telegraph.h"
+#include "UDSWrapper.h"
 
 #include <bb/ApplicationInfo>
 #include <bb/cascades/Application>
@@ -422,26 +423,7 @@ void MainScreen::showNotifications()
 
 void MainScreen::onMessageReceived(const Message* message)
 {
-    if (!m_appFullScreen && !message->from()->muted())
-    {
-        Notification* notification = new Notification();
-        notification->setType(NotificationType::Default);
-        notification->setTitle("Telegram");
-        notification->setBody("You have new message from " + message->from()->title());
-
-        m_notificationList.append(notification);
-
-        /*if (m_appFullScreen)
-        notification->setSoundUrl(QUrl("asset:///sounds/sound_a.wav"));*/
-
-        //notification->notify();
-
-        /*if (m_appFullScreen)
-        {
-            notification->deleteFromInbox();
-            notification->clearEffects();
-        }*/
-    }
+    UDSWrapper::messageToHUB((Message*)message);
 }
 
 bool MainScreen::contactExist(const QString& phone)

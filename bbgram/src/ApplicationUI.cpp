@@ -46,6 +46,9 @@ ApplicationUI::ApplicationUI(bb::cascades::Application* app) :
 
     qmlRegisterType<VirtualKeyboardService>("bbgram.bps.lib", 0, 1, "VirtualKeyboardService");
 
+    m_invokeManager = new InvokeManager(this);
+    QObject::connect(m_invokeManager, SIGNAL(invoked(const bb::system::InvokeRequest&)), this, SLOT(onInvoke(const bb::system::InvokeRequest&)));
+
     m_telegraph = new Telegraph();
     m_telegraph->start();
 
@@ -78,6 +81,11 @@ void ApplicationUI::onAllAuthorized()
     toast->setBody("All DC Authorized");
     toast->setPosition(SystemUiPosition::MiddleCenter);
     toast->show();
+}
+
+void ApplicationUI::onInvoke(const bb::system::InvokeRequest& invoke)
+{
+    int i = 1;
 }
 
 #include "ui/IntroScreen.h"
