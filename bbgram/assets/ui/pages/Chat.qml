@@ -28,8 +28,8 @@ Page {
     }
     
     function sendMessage() {
-        _owner.sendMessage(peer, message.text)
-        message.text = ""
+        _owner.sendMessage(peer, input.value)
+        input.clear()
     }
     
     function clearHistory() {
@@ -163,7 +163,7 @@ Page {
             ActionBar.placement: ActionBarPlacement.OnBar
             
             onTriggered: {
-                sendMessage()
+                me.sendMessage()
             }
         },
         ActionItem {
@@ -257,45 +257,13 @@ Page {
                 peer: me.peer
             }
         }
-        Container {
-            layout: StackLayout {
-                orientation: LayoutOrientation.LeftToRight
+        MessageInput {
+            id: input
+            onValueChanging: {
+                sendAction.enabled = value.length > 0;
             }
-            leftPadding: 20
-            rightPadding: 20
-            topPadding: 10
-            bottomPadding: 20
-            horizontalAlignment: HorizontalAlignment.Fill
-            background: Color.create("#252525")
-            ImageButton {
-                verticalAlignment: VerticalAlignment.Center
-                defaultImageSource: "asset:///images/bar_voice1.png"
-                pressedImageSource: "asset:///images/bar_voice2.png"
-                preferredWidth: 90
-                preferredHeight: 90
-            }
-            TextArea {
-                id: message
-                verticalAlignment: VerticalAlignment.Center
-                focusPolicy: FocusPolicy.KeyAndTouch
-                //text: "asdasjdh asdk jhasd asd jahsd kasd haskdjha asjdasdasdh"
-                hintText: "Enter a message"
-                onTextChanging: {
-                    sendAction.enabled = text.length > 0;
-                }
-                input {                    
-                    submitKey: SubmitKey.Send
-                    onSubmitted: {
-                        sendMessage()
-                    }
-                }
-            }
-            ImageButton {
-                verticalAlignment: VerticalAlignment.Center
-                defaultImageSource: "asset:///images/bar_smile.png"
-                pressedImageSource: "asset:///images/bar_smile.png"
-                preferredWidth: 90
-                preferredHeight: 90
+            onSubmitted: {
+                sendMessage();
             }
         }
     }
