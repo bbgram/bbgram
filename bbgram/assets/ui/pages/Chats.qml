@@ -131,7 +131,18 @@ NavigationPane {
                 title: "New Secret Chat"
                 ActionBar.placement: ActionBarPlacement.InOverflow
                 
+                function newEncrChatSlot(user, sheet)
+                {
+                    sheet.userSelected.disconnect(newEncrChatSlot)
+                    
+                    if (user)
+                        _owner.createSecretChat(user);
+                }
+                
                 onTriggered: {
+                    var sheet = contactPickerSheetDef.createObject()
+                    sheet.userSelected.connect(newEncrChatSlot);
+                    sheet.open()
                 }
             },
             
