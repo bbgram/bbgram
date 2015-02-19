@@ -24,5 +24,11 @@ protected:
     int                         m_width;
     int                         m_height;
 
+    QByteArray                  m_encKey;
+    QByteArray                  m_encIv;
+    QByteArray                  m_encCaption;
+    QByteArray                  m_encMimeType;
+
+
     static void loadPhotoCallback(struct tgl_state *TLS, void *callback_extra, int success, char *filename);
 };

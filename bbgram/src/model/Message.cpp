@@ -56,6 +56,24 @@ Message::Message(long long id, tgl_message* M)
             m_media.insert("local_id", sz.loc.local_id);
             m_media.insert("secret", sz.loc.secret);
         }
+        else if (m_mediaType == tgl_message_media_photo_encr)
+        {
+            m_media.insert("id", M->media.encr_document.id);
+            m_media.insert("width", M->media.encr_document.w);
+            m_media.insert("height", M->media.encr_document.h);
+            m_media.insert("size", M->media.encr_document.size);
+            m_media.insert("access_hash", M->media.encr_document.access_hash);
+            m_media.insert("dc_id", M->media.encr_document.dc_id);
+            m_media.insert("key_fingerprint", M->media.encr_document.key_fingerprint);
+            m_media.insert("flags", M->media.encr_document.flags);
+            m_media.insert("key", QByteArray::fromRawData((const char*)M->media.encr_document.key, 32));
+            m_media.insert("iv", QByteArray::fromRawData((const char*)M->media.encr_document.iv, 32));
+            if (M->media.encr_document.caption)
+                m_media.insert("caption", QByteArray::fromRawData(M->media.encr_document.caption, strlen(M->media.encr_document.caption)));
+            if (M->media.encr_document.mime_type)
+                m_media.insert("mime_type", QByteArray::fromRawData(M->media.encr_document.mime_type, strlen(M->media.encr_document.mime_type)));
+            m_media.insert("duration", M->media.encr_document.duration);
+        }
         else if (m_mediaType == tgl_message_media_contact)
         {
             m_media.insert("phone", QString::fromUtf8(M->media.phone));
@@ -246,7 +264,7 @@ QString Message::text() const
             case tgl_message_media_contact:
                 return "contact";
             case tgl_message_media_photo_encr:
-                return "#Unsupported media: photo encr";
+                return "photo";
             /*case tgl_message_media_video_encr:
                 return "#Unsupported media: video encr";
             case tgl_message_media_audio_encr:

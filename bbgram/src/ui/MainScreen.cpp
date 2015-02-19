@@ -126,7 +126,10 @@ void MainScreen::sendMessage(Peer* peer, const QString& message)
 
 void MainScreen::sendPhoto(Peer* peer, const QString& fileName)
 {
-    tgl_do_send_document(gTLS, -1, {peer->type(), peer->id()}, fileName.toUtf8().data(), NULL, NULL);
+    //if (peer->type() == TGL_PEER_ENCR_CHAT)
+    //    123
+    //else
+        tgl_do_send_document(gTLS, -1, {peer->type(), peer->id()}, fileName.toUtf8().data(), NULL, NULL);
 }
 
 void MainScreen::deleteMessage(long long id)

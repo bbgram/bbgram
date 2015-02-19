@@ -78,6 +78,53 @@ void MediaViewer::setMessage(Message *message)
             tgl_do_load_photo(gTLS, &photo, loadPhotoCallback, this);
         }
     }
+    else if (m_message->mediaType() == tgl_message_media_photo_encr)
+    {
+        const QVariantMap& media = message->media();
+        /**/
+        m_height = media["height"].toInt();
+        m_width = media["width"].toInt();
+
+        m_encKey = media["key"].toByteArray();
+        m_encIv = media["iv"].toByteArray();
+        m_encCaption = media["caption"].toByteArray();
+        m_encMimeType = media["mime_type"].toByteArray();
+
+        m_aspectRatio = (float)m_height / (float)m_width;
+
+        setPreferredWidth(m_width);
+        setPreferredHeight(m_height);
+
+        connect(this, SIGNAL(maxWidthChanged(float)), this, SLOT(updateImageView(float)));
+
+        if (media.find("filename") != media.end())
+        {
+            QString filename = media["filename"].toString();
+            QUrl url = QUrl::fromLocalFile(filename);
+            m_imageView->setImageSource(url);
+        }
+        else
+        {
+            tgl_encr_document encrPhoto;
+            memset(&encrPhoto, 0, sizeof(tgl_encr_document));
+
+            encrPhoto.w = m_width;
+            encrPhoto.h = m_height;
+            encrPhoto.id = media["id"].toLongLong();
+            encrPhoto.size = media["size"].toInt();
+            encrPhoto.dc_id = media["dc_id"].toInt();
+            encrPhoto.flags = media["flags"].toInt();
+            encrPhoto.access_hash = media["access_hash"].toLongLong();
+            encrPhoto.key_fingerprint = media["key_fingerprint"].toInt();
+            encrPhoto.key = (unsigned char*)m_encKey.data();
+            encrPhoto.iv = (unsigned char*)m_encIv.data();
+            encrPhoto.mime_type = m_encMimeType.data();
+            encrPhoto.caption = m_encCaption.data();
+            encrPhoto.duration =  media["duration"].toInt();
+
+            tgl_do_load_encr_document(gTLS, &encrPhoto, loadPhotoCallback, this);
+        }
+    }
 }
 
 void MediaViewer::updateImageView(float maxWidth){
