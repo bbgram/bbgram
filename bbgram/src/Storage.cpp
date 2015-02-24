@@ -353,7 +353,7 @@ void Storage::createEncrChar(Peer* peer)
 
 void Storage::deleteHistory(Peer* peer)
 {
-    if (peer->type() != TGL_BROADCAST_CHAT)
+    if (peer->type() != TGL_BROADCAST_CHAT && peer->type() != TGL_PEER_ENCR_CHAT)
         tgl_do_delete_history(gTLS, {peer->type(), peer->id()}, 0, Storage::_deleteHistoryCallback, peer);
     else
         Storage::_deleteHistoryCallback(gTLS, peer, 1, 0);
@@ -384,6 +384,13 @@ void Storage::deleteChat(Peer* peer)
     {
         query.prepare("DELETE FROM broadcasts WHERE id=:id");
         query.bindValue(":id", peer->id());
+        query.exec();
+    }
+
+    if (peer->type() == TGL_PEER_ENCR_CHAT)
+    {
+        query.prepare("DELETE FROM encr_chats WHERE id=:id");
+        query.bindValue(":id", ((long long)peer->type() << 32) | (unsigned int)peer->id());
         query.exec();
     }
 }
