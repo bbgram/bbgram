@@ -38,6 +38,9 @@ void EncrChat::load(const QVariantMap& map)
 
         QByteArray key, first_key_sha;
 
+        it = encrChatSettings.find("print_name");
+        print_name = it.value().toString();
+
         it = encrChatSettings.find("user_id");
         user_id = it.value().toInt();
 
@@ -52,7 +55,6 @@ void EncrChat::load(const QVariantMap& map)
 
         it = encrChatSettings.find("layer");
         layer = it.value().toInt();
-
 
         it = encrChatSettings.find("access_hash");
         access_hash = it.value().toLongLong();
