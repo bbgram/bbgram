@@ -135,9 +135,6 @@ void Message::deserialize(QByteArray& data)
     it = map.find("action");
     if (it != map.end())
         m_action = it.value().toMap();
-    it = map.find("mediaType");
-    if (it != map.end())
-        m_mediaType = it.value().toInt();
     it = map.find("media");
     if (it != map.end())
         m_media = it.value().toMap();
@@ -156,7 +153,6 @@ QByteArray Message::serialize() const
     map.insert("unread", m_unread);
     map.insert("service", m_service);
     map.insert("action", m_action);
-    map.insert("mediaType", m_mediaType);
     map.insert("media", m_media);
 
     map.insert("fwdDate", m_fwdDate.toTime_t());

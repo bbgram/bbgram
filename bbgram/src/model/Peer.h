@@ -22,6 +22,9 @@ class Peer : public QObject
     Q_PROPERTY(QDateTime lastMessageDate READ lastMessageDate NOTIFY messagesChanged)
     Q_PROPERTY(bool muted READ muted NOTIFY notifySettingsChanged)
     Q_PROPERTY(int unreadCount READ unreadCount NOTIFY unreadCountChanged)
+
+    Q_PROPERTY(bb::cascades::DataModel* sharedMedia READ sharedMedia NOTIFY messagesChanged)
+    Q_PROPERTY(bb::cascades::DataModel* sharedFiles READ sharedFiles NOTIFY messagesChanged)
 public:
     Peer(int type = 0, int id = 0);
     ~Peer();
@@ -58,6 +61,9 @@ public:
     bool muted() const;
     void updateNotifySettings(uint mute_until, char* sound, int show_previews, int events_masks);
     Q_INVOKABLE void mute(bool value);
+
+    bb::cascades::DataModel* sharedMedia();
+    bb::cascades::DataModel* sharedFiles();
 signals:
     void titleChanged();
     void statusChanged();

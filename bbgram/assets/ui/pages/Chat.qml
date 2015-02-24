@@ -203,6 +203,12 @@ Page {
             title: "Shared Media"
             imageSource: "asset:///images/menu_sharedmedia.png"
             ActionBar.placement: ActionBarPlacement.InOverflow
+            onTriggered: {
+                var page = sharedMediaPageDef.createObject()
+                page.peer = peer
+                var navigationPane = Application.scene.activeTab.content 
+                navigationPane.push(page)
+            }
         },
         DeleteActionItem {
             id: clearHistoryAction
@@ -309,12 +315,16 @@ Page {
             fontSize: FontSize.Small
         },
         ComponentDefinition {
-                    id: contactPageDef
-                    source: "ContactInfo.qml"
+             id: contactPageDef
+             source: "ContactInfo.qml"
         },
         ComponentDefinition {
             id: groupPageDef
             source: "GroupInfo.qml"
+        },
+        ComponentDefinition {
+            id: sharedMediaPageDef
+            source: "SharedMedia.qml"
         },
         ComponentDefinition {
             id: contactPickerSheetDef

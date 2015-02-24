@@ -57,6 +57,9 @@ public:
     void searchMessage(Peer* peer, int from, int to, int limit, int offset, const char *s);
 
     void AsyncPhotoLoad(Peer* peer);
+
+    bb::cascades::DataModel* getSharedMedia(Peer* peer);
+    bb::cascades::DataModel* getSharedFiles(Peer* peer);
 signals:
     void newMessageReceived(const Message* message);
 protected slots:
@@ -86,6 +89,7 @@ protected:
     static void _searchMessageCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]);
     static void _loadPhotoCallback(struct tgl_state *TLS, void *callback_extra, int success, char *filename);
     static void _newSecretChatCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_secret_chat *E);
+    static void _searchFilesCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]);
 
     void _LoadNextPhoto();
     void _PhotoLoaded();

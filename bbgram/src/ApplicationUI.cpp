@@ -21,6 +21,7 @@ using namespace bb::system;
 #include "model/Message.h"
 #include "model/User.h"
 #include "model/EncrChat.h"
+#include "model/Document.h"
 
 ApplicationUI::ApplicationUI(bb::cascades::Application* app) :
         QObject(app)
@@ -33,6 +34,7 @@ ApplicationUI::ApplicationUI(bb::cascades::Application* app) :
     qmlRegisterType<Message>("bbgram.types.lib", 0, 1, "Message");
     qmlRegisterType<User>("bbgram.types.lib", 0, 1, "User");
     qmlRegisterType<EncrChat>("bbgram.types.lib", 0, 1, "EncrChat");
+    qmlRegisterType<Document>("bbgram.types.lib", 0, 1, "Document");
     qmlRegisterType<QTimer>("bbgram.types.lib", 0, 1, "QTimer");
 
     m_telegraph = new Telegraph();

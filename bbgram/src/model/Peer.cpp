@@ -273,3 +273,14 @@ QString Peer::_getDefaultPlaceholder()
 
     return QString();
 }
+
+bb::cascades::DataModel* Peer::sharedMedia()
+{
+    return Storage::instance()->getSharedMedia(this);
+}
+
+bb::cascades::DataModel* Peer::sharedFiles()
+{
+    return Storage::instance()->getSharedFiles(this);
+}
+

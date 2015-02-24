@@ -3,8 +3,10 @@
 #include "model/User.h"
 #include "model/GroupChat.h"
 #include "model/BroadcastChat.h"
+#include "model/Document.h"
 
 #include <QDateTime>
+#include <bb/cascades/QListDataModel>
 
 Storage* Storage::m_instance = 0;
 
@@ -13,12 +15,12 @@ const int HISTORY_LIMIT = 20;
 
 const char* DATABASE_NAME = "data/storage.db";
 const char* DATABASE_INFO_NAME = "data/storage.info";
-const int DATABASE_VERSION = 6;
+const int DATABASE_VERSION = 7;
 
 using namespace bb::cascades;
 
 Storage::Storage(QObject* parent)
-    : QObject(parent), m_photosInQuoue(0)
+: QObject(parent), m_photosInQuoue(0)
 {
     m_instance = this;
 
@@ -44,7 +46,7 @@ Storage::Storage(QObject* parent)
         query.exec("CREATE TABLE peers(id INTEGER PRIMARY KEY, data BLOB)");
         query.exec("CREATE TABLE contacts(user_id INTEGER PRIMARY KEY)");
         query.exec("CREATE TABLE dialogs(id INTEGER PRIMARY KEY)");
-        query.exec("CREATE TABLE messages(id INTEGER PRIMARY KEY, from_id INTEGER, to_id INTEGER, to_type INTEGER, text TEXT, date INTEGER, data BLOB)");
+        query.exec("CREATE TABLE messages(id INTEGER PRIMARY KEY, from_id INTEGER, to_id INTEGER, to_type INTEGER, text TEXT, date INTEGER, media_type INTEGER, data BLOB)");
         query.exec("CREATE TABLE broadcasts(id INTEGER, message_id INTEGER)");
         query.exec("CREATE TABLE encr_chats(id INTEGER PRIMARY KEY, companion INTEGER)");
 
@@ -121,7 +123,7 @@ Storage::Storage(QObject* parent)
         dialogs.append(peer);
     }
 
-    query.prepare("SELECT id, from_id, to_id, to_type, text, date, data FROM messages WHERE (to_id = :r_id AND to_type = :r_type) OR (to_id = :my_id AND to_type = 1 AND from_id = :s_id) ORDER BY date DESC LIMIT " + QString::number(HISTORY_LIMIT));
+    query.prepare("SELECT id, from_id, to_id, to_type, text, date, media_type, data FROM messages WHERE (to_id = :r_id AND to_type = :r_type) OR (to_id = :my_id AND to_type = 1 AND from_id = :s_id) ORDER BY date DESC LIMIT " + QString::number(HISTORY_LIMIT));
     for (int i = 0; i < dialogs.size(); i++)
     {
         Peer* peer = dialogs.value(i);
@@ -147,7 +149,8 @@ Storage::Storage(QObject* parent)
             message->m_toType = query.value(3).toInt();
             message->m_text = query.value(4).toString();
             message->m_date = QDateTime::fromTime_t(query.value(5).toInt());
-            QByteArray data = query.value(6).toByteArray();
+            message->m_mediaType = query.value(6).toInt();
+            QByteArray data = query.value(7).toByteArray();
             message->deserialize(data);
             m_messages.insert(id, message);
             peer->addMessage(message);
@@ -169,22 +172,20 @@ Storage::Storage(QObject* parent)
         m_dialogs->insert(newPos, peer);
     }
 
-    QSqlQuery broadcast_query(m_db);
-    query.prepare("SELECT id, from_id, to_id, to_type, text, date, data FROM messages WHERE (id = :message_id) ORDER BY date DESC LIMIT " + QString::number(HISTORY_LIMIT));
-    broadcast_query.prepare("SELECT message_id FROM broadcasts WHERE id = :id");
+    query.prepare("SELECT message_id FROM broadcasts WHERE id = :id");
     for (int i = 0; i < dialogs.size(); i++)
     {
         Peer* peer = dialogs.value(i);
         if (peer->type() != TGL_BROADCAST_CHAT)
             continue;
 
-        broadcast_query.bindValue(":id", peer->id());
-        broadcast_query.exec();
-        while(broadcast_query.next())
+        query.bindValue(":id", peer->id());
+        query.exec();
+        while(query.next())
         {
-            if (broadcast_query.value(0).toLongLong() != 0)
+            if (query.value(0).toLongLong() != 0)
             {
-                Message* message = getMessage(broadcast_query.value(0).toLongLong());
+                Message* message = getMessage(query.value(0).toLongLong());
                 if (message)
                     peer->addMessage(message);
             }
@@ -277,13 +278,14 @@ void Storage::deleteMessage(long long id)
 void Storage::saveMessage(Message* message)
 {
     QSqlQuery query(m_db);
-    query.prepare("REPLACE INTO messages(id, from_id, to_id, to_type, text, date, data) VALUES(:id, :from_id, :to_id, :to_type, :text, :date, :data)");
+    query.prepare("REPLACE INTO messages(id, from_id, to_id, to_type, text, date, media_type, data) VALUES(:id, :from_id, :to_id, :to_type, :text, :date, :media_type, :data)");
     query.bindValue(":id", message->id());
     query.bindValue(":from_id", message->m_fromId);
     query.bindValue(":to_id", message->m_toId);
     query.bindValue(":to_type", message->m_toType);
     query.bindValue(":text", message->text());
     query.bindValue(":date", message->dateTime().toTime_t());
+    query.bindValue(":media_type", message->mediaType());
     QByteArray data = message->serialize();
     query.bindValue(":data", data);
     query.exec();
@@ -544,7 +546,7 @@ void Storage::userUpdateHandler(struct tgl_state *TLS, struct tgl_user *U, unsig
         long long newPhotoId = (long long)U->photo_big.local_id << 32 | U->photo_small.local_id;
         if (user->getPhotoId() != newPhotoId)
             m_instance->AsyncPhotoLoad(user);
-            //tgl_do_get_user_info(gTLS, {user->type(), user->id()}, 0, _updateContactPhoto, NULL);
+        //tgl_do_get_user_info(gTLS, {user->type(), user->id()}, 0, _updateContactPhoto, NULL);
 
         if ((flags & TGL_UPDATE_PHOTO) == flags)
             return;
@@ -700,15 +702,15 @@ void Storage::updateChatHandler(struct tgl_state *TLS, struct tgl_chat *C, unsig
         //tgl_do_get_chat_info(gTLS, {groupChat->type(), groupChat->id()}, 0, NULL, NULL);
 
 
-    if (flags & TGL_UPDATE_TITLE)
-        groupChat->setTitle(QString::fromUtf8(C->title));
+        if (flags & TGL_UPDATE_TITLE)
+            groupChat->setTitle(QString::fromUtf8(C->title));
 
     if (flags & TGL_UPDATE_PHOTO)
     {
         long long newPhotoId = (long long)C->photo_big.local_id << 32 | C->photo_small.local_id;
         if (groupChat->getPhotoId() != newPhotoId)
             m_instance->AsyncPhotoLoad(groupChat);
-            //tgl_do_get_chat_info(gTLS, {groupChat->type(), groupChat->id()}, 0, _updateGroupPhoto, NULL);
+        //tgl_do_get_chat_info(gTLS, {groupChat->type(), groupChat->id()}, 0, _updateGroupPhoto, NULL);
 
         if ((flags & TGL_UPDATE_PHOTO) == flags)
             return;
@@ -1172,7 +1174,7 @@ void Storage::loadAdditionalHistory(Peer* peer)
     int msg_id = msg->id();
 
     QSqlQuery query(m_db);
-    query.prepare("SELECT id, from_id, to_id, to_type, text, date, data FROM messages WHERE ((to_id = :r_id AND to_type = :r_type) OR (to_id = :my_id AND to_type = 1 AND from_id = :s_id)) AND id > :marker AND id < :max_id ORDER BY date DESC LIMIT " + QString::number(HISTORY_LIMIT));
+    query.prepare("SELECT id, from_id, to_id, to_type, text, date, media_type, data FROM messages WHERE ((to_id = :r_id AND to_type = :r_type) OR (to_id = :my_id AND to_type = 1 AND from_id = :s_id)) AND id > :marker AND id < :max_id ORDER BY date DESC LIMIT " + QString::number(HISTORY_LIMIT));
 
     query.bindValue(":r_type", peer->type());
     query.bindValue(":r_id", peer->id());
@@ -1195,7 +1197,8 @@ void Storage::loadAdditionalHistory(Peer* peer)
             message->m_toType = query.value(3).toInt();
             message->m_text = query.value(4).toString();
             message->m_date = QDateTime::fromTime_t(query.value(5).toInt());
-            QByteArray data = query.value(6).toByteArray();
+            message->m_mediaType = query.value(6).toInt();
+            QByteArray data = query.value(7).toByteArray();
             message->deserialize(data);
             m_messages.insert(id, message);
         }
@@ -1205,7 +1208,7 @@ void Storage::loadAdditionalHistory(Peer* peer)
     }
 
     if (peer->type() == TGL_BROADCAST_CHAT)
-            return;
+        return;
 
     if (n < HISTORY_LIMIT)
         tgl_do_get_history_maxid(gTLS, {peer->type(), peer->id()}, -1, msg_id, HISTORY_LIMIT, _getHistoryCallback, peer);
@@ -1216,4 +1219,106 @@ void Storage::loadAdditionalHistory(Peer* peer)
 void Storage::searchMessage(Peer* peer, int from, int to, int limit, int offset, const char *s)
 {
     tgl_do_msg_search(gTLS, {peer->type(), peer->id()}, from, to, limit, offset, s, Storage::_searchMessageCallback, NULL);
+}
+
+bb::cascades::DataModel* Storage::getSharedMedia(Peer* peer)
+{
+    QListDataModel<Message*>* model = new QListDataModel<Message*>();
+    model->setParent(peer);
+    return model;
+}
+
+struct SearchFilesCallbackExtra
+{
+    Peer*                       peer;
+    QListDataModel<Document*>*  model;
+    int                         offset;
+};
+
+void Storage::_searchFilesCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[])
+{
+    SearchFilesCallbackExtra* extra = (SearchFilesCallbackExtra*)callback_extra;
+
+    QSqlDatabase &db = m_instance->m_db;
+    db.transaction();
+    for (int i = 0; i < size; i++)
+    {
+        Message* message = m_instance->getMessage(list[i]->id);
+        int idx = 0;
+        for (; idx < extra->model->size(); idx++)
+            if (extra->model->value(idx)->message() == message)
+                break;
+        if (idx >= extra->model->size())
+        {
+            Document* doc = new Document(message);
+            doc->setParent( extra->model);
+            extra->model->insert( extra->model->size(), doc);
+        }
+    }
+    db.commit();
+
+    if (size == HISTORY_LIMIT)
+    {
+        extra->offset += HISTORY_LIMIT;
+        tgl_do_msg_search_files(gTLS, {extra->peer->type(), extra->peer->id()}, 0, 0, HISTORY_LIMIT, extra->offset, Storage::_searchFilesCallback, extra);
+    }
+    else
+    {
+        delete extra;
+    }
+}
+
+bb::cascades::DataModel* Storage::getSharedFiles(Peer* peer)
+{
+    QListDataModel<Document*>* model = new QListDataModel<Document*>();
+    model->setParent(peer);
+
+    QSqlQuery query(m_db);
+    query.prepare("SELECT id, from_id, to_id, to_type, text, date, media_type, data FROM messages WHERE ((to_id = :r_id AND to_type = :r_type) OR (to_id = :my_id AND to_type = 1 AND from_id = :s_id)) AND media_type = 2 ORDER BY date DESC");
+
+    query.bindValue(":r_type", peer->type());
+    query.bindValue(":r_id", peer->id());
+    query.bindValue(":my_id", gTLS->our_id);
+    query.bindValue(":s_id", peer->id());
+    query.exec();
+    while (query.next())
+    {
+        long long id = query.value(0).toLongLong();
+        Message* message = getMessage(id);
+        if (message == 0)
+        {
+            message = new Message(id);
+            message->setParent(this);
+            message->m_fromId = query.value(1).toInt();
+            message->m_toId = query.value(2).toInt();
+            message->m_toType = query.value(3).toInt();
+            message->m_text = query.value(4).toString();
+            message->m_date = QDateTime::fromTime_t(query.value(5).toInt());
+            message->m_mediaType = query.value(6).toInt();
+            QByteArray data = query.value(7).toByteArray();
+            message->deserialize(data);
+            m_messages.insert(id, message);
+        }
+        int idx = 0;
+        for (; idx < model->size(); idx++)
+            if (model->value(idx)->message() == message)
+                break;
+        if (idx >= model->size())
+        {
+            QVariantMap media = message->media();
+            if (media["flags"].toInt() <= 1)
+            {
+                Document* doc = new Document(message);
+                doc->setParent(model);
+                model->insert(model->size(), doc);
+            }
+        }
+    }
+
+    SearchFilesCallbackExtra* extra = new SearchFilesCallbackExtra();
+    extra->peer = peer;
+    extra->model = model;
+    extra->offset = 0;
+    tgl_do_msg_search_files(gTLS, {peer->type(), peer->id()}, 0, 0, HISTORY_LIMIT, 0, Storage::_searchFilesCallback, extra);
+    return model;
 }
