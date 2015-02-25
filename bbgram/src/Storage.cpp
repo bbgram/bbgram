@@ -393,7 +393,7 @@ void Storage::deleteChat(Peer* peer)
     if (peer->type() == TGL_PEER_ENCR_CHAT)
     {
         query.prepare("DELETE FROM encr_chats WHERE id=:id");
-        query.bindValue(":id", ((long long)peer->type() << 32) | (unsigned int)peer->id());
+        query.bindValue(":id", id);
         query.exec();
     }
 }

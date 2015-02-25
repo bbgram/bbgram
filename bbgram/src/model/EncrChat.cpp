@@ -80,7 +80,8 @@ void EncrChat::load(const QVariantMap& map)
         it = encrChatSettings.find("out_seq_no");
         out_seq_no = it.value().toInt();
 
-        bl_do_encr_chat_create (gTLS, id(), user_id, admin_id, print_name.toUtf8().data(), print_name.toUtf8().size());
+        QByteArray name = print_name.toLocal8Bit();
+        bl_do_encr_chat_create (gTLS, id(), user_id, admin_id, name.data(), name.size());
         tgl_secret_chat* secret_chat = (tgl_secret_chat *)tgl_peer_get (gTLS, TGL_MK_ENCR_CHAT(id()));
 
         assert(secret_chat && (secret_chat->flags & FLAG_CREATED));
