@@ -28,12 +28,12 @@ Page {
             Option {
                 id: mediaOption
                 text: "Media"
+                selected: true
             
             }
             Option {
                 id: filesOption
                 text: "Files"
-                selected: true
             }
         }
         
@@ -74,8 +74,11 @@ Page {
                             layout: DockLayout {
                             }
                             ImageView {
-                                imageSource: "asset:///images/background_hd.jpg"
+                                //imageSource: "asset:///images/background_hd.jpg"
+                                imageSource: ListItemData.thumbnail
                                 scalingMethod: ScalingMethod.AspectFill
+                                horizontalAlignment: HorizontalAlignment.Fill
+                                verticalAlignment: VerticalAlignment.Fill
                             }
                             Label {
                                 text: ListItemData.code

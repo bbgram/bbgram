@@ -42,23 +42,19 @@ QUrl Document::thumbnail() const
 {
     if (m_thumbnail.isEmpty())
     {
-        QVariantMap media = m_message->media().value("thumb").toMap();
+        QVariantMap& media = m_message->media();
+        QVariantMap thumb = media.value("thumb").toMap();
 
         tgl_photo_size photoSize;
-        photoSize.w = media["width"].toInt();
-        photoSize.w = media["height"].toInt();
-        photoSize.size = media["size"].toInt();
-        photoSize.loc.volume =media["volume"].toLongLong();
-        photoSize.loc.dc = media["dc"].toInt();
-        photoSize.loc.local_id = media["local_id"].toInt();
-        photoSize.loc.secret = media["secret"].toLongLong();
+        photoSize.w = thumb["width"].toInt();
+        photoSize.w = thumb["height"].toInt();
+        photoSize.size = thumb["size"].toInt();
+        photoSize.loc.volume = thumb["volume"].toLongLong();
+        photoSize.loc.dc = thumb["dc"].toInt();
+        photoSize.loc.local_id = thumb["local_id"].toInt();
+        photoSize.loc.secret = thumb["secret"].toLongLong();
 
-        tgl_photo photo;
-        memset(&photo, 0, sizeof(tgl_photo));
-        photo.sizes_num = 1;
-        photo.sizes = &photoSize;
-
-        tgl_do_load_photo(gTLS, &photo, _loadThumbnailCallback, (void*)this);
+        tgl_do_load_photo_size(gTLS, &photoSize, _loadThumbnailCallback, (void*)this);
     }
     return m_thumbnail;
 }
@@ -67,7 +63,7 @@ void Document::_loadThumbnailCallback(struct tgl_state *TLS, void *callback_extr
 {
     Document* doc = (Document*)callback_extra;
 
-    doc->m_thumbnail = QUrl("file://" + QDir::currentPath() + "/" + filename);
+    doc->m_thumbnail = QUrl::fromLocalFile(filename);
     emit doc->thumbnailChanged();
 }
 

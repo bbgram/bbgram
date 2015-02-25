@@ -24,17 +24,24 @@ Message* MediaViewer::message() const
     return m_message;
 }
 
+struct LoadPhotoExtra
+{
+    MediaViewer*    viewer;
+    int             sizeIdx;
+};
+
 void MediaViewer::loadPhotoCallback(struct tgl_state *TLS, void *callback_extra, int success, char *filename)
 {
-    if (!success)
-        return;
-
-    QString filename_ = QString::fromUtf8(filename);
-    MediaViewer* instance = (MediaViewer*)callback_extra;
-    instance->m_message->media().insert("filename", filename_);
-
-    QUrl url = QUrl::fromLocalFile(filename_);
-    instance->m_imageView->setImageSource(url);
+    LoadPhotoExtra* extra = (LoadPhotoExtra*)callback_extra;
+    if (success)
+    {
+        QString filename_ = QString::fromUtf8(filename);
+        /*QVariantList sizes = extra->viewer->m_message->media()["sizes"].toList();
+        sizes[extra->sizeIdx].toMap().insert("filename", filename_);*/
+        QUrl url = QUrl::fromLocalFile(filename_);
+        extra->viewer->m_imageView->setImageSource(url);
+    }
+    delete extra;
 }
 
 void MediaViewer::setMessage(Message *message)
@@ -43,9 +50,27 @@ void MediaViewer::setMessage(Message *message)
     if (m_message->mediaType() == tgl_message_media_photo)
     {
         const QVariantMap& media = message->media();
-        /**/
-        m_height = media["height"].toInt();
-        m_width = media["width"].toInt();
+
+        QVariantList sizes = media["sizes"].toList();
+
+        int max = -1;
+        int maxi = -1;
+        for (int i = 0; i < sizes.size(); i++)
+        {
+            QVariantMap size = sizes[i].toMap();
+            int w = size["width"].toInt();
+            int h = size["height"].toInt();
+
+              if (w + h > max)
+              {
+                max = w + h;
+                maxi = i;
+              }
+        }
+        QVariantMap sz = sizes[maxi].toMap();
+
+        m_height = sz["height"].toInt();
+        m_width = sz["width"].toInt();
         m_aspectRatio = (float)m_height / (float)m_width;
 
         setPreferredWidth(m_width);
@@ -53,29 +78,27 @@ void MediaViewer::setMessage(Message *message)
 
         connect(this, SIGNAL(maxWidthChanged(float)), this, SLOT(updateImageView(float)));
 
-        if (media.find("filename") != media.end())
+        /*if (sz.find("filename") != sz.end())
         {
-            QString filename = media["filename"].toString();
+            QString filename = sz["filename"].toString();
             QUrl url = QUrl::fromLocalFile(filename);
             m_imageView->setImageSource(url);
         }
-        else
+        else*/
         {
             tgl_photo_size photoSize;
             photoSize.w = m_width;
             photoSize.w = m_height;
-            photoSize.size = media["size"].toInt();
-            photoSize.loc.volume =media["volume"].toLongLong();
-            photoSize.loc.dc = media["dc"].toInt();
-            photoSize.loc.local_id = media["local_id"].toInt();
-            photoSize.loc.secret = media["secret"].toLongLong();
+            photoSize.size = sz["size"].toInt();
+            photoSize.loc.volume = sz["volume"].toLongLong();
+            photoSize.loc.dc = sz["dc"].toInt();
+            photoSize.loc.local_id = sz["local_id"].toInt();
+            photoSize.loc.secret = sz["secret"].toLongLong();
 
-            tgl_photo photo;
-            memset(&photo, 0, sizeof(tgl_photo));
-            photo.sizes_num = 1;
-            photo.sizes = &photoSize;
-
-            tgl_do_load_photo(gTLS, &photo, loadPhotoCallback, this);
+            LoadPhotoExtra* extra = new LoadPhotoExtra();
+            extra->viewer = this;
+            extra->sizeIdx = maxi;
+            tgl_do_load_photo_size(gTLS, &photoSize, loadPhotoCallback, extra);
         }
     }
     else if (m_message->mediaType() == tgl_message_media_photo_encr)

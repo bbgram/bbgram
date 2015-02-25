@@ -4,6 +4,7 @@
 #include "model/GroupChat.h"
 #include "model/BroadcastChat.h"
 #include "model/Document.h"
+#include "model/Media.h"
 
 #include <QDateTime>
 #include <bb/cascades/QListDataModel>
@@ -1221,10 +1222,98 @@ void Storage::searchMessage(Peer* peer, int from, int to, int limit, int offset,
     tgl_do_msg_search(gTLS, {peer->type(), peer->id()}, from, to, limit, offset, s, Storage::_searchMessageCallback, NULL);
 }
 
+struct SearchMediaCallbackExtra
+{
+    Peer*                       peer;
+    QListDataModel<Media*>*     model;
+    int                         offset;
+};
+
+void Storage::_searchMediaCallback(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[])
+{
+    SearchMediaCallbackExtra* extra = (SearchMediaCallbackExtra*)callback_extra;
+
+    QSqlDatabase &db = m_instance->m_db;
+    db.transaction();
+    for (int i = 0; i < size; i++)
+    {
+        Message* message = m_instance->getMessage(list[i]->id);
+        int idx = 0;
+        for (; idx < extra->model->size(); idx++)
+            if (extra->model->value(idx)->message() == message)
+                break;
+        if (idx >= extra->model->size())
+        {
+            Media* media = new Media(message);
+            media->setParent(extra->model);
+            extra->model->insert(extra->model->size(), media);
+        }
+    }
+    db.commit();
+
+    if (size == HISTORY_LIMIT)
+    {
+        extra->offset += HISTORY_LIMIT;
+        tgl_do_msg_search_media(gTLS, {extra->peer->type(), extra->peer->id()}, 0, 0, HISTORY_LIMIT, extra->offset, Storage::_searchMediaCallback, extra);
+    }
+    else
+    {
+        delete extra;
+    }
+}
+
 bb::cascades::DataModel* Storage::getSharedMedia(Peer* peer)
 {
-    QListDataModel<Message*>* model = new QListDataModel<Message*>();
+    QListDataModel<Media*>* model = new QListDataModel<Media*>();
     model->setParent(peer);
+
+    QSqlQuery query(m_db);
+    query.prepare("SELECT id, from_id, to_id, to_type, text, date, media_type, data FROM messages WHERE ((to_id = :r_id AND to_type = :r_type) OR (to_id = :my_id AND to_type = 1 AND from_id = :s_id)) AND (media_type = 1 OR media_type = 2) ORDER BY date DESC");
+
+    query.bindValue(":r_type", peer->type());
+    query.bindValue(":r_id", peer->id());
+    query.bindValue(":my_id", gTLS->our_id);
+    query.bindValue(":s_id", peer->id());
+    query.exec();
+    while (query.next())
+    {
+        long long id = query.value(0).toLongLong();
+        Message* message = getMessage(id);
+        if (message == 0)
+        {
+            message = new Message(id);
+            message->setParent(this);
+            message->m_fromId = query.value(1).toInt();
+            message->m_toId = query.value(2).toInt();
+            message->m_toType = query.value(3).toInt();
+            message->m_text = query.value(4).toString();
+            message->m_date = QDateTime::fromTime_t(query.value(5).toInt());
+            message->m_mediaType = query.value(6).toInt();
+            QByteArray data = query.value(7).toByteArray();
+            message->deserialize(data);
+            m_messages.insert(id, message);
+        }
+        int idx = 0;
+        for (; idx < model->size(); idx++)
+            if (model->value(idx)->message() == message)
+                break;
+        if (idx >= model->size())
+        {
+            QVariantMap media = message->media();
+            if (message->mediaType() == 1 || media["flags"].toInt() == 2)
+            {
+                Media* media = new Media(message);
+                media->setParent(model);
+                model->insert(model->size(), media);
+            }
+        }
+    }
+
+    SearchMediaCallbackExtra* extra = new SearchMediaCallbackExtra();
+    extra->peer = peer;
+    extra->model = model;
+    extra->offset = 0;
+    tgl_do_msg_search_media(gTLS, {peer->type(), peer->id()}, 0, 0, HISTORY_LIMIT, 0, Storage::_searchMediaCallback, extra);
     return model;
 }
 
@@ -1251,7 +1340,7 @@ void Storage::_searchFilesCallback(struct tgl_state *TLS, void *callback_extra, 
         if (idx >= extra->model->size())
         {
             Document* doc = new Document(message);
-            doc->setParent( extra->model);
+            doc->setParent(extra->model);
             extra->model->insert( extra->model->size(), doc);
         }
     }

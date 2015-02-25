@@ -37,24 +37,32 @@ Message::Message(long long id, tgl_message* M)
     {
         if (m_mediaType == tgl_message_media_photo)
         {
-            int max = -1;
-            int maxi = -1;
+            m_media.insert("id", M->media.photo.id);
+            m_media.insert("access_hash", M->media.photo.access_hash);
+            m_media.insert("user_id", M->media.photo.user_id);
+            m_media.insert("date", M->media.photo.date);
+            m_media.insert("caption", M->media.photo.caption);
+            m_media.insert("geo_longitude", M->media.photo.geo.longitude);
+            m_media.insert("geo_latitude", M->media.photo.geo.latitude);
+
+            QVariantList sizes;
             for (int i = 0; i < M->media.photo.sizes_num; i++)
             {
-                  if (M->media.photo.sizes[i].w + M->media.photo.sizes[i].h > max)
-                  {
-                    max = M->media.photo.sizes[i].w + M->media.photo.sizes[i].h;
-                    maxi = i;
-                  }
+                tgl_photo_size& sz = M->media.photo.sizes[i];
+
+                QVariantMap size;
+                size.insert("type", sz.type);
+                size.insert("width", sz.w);
+                size.insert("height", sz.h);
+                size.insert("size", sz.size);
+                size.insert("volume", sz.loc.volume);
+                size.insert("dc", sz.loc.dc);
+                size.insert("local_id", sz.loc.local_id);
+                size.insert("secret", sz.loc.secret);
+                sizes.append(size);
             }
-            tgl_photo_size &sz = M->media.photo.sizes[maxi];
-            m_media.insert("width", sz.w);
-            m_media.insert("height", sz.h);
-            m_media.insert("size", sz.size);
-            m_media.insert("volume", sz.loc.volume);
-            m_media.insert("dc", sz.loc.dc);
-            m_media.insert("local_id", sz.loc.local_id);
-            m_media.insert("secret", sz.loc.secret);
+
+            m_media.insert("sizes", sizes);
         }
         else if (m_mediaType == tgl_message_media_photo_encr)
         {
