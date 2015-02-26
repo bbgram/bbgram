@@ -62,28 +62,63 @@ Page {
                 rightPadding: 20
                 layout: GridListLayout {
                     columnCount: 4
-                }
-                /*dataModel: XmlDataModel {
-                 source: "asset:///dm_countries.xml"
-                 }*/
+                }             
+                function itemType(data, indexPath) {
+                    if (data.flags == 1)
+                        return "photo";
+                    else
+                        return "video";
+                } 
                 dataModel: peer ? peer.sharedMedia : null
                 listItemComponents: [
                     ListItemComponent {
-                        //type: "country"
+                        type: "photo"
+                        ImageView {
+                            //imageSource: "asset:///images/background_hd.jpg"
+                            imageSource: ListItemData.thumbnail
+                            scalingMethod: ScalingMethod.AspectFill
+                            horizontalAlignment: HorizontalAlignment.Fill
+                            verticalAlignment: VerticalAlignment.Fill
+                        }
+                    },
+                    ListItemComponent {
+                        type: "video"
                         Container {
-                            layout: DockLayout {
+                            layout: DockLayout {                                
                             }
                             ImageView {
-                                //imageSource: "asset:///images/background_hd.jpg"
                                 imageSource: ListItemData.thumbnail
                                 scalingMethod: ScalingMethod.AspectFill
                                 horizontalAlignment: HorizontalAlignment.Fill
                                 verticalAlignment: VerticalAlignment.Fill
                             }
-                            Label {
-                                text: ListItemData.code
-                                horizontalAlignment: HorizontalAlignment.Center
-                                verticalAlignment: VerticalAlignment.Center
+                            Container {
+                                horizontalAlignment: HorizontalAlignment.Fill
+                                verticalAlignment: VerticalAlignment.Bottom
+                                background: Color.create("#66000000")
+                                Container {
+                                    leftPadding: 10
+                                    bottomPadding: 5
+                                    rightPadding: 5
+                                    layout: StackLayout {
+                                        orientation: LayoutOrientation.LeftToRight
+                                    }
+                                    ImageView {
+                                        implicitLayoutAnimationsEnabled: false
+                                        imageSource: "asset:///images/video.png"
+                                        verticalAlignment: VerticalAlignment.Center
+                                        rightMargin: 0
+                                    }
+                                    Label {           
+                                        leftMargin: 10                         
+                                        verticalAlignment: VerticalAlignment.Center
+                                        text: ListItemData.durationFormatted
+                                        textStyle {
+                                            fontSize: FontSize.XSmall
+                                            color: Color.White    
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -162,14 +197,12 @@ Page {
                                                 fontSize: FontSize.Small
                                             }
                                         ]
-                                    
                                     }
                                 }
                             }
                         }
                     }
                 ]
-            
             }            
         }
     ]

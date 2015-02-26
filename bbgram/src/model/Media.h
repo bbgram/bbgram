@@ -11,6 +11,9 @@ class Media: public QObject
 
     Q_PROPERTY(QString caption READ caption CONSTANT)
     Q_PROPERTY(QUrl thumbnail READ thumbnail NOTIFY thumbnailChanged)
+    Q_PROPERTY(int flags READ flags CONSTANT)
+    Q_PROPERTY(int duration READ duration CONSTANT)
+    Q_PROPERTY(QString durationFormatted READ durationFormatted CONSTANT)
 public:
     Media(Message* message = 0);
     ~Media();
@@ -18,6 +21,9 @@ public:
     Message* message() const;
     QString caption() const;
     QUrl thumbnail() const;
+    int flags() const;
+    int duration() const;
+    QString durationFormatted() const;
 signals:
     void thumbnailChanged();
 protected:
