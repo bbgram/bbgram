@@ -1244,9 +1244,12 @@ void Storage::_searchMediaCallback(struct tgl_state *TLS, void *callback_extra, 
                 break;
         if (idx >= extra->model->size())
         {
+            for (idx = 0; idx < extra->model->size(); idx++)
+                if (extra->model->value(idx)->message()->dateTime() < message->dateTime())
+                    break;
             Media* media = new Media(message);
             media->setParent(extra->model);
-            extra->model->insert(extra->model->size(), media);
+            extra->model->insert(idx, media);
         }
     }
     db.commit();
@@ -1268,7 +1271,7 @@ bb::cascades::DataModel* Storage::getSharedMedia(Peer* peer)
     model->setParent(peer);
 
     QSqlQuery query(m_db);
-    query.prepare("SELECT id, from_id, to_id, to_type, text, date, media_type, data FROM messages WHERE ((to_id = :r_id AND to_type = :r_type) OR (to_id = :my_id AND to_type = 1 AND from_id = :s_id)) AND (media_type = 1 OR media_type = 2) ORDER BY date DESC");
+    query.prepare("SELECT id, from_id, to_id, to_type, text, date, media_type, data FROM messages WHERE ((to_id = :r_id AND to_type = :r_type) OR (to_id = :my_id AND to_type = 1 AND from_id = :s_id)) AND (media_type = 1 OR media_type = 2) ORDER BY date");
 
     query.bindValue(":r_type", peer->type());
     query.bindValue(":r_id", peer->id());
@@ -1293,19 +1296,13 @@ bb::cascades::DataModel* Storage::getSharedMedia(Peer* peer)
             message->deserialize(data);
             m_messages.insert(id, message);
         }
-        int idx = 0;
-        for (; idx < model->size(); idx++)
-            if (model->value(idx)->message() == message)
-                break;
-        if (idx >= model->size())
+        QVariantMap media = message->media();
+        if (message->mediaType() == tgl_message_media_photo || media["flags"].toInt() == FLAG_DOCUMENT_VIDEO)
         {
-            QVariantMap media = message->media();
-            if (message->mediaType() == 1 || media["flags"].toInt() == 2)
-            {
-                Media* media = new Media(message);
-                media->setParent(model);
-                model->insert(model->size(), media);
-            }
+
+            Media* media = new Media(message);
+            media->setParent(model);
+            model->insert(0, media);
         }
     }
 
@@ -1339,6 +1336,9 @@ void Storage::_searchFilesCallback(struct tgl_state *TLS, void *callback_extra, 
                 break;
         if (idx >= extra->model->size())
         {
+            for (idx = 0; idx < extra->model->size(); idx++)
+                if (extra->model->value(idx)->message()->dateTime() < message->dateTime())
+                    break;
             Document* doc = new Document(message);
             doc->setParent(extra->model);
             extra->model->insert( extra->model->size(), doc);
@@ -1363,7 +1363,7 @@ bb::cascades::DataModel* Storage::getSharedFiles(Peer* peer)
     model->setParent(peer);
 
     QSqlQuery query(m_db);
-    query.prepare("SELECT id, from_id, to_id, to_type, text, date, media_type, data FROM messages WHERE ((to_id = :r_id AND to_type = :r_type) OR (to_id = :my_id AND to_type = 1 AND from_id = :s_id)) AND media_type = 2 ORDER BY date DESC");
+    query.prepare("SELECT id, from_id, to_id, to_type, text, date, media_type, data FROM messages WHERE ((to_id = :r_id AND to_type = :r_type) OR (to_id = :my_id AND to_type = 1 AND from_id = :s_id)) AND media_type = 2 ORDER BY date");
 
     query.bindValue(":r_type", peer->type());
     query.bindValue(":r_id", peer->id());
@@ -1388,19 +1388,12 @@ bb::cascades::DataModel* Storage::getSharedFiles(Peer* peer)
             message->deserialize(data);
             m_messages.insert(id, message);
         }
-        int idx = 0;
-        for (; idx < model->size(); idx++)
-            if (model->value(idx)->message() == message)
-                break;
-        if (idx >= model->size())
+        QVariantMap media = message->media();
+        if (media["flags"].toInt() <= 1)
         {
-            QVariantMap media = message->media();
-            if (media["flags"].toInt() <= 1)
-            {
-                Document* doc = new Document(message);
-                doc->setParent(model);
-                model->insert(model->size(), doc);
-            }
+            Document* doc = new Document(message);
+            doc->setParent(model);
+            model->insert(0, doc);
         }
     }
 
