@@ -47,7 +47,17 @@ void ChatList::itemAdded(const QVariantList& index)
 
 void ChatList::itemRemoved(Peer* peer)
 {
-    m_model->remove(peer);
+    QVariantList it = m_model->last();
+    while(!it.empty())
+    {
+        Peer* contact =  (Peer*)m_model->data(it).value<QObject*>();
+        if (peer == contact)
+        {
+            m_model->removeAt(it);
+            break;
+        }
+        it = m_model->before(it);
+    }
 }
 
 void ChatList::updateContent()

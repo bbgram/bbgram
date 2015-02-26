@@ -32,14 +32,14 @@ void EncrChat::load(const QVariantMap& map)
     {
         QVariantMap encrChatSettings = it.value().toMap();
 
-        QString print_name;
+        QByteArray print_name;
         int user_id, admin_id, date, ttl, layer, state, in_seq_no, out_seq_no, last_in_seq_no;
         long long access_hash, key_fingerprint;
 
         QByteArray key, first_key_sha;
 
         it = encrChatSettings.find("print_name");
-        print_name = it.value().toString();
+        print_name = it.value().toByteArray();
 
         it = encrChatSettings.find("user_id");
         user_id = it.value().toInt();
@@ -80,8 +80,7 @@ void EncrChat::load(const QVariantMap& map)
         it = encrChatSettings.find("out_seq_no");
         out_seq_no = it.value().toInt();
 
-        QByteArray name = print_name.toLocal8Bit();
-        bl_do_encr_chat_create (gTLS, id(), user_id, admin_id, name.data(), name.size());
+        bl_do_encr_chat_create (gTLS, id(), user_id, admin_id, print_name.data(), print_name.size());
         tgl_secret_chat* secret_chat = (tgl_secret_chat *)tgl_peer_get (gTLS, TGL_MK_ENCR_CHAT(id()));
 
         assert(secret_chat && (secret_chat->flags & FLAG_CREATED));
@@ -105,7 +104,8 @@ void EncrChat::save(QVariantMap& map) const
     if (m_secret_chat)
     {
         QVariantMap encrChatSettings;
-        encrChatSettings["print_name"] = QString(m_secret_chat->print_name);
+        QString print_name(m_secret_chat->print_name);
+        encrChatSettings["print_name"] = print_name.toAscii();
         encrChatSettings["user_id"] = m_secret_chat->user_id;
         encrChatSettings["admin_id"] = m_secret_chat->admin_id;
         encrChatSettings["date"] = m_secret_chat->date;
