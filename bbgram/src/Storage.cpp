@@ -9,6 +9,12 @@
 #include <QDateTime>
 #include <bb/cascades/QListDataModel>
 
+#include <bb/system/SystemToast>
+#include <bb/system/SystemUiPosition>
+
+using namespace bb::cascades;
+using namespace bb::system;
+
 Storage* Storage::m_instance = 0;
 
 const int MAX_PHOTOS_TO_LOAD = 5;
@@ -32,8 +38,16 @@ Storage::Storage(QObject* parent)
         QDataStream stream(&dbInfoFile);
         stream >> version;
     }
+
     if (version != DATABASE_VERSION)
+    {
         QFile::remove(DATABASE_NAME);
+
+        SystemToast* toast = new SystemToast();
+        toast->setBody("Database scheme updated");
+        toast->setPosition(SystemUiPosition::MiddleCenter);
+        toast->show();
+    }
 
     QFile dbFile(DATABASE_NAME);
     bool dbExists = dbFile.exists();
