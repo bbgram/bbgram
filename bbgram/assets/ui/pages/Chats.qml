@@ -176,8 +176,6 @@ NavigationPane {
                 stickToEdgePolicy: ListViewStickToEdgePolicy.Beginning
                 
                 multiSelectHandler{
-                    
-                    
                     actions: [
                         ActionItem {
                             title: "Clear History";

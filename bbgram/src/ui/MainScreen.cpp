@@ -137,6 +137,11 @@ void MainScreen::deleteMessage(long long id)
     Storage::instance()->deleteMessage(id);
 }
 
+void MainScreen::forwardMessage(long long id, Peer* peer)
+{
+    tgl_do_forward_message(gTLS, { peer->type(), peer->id() }, (int)id, 0, 0);
+}
+
 void MainScreen::markRead(Peer* peer)
 {
     if (peer->type() == TGL_BROADCAST_CHAT)

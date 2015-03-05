@@ -8,7 +8,7 @@ ListView {
     layout: StackListLayout {
         orientation: LayoutOrientation.BottomToTop
     }
-
+    
     dataModel: peer ? peer.messages : null
     
     verticalAlignment: VerticalAlignment.Bottom
@@ -18,10 +18,35 @@ ListView {
     
     multiSelectHandler {
         actions: [
+            ActionItem {
+                id: fwdAction
+                title: "Forward"
+                imageSource: "asset:///images/menu_forward.png"
+                enabled: peer ? peer.type < 3 : false
+                
+                function forwardMessages(chat, messages) {
+                    for (var i = 0; i < messages.length; i++) {
+                        _owner.forwardMessage(messages[i], chat);
+                    }
+                    Application.scene.openChat(chat);
+                }
+                
+                onTriggered: {
+                    var messages = [];
+                    var list = me.selectionList();
+                    for (var i = 0; i < list.length; i++) {
+                        messages.push(me.dataModel.data(list[i]).id);
+                    }
+                    messages.sort();
+                    var sheet = chatPickerSheetDef.createObject();
+                    sheet.userData = messages;
+                    sheet.chatSelected.connect(forwardMessages);
+                    sheet.open();
+                }
+            },
             DeleteActionItem {
                 onTriggered: {
-                    for (var i = 0; i < me.selectionList().length; i++)
-                    {
+                    for (var i = 0; i < me.selectionList().length; i++) {
                         _owner.deleteMessage(me.messages.data(me.selectionList()[i]).id);
                     }
                 
@@ -78,6 +103,10 @@ ListView {
                 if (dataModel && firstVisibleItem.length > 0 && atEnd)
                     peer.loadAdditionalHistory()
             }
+        },
+        ComponentDefinition {
+            id: chatPickerSheetDef
+            source: "ChatPicker.qml"
         }
     ]
 }
