@@ -5,38 +5,21 @@ Page {
     property Peer peer
     
     titleBar: TitleBar {
-        kind: TitleBarKind.FreeForm
-        kindProperties: FreeFormTitleBarKindProperties {
-            Container {
-                layout: DockLayout {}
-                leftPadding: 20
-                rightPadding: 20
-                Label {
-                    text: "Shared Media"
-                    textStyle.base: titleTextStyle.style
-                    horizontalAlignment: HorizontalAlignment.Left
-                    verticalAlignment: VerticalAlignment.Center
-                }
+        id: filter        
+        kind: TitleBarKind.Segmented
+        options: [
+            Option {
+                text: "Shared Media"
+                selected: true
+            },
+            Option {
+                text: "Files"
             }
-        }
+        ]
     }
     
     Container {
         topPadding: 20
-        SegmentedControl {
-            id: filter
-            Option {
-                id: mediaOption
-                text: "Media"
-                selected: true
-            
-            }
-            Option {
-                id: filesOption
-                text: "Files"
-            }
-        }
-        
         ControlDelegate {
             sourceComponent: mediaListCompDef
             delegateActive: filter.selectedIndex == 0
