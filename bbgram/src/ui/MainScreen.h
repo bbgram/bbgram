@@ -28,6 +28,7 @@ public:
     Q_INVOKABLE void sendPhoto(Peer* peer, const QString& fileName);
     Q_INVOKABLE void deleteMessage(long long id);
     Q_INVOKABLE void forwardMessages(const QVariantList& messages, Peer* peer);
+    Q_INVOKABLE void copyMessagesToClipboard(const QVariantList& messages);
     Q_INVOKABLE void markRead(Peer* peer);
     Q_INVOKABLE void createGroup(QVariantList users, const QString& title, const QString& chatPhoto);
     Q_INVOKABLE void createSecretChat(Peer* peer);

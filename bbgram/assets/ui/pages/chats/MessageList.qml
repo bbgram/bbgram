@@ -33,19 +33,32 @@ ListView {
                     var messages = [];
                     var list = me.selectionList();
                     for (var i = 0; i < list.length; i++) {
-                        messages.push(me.dataModel.data(list[i]).id);
+                        messages.push(me.dataModel.data(list[i]));
                     }
-                    messages.sort();
                     var sheet = chatPickerSheetDef.createObject();
                     sheet.userData = messages;
                     sheet.chatSelected.connect(forwardMessages);
                     sheet.open();
                 }
             },
+            ActionItem {
+                id: copyAction
+                title: "Copy"
+                imageSource: "asset:///images/menu_copy.png"
+                
+                onTriggered: {
+                    var messages = [];
+                    var list = me.selectionList();
+                    for (var i = 0; i < list.length; i++) {
+                        messages.push(me.dataModel.data(list[i]));
+                    }
+                    _owner.copyMessagesToClipboard(messages);
+                }
+            },
             DeleteActionItem {
                 onTriggered: {
                     for (var i = 0; i < me.selectionList().length; i++) {
-                        _owner.deleteMessage(me.messages.data(me.selectionList()[i]).id);
+                        _owner.deleteMessage(me.dataModel.data(me.selectionList()[i]).id);
                     }
                 
                 }

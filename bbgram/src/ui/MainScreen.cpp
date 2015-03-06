@@ -4,6 +4,7 @@
 
 #include <bb/ApplicationInfo>
 #include <bb/cascades/Application>
+#include <bb/system/Clipboard>
 #include <bb/system/InvokeManager>
 #include <bb/system/InvokeRequest>
 #include <bb/PpsObject>
@@ -137,17 +138,48 @@ void MainScreen::deleteMessage(long long id)
     Storage::instance()->deleteMessage(id);
 }
 
+
+bool compareMessages(const Message* a, const Message* b)
+{
+    return a->id() < b->id();
+}
+
 void MainScreen::forwardMessages(const QVariantList& messages, Peer* peer)
 {
-    int count = messages.length();
-    int* identifiers = new int[count];
+    QList<Message*> list;
     for (int i = 0; i < messages.length(); i++)
-        identifiers[i] = (int)messages.at(i).toLongLong();
+        list.append((Message*)messages.at(i).value<QObject*>());
+    qSort(list.begin(), list.end(), compareMessages);
+
+    int count = list.length();
+    int* identifiers = new int[count];
+    for (int i = 0; i < list.length(); i++)
+        identifiers[i] = (int)list[i]->id();
+
     if (count == 1)
         tgl_do_forward_message(gTLS, { peer->type(), peer->id() }, identifiers[0], 0, 0);
     else
         tgl_do_forward_messages(gTLS, { peer->type(), peer->id() }, count, identifiers, 0, 0);
     delete [] identifiers;
+}
+
+
+
+void MainScreen::copyMessagesToClipboard(const QVariantList& messages)
+{
+    QList<Message*> list;
+    for (int i = 0; i < messages.length(); i++)
+        list.append((Message*)messages.at(i).value<QObject*>());
+    qSort(list.begin(), list.end(), compareMessages);
+
+
+    QString str = "";
+    foreach(Message* msg, list)
+        str += msg->text() + "\n";
+
+    Clipboard clipboard;
+    clipboard.clear();
+    clipboard.insert("text/plain", str.toUtf8());
 }
 
 void MainScreen::markRead(Peer* peer)
