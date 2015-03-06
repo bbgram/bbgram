@@ -2120,6 +2120,7 @@ static int fwd_msg_on_answer (struct tgl_state *TLS, struct query *q) {
   int seq = fetch_int ();
   if (seq == TLS->seq + 1 && !(TLS->locks & TGL_LOCK_DIFF)) {
     bl_do_set_pts (TLS, pts);
+    bl_do_set_seq (TLS, seq);
     bl_do_msg_seq_update (TLS, M->id);
   } else {
     if (seq > TLS->seq + 1) {
@@ -4831,10 +4832,11 @@ void tgl_do_delete_history (struct tgl_state *TLS, tgl_peer_id_t id, int offset,
 }
 
 static int update_notify_settings_on_answer (struct tgl_state *TLS, struct query *q) {
-    fetch_bool ();
-      if (q->callback) {
+    int r = fetch_bool ();
+    if (q->callback) {
         ((void (*)(struct tgl_state *TLS, void *, int))(q->callback))(TLS, q->callback_extra, 1);
-      }
+    }
+    return r;
 }
 
 static struct query_methods update_notify_settings_methods  = {
@@ -4924,4 +4926,72 @@ void tgl_do_msg_search_files (struct tgl_state *TLS, tgl_peer_id_t id, int from,
     char* s = talloc(1);
      strcpy(s, "");
     _tgl_do_msg_search(TLS, id, CODE_input_messages_filter_document, from, to, limit, offset, 0, s, 0, 0, 0, callback, callback_extra);
+}
+
+static int fwd_msgs_on_answer (struct tgl_state *TLS, struct query *q) {
+  assert (fetch_int () == (int)CODE_messages_stated_messages);
+  assert (fetch_int () == CODE_vector);
+  int num, i;
+  num = fetch_int ();
+  struct tgl_message **ML = talloc (sizeof (void *) * num);
+  for (i = 0; i < num; i++) {
+      ML[i] = tglf_fetch_alloc_message (TLS);
+      bl_do_msg_set_outbound (TLS, ML[i]->id);
+  }
+  assert (fetch_int () == CODE_vector);
+  int n;
+  n = fetch_int ();
+  for (i = 0; i < n; i++) {
+    tglf_fetch_alloc_chat (TLS);
+  }
+  assert (fetch_int () == CODE_vector);
+  n = fetch_int ();
+  for (i = 0; i < n; i++) {
+    tglf_fetch_alloc_user (TLS);
+  }
+  //tglu_fetch_pts ();
+  int pts = fetch_int ();
+  int seq = fetch_int ();
+  if (seq == TLS->seq + 1 && !(TLS->locks & TGL_LOCK_DIFF)) {
+    bl_do_set_pts (TLS, pts);
+    bl_do_set_seq (TLS, seq);
+    for (i = 0; i < num; i++) {
+      bl_do_msg_update (TLS, ML[i]->id);
+    }
+  } else {
+    if (seq > TLS->seq + 1) {
+      vlogprintf (E_NOTICE, "Hole in seq\n");
+      tgl_do_get_difference (TLS, 0, 0, 0);
+    }
+  }
+  //print_message (M);
+  if (q->callback) {
+    ((void (*)(struct tgl_state *, void *, int, int, struct tgl_message **))q->callback) (TLS, q->callback_extra, 1, num, ML);
+  }
+  tfree (ML, num * sizeof (void *));
+  return 0;
+}
+
+static struct query_methods fwd_msgs_methods = {
+  .on_answer = fwd_msgs_on_answer,
+  .on_error = q_ptr_on_error,
+  .type = TYPE_TO_PARAM(messages_stated_messages)
+};
+
+void tgl_do_forward_messages (struct tgl_state *TLS, tgl_peer_id_t id, int size, int identifiers[], void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, int num, struct tgl_message *ML[]), void *callback_extra)
+{
+    if (tgl_get_peer_type (id) == TGL_PEER_ENCR_CHAT) {
+        vlogprintf (E_WARNING, "Can not forward messages from secret chat\n");
+        if (callback) {
+            callback (TLS, callback_extra, 0, 0, 0);
+        }
+        return;
+    }
+    clear_packet ();
+    out_int (CODE_messages_forward_messages);
+    out_peer_id (TLS, id);
+    out_int (CODE_vector);
+    out_int (size);
+    out_ints (identifiers, size);
+    tglq_send_query (TLS, TLS->DC_working, packet_ptr - packet_buffer, packet_buffer, &fwd_msgs_methods, 0, callback, callback_extra);
 }
