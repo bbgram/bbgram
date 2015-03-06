@@ -25,9 +25,7 @@ ListView {
                 enabled: peer ? peer.type < 3 : false
                 
                 function forwardMessages(chat, messages) {
-                    for (var i = 0; i < messages.length; i++) {
-                        _owner.forwardMessage(messages[i], chat);
-                    }
+                    _owner.forwardMessages(messages, chat);
                     Application.scene.openChat(chat);
                 }
                 

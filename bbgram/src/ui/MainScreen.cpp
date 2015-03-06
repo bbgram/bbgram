@@ -137,9 +137,17 @@ void MainScreen::deleteMessage(long long id)
     Storage::instance()->deleteMessage(id);
 }
 
-void MainScreen::forwardMessage(long long id, Peer* peer)
+void MainScreen::forwardMessages(const QVariantList& messages, Peer* peer)
 {
-    tgl_do_forward_message(gTLS, { peer->type(), peer->id() }, (int)id, 0, 0);
+    int count = messages.length();
+    int* identifiers = new int[count];
+    for (int i = 0; i < messages.length(); i++)
+        identifiers[i] = (int)messages.at(i).toLongLong();
+    if (count == 1)
+        tgl_do_forward_message(gTLS, { peer->type(), peer->id() }, identifiers[0], 0, 0);
+    else
+        tgl_do_forward_messages(gTLS, { peer->type(), peer->id() }, count, identifiers, 0, 0);
+    delete [] identifiers;
 }
 
 void MainScreen::markRead(Peer* peer)
