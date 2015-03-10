@@ -49,6 +49,7 @@ CustomListItem {
                         verticalAlignment: VerticalAlignment.Center
                         textStyle {
                             fontSize: FontSize.Large
+                            color: if (ListItemData.type == 4) Color.create("#74B266")
                         }
                     }
                 }

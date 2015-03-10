@@ -133,9 +133,9 @@ void EncrChat::save(QVariantMap& map) const
 QString EncrChat::title() const
 {
     if (m_companion)
-        return QString("Encr: ") + m_companion->title();
+        return m_companion->title();
     else
-        return QString("Encr: ");
+        return QString("");
 }
 
 QString EncrChat::status() const
