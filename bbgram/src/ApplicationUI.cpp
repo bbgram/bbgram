@@ -23,6 +23,7 @@ using namespace bb::system;
 #include "model/EncrChat.h"
 #include "model/Document.h"
 #include "model/Media.h"
+#include "model/Wallpaper.h"
 
 ApplicationUI::ApplicationUI(bb::cascades::Application* app) :
         QObject(app)
@@ -37,6 +38,7 @@ ApplicationUI::ApplicationUI(bb::cascades::Application* app) :
     qmlRegisterType<EncrChat>("bbgram.types.lib", 0, 1, "EncrChat");
     qmlRegisterType<Document>("bbgram.types.lib", 0, 1, "Document");
     qmlRegisterType<Media>("bbgram.types.lib", 0, 1, "Media");
+    qmlRegisterType<Wallpaper>("bbgram.types.lib", 0, 1, "Wallpaper");
     qmlRegisterType<QTimer>("bbgram.types.lib", 0, 1, "QTimer");
 
     m_telegraph = new Telegraph();

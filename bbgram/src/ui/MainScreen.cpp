@@ -1,4 +1,5 @@
 #include "MainScreen.h"
+#include "../model/Wallpaper.h"
 #include "../Storage.h"
 #include "../Telegraph.h"
 
@@ -163,7 +164,24 @@ void MainScreen::forwardMessages(const QVariantList& messages, Peer* peer)
     delete [] identifiers;
 }
 
+void MainScreen::_getWallpapersCallback(struct tgl_state *TLS, void *callback_extra, int success, int num, struct tgl_wallpaper wallpapers[])
+{
+    if (!success)
+        return;
+    QListDataModel<Wallpaper*>* model = (QListDataModel<Wallpaper*>*)callback_extra;
+    for (int i = 0; i < num; i++)
+    {
+        Wallpaper* wallpaper = new Wallpaper(wallpapers + i);
+        model->insert(model->size(), wallpaper);
+    }
+}
 
+bb::cascades::DataModel* MainScreen::getWallpapers() const
+{
+    QListDataModel<Wallpaper*>* model = new QListDataModel<Wallpaper*>();
+    tgl_do_get_wallpapers(gTLS, MainScreen::_getWallpapersCallback, model);
+    return model;
+}
 
 void MainScreen::copyMessagesToClipboard(const QVariantList& messages)
 {

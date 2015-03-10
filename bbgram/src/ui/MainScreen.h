@@ -43,6 +43,7 @@ public:
     Q_INVOKABLE void dialANumber(const QString& number);
     Q_INVOKABLE User* getUser(int id);
     Q_INVOKABLE QString getAppVersion() const;
+    Q_INVOKABLE bb::cascades::DataModel* getWallpapers() const;
 
     static MainScreen* instance();
     void initialize();
@@ -78,4 +79,5 @@ protected:
     static void _contactDeleteHandler(struct tgl_state *TLS, void *callback_extra, int success);
     static void _markReaded(struct tgl_state *TLS, void *callback_extra, int success);
     static void _contactsAdded(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[]);
+    static void _getWallpapersCallback(struct tgl_state *TLS, void *callback_extra, int success, int num, struct tgl_wallpaper wallpapers[]);
 };
