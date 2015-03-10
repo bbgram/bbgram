@@ -506,6 +506,20 @@ struct tgl_notify_peer_t {
     };
 };
 
+struct tgl_wallpaper {
+    int solid;
+    int id;
+    char* title;
+    int color;
+    union {
+        struct {
+            int sizes_num;
+            struct tgl_photo_size *sizes;
+        };
+        int bg_color;
+    };
+};
+
 
 #pragma pack(pop)
 #endif

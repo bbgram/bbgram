@@ -1,4 +1,4 @@
-/* 
+/*
     This file is part of tgl-library
 
     This library is free software; you can redistribute it and/or
@@ -41,6 +41,7 @@ void tglf_fetch_message_media (struct tgl_state *TLS, struct tgl_message_media *
 void tglf_fetch_message_media_encrypted (struct tgl_state *TLS, struct tgl_message_media *M);
 void tglf_fetch_message_action (struct tgl_state *TLS, struct tgl_message_action *M);
 void tglf_fetch_message_action_encrypted (struct tgl_state *TLS, struct tgl_message_action *M);
+void tglf_fetch_photo_size (struct tgl_state *TLS, struct tgl_photo_size *S);
 void tglf_fetch_photo (struct tgl_state *TLS, struct tgl_photo *P);
 
 void tglf_fetch_chat (struct tgl_state *TLS, struct tgl_chat *C);

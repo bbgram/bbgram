@@ -4972,9 +4972,9 @@ static int fwd_msgs_on_answer (struct tgl_state *TLS, struct query *q) {
   return 0;
 }
 
-static struct query_methods fwd_msgs_methods = {
+static struct query_methods forward_messages_methods = {
   .on_answer = fwd_msgs_on_answer,
-  .on_error = q_ptr_on_error,
+  .on_error = q_list_on_error,
   .type = TYPE_TO_PARAM(messages_stated_messages)
 };
 
@@ -4993,5 +4993,57 @@ void tgl_do_forward_messages (struct tgl_state *TLS, tgl_peer_id_t id, int size,
     out_int (CODE_vector);
     out_int (size);
     out_ints (identifiers, size);
-    tglq_send_query (TLS, TLS->DC_working, packet_ptr - packet_buffer, packet_buffer, &fwd_msgs_methods, 0, callback, callback_extra);
+    tglq_send_query (TLS, TLS->DC_working, packet_ptr - packet_buffer, packet_buffer, &forward_messages_methods, 0, callback, callback_extra);
+}
+
+static int get_wallpapers_on_answer (struct tgl_state *TLS, struct query *q) {
+    assert (fetch_int () == CODE_vector);
+    int i, n;
+    n = fetch_int ();
+    struct tgl_wallpaper *wallpapers = talloc (sizeof (struct tgl_wallpaper) * n);
+    memset(wallpapers, 0, sizeof (struct tgl_wallpaper) * n);
+    for (i = 0; i < n; i++) {
+        struct tgl_wallpaper* W = wallpapers + i;
+        int type = fetch_int ();
+        assert (type == CODE_wall_paper || type == CODE_wall_paper_solid);
+        W->solid = type == CODE_wall_paper_solid ? 1 : 0;
+        W->id = fetch_int();
+        int l = prefetch_strlen ();
+        W->title = fetch_str (l);
+        if (type == CODE_wall_paper)
+        {
+            assert (fetch_int () == CODE_vector);
+            W->sizes_num = fetch_int ();
+            W->sizes = talloc (sizeof (struct tgl_photo_size) * W->sizes_num);
+            int j;
+            for (j = 0; j < W->sizes_num; j++) {
+              tglf_fetch_photo_size (TLS, &W->sizes[j]);
+            }
+        }
+        else
+            wallpapers[i].bg_color = fetch_int();
+        wallpapers[i].color = fetch_int();
+    }
+  if (q->callback) {
+      ((void (*)(struct tgl_state *, void *, int, int, struct tgl_wallpaper[]))(q->callback)) (TLS, q->callback_extra, 1, n, wallpapers);
+  }
+  for (i = 0; i < n; i++) {
+      struct tgl_wallpaper* W = wallpapers + i;
+      tfree (W->sizes, sizeof (struct tgl_photo_size) * W->sizes_num);
+  }
+  tfree (wallpapers, n * sizeof (struct tgl_wallpaper));
+  return 0;
+}
+
+static struct query_methods get_wallpapers_methods = {
+  .on_answer = get_wallpapers_on_answer,
+  .on_error = q_list_on_error,
+  .type = TYPE_TO_PARAM_1(vector, TYPE_TO_PARAM (wall_paper))
+};
+
+void tgl_do_get_wallpapers (struct tgl_state *TLS, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, int num, struct tgl_wallpaper wallpapers[]), void *callback_extra)
+{
+    clear_packet ();
+    out_int (CODE_account_get_wall_papers);
+    tglq_send_query(TLS, TLS->DC_working, packet_ptr - packet_buffer, packet_buffer, &get_wallpapers_methods, 0, callback, callback_extra);
 }

@@ -372,6 +372,7 @@ void tgl_do_msg_search_media (struct tgl_state *TLS, tgl_peer_id_t id, int from,
 void tgl_do_msg_search_files (struct tgl_state *TLS, tgl_peer_id_t id, int from, int to, int limit, int offset, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_message *list[]), void *callback_extra);
 
 void tgl_do_forward_messages (struct tgl_state *TLS, tgl_peer_id_t id, int size, int identifiers[], void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, int num, struct tgl_message *ML[]), void *callback_extra);
+void tgl_do_get_wallpapers (struct tgl_state *TLS, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, int num, struct tgl_wallpaper wallpapers[]), void *callback_extra);
 
 void tgl_do_import_contacts(struct tgl_state *TLS, int size, const char *phone[], const char *first_name[], const char *last_name[], int replace, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[]), void *callback_extra);
 
