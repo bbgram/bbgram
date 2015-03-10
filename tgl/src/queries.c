@@ -2549,7 +2549,8 @@ static int download_on_answer (struct tgl_state *TLS, struct query *q) {
   }
   D->offset += len;
   D->refcnt --;
-  if (D->offset < D->size) {
+  //if (D->offset < D->size) {
+  if ((D->size && D->offset < D->size) || (!D->size && len == 16384)) {
     load_next_part (TLS, D, q->callback, q->callback_extra);
     return 0;
   } else {
