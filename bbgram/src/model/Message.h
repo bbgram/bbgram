@@ -40,6 +40,7 @@ public:
     bool service() const;
     int mediaType() const;
     QVariantMap& media();
+    QVariantMap& actions();
 
     User* from() const;
 

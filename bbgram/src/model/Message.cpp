@@ -324,6 +324,11 @@ QVariantMap& Message::media()
     return m_media;
 }
 
+QVariantMap& Message::actions()
+{
+    return m_action;
+}
+
 User* Message::from() const
 {
     return (User*)Storage::instance()->getPeer(TGL_PEER_USER, m_fromId);

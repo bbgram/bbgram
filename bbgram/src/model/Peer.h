@@ -45,7 +45,7 @@ public:
     Message* lastMessage() const;
     QDateTime lastMessageDate() const;
 
-    void addMessage(Message* message);
+    virtual void addMessage(Message* message);
     void deleteMessage(Message* message);
     int unreadCount();
     void markRead();

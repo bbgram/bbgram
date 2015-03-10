@@ -145,6 +145,13 @@ QString EncrChat::status() const
     return "";
 }
 
+void EncrChat::addMessage(Message* message)
+{
+    QVariantMap& actions = message->actions();
+    if (actions["type"].toInt() != tgl_message_action_notify_layer)
+        Peer::addMessage(message);
+}
+
 void EncrChat::setCompanion(User* user)
 {
     m_companion = user;

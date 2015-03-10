@@ -19,6 +19,7 @@ public:
     QString title() const;
     QString status() const;
 
+    void addMessage(Message* message);
     void setCompanion(User* user);
     void setSecretInfo(tgl_secret_chat* info);
 protected:
