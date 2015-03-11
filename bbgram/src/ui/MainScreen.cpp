@@ -183,6 +183,26 @@ bb::cascades::DataModel* MainScreen::getWallpapers() const
     return model;
 }
 
+QString MainScreen::wallpaper() const
+{
+    QSettings settings;
+    QString wallpaper = settings.value("chat/wallpaper").toString();
+    if (!wallpaper.startsWith('#'))
+    {
+        QUrl url(wallpaper);
+        if (!QFile::exists(url.path()))
+            return QString();
+    }
+    return wallpaper;
+}
+
+void MainScreen::setWallpaper(const QString& url)
+{
+    QSettings settings;
+    settings.setValue("chat/wallpaper", url);
+    emit wallpaperChanged();
+}
+
 void MainScreen::copyMessagesToClipboard(const QVariantList& messages)
 {
     QList<Message*> list;

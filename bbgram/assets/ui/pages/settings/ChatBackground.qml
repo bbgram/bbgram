@@ -16,7 +16,6 @@ Page {
             
             Wallpaper {
                 id: wallpaper
-                source: ""
             }
             ActivityIndicator {
                 id: indicator
@@ -55,19 +54,22 @@ Page {
                     }
                 ]
                 function loaded(url) {
-                    wallpaper.source = url;  
+                    wallpaper.source = url;
+                    _owner.wallpaper = wallpaper.source;
                     indicator.stop();
                 }
                 onTriggered: {
                     var w = dataModel.data(indexPath);
                     if (!w.isSolid) {
-                        wallpaper.source = w.thumbnail;                    
+                        wallpaper.source = w.thumbnail;
                         indicator.start();
                         w.loaded.connect(loaded);
                         w.load();
                     }
-                    else
+                    else {
                         wallpaper.source = '#' + w.backgroundColor.toString(16);
+                        _owner.wallpaper = wallpaper.source;
+                    }
                 }
             }
         }

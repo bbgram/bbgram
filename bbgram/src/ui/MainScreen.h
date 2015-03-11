@@ -16,6 +16,8 @@ class ApplicationUI;
 class MainScreen : public Screen<bb::cascades::TabbedPane>
 {
     Q_OBJECT
+
+    Q_PROPERTY(QString wallpaper READ wallpaper WRITE setWallpaper NOTIFY wallpaperChanged)
 public:
     MainScreen(ApplicationUI* app);
     ~MainScreen();
@@ -43,7 +45,10 @@ public:
     Q_INVOKABLE void dialANumber(const QString& number);
     Q_INVOKABLE User* getUser(int id);
     Q_INVOKABLE QString getAppVersion() const;
+
     Q_INVOKABLE bb::cascades::DataModel* getWallpapers() const;
+    Q_INVOKABLE QString wallpaper() const;
+    Q_INVOKABLE void setWallpaper(const QString& url);
 
     static MainScreen* instance();
     void initialize();
@@ -52,6 +57,7 @@ signals:
     void contactRenamed(bool error, QString message);
     void contactDeleted(bool error, QString message);
     void groupCreated(GroupChat* groupChat);
+    void wallpaperChanged();
 protected slots:
     void onAppFullScreen();
     void onAppThumbnail();

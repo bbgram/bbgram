@@ -1,7 +1,8 @@
 import bb.cascades 1.2
 
 Container {
-    property string source: ""
+    id: me
+    property string source: _owner.wallpaper
     
     Container {
         background: source.length > 0 && source.charAt(0) == '#' ? Color.create(source) : Color.Transparent
@@ -9,7 +10,8 @@ Container {
         preferredHeight: Infinity
         ControlDelegate {
             sourceComponent: imageViewCompDef
-            delegateActive: source.length == 0 || source.charAt(0) != '#'
+            delegateActive: me.source.length == 0 || me.source.charAt(0) != '#'
+            implicitLayoutAnimationsEnabled: false
         }
     }
     attachedObjects: [
@@ -20,7 +22,7 @@ Container {
                 preferredWidth: Infinity
                 preferredHeight: Infinity
                 imageSource: source.length == 0 ? "asset:///images/background_hd.jpg" : source
-                loadEffect: ImageViewLoadEffect.DefaultDeferred
+                loadEffect: ImageViewLoadEffect.None
                 implicitLayoutAnimationsEnabled: false
                 scalingMethod: ScalingMethod.AspectFill
             }

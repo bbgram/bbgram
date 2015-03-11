@@ -250,12 +250,7 @@ Page {
         Container {
             layout: DockLayout {            
             }
-            ImageView {
-                horizontalAlignment: HorizontalAlignment.Fill
-                verticalAlignment: VerticalAlignment.Fill
-                imageSource: "asset:///images/background_hd.jpg"
-                loadEffect: ImageViewLoadEffect.DefaultDeferred
-                scalingMethod: ScalingMethod.AspectFill
+            Wallpaper {
             }
             MessageList {
                 id: messageList

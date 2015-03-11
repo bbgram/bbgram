@@ -10,6 +10,9 @@ Q_DECL_EXPORT int main(int argc, char **argv)
 {
     QLocale::setDefault(QLocale::English);
 
+    QCoreApplication::setOrganizationName("bomogram");
+    QCoreApplication::setApplicationName("Big Boss");
+
     bb::cascades::Application app(argc, argv);
 
     //QThread *thread = new QThread;
