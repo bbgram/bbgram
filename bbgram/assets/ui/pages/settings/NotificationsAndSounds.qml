@@ -15,9 +15,17 @@ Page {
             }
             SettingsToggleButton {
                 text: "Alert"
+                checked: settings.value("Message Notifications/Alert", false)
+                onCheckedChanged: {
+                    settings.setValue("Message Notifications/Alert", checked)
+                }
             }
             SettingsToggleButton {
                 text: "Message Preview"
+                checked: settings.value("Message Notifications/Message Preview", false)
+                onCheckedChanged: {
+                    settings.setValue("Message Notifications/Message Preview", checked)
+                }
             }
             SettingsDropDown {
                 title: "Sound"
@@ -26,7 +34,11 @@ Page {
                         text: "Default"
                     }
                 ]
-                selectedIndex: 0
+                selectedIndex: settings.value("Message Notifications/Sound", 0)
+                
+                onSelectedIndexChanged: {
+                    settings.setValue("Message Notifications/Sound", selectedIndex)
+                }
             }
             
             SettingsHeader {
@@ -34,9 +46,17 @@ Page {
             }
             SettingsToggleButton {
                 text: "Alert"
+                checked: settings.value("Group Notifications/Alert", false)
+                onCheckedChanged: {
+                    settings.setValue("Group Notifications/Alert", checked)
+                }
             }
             SettingsToggleButton {
                 text: "Message Preview"
+                checked: settings.value("Group Notifications/Message Preview", false)
+                onCheckedChanged: {
+                    settings.setValue("Group Notifications/Message Preview", checked)
+                }
             }
             SettingsDropDown {
                 title: "Sound"
@@ -45,7 +65,11 @@ Page {
                         text: "Default"
                     }
                 ]
-                selectedIndex: 0
+                selectedIndex: settings.value("Group Notifications/Sound", 0)
+                
+                onSelectedIndexChanged: {
+                    settings.setValue("Group Notifications/Sound", selectedIndex)
+                }
             }
             
             SettingsHeader {
@@ -53,12 +77,24 @@ Page {
             }
             SettingsToggleButton {
                 text: "In-App Sounds"
+                checked: settings.value("In-App Notifications/In-App Sounds", false)
+                onCheckedChanged: {
+                    settings.setValue("In-App Notifications/In-App Sounds", checked)
+                }
             }
             SettingsToggleButton {
                 text: "In-App Vibrate"
+                checked: settings.value("In-App Notifications/In-App Vibrate", false)
+                onCheckedChanged: {
+                    settings.setValue("In-App Notifications/In-App Vibrate", checked)
+                }
             }
             SettingsToggleButton {
                 text: "In-App Preview"
+                checked: settings.value("In-App Notifications/In-App Preview", false)
+                onCheckedChanged: {
+                    settings.setValue("In-App Notifications/In-App Preview", checked)
+                }
             }
             
             SettingsHeader {
