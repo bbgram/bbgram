@@ -1,5 +1,6 @@
 #include "MainScreen.h"
 #include "../model/Wallpaper.h"
+#include "../Settings.h"
 #include "../Storage.h"
 #include "../Telegraph.h"
 
@@ -49,6 +50,7 @@ MainScreen::MainScreen(ApplicationUI* app)
     m_dialogs->setParent(this);
     setContextProperty("_contacts", m_contacts);
     setContextProperty("_chats", m_dialogs);
+    setContextProperty("settings", new Settings());
 
     QObject::connect(bb::Application::instance(), SIGNAL(thumbnail()), this, SLOT(onAppThumbnail()));
     QObject::connect(bb::Application::instance(), SIGNAL(invisible()), this, SLOT(onAppThumbnail()));
