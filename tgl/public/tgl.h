@@ -1,4 +1,4 @@
-/* 
+/*
     This file is part of tgl-library
 
     This library is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@
 #define TGL_MAX_DC_NUM 100
 #define TG_SERVER_1 "149.154.175.50"
 #define TG_SERVER_2 "149.154.167.51"
-#define TG_SERVER_3 "174.140.142.6"
+#define TG_SERVER_3 "149.154.175.100"
 #define TG_SERVER_4 "149.154.167.91"
 #define TG_SERVER_5 "149.154.171.5"
 
@@ -163,14 +163,14 @@ struct tgl_state {
   int date;
   int seq;
   int binlog_enabled;
-  int test_mode; 
+  int test_mode;
   int verbosity;
   int unread_messages;
   int active_queries;
   int max_msg_id;
   int started;
 
-  long long locks; 
+  long long locks;
   struct tgl_dc *DC_list[TGL_MAX_DC_NUM];
   struct tgl_dc *DC_working;
   int max_dc_num;
@@ -221,8 +221,8 @@ struct tgl_state {
 
   struct tree_query *queries_tree;
 
-  char *base_path; 
-  
+  char *base_path;
+
   struct tree_user *online_updates;
 
   struct tgl_timer *online_updates_timer;
