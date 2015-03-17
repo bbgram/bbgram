@@ -126,14 +126,25 @@ void UDSWrapper::messageToHUB(Message* msg)
     uds_inbox_item_data_t* inboxItem = uds_inbox_item_data_create();
     uds_inbox_item_data_set_account_id(inboxItem, m_accountId);
 
-    long long peerId = ((long long)msg->from()->type() << 32) | (unsigned int)msg->from()->id();
+    long long peerId = 0;
+    if (msg->toType() == TGL_PEER_USER)
+        peerId =  ((long long)msg->from()->type() << 32) | (unsigned int)msg->from()->id();
+    else if (msg->toType() == TGL_PEER_CHAT)
+        peerId =  ((long long)msg->toType() << 32) | (unsigned int)msg->toId();
 
     QString source = QString::number(peerId);
 
     QByteArray sourceBytes = source.toUtf8();
     uds_inbox_item_data_set_source_id(inboxItem, sourceBytes.data());
 
-    QString name = msg->from()->title();
+    QString name;
+    if (msg->toType() == TGL_PEER_USER)
+        name = msg->from()->title();
+    else if (msg->toType() == TGL_PEER_CHAT)
+    {
+        GroupChat* group = (GroupChat*)Storage::instance()->getPeer(msg->toType(), msg->toId());
+        name = msg->from()->title() + "@" + group->title();
+    }
 
     QByteArray nameBytes = name.toUtf8();
     uds_inbox_item_data_set_name(inboxItem, nameBytes.data());
@@ -141,7 +152,7 @@ void UDSWrapper::messageToHUB(Message* msg)
     uds_inbox_item_data_set_description(inboxItem, text.data());
     //uds_inbox_item_data_set_icon(inboxItem, "icon.png"); //msg->unread() ? "bar_voice2.png" : "bar_voice1.png");
     uds_inbox_item_data_set_mime_type(inboxItem, "hub/vnd.test.item");
-    uds_inbox_item_data_set_unread_count(inboxItem, msg->unread() ? 1 : 0);
+    uds_inbox_item_data_set_unread_count(inboxItem, 0/*msg->unread() ? 1 : 0*/);
     uds_inbox_item_data_set_total_count(inboxItem, 1);
     //uds_inbox_item_data_set_category_id(inboxItem, 1);
     uds_inbox_item_data_set_timestamp(inboxItem, msg->dateTime().toTime_t());

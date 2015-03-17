@@ -18,7 +18,7 @@ HeadlessApplication::HeadlessApplication(bb::Application *app) :
                             this, SLOT(onCreateChannelCompleted(const bb::network::PushStatus&, const QString)));
 
     //m_pushService->createSession();
-    m_pushService->createChannel(QUrl());
+    //m_pushService->createChannel(QUrl());
 
     qDebug() << "HeadlessApplication::HeadlessApplication" << endl;
 }
