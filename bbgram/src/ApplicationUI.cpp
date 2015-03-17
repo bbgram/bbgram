@@ -25,12 +25,15 @@ using namespace bb::system;
 #include "model/Media.h"
 #include "model/Wallpaper.h"
 
+#include "utils/VirtualKeyboardService.h"
+
 ApplicationUI::ApplicationUI(bb::cascades::Application* app) :
         QObject(app)
 {
     qmlRegisterType<PhoneNumberInput>("bbgram.control.lib", 0, 1, "PhoneNumberInput");
     qmlRegisterType<MediaViewer>("bbgram.control.lib", 0, 1, "MediaViewer");
     qmlRegisterType<DocumentViewer>("bbgram.control.lib", 0, 1, "DocumentViewer");
+
     qmlRegisterType<Peer>("bbgram.types.lib", 0, 1, "Peer");
     qmlRegisterType<GroupChat>("bbgram.types.lib", 0, 1, "GroupChat");
     qmlRegisterType<Message>("bbgram.types.lib", 0, 1, "Message");
@@ -40,6 +43,8 @@ ApplicationUI::ApplicationUI(bb::cascades::Application* app) :
     qmlRegisterType<Media>("bbgram.types.lib", 0, 1, "Media");
     qmlRegisterType<Wallpaper>("bbgram.types.lib", 0, 1, "Wallpaper");
     qmlRegisterType<QTimer>("bbgram.types.lib", 0, 1, "QTimer");
+
+    qmlRegisterType<VirtualKeyboardService>("bbgram.bps.lib", 0, 1, "VirtualKeyboardService");
 
     m_telegraph = new Telegraph();
     m_telegraph->start();

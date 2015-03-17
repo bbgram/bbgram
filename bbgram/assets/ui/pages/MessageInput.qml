@@ -1,17 +1,17 @@
 import bb.cascades 1.2
+import bbgram.bps.lib 0.1
 
 Container {
     signal submitted();
     signal valueChanging(string value);    
     property alias value: message.text
-    //maxHeight: 500
     
     function clear() {
         message.text = ""
     }
     /*layout: StackLayout {
-        orientation: LayoutOrientation.TopToBottom
-    }*/
+     orientation: LayoutOrientation.TopToBottom
+     }*/
     Container {
         id: inputPanel
         layoutProperties: StackLayoutProperties {
@@ -67,22 +67,34 @@ Container {
         }
     }
     ControlDelegate {
-        
         id: emojiPanel
         
         sourceComponent: emojiPanelCompDef
         delegateActive: false 
+        
+        implicitLayoutAnimationsEnabled: false
         onControlChanged: {
             if (control)
                 control.textArea = message
         }
     }
     attachedObjects: [
+        VirtualKeyboardService {
+            id: virtualKeyboardService
+
+            onKeyboardVisible: {
+                console.log("Keyboard Visible");
+                emojiPanel.delegateActive = false
+            }
+            onKeyboardHidden: {
+                console.log("Keyboard Hidden");
+            }
+        },
         ComponentDefinition {
-            
             id: emojiPanelCompDef
             Container {
                 property variant textArea: null
+                maxHeight: virtualKeyboardService.height() - 140
                 layout: StackLayout {                    
                 }
                 
@@ -97,117 +109,111 @@ Container {
                     rightPadding: 10
                     
                     
-                    /*ImageButton {
-                     defaultImageSource: "asset:///images/emojis_recent.png"
-                     onClicked: {
-                     listView.dataModel.source = ""
-                     }
-                     }*/
-ImageButton {
+                    ImageButton {
                         defaultImageSource: "asset:///images/emojis_people.png"
                         scaleX: 0.8
                         scaleY: 0.8
                         onClicked: {
                             listView.dataModel.source = "asset:///dm_emojis_people.xml"
                         }
-}
-ImageButton {
-    defaultImageSource: "asset:///images/emojis_nature.png"
-    scaleX: 0.8
-    scaleY: 0.8
-    onClicked: {
-        listView.dataModel.source = "asset:///dm_emojis_nature.xml"
-    }
-}
-ImageButton {
-    defaultImageSource: "asset:///images/emojis_objects.png"
-    scaleX: 0.8
-    scaleY: 0.8
-    onClicked: {
-        listView.dataModel.source = "asset:///dm_emojis_objects.xml"
-    }
-}
-ImageButton {
-    defaultImageSource: "asset:///images/emojis_places.png"
-    scaleX: 0.8
-    scaleY: 0.8
-    onClicked: {
-        listView.dataModel.source = "asset:///dm_emojis_places.xml"
-    }
-}
-ImageButton {
-    defaultImageSource: "asset:///images/emojis_symbols.png"
-    scaleX: 0.8
-    scaleY: 0.8
-    onClicked: {
-        listView.dataModel.source = "asset:///dm_emojis_symbols.xml"
-    }
-}
-
-/*ImageButton {
- defaultImageSource: "asset:///images/emojis_backspace.png"
- scaleX: 0.8
- scaleY: 0.8
- onClicked: {
- //??
- }
- }*/
+                    }
+                    ImageButton {
+                        defaultImageSource: "asset:///images/emojis_nature.png"
+                        scaleX: 0.8
+                        scaleY: 0.8
+                        onClicked: {
+                            listView.dataModel.source = "asset:///dm_emojis_nature.xml"
+                        }
+                    }
+                    ImageButton {
+                        defaultImageSource: "asset:///images/emojis_objects.png"
+                        scaleX: 0.8
+                        scaleY: 0.8
+                        onClicked: {
+                            listView.dataModel.source = "asset:///dm_emojis_objects.xml"
+                        }
+                    }
+                    ImageButton {
+                        defaultImageSource: "asset:///images/emojis_places.png"
+                        scaleX: 0.8
+                        scaleY: 0.8
+                        onClicked: {
+                            listView.dataModel.source = "asset:///dm_emojis_places.xml"
+                        }
+                    }
+                    ImageButton {
+                        defaultImageSource: "asset:///images/emojis_symbols.png"
+                        scaleX: 0.8
+                        scaleY: 0.8
+                        onClicked: {
+                            listView.dataModel.source = "asset:///dm_emojis_symbols.xml"
+                        }
+                    }
+                    
+                    /*ImageButton {
+                     defaultImageSource: "asset:///images/emojis_backspace.png"
+                     scaleX: 0.8
+                     scaleY: 0.8
+                     onClicked: {
+                     //??
+                     }
+                     }*/
                 }
-                                
-                                Container {
-                                    background: Color.Black
-                                    preferredHeight: 2
+                
+                Container {
+                background: Color.Black
+                preferredHeight: 2
                                     horizontalAlignment: HorizontalAlignment.Fill                    
+                }
+                //preferredHeight: 100        
+                ListView {
+                    id: listView
+                    dataModel: XmlDataModel {
+                        source: "asset:///dm_emojis_people.xml"
+                    }
+                    layout: GridListLayout {
+                        columnCount: 8
+                    }
+                    
+                    onTriggered: {
+                        var code = dataModel.data(indexPath).code;
+                        var i1 = parseInt(code.slice(0, 4), 16);
+                        var i2 = parseInt(code.slice(4, 8), 16);
+                        var s = "";
+                        if (i1 != 0)
+                            s = String.fromCharCode(i1, i2);
+                        else
+                            s = String.fromCharCode(i2);
+                        textArea.editor.insertPlainText(s);
+                        textArea.requestFocus();
+                    }
+                    listItemComponents: ListItemComponent {
+                        type: "emoji"
+                        CustomListItem {
+                            dividerVisible: false
+                            Label {
+                                id: label
+                                horizontalAlignment: HorizontalAlignment.Center
+                                verticalAlignment: VerticalAlignment.Center
+                                textStyle {
+                                    fontSize: FontSize.XLarge
                                 }
-                                //preferredHeight: 100        
-                                ListView {
-                                    id: listView
-                                    dataModel: XmlDataModel {
-                                        source: "asset:///dm_emojis_people.xml"
-                                    }
-                                    layout: GridListLayout {
-                                        columnCount: 8
-                                    }
-                                    
-                                    onTriggered: {
-                                        var code = dataModel.data(indexPath).code;
-                                        var i1 = parseInt(code.slice(0, 4), 16);
-                                        var i2 = parseInt(code.slice(4, 8), 16);
-                                        var s = "";
-                                        if (i1 != 0)
-                                            s = String.fromCharCode(i1, i2);
-                                        else
-                                            s = String.fromCharCode(i2);
-                                        textArea.editor.insertPlainText(s);
-                                        textArea.requestFocus();
-                                    }
-                                    listItemComponents: ListItemComponent {
-                                        type: "emoji"
-                                        CustomListItem {
-                                            dividerVisible: false
-                                            Label {
-                                                id: label
-                                                horizontalAlignment: HorizontalAlignment.Center
-                                                verticalAlignment: VerticalAlignment.Center
-                                                textStyle {
-                                                    fontSize: FontSize.XLarge
-                                                }
-                                                
-                                                function parseChar(code) {
-                                                    var i1 = parseInt(code.slice(0, 4), 16);
-                                                    var i2 = parseInt(code.slice(4, 8), 16);
-                                                    if (i1 != 0)
-                                                        return String.fromCharCode(i1, i2)
-                                                    else
-                                                        return String.fromCharCode(i2)
-                                                }
-                                                
-                                                //String.fromCharCode(0xD83D,0xDE04) + String.fromCharCode(0xf09f9884) + 
-                                                text: parseChar(ListItemData.code);                                
-                                            }
-                                        }
-                                    }
+                                
+                                function parseChar(code) {
+                                    var i1 = parseInt(code.slice(0, 4), 16);
+                                    var i2 = parseInt(code.slice(4, 8), 16);
+                                    if (i1 != 0)
+                                        return String.fromCharCode(i1, i2)
+                                    else
+                                        return String.fromCharCode(i2)
                                 }
+                                
+                                //String.fromCharCode(0xD83D,0xDE04) + String.fromCharCode(0xf09f9884) + 
+                                text: parseChar(ListItemData.code);                                
+                            }
+                        }
+                    }
+                }
             }
         }
     ]
