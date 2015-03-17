@@ -9,7 +9,12 @@ TabbedPane {
         activeTab = chatsTab
         var page = chatPageDef.createObject()
         page.peer = peer
-        activeTab.content.push(page)
+        getNavigationPane().push(page)
+    }
+    
+    function getNavigationPane()
+    {
+        return activeTab.content;
     }
     
     Tab {

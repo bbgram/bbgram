@@ -40,13 +40,13 @@ Page {
         if (peer.type == 1) {// user
             var page = contactPageDef.createObject()
             page.user = peer
-            var navigationPane = Application.scene.activeTab.content 
+            var navigationPane = Application.scene.getNavigationPane()
             navigationPane.push(page)
         }
         else if (peer.type == 2 || peer.type == 255) { // group or broadcast
             var page = groupPageDef.createObject()
             page.chat = peer
-            var navigationPane = Application.scene.activeTab.content 
+            var navigationPane = Application.scene.getNavigationPane() 
             navigationPane.push(page)
         }
     }
@@ -206,7 +206,7 @@ Page {
             onTriggered: {
                 var page = sharedMediaPageDef.createObject()
                 page.peer = peer
-                var navigationPane = Application.scene.activeTab.content 
+                var navigationPane = Application.scene.getNavigationPane() 
                 navigationPane.push(page)
             }
         },

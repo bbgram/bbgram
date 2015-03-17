@@ -4,6 +4,7 @@
 #include "../Storage.h"
 #include "../Telegraph.h"
 #include "UDSWrapper.h"
+#include "../ApplicationUI.h"
 
 #include <bb/ApplicationInfo>
 #include <bb/cascades/Application>
@@ -11,6 +12,8 @@
 #include <bb/system/InvokeManager>
 #include <bb/system/InvokeRequest>
 #include <bb/PpsObject>
+#include <bb/cascades/NavigationPane>
+#include <bb/cascades/Page>
 
 using namespace bb::cascades;
 using namespace bb::system;
@@ -38,12 +41,24 @@ MainScreen* MainScreen::instance()
     return m_instance;
 }
 
-MainScreen::MainScreen(ApplicationUI* app)
-    : Screen("asset:///ui/pages/Main.qml")
-        , m_app(app), m_appFullScreen(true)
+MainScreen::MainScreen(ApplicationUI* app, bool card)
+    : m_app(app), m_appFullScreen(true)
 {
     Q_ASSERT(m_instance == NULL);
     m_instance = this;
+
+    if (!card)
+    {
+        m_qmlDocument = bb::cascades::QmlDocument::create("asset:///ui/pages/Main.qml").parent(this);
+        m_rootObject = m_qmlDocument->createRootObject<bb::cascades::TabbedPane>();
+    }
+    else
+    {
+        m_qmlDocument = bb::cascades::QmlDocument::create("asset:///ui/pages/Card.qml").parent(this);
+        m_rootObject = m_qmlDocument->createRootObject<bb::cascades::NavigationPane>();
+    }
+
+    m_qmlDocument->setContextProperty("_owner", this);
 
     m_contacts = new ContactList(Storage::instance()->contacts());
     m_contacts->setParent(this);
@@ -394,6 +409,14 @@ void MainScreen::initialize()
     }*/
 }
 
+void MainScreen::setContextProperties(bb::cascades::QmlDocument* document)
+{
+    document->setContextProperty("_owner", this);
+    document->setContextProperty("_contacts", m_contacts);
+    document->setContextProperty("_chats", m_dialogs);
+    document->setContextProperty("settings", new Settings());
+}
+
 void MainScreen::onAppFullScreen()
 {
     m_appFullScreen = true;
@@ -561,4 +584,21 @@ QString MainScreen::getAppVersion() const
 {
     bb::ApplicationInfo info;
     return info.version();
+}
+
+void MainScreen::openCardChat(Peer* peer)
+{
+    qDebug() << "MainScreen::openCardChat";
+    bb::cascades::QmlDocument* qmlDocument = bb::cascades::QmlDocument::create("asset:///ui/pages/Chat.qml").parent(this);
+    bb::cascades::Page* page = qmlDocument->createRootObject<bb::cascades::Page>(m_qmlDocument->documentContext());
+    page->setProperty("peer", QVariant::fromValue(peer));
+
+    NavigationPane* pane = (NavigationPane*)m_rootObject;
+    pane->insert(pane->count(), page);
+}
+
+void MainScreen::onCardPooled(const bb::system::CardDoneMessage &message)
+{
+    NavigationPane* pane = (NavigationPane*)m_rootObject;
+    pane->pop();
 }

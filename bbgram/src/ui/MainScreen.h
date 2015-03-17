@@ -10,16 +10,17 @@
 
 #include <bb/cascades/TabbedPane>
 #include <bb/platform/Notification>
+#include <bb/system/CardDoneMessage>
 
 class ApplicationUI;
 
-class MainScreen : public Screen<bb::cascades::TabbedPane>
+class MainScreen : public Screen
 {
     Q_OBJECT
 
     Q_PROPERTY(QString wallpaper READ wallpaper WRITE setWallpaper NOTIFY wallpaperChanged)
 public:
-    MainScreen(ApplicationUI* app);
+    MainScreen(ApplicationUI* app, bool card);
     ~MainScreen();
 
     Q_INVOKABLE void addContact(const QString& firstName, const QString& lastName, const QString& phone);
@@ -45,6 +46,7 @@ public:
     Q_INVOKABLE void dialANumber(const QString& number);
     Q_INVOKABLE User* getUser(int id);
     Q_INVOKABLE QString getAppVersion() const;
+    Q_INVOKABLE void openCardChat(Peer* peer);
 
     Q_INVOKABLE bb::cascades::DataModel* getWallpapers() const;
     Q_INVOKABLE QString wallpaper() const;
@@ -52,6 +54,7 @@ public:
 
     static MainScreen* instance();
     void initialize();
+    void setContextProperties(bb::cascades::QmlDocument* document);
 signals:
     void contactAdded(bool error, QString message);
     void contactRenamed(bool error, QString message);
@@ -63,6 +66,7 @@ protected slots:
     void onAppThumbnail();
     void showNotifications();
     void onMessageReceived(const Message* message);
+    void onCardPooled(const bb::system::CardDoneMessage &message);
 protected:
     static MainScreen*  m_instance;
     ApplicationUI*      m_app;

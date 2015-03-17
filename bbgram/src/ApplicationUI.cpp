@@ -3,6 +3,8 @@
 #include <bb/cascades/NavigationPane>
 #include <bb/cascades/TabbedPane>
 #include <bb/cascades/QmlDocument>
+#include <bb/data/JsonDataAccess>
+#include <bb/system/CardDoneMessage>
 
 #include "ui/widgets/DocumentViewer.h"
 #include "ui/widgets/MediaViewer.h"
@@ -25,7 +27,13 @@ using namespace bb::system;
 #include "model/Media.h"
 #include "model/Wallpaper.h"
 
+#include "ui/IntroScreen.h"
+#include "ui/MainScreen.h"
 #include "utils/VirtualKeyboardService.h"
+
+
+static IntroScreen* introScreen = NULL;
+static MainScreen* mainScreen = NULL;
 
 ApplicationUI::ApplicationUI(bb::cascades::Application* app) :
         QObject(app)
@@ -46,6 +54,8 @@ ApplicationUI::ApplicationUI(bb::cascades::Application* app) :
 
     qmlRegisterType<VirtualKeyboardService>("bbgram.bps.lib", 0, 1, "VirtualKeyboardService");
 
+    m_isCard = false;
+
     m_invokeManager = new InvokeManager(this);
     QObject::connect(m_invokeManager, SIGNAL(invoked(const bb::system::InvokeRequest&)), this, SLOT(onInvoke(const bb::system::InvokeRequest&)));
 
@@ -54,10 +64,15 @@ ApplicationUI::ApplicationUI(bb::cascades::Application* app) :
 
     m_storage = new Storage(this);
 
+    if (m_invokeManager->startupMode() == ApplicationStartupMode::InvokeCard)
+        m_isCard = true;
+
     if (gTLS->DC_working && tgl_signed_dc(gTLS, gTLS->DC_working))
-        showMainScreen();
+        showMainScreen(m_isCard);
     else
         showIntroScreen();
+
+    QObject::connect(m_invokeManager, SIGNAL(cardPooled(const bb::system::CardDoneMessage &)), mainScreen, SLOT(onCardPooled(const bb::system::CardDoneMessage &)));
 }
 
 ApplicationUI::~ApplicationUI()
@@ -85,14 +100,27 @@ void ApplicationUI::onAllAuthorized()
 
 void ApplicationUI::onInvoke(const bb::system::InvokeRequest& invoke)
 {
-    int i = 1;
+    bb::data::JsonDataAccess jda;
+    QVariantMap objectMap = (jda.loadFromBuffer(invoke.data())).toMap();
+    QVariantMap attributesMap = objectMap["attributes"].toMap();
+
+    if(invoke.action().compare("bb.action.VIEW") == 0)
+    {
+        QString contactId = attributesMap["sourceId"].toString();
+
+        long long peerId = contactId.toLongLong();
+
+        int id = (int)peerId;
+        int type = (peerId >> 32);
+
+        Peer* peer = Storage::instance()->getPeer(type, id);
+
+        if (peer)
+        {
+            mainScreen->openCardChat(peer);
+        }
+    }
 }
-
-#include "ui/IntroScreen.h"
-#include "ui/MainScreen.h"
-
-static IntroScreen* introScreen = NULL;
-static MainScreen* mainScreen = NULL;
 
 void ApplicationUI::showIntroScreen()
 {
@@ -102,7 +130,7 @@ void ApplicationUI::showIntroScreen()
     Application::instance()->setScene(introScreen->rootObject());
 }
 
-void ApplicationUI::showMainScreen()
+void ApplicationUI::showMainScreen(bool card)
 {
     AbstractPane* prevPane = Application::instance()->scene();
     if (prevPane)
@@ -113,7 +141,7 @@ void ApplicationUI::showMainScreen()
 
     delete introScreen;
 
-    mainScreen = new MainScreen(this);
+    mainScreen = new MainScreen(this, card);
     mainScreen->setContextProperty("_app", this);
 
     Application::instance()->setScene(mainScreen->rootObject());
@@ -153,4 +181,19 @@ void ApplicationUI::logout()
 
     showIntroScreen();
 
+}
+
+void ApplicationUI::sendCardDoneMessage()
+{
+    if (m_isCard)
+    {
+        // Assemble response message
+        CardDoneMessage message;
+        message.setData(tr(""));
+        message.setDataType("text/plain");
+        message.setReason(tr("Success!"));
+
+        // Send message
+        m_invokeManager->sendCardDone(message);
+    }
 }

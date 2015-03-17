@@ -5,7 +5,7 @@
 
 class ApplicationUI;
 
-class IntroScreen : public Screen<bb::cascades::NavigationPane>
+class IntroScreen : public Screen
 {
     Q_OBJECT
 

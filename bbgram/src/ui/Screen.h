@@ -3,24 +3,21 @@
 #include <QObject>
 #include <QString>
 #include <bb/cascades/QmlDocument>
+#include <bb/cascades/AbstractPane>
 
-template <typename T>
 class Screen: public QObject
 {
 public:
-    Screen(const QString& qmlAsset)
+    Screen()
         : m_rootObject(0)
     {
-        m_qmlDocument = bb::cascades::QmlDocument::create(qmlAsset).parent(this);
-        m_qmlDocument->setContextProperty("_owner", this);
-        m_rootObject = m_qmlDocument->createRootObject<T>();
     }
 
     ~Screen()
     {
     }
 
-    T* rootObject() const
+    bb::cascades::AbstractPane* rootObject() const
     {
         return m_rootObject;
     }
@@ -31,6 +28,6 @@ public:
     }
 protected:
     bb::cascades::QmlDocument   *m_qmlDocument;
-    T                           *m_rootObject;
+    bb::cascades::AbstractPane  *m_rootObject;
 };
 

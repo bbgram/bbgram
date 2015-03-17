@@ -107,13 +107,14 @@
 	</entryPoint>
 	
 	<invoke-target id="com.bigboss.bbgram">
-    	<invoke-target-type>application</invoke-target-type>
+    	<invoke-target-type>card.previewer</invoke-target-type>
     	<invoke-target-name>bomogram</invoke-target-name>
     	<entry-point-id>bomogram</entry-point-id>
-    	<filter>
-        	<action>bb.action.OPEN</action>
-        	<mime-type>text/plain</mime-type>
-      	</filter>
+      	<filter>
+			<action>bb.action.VIEW</action>
+			<mime-type>hub/vnd.test.item</mime-type>
+			<property var="uris" value="data://,pim:"/>
+		</filter>
 	</invoke-target>
 	
 	<invoke-target id="com.bigboss.bomogramHeadless">

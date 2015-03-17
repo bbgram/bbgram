@@ -8,9 +8,12 @@
 using namespace bb::cascades;
 
 IntroScreen::IntroScreen(ApplicationUI* app)
-    : Screen("asset:///ui/pages/Intro.qml")
-        , m_app(app), m_authReady(false)
+    : m_app(app), m_authReady(false)
 {
+    m_qmlDocument = bb::cascades::QmlDocument::create("asset:///ui/pages/Intro.qml").parent(this);
+    m_qmlDocument->setContextProperty("_owner", this);
+    m_rootObject = m_qmlDocument->createRootObject<bb::cascades::NavigationPane>();
+
     m_phone = "";
     m_codeHash = "";
     m_registered = false;
@@ -82,11 +85,11 @@ void IntroScreen::_sendCodeCallback(struct tgl_state *TLS, void *callback_extra,
     IntroScreen* _this = (IntroScreen*)callback_extra;
     if (success)
     {
-        _this->m_app->showMainScreen();
+        _this->m_app->showMainScreen(false);
     }
     else
     {
-        NavigationPane* navigationPane = _this->m_rootObject;
+        NavigationPane* navigationPane = (NavigationPane*)_this->m_rootObject;
         navigationPane->setBackButtonsVisible(true);
         while (navigationPane->count() > 3)
             navigationPane->pop();
@@ -109,7 +112,7 @@ void IntroScreen::submitCode(const QString& code)
     }
     else
     {
-        NavigationPane* navigationPane = this->m_rootObject;
+        NavigationPane* navigationPane = (NavigationPane*)this->m_rootObject;
         navigationPane->setBackButtonsVisible(true);
 
         QmlDocument* qml = QmlDocument::create("asset:///ui/pages/Registration.qml");

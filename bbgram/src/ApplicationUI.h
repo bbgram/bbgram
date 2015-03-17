@@ -15,8 +15,10 @@ public:
     virtual ~ApplicationUI();
 
     Q_INVOKABLE void showIntroScreen();
-    Q_INVOKABLE void showMainScreen();
+    Q_INVOKABLE void showMainScreen(bool card);
     Q_INVOKABLE void logout();
+
+    void sendCardDoneMessage();
 public slots:
     void onMainAuthorized();
     void onAllAuthorized();
@@ -25,4 +27,5 @@ protected:
     Telegraph*  m_telegraph;
     Storage*    m_storage;
     bb::system::InvokeManager* m_invokeManager;
+    bool        m_isCard;
 };
