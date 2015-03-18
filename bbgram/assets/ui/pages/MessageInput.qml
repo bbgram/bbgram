@@ -94,7 +94,8 @@ Container {
             id: emojiPanelCompDef
             Container {
                 property variant textArea: null
-                maxHeight: virtualKeyboardService.height() - 140
+                property int height: virtualKeyboardService.height()
+                maxHeight: height > 140 ? height - 140 : 275
                 layout: StackLayout {                    
                 }
                 
