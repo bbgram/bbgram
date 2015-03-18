@@ -47,6 +47,7 @@ Container {
             }
             input {                    
                 submitKey: SubmitKey.Send
+                flags: emojiPanel.delegateActive ? TextInputFlag.VirtualKeyboardOff : TextInputFlag.VirtualKeyboard
                 onSubmitted: {
                     submitted();
                 }
@@ -61,6 +62,10 @@ Container {
             
             onClicked: {
                 emojiPanel.delegateActive = !emojiPanel.delegateActive;
+                if (emojiPanel.delegateActive)
+                    virtualKeyboardService.hide()
+                else
+                    message.requestFocus()
                 //emojiPanel.layoutProperties.spaceQuota = emojiPanel.delegateActive ? 1 : -1;
                 //inputPanel.layoutProperties.spaceQuota = -emojiPanel.layoutProperties.spaceQuota;
             }
