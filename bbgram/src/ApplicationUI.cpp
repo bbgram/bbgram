@@ -72,7 +72,8 @@ ApplicationUI::ApplicationUI(bb::cascades::Application* app) :
     else
         showIntroScreen();
 
-    QObject::connect(m_invokeManager, SIGNAL(cardPooled(const bb::system::CardDoneMessage &)), mainScreen, SLOT(onCardPooled(const bb::system::CardDoneMessage &)));
+    if (mainScreen)
+        QObject::connect(m_invokeManager, SIGNAL(cardPooled(const bb::system::CardDoneMessage &)), mainScreen, SLOT(onCardPooled(const bb::system::CardDoneMessage &)));
 }
 
 ApplicationUI::~ApplicationUI()

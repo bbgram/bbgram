@@ -25,10 +25,16 @@ void UDSWrapper::initialize()
         const char* libPath = "";
         const char* assetPath = "hubassets";
 
+        QString tmpPath = QDir::current().absoluteFilePath("data");
+        tmpPath = tmpPath.replace("/data", "/public/");
+        tmpPath = tmpPath.append(assetPath);
+        tmpPath = tmpPath.append("/");
+        tmpPath = tmpPath.replace("/accounts/1000/appdata", "/apps");
+
         int status = 0;
         int serviceId = 0;
 
-        result = uds_register_client(m_udsHandle, serviceURL, libPath, assetPath);
+        result = uds_register_client(m_udsHandle, serviceURL, libPath, tmpPath.toUtf8().data());
         if (result == UDS_SUCCESS)
         {
             serviceId = uds_get_service_id(m_udsHandle);
@@ -81,7 +87,7 @@ void UDSWrapper::initialize()
                 uds_account_data_t *account_data = uds_account_data_create();
                 uds_account_data_set_id(account_data, m_accountId);
                 uds_account_data_set_name(account_data, "Bomogram");
-                uds_account_data_set_icon(account_data, "hub_icon.png");
+                uds_account_data_set_icon(account_data, "hub_icon_v1.png");
 
                 result = uds_account_added(m_udsHandle, account_data);
                 if (result == UDS_SUCCESS)

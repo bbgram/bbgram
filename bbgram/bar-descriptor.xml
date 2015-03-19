@@ -91,6 +91,7 @@
 
     <asset path="icon.png">icon.png</asset>
     <asset path="assets">assets</asset>
+    <asset public="true" path="hubassets">hubassets</asset>
 
     <!-- Locale support -->
     <asset path="translations" dest="qm">
