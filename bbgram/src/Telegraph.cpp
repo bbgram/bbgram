@@ -345,7 +345,8 @@ void Telegraph::onReady()
 
 void Telegraph::writeState()
 {
-    write_state_file(gTLS);
+    if (gTLS)
+        write_state_file(gTLS);
 }
 
 void Telegraph::onLoginIn(struct tgl_state *TLS)

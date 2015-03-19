@@ -97,7 +97,7 @@ Page {
                     verticalAlignment: VerticalAlignment.Center
                     leftPadding: 20
                     Label {
-                        text: peer ? peer.title : ""
+                        text: _owner.networkStatus ? (peer ? peer.title : "") : "Connecting…"
                         //text: "Anastasiya Shy"
                         textStyle.base: titleTextStyle.style
                         bottomMargin: 0

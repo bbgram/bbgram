@@ -42,7 +42,7 @@ MainScreen* MainScreen::instance()
 }
 
 MainScreen::MainScreen(ApplicationUI* app, bool card)
-    : m_app(app), m_appFullScreen(true)
+    : m_app(app), m_appFullScreen(true), m_networkStatus(false)
 {
     Q_ASSERT(m_instance == NULL);
     m_instance = this;
@@ -73,10 +73,6 @@ MainScreen::MainScreen(ApplicationUI* app, bool card)
     QObject::connect(bb::Application::instance(), SIGNAL(fullscreen()), this, SLOT(onAppFullScreen()));
 
     QObject::connect(Storage::instance(), SIGNAL(newMessageReceived(const Message*)), this, SLOT(onMessageReceived(const Message*)));
-
-    QObject::connect(&m_notificationTimer, SIGNAL(timeout()), this, SLOT(showNotifications()));
-
-    m_notificationTimer.setSingleShot(false);
 
     tgl_login(gTLS);
     //initialize();
@@ -219,6 +215,17 @@ void MainScreen::setWallpaper(const QString& url)
     QSettings settings;
     settings.setValue("chat/wallpaper", url);
     emit wallpaperChanged();
+}
+
+bool MainScreen::networkStatus() const
+{
+    return m_networkStatus;
+}
+
+void MainScreen::setNetworkStatus(bool status)
+{
+    m_networkStatus = status;
+    emit networkStatusChanged();
 }
 
 void MainScreen::copyMessagesToClipboard(const QVariantList& messages)
@@ -378,6 +385,8 @@ void MainScreen::initialize()
         addContact(phoneBook[i]["firstName"].toString(), phoneBook[i]["lastName"].toString(), phoneBook[i]["phone"].toString());
     }
 
+    setNetworkStatus(true);
+
     /*if (count > 0)
     {
         char** phones = new char*[count];
@@ -420,28 +429,21 @@ void MainScreen::setContextProperties(bb::cascades::QmlDocument* document)
 void MainScreen::onAppFullScreen()
 {
     m_appFullScreen = true;
-
-    Notification::deleteAllFromInbox();
-    Notification::clearEffectsForAll();
-    m_notificationTimer.stop();
-    m_notificationList.clear();
+    if (!gTLS)
+    {
+        Telegraph::instance()->start();
+        tgl_login(gTLS);
+    }
 }
 
 void MainScreen::onAppThumbnail()
 {
     m_appFullScreen = false;
-
-    m_notificationTimer.start(1000);
-}
-
-void MainScreen::showNotifications()
-{
-    foreach(Notification* n, m_notificationList)
+    if (gTLS)
     {
-        n->notify();
+        Telegraph::instance()->stop();
+        setNetworkStatus(false);
     }
-
-    m_notificationList.clear();
 }
 
 void MainScreen::onMessageReceived(const Message* message)

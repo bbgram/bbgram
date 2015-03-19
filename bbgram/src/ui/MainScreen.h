@@ -19,6 +19,7 @@ class MainScreen : public Screen
     Q_OBJECT
 
     Q_PROPERTY(QString wallpaper READ wallpaper WRITE setWallpaper NOTIFY wallpaperChanged)
+    Q_PROPERTY(bool networkStatus READ networkStatus NOTIFY networkStatusChanged)
 public:
     MainScreen(ApplicationUI* app, bool card);
     ~MainScreen();
@@ -52,6 +53,9 @@ public:
     Q_INVOKABLE QString wallpaper() const;
     Q_INVOKABLE void setWallpaper(const QString& url);
 
+    Q_INVOKABLE bool networkStatus() const;
+    Q_INVOKABLE void setNetworkStatus(bool status);
+
     static MainScreen* instance();
     void initialize();
     void setContextProperties(bb::cascades::QmlDocument* document);
@@ -61,10 +65,10 @@ signals:
     void contactDeleted(bool error, QString message);
     void groupCreated(GroupChat* groupChat);
     void wallpaperChanged();
+    void networkStatusChanged();
 protected slots:
     void onAppFullScreen();
     void onAppThumbnail();
-    void showNotifications();
     void onMessageReceived(const Message* message);
     void onCardPooled(const bb::system::CardDoneMessage &message);
 protected:
@@ -73,10 +77,8 @@ protected:
     ContactList*        m_contacts;
     ChatList*           m_dialogs;
 
-    QTimer m_notificationTimer;
-    QList<bb::platform::Notification*> m_notificationList;
-
     bool                m_appFullScreen;
+    bool                m_networkStatus;
 
     bool contactExist(const QString& phone);
 

@@ -31,7 +31,7 @@ NavigationPane {
                     rightPadding: 20
                     Label {
                         id: chatsLabel
-                        text: "Chats"
+                        text: _owner.networkStatus ? "Chats" : "Connecting…"
                         textStyle.base: titleTextStyle.style
                         horizontalAlignment: HorizontalAlignment.Left
                         verticalAlignment: VerticalAlignment.Center

@@ -14,7 +14,7 @@ NavigationPane {
                     rightPadding: 20
                     Label {
                         id: contactsLabel
-                        text: "Contacts"
+                        text: _owner.networkStatus ? "Contacts" : "Connecting…"
                         textStyle.base: titleTextStyle.style
                         horizontalAlignment: HorizontalAlignment.Left
                         verticalAlignment: VerticalAlignment.Center
