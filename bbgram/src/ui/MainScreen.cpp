@@ -68,11 +68,14 @@ MainScreen::MainScreen(ApplicationUI* app, bool card)
     setContextProperty("_chats", m_dialogs);
     setContextProperty("settings", new Settings());
 
-    QObject::connect(bb::Application::instance(), SIGNAL(thumbnail()), this, SLOT(onAppThumbnail()));
-    QObject::connect(bb::Application::instance(), SIGNAL(invisible()), this, SLOT(onAppThumbnail()));
+    //QObject::connect(bb::Application::instance(), SIGNAL(thumbnail()), this, SLOT(onAppThumbnail()));
+    QObject::connect(bb::Application::instance(), SIGNAL(invisible()), this, SLOT(onAppInvisible()));
     QObject::connect(bb::Application::instance(), SIGNAL(fullscreen()), this, SLOT(onAppFullScreen()));
 
     QObject::connect(Storage::instance(), SIGNAL(newMessageReceived(const Message*)), this, SLOT(onMessageReceived(const Message*)));
+
+    QObject::connect(&m_networkShutdownTimer, SIGNAL(timeout()), this, SLOT(onNetworkShutdown()));
+
 
     tgl_login(gTLS);
     //initialize();
@@ -434,11 +437,18 @@ void MainScreen::onAppFullScreen()
         Telegraph::instance()->start();
         tgl_login(gTLS);
     }
+    else
+        m_networkShutdownTimer.stop();
 }
 
-void MainScreen::onAppThumbnail()
+void MainScreen::onAppInvisible()
 {
     m_appFullScreen = false;
+    m_networkShutdownTimer.start(1000 * 60 * 5);
+}
+
+void MainScreen::onNetworkShutdown()
+{
     if (gTLS)
     {
         Telegraph::instance()->stop();

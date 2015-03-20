@@ -68,7 +68,8 @@ signals:
     void networkStatusChanged();
 protected slots:
     void onAppFullScreen();
-    void onAppThumbnail();
+    void onAppInvisible();
+    void onNetworkShutdown();
     void onMessageReceived(const Message* message);
     void onCardPooled(const bb::system::CardDoneMessage &message);
 protected:
@@ -79,6 +80,7 @@ protected:
 
     bool                m_appFullScreen;
     bool                m_networkStatus;
+    QTimer              m_networkShutdownTimer;
 
     bool contactExist(const QString& phone);
 
