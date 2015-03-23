@@ -2,7 +2,6 @@
 #include "../Storage.h"
 #include "User.h"
 #include <QLocale>
-#include "UDSWrapper.h"
 
 Message::Message(long long id, tgl_message* M)
     : m_id(id)
@@ -318,9 +317,6 @@ void Message::markAsRead()
 {
     m_unread = 0;
     emit markedRead();
-
-    if (!our() && from()->lastMessage() == this)
-        UDSWrapper::messageToHUB(this);
 }
 
 bool Message::service() const

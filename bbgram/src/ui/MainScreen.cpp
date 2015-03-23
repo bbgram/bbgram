@@ -3,7 +3,6 @@
 #include "../Settings.h"
 #include "../Storage.h"
 #include "../Telegraph.h"
-#include "UDSWrapper.h"
 #include "../ApplicationUI.h"
 
 #include <bb/ApplicationInfo>
@@ -458,7 +457,6 @@ void MainScreen::onNetworkShutdown()
 
 void MainScreen::onMessageReceived(const Message* message)
 {
-    UDSWrapper::messageToHUB((Message*)message);
 }
 
 bool MainScreen::contactExist(const QString& phone)
