@@ -1,5 +1,6 @@
 #include "HeadlessApplication.hpp"
 #include <bb/network/PushErrorCode>
+#include "UDSWrapper.h"
 
 //http://pushapi.eval.blackberry.com
 HeadlessApplication::HeadlessApplication(bb::Application *app) :
@@ -25,10 +26,16 @@ HeadlessApplication::HeadlessApplication(bb::Application *app) :
 
 void HeadlessApplication::onInvoked(const bb::system::InvokeRequest& request)
 {
-    // When the headless app is invoked, this function is called.
-    // Add your app's logic here.
-    qDebug() << "Hello Headless App" << endl;
     qDebug() << request.action() << endl;
+    if(request.action().compare("bb.action.system.STARTED") == 0)
+    {
+        UDSWrapper::initialize();
+    }
+    else if(request.action().compare("bb.action.PUSH") == 0)
+    {
+        qDebug() << request.data();
+    }
+
 }
 
 void HeadlessApplication::onCreateSessionCompleted(const bb::network::PushStatus& status)
@@ -43,5 +50,5 @@ void HeadlessApplication::onCreateSessionCompleted(const bb::network::PushStatus
 
 void HeadlessApplication::onCreateChannelCompleted(const bb::network::PushStatus& status, const QString token)
 {
-    qDebug() << status.errorDescription() << " ! "<< status.code() << endl;
+    qDebug() << status.errorDescription() << " ! "<< status.code() << "TOKEN " << token << endl;
 }

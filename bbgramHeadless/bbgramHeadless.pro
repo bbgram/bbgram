@@ -1,5 +1,9 @@
 APP_NAME = bbgramHeadless
 
-LIBS += -lbbsystem -lbb -lbbnetwork -lbbplatform
+QT = core network sql
+
+CONFIG += qt warn_on cascades10
+
+LIBS += -lbbsystem -lbb -lbbnetwork -lbbplatform -lunifieddatasourcec -lbbpim -lbbdata
 
 include(config.pri)

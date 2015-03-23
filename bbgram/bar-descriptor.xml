@@ -30,7 +30,7 @@
     <configuration name="Device-Debug">
        <platformArchitecture>armle-v7</platformArchitecture>
        <asset entryPointId="bomogram" path="arm/o.le-v7-g/bbgram" entry="true" type="Qnx/Elf">bomogram</asset>
-       <asset entryPointId="bomogramHeadless" path="../bbgramHeadless/arm/bbgramHeadless" type="Qnx/Elf">bomogramHeadless</asset>
+       <asset entryPointId="bomogramHeadless" path="../bbgramHeadless/arm/o.le-v7-g/bbgramHeadless" type="Qnx/Elf">bomogramHeadless</asset>
     </configuration>
     <configuration name="Device-Release">
        <entryPointType>Qnx/Cascades</entryPointType>

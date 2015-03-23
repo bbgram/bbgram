@@ -3,9 +3,7 @@
 #include <bb/pim/account/Account>
 #include <bb/pim/account/Provider>
 #include <bb/pim/account/Result>
-
-#include "model/User.h"
-#include "Storage.h"
+#include <QDir>
 
 const int OPEN_CAHT_CARD = 1;
 
@@ -127,7 +125,7 @@ void UDSWrapper::initialize()
     }
 }
 
-void UDSWrapper::messageToHUB(Message* msg)
+/*void UDSWrapper::messageToHUB(Message* msg)
 {
     uds_inbox_item_data_t* inboxItem = uds_inbox_item_data_create();
     uds_inbox_item_data_set_account_id(inboxItem, m_accountId);
@@ -158,16 +156,16 @@ void UDSWrapper::messageToHUB(Message* msg)
     uds_inbox_item_data_set_description(inboxItem, text.data());
     //uds_inbox_item_data_set_icon(inboxItem, "icon.png"); //msg->unread() ? "bar_voice2.png" : "bar_voice1.png");
     uds_inbox_item_data_set_mime_type(inboxItem, "hub/vnd.test.item");
-    uds_inbox_item_data_set_unread_count(inboxItem, 0/*msg->unread() ? 1 : 0*/);
-    uds_inbox_item_data_set_total_count(inboxItem, 1);
+    uds_inbox_item_data_set_unread_count(inboxItem, 0/*msg->unread() ? 1 : 0*///);
+    //uds_inbox_item_data_set_total_count(inboxItem, 1);
     //uds_inbox_item_data_set_category_id(inboxItem, 1);
-    uds_inbox_item_data_set_timestamp(inboxItem, msg->dateTime().toTime_t());
+    //uds_inbox_item_data_set_timestamp(inboxItem, msg->dateTime().toTime_t());
     //uds_inbox_item_data_set_context_state(inboxItem, OPEN_CAHT_CARD);
-    uds_item_removed(m_udsHandle, m_accountId, source.toUtf8().data());
-    if (UDS_ERROR_FAILED == uds_item_added(m_udsHandle, inboxItem))
-    {
+    //uds_item_removed(m_udsHandle, m_accountId, source.toUtf8().data());
+    //if (UDS_ERROR_FAILED == uds_item_added(m_udsHandle, inboxItem))
+    //{
         //bool result = UDS_SUCCESS == uds_item_updated(m_udsHandle, inboxItem);
-    }
+    //}
 
-    uds_inbox_item_data_destroy(inboxItem);
-}
+   //uds_inbox_item_data_destroy(inboxItem);
+//}*/
