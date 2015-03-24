@@ -6,6 +6,8 @@
 #include <bb/Application>
 #include <QObject>
 
+#include "PushHandler.h"
+
 using namespace bb::network;
 using namespace bb::system;
 
@@ -22,4 +24,5 @@ private slots:
 private:
     InvokeManager* m_invokeManager;
     PushService *m_pushService;
+    PushHandler* m_pushHandler;
 };

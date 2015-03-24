@@ -6,9 +6,11 @@
 
 //http://pushapi.eval.blackberry.com
 HeadlessApplication::HeadlessApplication(bb::Application *app) :
-    QObject(app), m_invokeManager(new InvokeManager())
+    QObject(app), m_invokeManager(new InvokeManager()), m_pushHandler(new PushHandler())
 {
     m_invokeManager->setParent(this);
+    m_pushHandler->setParent(this);
+
 
     QObject::connect(m_invokeManager, SIGNAL(invoked(const bb::system::InvokeRequest&)), this, SLOT(onInvoked(const bb::system::InvokeRequest&)));
 
@@ -21,9 +23,6 @@ HeadlessApplication::HeadlessApplication(bb::Application *app) :
                             this, SLOT(onCreateChannelCompleted(const bb::network::PushStatus&, const QString)));
 
     m_pushService->createSession();
-    //m_pushService->createChannel(QUrl());
-
-    qDebug() << "HeadlessApplication::HeadlessApplication" << endl;
 }
 
 void HeadlessApplication::onInvoked(const bb::system::InvokeRequest& request)
@@ -40,8 +39,7 @@ void HeadlessApplication::onInvoked(const bb::system::InvokeRequest& request)
 
         bb::data::JsonDataAccess jda;
         QVariantMap rootMap = (jda.loadFromBuffer(payload.data())).toMap();
-        QVariantMap dataMap = rootMap["data"].toMap();
-
+        m_pushHandler->handle(rootMap);
     }
 
 }
