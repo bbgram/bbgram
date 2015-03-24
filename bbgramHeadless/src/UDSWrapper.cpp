@@ -4,6 +4,8 @@
 #include <bb/pim/account/Provider>
 #include <bb/pim/account/Result>
 #include <QDir>
+#include <QDateTime>
+#include <ctime>
 
 const int OPEN_CAHT_CARD = 1;
 
@@ -122,6 +124,32 @@ void UDSWrapper::initialize()
                uds_item_action_data_destroy(action_data);*/
             }
         }
+    }
+}
+
+void UDSWrapper::messageToHub(const QString& source, const QString& name, const QString& text, bool is_unread)
+{
+    uds_inbox_item_data_t* inboxItem = uds_inbox_item_data_create();
+    uds_inbox_item_data_set_account_id(inboxItem, m_accountId);
+
+    QByteArray sourceBytes = source.toUtf8();
+    uds_inbox_item_data_set_source_id(inboxItem, sourceBytes.data());
+
+    QByteArray nameBytes = name.toUtf8();
+    uds_inbox_item_data_set_name(inboxItem, nameBytes.data());
+
+    QByteArray textArray = text.toUtf8();
+    uds_inbox_item_data_set_description(inboxItem, textArray.data());
+
+    uds_inbox_item_data_set_timestamp(inboxItem, QDateTime::currentDateTime().toMSecsSinceEpoch());
+    uds_inbox_item_data_set_mime_type(inboxItem, "hub/vnd.test.item");
+    uds_inbox_item_data_set_icon(inboxItem, is_unread ? "unread_message_icon_v1.png" : "readed_message_icon_v1.png");
+    uds_inbox_item_data_set_unread_count(inboxItem, is_unread ? 1 : 0);
+    uds_inbox_item_data_set_total_count(inboxItem, 1);
+
+    if (UDS_ERROR_FAILED == uds_item_added(m_udsHandle, inboxItem))
+    {
+        bool result = UDS_SUCCESS == uds_item_updated(m_udsHandle, inboxItem);
     }
 }
 

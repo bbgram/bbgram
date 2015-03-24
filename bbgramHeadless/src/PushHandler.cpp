@@ -1,5 +1,6 @@
 #include <PushHandler.h>
 #include <qdebug.h>
+#include "UDSWrapper.h"
 
 /*class MessageText : public Handler
 {
@@ -36,8 +37,12 @@ bool handle(const QVariantMap& pushData)
     QString authtor = args[0].toString();
     QString message = args[1].toString();
 
+    int chat_id = pushData["custom"].toMap()["chat_id"].toInt();
+
     //send to hub message authtor
     qDebug() << authtor << message;
+
+    UDSWrapper::messageToHub(QString(chat_id), authtor, message, true);
 
     return true;
 }
