@@ -3,7 +3,7 @@
 #define MAX_MIME_TYPES_NUM 10000
 
 #include "mime-types.c"
-  
+
 static int mime_initialized;
 static int mime_type_number;
 static char *mime_type_names[MAX_MIME_TYPES_NUM];
@@ -38,9 +38,9 @@ static void mime_init (void) {
         while (*c <= ' ' && *c != '\n' && c < end) {
           c ++;
         }
-        if (*c == '\n' || c == end) { 
+        if (*c == '\n' || c == end) {
           if (*c == '\n') { c ++; }
-          break; 
+          break;
         }
         char *ext = c;
         while (*c > ' ' && *c != '\n' && c < end) {
@@ -92,5 +92,9 @@ char *tg_mime_by_filename (const char *filename) {
       return mime_type_names[i];
     }
   }
+
+  if (!strcmp ("m4a", p))
+      return "audio/mp4";
+
   return def;
 }

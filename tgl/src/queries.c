@@ -1678,10 +1678,15 @@ static void send_avatar_end (struct tgl_state *TLS, struct send_file *f, void *c
 static void send_file_unencrypted_end (struct tgl_state *TLS, struct send_file *f, void *callback, void *callback_extra) {
   out_int (CODE_messages_send_media);
   out_peer_id (TLS, f->to_id);
-  if (f->flags == -1) {
-    out_int (CODE_input_media_uploaded_photo);
-  } else {
-    if (f->thumb_id > 0) {
+  if (f->flags == -1)
+  {
+      out_int (CODE_input_media_uploaded_photo);
+  }
+  else if (f->flags == FLAG_DOCUMENT_AUDIO)
+      out_int (CODE_input_media_uploaded_audio);
+  else
+  {
+    if (f->thumb_id > 0){
       out_int (CODE_input_media_uploaded_thumb_document);
     } else {
       out_int (CODE_input_media_uploaded_document);
@@ -1703,7 +1708,13 @@ static void send_file_unencrypted_end (struct tgl_state *TLS, struct send_file *
     out_string ("");
   }
 
-  if (f->flags != -1) {
+  if (f->flags == FLAG_DOCUMENT_AUDIO)
+  {
+      out_int (f->duration);
+      out_string(tg_mime_by_filename(f->file_name));
+
+  }
+  else if (f->flags != -1) {
     out_string (tg_mime_by_filename (f->file_name));
 
     out_int (CODE_vector);
