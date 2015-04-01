@@ -27,6 +27,7 @@ public:
     Q_INVOKABLE void deleteContact(User* contact);
     Q_INVOKABLE void setProfilePhoto(const QString& fileName);
     Q_INVOKABLE void sendMessage(Peer* peer, const QString& message);
+    Q_INVOKABLE void sendAudio(Peer* peer, const QString& audio, int duration);
     Q_INVOKABLE void sendPhoto(Peer* peer, const QString& fileName);
     Q_INVOKABLE void deleteMessage(long long id);
     Q_INVOKABLE void forwardMessages(const QVariantList& messages, Peer* peer);
@@ -45,6 +46,7 @@ public:
     Q_INVOKABLE void dialANumber(const QString& number);
     Q_INVOKABLE User* getUser(int id);
     Q_INVOKABLE QString getAppVersion() const;
+    Q_INVOKABLE QString getDataPath() const;
 
     Q_INVOKABLE bb::cascades::DataModel* getWallpapers() const;
     Q_INVOKABLE QString wallpaper() const;
@@ -86,4 +88,5 @@ protected:
     static void _markReaded(struct tgl_state *TLS, void *callback_extra, int success);
     static void _contactsAdded(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[]);
     static void _getWallpapersCallback(struct tgl_state *TLS, void *callback_extra, int success, int num, struct tgl_wallpaper wallpapers[]);
+    static void _sendAudioCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M);
 };

@@ -128,6 +128,17 @@ void MainScreen::sendMessage(Peer* peer, const QString& message)
         tgl_do_send_message(gTLS, {peer->type(), peer->id()}, (const char*)bytes.data(), bytes.length(), 0, 0);
 }
 
+void MainScreen::sendAudio(Peer* peer, const QString& audio, int duration)
+{
+    QString path = audio;
+    path.replace("file://", "");
+    if (peer->type() != TGL_BROADCAST_CHAT)
+    {
+        tgl_do_send_document_ex(gTLS, FLAG_DOCUMENT_AUDIO, {peer->type(), peer->id()}, path.toUtf8().data(), 0, 0, duration, NULL, NULL, _sendAudioCallback, NULL);
+        //tgl_do_send_document(gTLS, -2, {peer->type(), peer->id()}, path.toUtf8().data(), _sendAudioCallback, NULL);
+    }
+}
+
 void MainScreen::sendPhoto(Peer* peer, const QString& fileName)
 {
     //if (peer->type() == TGL_PEER_ENCR_CHAT)
@@ -176,6 +187,11 @@ void MainScreen::_getWallpapersCallback(struct tgl_state *TLS, void *callback_ex
         Wallpaper* wallpaper = new Wallpaper(wallpapers + i);
         model->insert(model->size(), wallpaper);
     }
+}
+
+void MainScreen::_sendAudioCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M)
+{
+    int i = 1;
 }
 
 bb::cascades::DataModel* MainScreen::getWallpapers() const
@@ -579,4 +595,9 @@ QString MainScreen::getAppVersion() const
 {
     bb::ApplicationInfo info;
     return info.version();
+}
+
+QString MainScreen::getDataPath() const
+{
+    return QDir::currentPath() + "/data/";
 }

@@ -28,7 +28,11 @@ Page {
     }
     
     function sendMessage() {
-        _owner.sendMessage(peer, input.value)
+        if (input.audioDuration > 0)
+            _owner.sendAudio(peer, input.audioPath, input.audioDuration)
+        else
+            _owner.sendMessage(peer, input.value)
+            
         input.clear()
     }
     
@@ -259,9 +263,15 @@ Page {
         }
         MessageInput {
             id: input
+            
             onValueChanging: {
                 sendAction.enabled = value.length > 0;
             }
+            
+            onAudioDurationChanged: {
+                sendAction.enabled = audioDuration > 0;
+            }
+            
             onSubmitted: {
                 sendMessage();
             }
