@@ -319,6 +319,11 @@ int Message::mediaType() const
     return m_mediaType;
 }
 
+bool Message::isAudio() const
+{
+    return m_media["flags"].toInt() & FLAG_DOCUMENT_AUDIO;
+}
+
 QVariantMap& Message::media()
 {
     return m_media;

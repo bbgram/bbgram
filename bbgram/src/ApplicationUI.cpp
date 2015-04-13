@@ -7,6 +7,7 @@
 #include "ui/widgets/DocumentViewer.h"
 #include "ui/widgets/MediaViewer.h"
 #include "ui/widgets/PhoneNumberInput.h"
+#include "ui/widgets/AudioPlayer.h"
 
 #include "Telegraph.h"
 
@@ -33,6 +34,7 @@ ApplicationUI::ApplicationUI(bb::cascades::Application* app) :
     qmlRegisterType<PhoneNumberInput>("bbgram.control.lib", 0, 1, "PhoneNumberInput");
     qmlRegisterType<MediaViewer>("bbgram.control.lib", 0, 1, "MediaViewer");
     qmlRegisterType<DocumentViewer>("bbgram.control.lib", 0, 1, "DocumentViewer");
+    qmlRegisterType<AudioPlayer>("bbgram.control.lib", 0, 1, "AudioPlayer");
 
     qmlRegisterType<Peer>("bbgram.types.lib", 0, 1, "Peer");
     qmlRegisterType<GroupChat>("bbgram.types.lib", 0, 1, "GroupChat");

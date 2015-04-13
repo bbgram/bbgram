@@ -17,6 +17,7 @@ class Message: public QObject
     Q_PROPERTY(bool service READ service CONSTANT)
     Q_PROPERTY(QVariantMap media READ media CONSTANT)
     Q_PROPERTY(int mediaType READ mediaType CONSTANT)
+    Q_PROPERTY(int isAudio READ isAudio CONSTANT)
     Q_PROPERTY(User* from READ from CONSTANT)
     Q_PROPERTY(QDateTime forwardedDate READ forwardedDate CONSTANT)
     Q_PROPERTY(User* forwardedFrom READ forwardedFrom CONSTANT)
@@ -39,6 +40,7 @@ public:
     void markAsRead();
     bool service() const;
     int mediaType() const;
+    bool isAudio() const;
     QVariantMap& media();
     QVariantMap& actions();
 

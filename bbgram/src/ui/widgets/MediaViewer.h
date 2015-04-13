@@ -1,3 +1,4 @@
+#pragma once
 #include <bb/cascades/CustomControl>
 #include <bb/cascades/ImageView>
 #include <bb/cascades/LayoutUpdateHandler>

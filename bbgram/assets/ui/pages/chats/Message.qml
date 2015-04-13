@@ -87,12 +87,23 @@ Container {
                             }
                             ControlDelegate {
                                 id: documentDelegate
-                                delegateActive: ListItemData.mediaType == 2
+                                delegateActive: ListItemData.mediaType == 2 && !ListItemData.isAudio
                                 sourceComponent: viewerDef
                                 attachedObjects: [
                                     ComponentDefinition {
                                         id: viewerDef
                                         DocumentViewer { message: ListItemData }
+                                    }
+                                ]
+                            }
+                            ControlDelegate {
+                                id: audioDelegate
+                                delegateActive: ListItemData.mediaType == 2 && ListItemData.isAudio
+                                sourceComponent: audioDef
+                                attachedObjects: [
+                                    ComponentDefinition {
+                                        id: audioDef
+                                        AudioPlayer { message: ListItemData }
                                     }
                                 ]
                             }

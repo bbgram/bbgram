@@ -64,6 +64,10 @@ char *tg_extension_by_mime (const char *mime_type) {
   if (!mime_initialized) {
     mime_init ();
   }
+
+  if (!strcmp ("audio/mp4", mime_type))
+      return "m4a";
+
   int i;
   for (i = 0; i < mime_type_number; i++) {
     if (!strcmp (mime_type_names[i], mime_type)) {
