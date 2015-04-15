@@ -24,17 +24,15 @@
 							<tool id="com.qnx.qcc.tool.compiler.2026161392" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler">
 								<option id="com.qnx.qcc.option.compiler.optlevel.1832017051" name="Optimization Level" superClass="com.qnx.qcc.option.compiler.optlevel" value="com.qnx.qcc.option.compiler.optlevel.0" valueType="enumerated"/>
 								<option id="com.qnx.qcc.option.compiler.includePath.985652155" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/opus/public}&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/AL"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/bb/platform"/>
-									<listOptionValue builtIn="false" value="${workspace_loc:/tgl/public}"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/tgl}&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.181895004" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.716964617" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">
 								<option id="com.qnx.qcc.option.assembler.includePath.915137692" name="Include Directories (-I)" superClass="com.qnx.qcc.option.assembler.includePath" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/tgl/public}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/tgl}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/opus/public}&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.assembler.732762340" superClass="com.qnx.qcc.inputType.assembler"/>
 							</tool>
@@ -58,14 +56,11 @@
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
-				<externalSettings containerId="tgl;com.qnx.qcc.configuration.staticLib.debug.709782809" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+				<externalSettings containerId="opus;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/tgl/public"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/tgl"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/tgl/Device-Debug"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/tgl"/>
-						<entry flags="NONE" kind="libraryFile" name="tgl" srcPrefixMapping="" srcRootPath=""/>
-						<entry flags="RESOLVED" kind="libraryFile" name="tgl" srcPrefixMapping="" srcRootPath=""/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/opus/public"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/opus/Device-Debug"/>
+						<entry flags="NONE" kind="libraryFile" name="opus" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
 			</storageModule>
