@@ -1,25 +1,14 @@
 import bb.cascades 1.2
-import bb.multimedia 1.2
+import bbgram.control.lib 0.1
 
 Container {
     property int duration: 0
-    property string audioFileName: ""
+    property AudioPlayer player;
     
     Button {
         text: "Play"
         onClicked: {
-            console.log(audioFileName)
-            audioPlayer.sourceUrl = audioFileName;
-            audioPlayer.play()
+            player.play();
         }
     }
-    
-    attachedObjects:[
-        MediaPlayer {
-            id: audioPlayer
-            onError: {
-                console.log(mediaError)
-            }
-        }
-    ]
 }
