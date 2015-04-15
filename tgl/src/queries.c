@@ -2713,12 +2713,19 @@ void tgl_do_load_document (struct tgl_state *TLS, struct tgl_document *V, void (
   D->dc = V->dc_id;
   D->name = 0;
   D->fd = -1;
-  D->type = CODE_input_document_file_location;
+  if (V->flags == FLAG_DOCUMENT_AUDIO)
+      D->type = CODE_input_audio_file_location;
+  else
+      D->type = CODE_input_document_file_location;
   if (V->mime_type) {
     char *r = tg_extension_by_mime (V->mime_type);
     if (r) {
       D->ext = tstrdup (r);
     }
+    else if (V->flags == FLAG_DOCUMENT_AUDIO)
+      {
+          D->ext = tstrdup ("ogg");
+      }
   }
   load_next_part (TLS, D, callback, callback_extra);
 }
