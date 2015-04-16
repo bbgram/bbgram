@@ -231,6 +231,50 @@ QString MainScreen::stopRecord()
     return m_audioRecorder.stopRecord();
 }
 
+
+int  MainScreen::accountTTL() const
+{
+    QSettings settings;
+    int days = settings.value("security/accountTTL").toInt();
+    return days;
+}
+
+void MainScreen::_getAccountTTLCallback(struct tgl_state *TLS, void *callback_extra, int success, int days)
+{
+    if (!success)
+        return;
+    MainScreen* instance = (MainScreen*)callback_extra;
+    QSettings settings;
+    settings.setValue("security/accountTTL", days);
+    emit instance->accountTTLChanged();
+}
+
+struct SetAccountTTLExtra
+{
+    MainScreen* instance;
+    int         days;
+};
+
+void  MainScreen::setAccountTTL(int days)
+{
+    SetAccountTTLExtra* extra = new SetAccountTTLExtra();
+    extra->instance = this;
+    extra->days = days;
+    tgl_do_set_account_ttl(gTLS, days, MainScreen::_setAccountTTLCallback, extra);
+}
+
+void MainScreen::_setAccountTTLCallback(struct tgl_state *TLS, void *callback_extra, int success)
+{
+    SetAccountTTLExtra* extra = (SetAccountTTLExtra*)callback_extra;
+    if (success)
+    {
+        QSettings settings;
+        settings.setValue("security/accountTTL", extra->days);
+        emit extra->instance->accountTTLChanged();
+    }
+    delete extra;
+}
+
 void MainScreen::copyMessagesToClipboard(const QVariantList& messages)
 {
     QList<Message*> list;
@@ -417,6 +461,8 @@ void MainScreen::initialize()
 
         tgl_do_import_contacts(gTLS, count, (const char**)phones, (const char**)firstNames, (const char**)lastNames, 0, MainScreen::_contactsAdded, data);
     }*/
+
+    tgl_do_get_account_ttl(gTLS, MainScreen::_getAccountTTLCallback, this);
 }
 
 void MainScreen::onAppFullScreen()

@@ -19,6 +19,7 @@ class MainScreen : public Screen<bb::cascades::TabbedPane>
     Q_OBJECT
 
     Q_PROPERTY(QString wallpaper READ wallpaper WRITE setWallpaper NOTIFY wallpaperChanged)
+    Q_PROPERTY(int accountTTL READ accountTTL WRITE setAccountTTL NOTIFY accountTTLChanged)
 public:
     MainScreen(ApplicationUI* app);
     ~MainScreen();
@@ -55,6 +56,9 @@ public:
 
     Q_INVOKABLE void startRecord();
     Q_INVOKABLE QString stopRecord();
+    
+    int accountTTL() const;
+    void setAccountTTL(int days);
 
     static MainScreen* instance();
     void initialize();
@@ -64,6 +68,7 @@ signals:
     void contactDeleted(bool error, QString message);
     void groupCreated(GroupChat* groupChat);
     void wallpaperChanged();
+    void accountTTLChanged();
 protected slots:
     void onAppFullScreen();
     void onAppThumbnail();
@@ -95,4 +100,6 @@ protected:
     static void _contactsAdded(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[]);
     static void _getWallpapersCallback(struct tgl_state *TLS, void *callback_extra, int success, int num, struct tgl_wallpaper wallpapers[]);
     static void _sendAudioCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M);
+    static void _getAccountTTLCallback(struct tgl_state *TLS, void *callback_extra, int success, int days);
+    static void _setAccountTTLCallback(struct tgl_state *TLS, void *callback_extra, int success);
 };
