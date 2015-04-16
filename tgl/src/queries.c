@@ -5066,3 +5066,53 @@ void tgl_do_get_wallpapers (struct tgl_state *TLS, void (*callback)(struct tgl_s
     out_int (CODE_account_get_wall_papers);
     tglq_send_query(TLS, TLS->DC_working, packet_ptr - packet_buffer, packet_buffer, &get_wallpapers_methods, 0, callback, callback_extra);
 }
+
+static int get_account_ttl_on_answer (struct tgl_state *TLS, struct query *q) {
+  assert (fetch_int () == CODE_account_days_t_t_l);
+  int days = fetch_int();
+  if (q->callback) {
+    ((void (*)(struct tgl_state *, void *, int, int))(q->callback)) (TLS, q->callback_extra, 1, days);
+  }
+  return 0;
+}
+
+static int get_account_ttl_on_error (struct tgl_state *TLS, struct query *q, int error_code, int l, char *error) {
+  if (q->callback) {
+    ((void (*)(struct tgl_state *, void *, int, int))(q->callback)) (TLS, q->callback_extra, 0, 0);
+  }
+  return 0;
+}
+
+static struct query_methods get_account_ttl_methods  = {
+  .on_answer = get_account_ttl_on_answer,
+  .on_error = get_account_ttl_on_error,
+  .type = TYPE_TO_PARAM(account_days_t_t_l)
+};
+
+void tgl_do_get_account_ttl (struct tgl_state *TLS, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success, int days), void *callback_extra) {
+    clear_packet ();
+    out_int (CODE_account_get_account_t_t_l);
+    tglq_send_query(TLS, TLS->DC_working, packet_ptr - packet_buffer, packet_buffer, &get_account_ttl_methods, 0, callback, callback_extra);
+}
+
+static int set_account_ttl_on_answer (struct tgl_state *TLS, struct query *q) {
+  fetch_bool ();
+  if (q->callback) {
+    ((void (*)(struct tgl_state *, void *, int))(q->callback)) (TLS, q->callback_extra, 1);
+  }
+  return 0;
+}
+
+static struct query_methods set_account_ttl_methods  = {
+  .on_answer = set_account_ttl_on_answer,
+  .on_error = q_void_on_error,
+  .type = TYPE_TO_PARAM(bool)
+};
+
+void tgl_do_set_account_ttl (struct tgl_state *TLS, int days, void (*callback)(struct tgl_state *TLS, void *callback_extra, int success), void *callback_extra) {
+    clear_packet ();
+    out_int (CODE_account_set_account_t_t_l);
+    out_int (CODE_account_days_t_t_l);
+    out_int (days);
+    tglq_send_query(TLS, TLS->DC_working, packet_ptr - packet_buffer, packet_buffer, &set_account_ttl_methods, 0, callback, callback_extra);
+}
