@@ -120,6 +120,7 @@ void AudioPlayer::setMessage(Message *message)
 
         m_root->setProperty("duration", document.duration);
         m_root->setProperty("player", QVariant::fromValue(this));
+        m_root->setProperty("incoming", !message->our());
 
         tgl_do_load_document(gTLS, &document, AudioPlayer::loadAudioCallback, extraData);
     }

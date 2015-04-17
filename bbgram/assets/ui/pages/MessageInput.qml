@@ -63,6 +63,7 @@ Container {
             }
             
             onTouch: {
+                return;
                 if (isCancelMode)
                 {
                     setCancelMode(false);
