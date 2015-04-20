@@ -48,8 +48,6 @@ Container {
             
             function setCancelMode(value)
             {
-                isCancelMode = value;
-                
                 if (value)
                 {
                     voiceButton.defaultImageSource = "asset:///images/bar_voice_cancel_1.png"
@@ -60,41 +58,46 @@ Container {
                     voiceButton.defaultImageSource = "asset:///images/bar_voice1.png"
                     voiceButton.pressedImageSource = "asset:///images/bar_voice2.png"
                 }
+                
+                voiceButton.isCancelMode = value;
             }
             
             onTouch: {
                 if (isCancelMode)
                 {
-                    setCancelMode(false);
-                    message.visible = true
-                    recordInfo.visible = false
-                    return;
-                }
-                
-                if (event.touchType == TouchType.Down)
-                {
-                    _owner.startRecord()
-                    message.visible = false
-                    recordInfo.visible = true
-                    recordTimer.duration = 0
-                    recordTimer.start();
-                }
-                else if (event.touchType == TouchType.Up || event.touchType == TouchType.Cancel)
-                {
-                    if (recordTimer.duration > 1000)
-                    {
-                        setCancelMode(true)
-                        audioDuration = recordTimer.duration / 1000
-                    }
-                    else
+                    if (event.touchType == TouchType.Up)
                     {
                         message.visible = true
                         recordInfo.visible = false
+                        recordTimer.duration = 0;
                     }
-                    
-                    audioPath = "file://" + _owner.stopRecord()
-                    //_owner.stopRecord();
-                    recordTimer.stop();
+                }
+                else
+                {
+                    if (event.touchType == TouchType.Down)
+                    {
+                        _owner.startRecord()
+                        message.visible = false
+                        recordInfo.visible = true
+                        recordTimer.duration = 0
+                        recordTimer.start();
+                    }
+                    else if (event.touchType == TouchType.Up || event.touchType == TouchType.Cancel)
+                    {
+                        if (recordTimer.duration > 1000)
+                        {
+                            setCancelMode(true)
+                            audioDuration = recordTimer.duration / 1000
+                        }
+                        else
+                        {
+                            message.visible = true
+                            recordInfo.visible = false
+                        }
+                        
+                        audioPath = "file://" + _owner.stopRecord()
+                        recordTimer.stop();
+                    }
                 }
             }
         }
@@ -176,7 +179,7 @@ Container {
             interval: 333
             onTimeout:{
                 duration += 333;
-                var sec = Math.ceil(duration / 1000);
+                var sec = Math.floor(duration / 1000);
                 var msec = (duration % 1000)
                 recordInfo.text = "Recoding " + sec + " : " + msec;
             }
