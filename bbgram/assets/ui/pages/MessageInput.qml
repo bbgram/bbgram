@@ -1,7 +1,8 @@
 import bb.cascades 1.2
 import bbgram.bps.lib 0.1
 import bb.multimedia 1.0
-import bbgram.types.lib 0.1
+
+import "."
 
 Container {
     signal submitted();
@@ -36,72 +37,27 @@ Container {
         horizontalAlignment: HorizontalAlignment.Fill
         //verticalAlignment: VerticalAlignment.Fill
         background: Color.create("#252525")
+        
         ImageButton {
-            id: voiceButton
+            horizontalAlignment: HorizontalAlignment.Right
             verticalAlignment: VerticalAlignment.Bottom
-            defaultImageSource: "asset:///images/bar_voice1.png"
-            pressedImageSource: "asset:///images/bar_voice2.png"
+            defaultImageSource: emojiPanel.delegateActive ? "asset:///images/bar_down.png" : "asset:///images/bar_smile.png"
+            pressedImageSource: emojiPanel.delegateActive ? "asset:///images/bar_down.png" : "asset:///images/bar_smile.png"
             preferredWidth: 90
             preferredHeight: 90
             
-            property bool isCancelMode : false
-            
-            function setCancelMode(value)
-            {
-                if (value)
-                {
-                    voiceButton.defaultImageSource = "asset:///images/bar_voice_cancel_1.png"
-                    voiceButton.pressedImageSource = "asset:///images/bar_voice_cancel_2.png"
-                }
+            onClicked: {
+                emojiPanel.delegateActive = !emojiPanel.delegateActive;
+                if (emojiPanel.delegateActive)
+                    virtualKeyboardService.hide()
                 else
-                {
-                    voiceButton.defaultImageSource = "asset:///images/bar_voice1.png"
-                    voiceButton.pressedImageSource = "asset:///images/bar_voice2.png"
-                }
-                
-                voiceButton.isCancelMode = value;
+                    message.requestFocus()
+                //emojiPanel.layoutProperties.spaceQuota = emojiPanel.delegateActive ? 1 : -1;
+                //inputPanel.layoutProperties.spaceQuota = -emojiPanel.layoutProperties.spaceQuota;
             }
-            
-            onTouch: {
-                if (isCancelMode)
-                {
-                    if (event.touchType == TouchType.Up)
-                    {
-                        message.visible = true
-                        recordInfo.visible = false
-                        recordTimer.duration = 0;
-                        setCancelMode(false)
-                    }
-                }
-                else
-                {
-                    if (event.touchType == TouchType.Down)
-                    {
-                        _owner.startRecord()
-                        message.visible = false
-                        recordInfo.visible = true
-                        recordTimer.duration = 0
-                        recordTimer.start();
-                    }
-                    else if (event.touchType == TouchType.Up || event.touchType == TouchType.Cancel)
-                    {
-                        if (recordTimer.duration > 1000)
-                        {
-                            setCancelMode(true)
-                            audioDuration = recordTimer.duration / 1000
-                        }
-                        else
-                        {
-                            message.visible = true
-                            recordInfo.visible = false
-                        }
-                        
-                        audioPath = "file://" + _owner.stopRecord()
-                        recordTimer.stop();
-                    }
-                }
-            }
+            visible: !audioRecorder.active
         }
+        
         TextArea {
             id: message
             verticalAlignment: VerticalAlignment.Center
@@ -119,34 +75,15 @@ Container {
                     submitted();
                 }
             }
+            visible: !audioRecorder.active
         }
-        Label {
-            id: recordInfo
-            verticalAlignment: VerticalAlignment.Center
-            horizontalAlignment: HorizontalAlignment.Fill
-            visible: false
-            text: "Recording"
-            textStyle {
-                base: SystemDefaults.TextStyles.BodyText
-                color: Color.Red
-            }
-        }
-        ImageButton {
-            verticalAlignment: VerticalAlignment.Bottom
-            defaultImageSource: emojiPanel.delegateActive ? "asset:///images/bar_down.png" : "asset:///images/bar_smile.png"
-            pressedImageSource: emojiPanel.delegateActive ? "asset:///images/bar_down.png" : "asset:///images/bar_smile.png"
-            preferredWidth: 90
-            preferredHeight: 90
-            
-            onClicked: {
-                emojiPanel.delegateActive = !emojiPanel.delegateActive;
-                if (emojiPanel.delegateActive)
-                    virtualKeyboardService.hide()
-                else
-                    message.requestFocus()
-                //emojiPanel.layoutProperties.spaceQuota = emojiPanel.delegateActive ? 1 : -1;
-                //inputPanel.layoutProperties.spaceQuota = -emojiPanel.layoutProperties.spaceQuota;
-            }
+        
+        AudioRecorder {
+            id: audioRecorder
+            visible: !emojiPanel.delegateActive
+            layoutProperties: StackLayoutProperties {
+                spaceQuota: audioRecorder.active ? 1 : -1
+            }        
         }
     }
     ControlDelegate {
@@ -166,22 +103,9 @@ Container {
             id: virtualKeyboardService
             
             onKeyboardVisible: {
-                //console.log("Keyboard Visible");
                 emojiPanel.delegateActive = false
             }
             onKeyboardHidden: {
-                //console.log("Keyboard Hidden");
-            }
-        },
-        QTimer {
-            property int duration : 0
-            id: recordTimer
-            singleShot: false
-            interval: 333
-            onTimeout:{
-                duration += 333;
-                var sec = Math.floor(duration / 1000);
-                recordInfo.text = "Recoding: " + sec + " sec";
             }
         },
         ComponentDefinition {
