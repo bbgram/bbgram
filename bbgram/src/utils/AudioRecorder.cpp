@@ -504,7 +504,7 @@ AudioRecorder::AudioRecorder()
     m_filePath = "tmp/record.ogg";
 }
 
-void AudioRecorder::StartRecord()
+void AudioRecorder::startRecord()
 {
     initRecorder(m_filePath.toUtf8().data());
 
@@ -513,7 +513,7 @@ void AudioRecorder::StartRecord()
     m_updateRecordTimer.start(20);
 }
 
-const QString& AudioRecorder::StopRecord()
+const QString& AudioRecorder::stopRecord()
 {
     m_updateRecordTimer.stop();
 

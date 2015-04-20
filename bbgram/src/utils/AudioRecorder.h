@@ -10,8 +10,8 @@ class AudioRecorder : public QObject
     Q_OBJECT
 public:
     AudioRecorder();
-    void StartRecord();
-    const QString& StopRecord();
+    void startRecord();
+    const QString& stopRecord();
 private slots:
     void updateRecord();
 private:

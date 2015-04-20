@@ -19,21 +19,40 @@ Page {
     
     function onPop() {
         messageList.dataModel.itemAdded.disconnect(messageAdded)
+        
+        input.recorder.startRecord.disconnect(startRecord)
+        input.recorder.stopRecord.disconnect(stopRecord)
+        input.recorder.cancelRecord.disconnect(cancelRecord)
     }
     
     function onPush() {
         _owner.markRead(peer);
         
         messageList.dataModel.itemAdded.connect(messageAdded)
+        
+        input.recorder.startRecord.connect(startRecord)
+        input.recorder.stopRecord.connect(stopRecord)
+        input.recorder.cancelRecord.connect(cancelRecord)
     }
     
     function sendMessage() {
-        if (input.audioDuration > 0)
-            _owner.sendAudio(peer, input.audioPath, input.audioDuration)
+       _owner.sendMessage(peer, input.value)
+       input.clear()
+    }
+    
+    function startRecord(){
+        _owner.startRecord();
+    }
+    
+    function stopRecord(){
+        if (input.recorder.duration > 2)
+            _owner.sendAudio(peer, _owner.stopRecord(), input.recorder.duration);
         else
-            _owner.sendMessage(peer, input.value)
-            
-        input.clear()
+            _owner.stopRecord();
+    }
+    
+    function cancelRecord(){
+        _owner.stopRecord()
     }
     
     function clearHistory() {
@@ -266,10 +285,6 @@ Page {
             
             onValueChanging: {
                 sendAction.enabled = value.length > 0;
-            }
-            
-            onAudioDurationChanged: {
-                sendAction.enabled = audioDuration > 0;
             }
             
             onSubmitted: {

@@ -223,12 +223,12 @@ void MainScreen::setWallpaper(const QString& url)
 
 void MainScreen::startRecord()
 {
-    m_audioRecorder.StartRecord();
+    m_audioRecorder.startRecord();
 }
 
 QString MainScreen::stopRecord()
 {
-    return m_audioRecorder.StopRecord();
+    return m_audioRecorder.stopRecord();
 }
 
 void MainScreen::copyMessagesToClipboard(const QVariantList& messages)

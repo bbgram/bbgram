@@ -5,6 +5,12 @@ import bbgram.types.lib 0.1
 Container {
     id: me
     property bool active: false
+    property alias duration : recordTimer.duration
+    
+    signal startRecord();
+    signal cancelRecord();
+    signal stopRecord();
+    
     onActiveChanged: {
         container.rightPadding = 90
         cancelHint.opacity = 1
@@ -80,8 +86,8 @@ Container {
         
         property int touchX: 0
         
-        function cancelRecord() {
-            _owner.stopRecord();
+        function cancel() {
+            cancelRecord()
             recordTimer.stop();
             me.active = false;
         }
@@ -89,14 +95,14 @@ Container {
         onTouch: {
             if (event.touchType == TouchType.Down) {
                 me.active = true;
-                _owner.startRecord();
+                startRecord();
                 recordTimer.duration = 0;
                 recordTimer.start();
                 voiceButton.touchX = event.localX
             }
             else if (event.touchType == TouchType.Up || event.touchType == TouchType.Cancel) {
                 if (me.active) {
-                    _owner.stopRecord();
+                    stopRecord();
                     recordTimer.stop();
                     me.active = false;
                 }
@@ -107,7 +113,7 @@ Container {
                     container.rightPadding = 90 + dx;
                     cancelHint.opacity = (100 - dx) / 100;
                     if (dx > 100)
-                        cancelRecord();
+                        cancel();
                 }
                 else 
                     container.rightPadding = 90;

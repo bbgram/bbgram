@@ -8,16 +8,9 @@ Container {
     signal submitted();
     signal valueChanging(string value);    
     property alias value: message.text
-    property string audioPath: ""
-    property int audioDuration : 0
     
+    property alias recorder: audioRecorder
     
-    function clear() {
-        message.text = ""
-        audioPath = ""
-        audioDuration = 0
-        voiceButton.setCancelMode(false);
-    }
     /*layout: StackLayout {
      orientation: LayoutOrientation.TopToBottom
      }*/
