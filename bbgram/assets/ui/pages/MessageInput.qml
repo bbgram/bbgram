@@ -70,6 +70,7 @@ Container {
                         message.visible = true
                         recordInfo.visible = false
                         recordTimer.duration = 0;
+                        setCancelMode(false)
                     }
                 }
                 else
@@ -180,8 +181,7 @@ Container {
             onTimeout:{
                 duration += 333;
                 var sec = Math.floor(duration / 1000);
-                var msec = (duration % 1000)
-                recordInfo.text = "Recoding " + sec + " : " + msec;
+                recordInfo.text = "Recoding: " + sec + " sec";
             }
         },
         ComponentDefinition {

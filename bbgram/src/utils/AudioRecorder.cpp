@@ -501,7 +501,7 @@ AudioRecorder::AudioRecorder()
 
     memset(&m_recordBuffer[0], 0, sizeof(m_recordBuffer));
 
-    m_filePath = MainScreen::instance()->getDataPath() + "recording.ogg";
+    m_filePath = "tmp/record.ogg";
 }
 
 void AudioRecorder::StartRecord()
