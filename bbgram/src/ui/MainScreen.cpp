@@ -221,6 +221,16 @@ void MainScreen::setWallpaper(const QString& url)
     emit wallpaperChanged();
 }
 
+void MainScreen::startRecord()
+{
+    m_audioRecorder.StartRecord();
+}
+
+QString MainScreen::stopRecord()
+{
+    return m_audioRecorder.StopRecord();
+}
+
 void MainScreen::copyMessagesToClipboard(const QVariantList& messages)
 {
     QList<Message*> list;

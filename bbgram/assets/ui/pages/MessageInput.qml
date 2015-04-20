@@ -63,7 +63,6 @@ Container {
             }
             
             onTouch: {
-                return;
                 if (isCancelMode)
                 {
                     setCancelMode(false);
@@ -74,26 +73,27 @@ Container {
                 
                 if (event.touchType == TouchType.Down)
                 {
-                    audioRecorder.record()
+                    _owner.startRecord()
                     message.visible = false
                     recordInfo.visible = true
+                    recordTimer.duration = 0
                     recordTimer.start();
                 }
                 else if (event.touchType == TouchType.Up || event.touchType == TouchType.Cancel)
                 {
-                    if (audioRecorder.duration > 1000)
+                    /*if (recordTimer.duration > 1000)
                     {
                         setCancelMode(true)
-                        audioDuration = audioRecorder.duration / 1000
+                        audioDuration = recordTimer.duration / 1000
                     }
                     else
                     {
                         message.visible = true
                         recordInfo.visible = false
-                    }
+                    }*/
                     
-                    audioPath = audioRecorder.outputUrl
-                    audioRecorder.reset()
+                    //audioPath = "file://" + _owner.stopRecord()
+                    _owner.stopRecord();
                     recordTimer.stop();
                 }
             }
@@ -169,17 +169,15 @@ Container {
                 //console.log("Keyboard Hidden");
             }
         },
-        AudioRecorder {
-            id: audioRecorder
-            outputUrl: "file://" + _owner.getDataPath() + "recording.m4a"
-        },
         QTimer {
+            property int duration : 0
             id: recordTimer
             singleShot: false
             interval: 333
             onTimeout:{
-                var sec = Math.ceil(audioRecorder.duration / 1000);
-                var msec = (audioRecorder.duration % 1000)
+                duration += 333;
+                var sec = Math.ceil(duration / 1000);
+                var msec = (duration % 1000)
                 recordInfo.text = "Recoding " + sec + " : " + msec;
             }
         },

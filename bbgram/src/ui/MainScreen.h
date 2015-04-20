@@ -7,6 +7,7 @@
 #include "../model/User.h"
 #include "../model/GroupChat.h"
 #include "../model/BroadcastChat.h"
+#include "../utils/AudioRecorder.h"
 
 #include <bb/cascades/TabbedPane>
 #include <bb/platform/Notification>
@@ -52,6 +53,9 @@ public:
     Q_INVOKABLE QString wallpaper() const;
     Q_INVOKABLE void setWallpaper(const QString& url);
 
+    Q_INVOKABLE void startRecord();
+    Q_INVOKABLE QString stopRecord();
+
     static MainScreen* instance();
     void initialize();
 signals:
@@ -75,6 +79,8 @@ protected:
     QList<bb::platform::Notification*> m_notificationList;
 
     bool                m_appFullScreen;
+
+    AudioRecorder m_audioRecorder;
 
     bool contactExist(const QString& phone);
 
