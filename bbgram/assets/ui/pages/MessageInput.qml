@@ -81,7 +81,7 @@ Container {
                 }
                 else if (event.touchType == TouchType.Up || event.touchType == TouchType.Cancel)
                 {
-                    /*if (recordTimer.duration > 1000)
+                    if (recordTimer.duration > 1000)
                     {
                         setCancelMode(true)
                         audioDuration = recordTimer.duration / 1000
@@ -90,10 +90,10 @@ Container {
                     {
                         message.visible = true
                         recordInfo.visible = false
-                    }*/
+                    }
                     
-                    //audioPath = "file://" + _owner.stopRecord()
-                    _owner.stopRecord();
+                    audioPath = "file://" + _owner.stopRecord()
+                    //_owner.stopRecord();
                     recordTimer.stop();
                 }
             }

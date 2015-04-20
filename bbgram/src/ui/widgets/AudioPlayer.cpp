@@ -161,7 +161,7 @@ void AudioPlayer::play()
     {
         qDebug() << "Could not play source!";
     }
-    m_updateBuffersTimer.start(20);
+    m_updateBuffersTimer.start(10);
 }
 
 void AudioPlayer::stop()

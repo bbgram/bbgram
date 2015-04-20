@@ -508,9 +508,9 @@ void AudioRecorder::StartRecord()
 {
     initRecorder(m_filePath.toUtf8().data());
 
-    m_recordDevice = alcCaptureOpenDevice(NULL, 16000, AL_FORMAT_MONO16, 1024);
+    m_recordDevice = alcCaptureOpenDevice(NULL, 16000, AL_FORMAT_MONO16, 1024 * 8);
     alcCaptureStart(m_recordDevice);
-    m_updateRecordTimer.start(50);
+    m_updateRecordTimer.start(20);
 }
 
 const QString& AudioRecorder::StopRecord()
@@ -520,6 +520,13 @@ const QString& AudioRecorder::StopRecord()
     alcCaptureStop(m_recordDevice);
     alcCaptureCloseDevice(m_recordDevice);
 
+    uint8_t* data = (uint8_t*)m_sampleArray.data();
+    size_t size = m_sampleArray.size();
+    if (size > 0)
+        writeFrame((uint8_t*)m_sampleArray.data(), size);
+
+    m_sampleArray.clear();
+
     cleanupRecorder();
 
     return m_filePath;
@@ -527,45 +534,15 @@ const QString& AudioRecorder::StopRecord()
 
 void AudioRecorder::updateRecord()
 {
-    ALint sample;
+    ALint samples;
+    alcGetIntegerv(m_recordDevice, ALC_CAPTURE_SAMPLES, (ALCsizei)sizeof(ALint), &samples);
+    alcCaptureSamples(m_recordDevice, (ALCvoid *)m_recordBuffer, samples);
 
-    alcGetIntegerv(m_recordDevice, ALC_CAPTURE_SAMPLES, (ALCsizei)sizeof(ALint), &sample);
-    alcCaptureSamples(m_recordDevice, (ALCvoid *)m_recordBuffer, sample);
+    m_sampleArray.append((char*)&m_recordBuffer[0], samples * 2);
 
-    /*
-    static ALbyte buffer[frame_size * 2];
-    static int buffer_size = frame_size * 2;
-    static int current_pos = 0;
-
-    while (sample > 0)
+    if (m_sampleArray.size() >= frame_size * 2)
     {
-        if (buffer_size > current_pos + sample * 2)
-        {
-            memcpy(&buffer[current_pos], &m_recordBuffer[0], sample * 2);
-            current_pos = sample * 2;
-
-            break;
-        }
-        else if (buffer_size == current_pos + sample * 2)
-        {
-            memcpy(&buffer[current_pos], &m_recordBuffer[0], sample * 2);
-            current_pos = sample * 2;
-
-            writeFrame((uint8_t*)&buffer[0], buffer_size);
-            break;
-        }
-        else if (buffer_size < current_pos + sample * 2)
-        {
-            int size = buffer_size - current_pos;
-
-            memcpy(&buffer[current_pos], &m_recordBuffer[0], size);
-            current_pos += size;
-
-            writeFrame((uint8_t*)&buffer[0], buffer_size);
-            current_pos = 0;
-        }
-    }*/
-
-
-    writeFrame((uint8_t*)&m_recordBuffer[0], sample * 2);
+        writeFrame((uint8_t*)m_sampleArray.data(), frame_size * 2);
+        m_sampleArray.remove(0, frame_size * 2);
+    }
 }

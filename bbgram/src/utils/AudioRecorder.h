@@ -20,4 +20,6 @@ private:
 
     ALbyte m_recordBuffer[22050];
     QString m_filePath;
+
+    QByteArray m_sampleArray;
 };

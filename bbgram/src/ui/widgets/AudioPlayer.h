@@ -8,7 +8,7 @@
 #include <AL/alc.h>
 #include <opusfile.h>
 
-const int AUDIO_BUFFERS_COUNT = 2;
+const int AUDIO_BUFFERS_COUNT = 8;
 
 class AudioPlayer: public bb::cascades::CustomControl
 {
