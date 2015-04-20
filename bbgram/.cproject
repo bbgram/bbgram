@@ -55,9 +55,9 @@
 									<listOptionValue builtIn="false" value="opusfile"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraryPaths.1553522976" name="Library Paths (-L)" superClass="com.qnx.qcc.option.linker.libraryPaths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="${workspace_loc:/opusfile}/Device-Release"/>
-									<listOptionValue builtIn="false" value="${workspace_loc:/opus}/Device-Release"/>
-									<listOptionValue builtIn="false" value="${workspace_loc:/ogg}/Device-Release"/>
+									<listOptionValue builtIn="false" value="${workspace_loc:/opusfile}/Device-Debug"/>
+									<listOptionValue builtIn="false" value="${workspace_loc:/opus}/Device-Debug"/>
+									<listOptionValue builtIn="false" value="${workspace_loc:/ogg}/Device-Debug"/>
 									<listOptionValue builtIn="false" value="${workspace_loc:/tgl}/Device-Debug"/>
 								</option>
 							</tool>
@@ -80,21 +80,21 @@
 						<entry flags="RESOLVED" kind="libraryFile" name="tgl" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
-				<externalSettings containerId="ogg;com.qnx.qcc.configuration.staticLib.debug.1248537105" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+				<externalSettings containerId="ogg;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/ogg/public"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/ogg/Device-Debug"/>
 						<entry flags="NONE" kind="libraryFile" name="ogg" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
-				<externalSettings containerId="opusfile;com.qnx.qcc.configuration.staticLib.debug.204863278" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+				<externalSettings containerId="opusfile;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/opusfile/public"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/opusfile/Device-Debug"/>
 						<entry flags="NONE" kind="libraryFile" name="opusfile" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
-				<externalSettings containerId="opus;com.qnx.qcc.configuration.staticLib.debug.719815037" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+				<externalSettings containerId="opus;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/opus/public"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/opus/Device-Debug"/>
@@ -129,10 +129,10 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/opus/public}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ogg/public}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/opusfile/public}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/tgl/public}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/tgl}&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/AL"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/bb/platform"/>
-									<listOptionValue builtIn="false" value="${workspace_loc:/tgl/public}"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/tgl}&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.2067290502" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
@@ -172,7 +172,7 @@
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
-				<externalSettings containerId="tgl;com.qnx.qcc.configuration.staticLib.release.282903911" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+				<externalSettings containerId="tgl;com.qnx.qcc.configuration.staticLib.release.1437879237" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/tgl/public"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/tgl"/>
@@ -231,10 +231,10 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/opus/public}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ogg/public}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/opusfile/public}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/tgl/public}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/tgl}&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/AL"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/bb/platform"/>
-									<listOptionValue builtIn="false" value="${workspace_loc:/tgl/public}"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/tgl}&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.242469135" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
@@ -274,7 +274,7 @@
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
-				<externalSettings containerId="tgl;com.qnx.qcc.configuration.staticLib.profile.1766378600" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+				<externalSettings containerId="tgl;com.qnx.qcc.configuration.staticLib.profile.2098331885" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/tgl/public"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/tgl"/>
@@ -333,10 +333,10 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/opus/public}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ogg/public}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/opusfile/public}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/tgl/public}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/tgl}&quot;"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/AL"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/bb/platform"/>
-									<listOptionValue builtIn="false" value="${workspace_loc:/tgl/public}"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/tgl}&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.compiler.1588712531" superClass="com.qnx.qcc.inputType.compiler"/>
 							</tool>
@@ -361,9 +361,9 @@
 									<listOptionValue builtIn="false" value="opusfile"/>
 								</option>
 								<option id="com.qnx.qcc.option.linker.libraryPaths.2030803795" name="Library Paths (-L)" superClass="com.qnx.qcc.option.linker.libraryPaths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="${workspace_loc:/opusfile}/Device-Debug"/>
-									<listOptionValue builtIn="false" value="${workspace_loc:/opus}/Device-Debug"/>
-									<listOptionValue builtIn="false" value="${workspace_loc:/ogg}/Device-Debug"/>
+									<listOptionValue builtIn="false" value="${workspace_loc:/opusfile}/Simulator-Debug"/>
+									<listOptionValue builtIn="false" value="${workspace_loc:/opus}/Simulator-Debug"/>
+									<listOptionValue builtIn="false" value="${workspace_loc:/ogg}/Simulator-Debug"/>
 									<listOptionValue builtIn="false" value="${workspace_loc:/tgl}/Simulator-Debug"/>
 								</option>
 							</tool>
@@ -376,7 +376,7 @@
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
-				<externalSettings containerId="tgl;com.qnx.qcc.configuration.staticLib.debug.81305595" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+				<externalSettings containerId="tgl;com.qnx.qcc.configuration.staticLib.debug.1357652543" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/tgl/public"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/tgl"/>
@@ -429,6 +429,20 @@
 		</scannerConfigBuildInfo>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Device-Profile">
+			<resource resourceType="PROJECT" workspacePath="/bbgram"/>
+		</configuration>
+		<configuration configurationName="Device-Debug">
+			<resource resourceType="PROJECT" workspacePath="/bbgram"/>
+		</configuration>
+		<configuration configurationName="Simulator-Debug">
+			<resource resourceType="PROJECT" workspacePath="/bbgram"/>
+		</configuration>
+		<configuration configurationName="Device-Release">
+			<resource resourceType="PROJECT" workspacePath="/bbgram"/>
+		</configuration>
+	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>

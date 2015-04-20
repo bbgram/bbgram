@@ -67,14 +67,14 @@
 				<externalSettings containerId="ogg;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/ogg/public"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/ogg/Device-Release"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/ogg/Device-Debug"/>
 						<entry flags="NONE" kind="libraryFile" name="ogg" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
 				<externalSettings containerId="opus;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/opus/public"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/opus/Device-Release"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/opus/Device-Debug"/>
 						<entry flags="NONE" kind="libraryFile" name="opus" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
@@ -145,14 +145,14 @@
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
-				<externalSettings containerId="ogg;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+				<externalSettings containerId="ogg;com.qnx.qcc.configuration.staticLib.release.1417486717" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/ogg/public"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/ogg/Device-Release"/>
 						<entry flags="NONE" kind="libraryFile" name="ogg" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
-				<externalSettings containerId="opus;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+				<externalSettings containerId="opus;com.qnx.qcc.configuration.staticLib.release.1887886426" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/opus/public"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/opus/Device-Release"/>
@@ -187,6 +187,8 @@
 								<option id="com.qnx.qcc.option.compile.debug.1903615583" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.profile2.383790702" name="Build for Profiling (Function Instrumentation) (-finstrument-functions)" superClass="com.qnx.qcc.option.compiler.profile2" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.includePath.1721916286" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/opus/public}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ogg/public}&quot;"/>
 									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}/public}"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/freetype2"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
@@ -199,7 +201,8 @@
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.491437652" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">
 								<option id="com.qnx.qcc.option.assembler.debug.1381543391" name="Debug (-g)" superClass="com.qnx.qcc.option.assembler.debug" value="true" valueType="boolean"/>
-								<option id="com.qnx.qcc.option.assembler.includePath.742686118" superClass="com.qnx.qcc.option.assembler.includePath" valueType="includePath">
+								<option id="com.qnx.qcc.option.assembler.includePath.742686118" name="Include Directories (-I)" superClass="com.qnx.qcc.option.assembler.includePath" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ogg/public}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/opus/public}&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.assembler.480232986" superClass="com.qnx.qcc.inputType.assembler"/>
@@ -222,7 +225,22 @@
 					</sourceEntries>
 				</configuration>
 			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+				<externalSettings containerId="ogg;com.qnx.qcc.configuration.staticLib.profile.570533513" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/ogg/public"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/ogg/Device-Profile"/>
+						<entry flags="NONE" kind="libraryFile" name="ogg" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+				<externalSettings containerId="opus;com.qnx.qcc.configuration.staticLib.profile.258323765" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/opus/public"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/opus/Device-Profile"/>
+						<entry flags="NONE" kind="libraryFile" name="opus" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+			</storageModule>
 		</cconfiguration>
 		<cconfiguration id="com.qnx.qcc.configuration.staticLib.coverage.55813264">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.qnx.qcc.configuration.staticLib.coverage.55813264" moduleId="org.eclipse.cdt.core.settings" name="Device-Coverage">
@@ -250,6 +268,8 @@
 								<option id="com.qnx.qcc.option.compile.debug.773877254" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.coverage.266548340" name="Build for Code Coverage (-Wc,-ftest-coverage -Wc,-fprofile-arcs)" superClass="com.qnx.qcc.option.compiler.coverage" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.includePath.361321860" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/opus/public}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ogg/public}&quot;"/>
 									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}/public}"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/freetype2"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
@@ -262,7 +282,8 @@
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.760630667" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">
 								<option id="com.qnx.qcc.option.assembler.debug.156316143" name="Debug (-g)" superClass="com.qnx.qcc.option.assembler.debug" value="true" valueType="boolean"/>
-								<option id="com.qnx.qcc.option.assembler.includePath.1310474817" superClass="com.qnx.qcc.option.assembler.includePath" valueType="includePath">
+								<option id="com.qnx.qcc.option.assembler.includePath.1310474817" name="Include Directories (-I)" superClass="com.qnx.qcc.option.assembler.includePath" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ogg/public}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/opus/public}&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.assembler.1093338862" superClass="com.qnx.qcc.inputType.assembler"/>
@@ -285,7 +306,22 @@
 					</sourceEntries>
 				</configuration>
 			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+				<externalSettings containerId="ogg;com.qnx.qcc.configuration.staticLib.coverage.307486136" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/ogg/public"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/ogg/Device-Coverage"/>
+						<entry flags="NONE" kind="libraryFile" name="ogg" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+				<externalSettings containerId="opus;com.qnx.qcc.configuration.staticLib.coverage.2043287346" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/opus/public"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/opus/Device-Coverage"/>
+						<entry flags="NONE" kind="libraryFile" name="opus" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+			</storageModule>
 		</cconfiguration>
 		<cconfiguration id="com.qnx.qcc.configuration.staticLib.debug.1809432146">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.qnx.qcc.configuration.staticLib.debug.1809432146" moduleId="org.eclipse.cdt.core.settings" name="Simulator-Debug">
@@ -311,6 +347,8 @@
 								<option id="com.qnx.qcc.option.compiler.optlevel.260742985" name="Optimization Level" superClass="com.qnx.qcc.option.compiler.optlevel" value="com.qnx.qcc.option.compiler.optlevel.0" valueType="enumerated"/>
 								<option id="com.qnx.qcc.option.compile.debug.183132735" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.includePath.1364706288" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/opus/public}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ogg/public}&quot;"/>
 									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}/public}"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/freetype2"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
@@ -323,7 +361,8 @@
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.349974928" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">
 								<option id="com.qnx.qcc.option.assembler.debug.28630904" name="Debug (-g)" superClass="com.qnx.qcc.option.assembler.debug" value="true" valueType="boolean"/>
-								<option id="com.qnx.qcc.option.assembler.includePath.1445685273" superClass="com.qnx.qcc.option.assembler.includePath" valueType="includePath">
+								<option id="com.qnx.qcc.option.assembler.includePath.1445685273" name="Include Directories (-I)" superClass="com.qnx.qcc.option.assembler.includePath" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ogg/public}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/opus/public}&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.assembler.965745752" superClass="com.qnx.qcc.inputType.assembler"/>
@@ -345,7 +384,22 @@
 					</sourceEntries>
 				</configuration>
 			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+				<externalSettings containerId="ogg;com.qnx.qcc.configuration.staticLib.debug.177189242" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/ogg/public"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/ogg/Simulator-Debug"/>
+						<entry flags="NONE" kind="libraryFile" name="ogg" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+				<externalSettings containerId="opus;com.qnx.qcc.configuration.staticLib.debug.828766790" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/opus/public"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/opus/Simulator-Debug"/>
+						<entry flags="NONE" kind="libraryFile" name="opus" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+			</storageModule>
 		</cconfiguration>
 		<cconfiguration id="com.qnx.qcc.configuration.staticLib.profile.1245232884">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.qnx.qcc.configuration.staticLib.profile.1245232884" moduleId="org.eclipse.cdt.core.settings" name="Simulator-Profile">
@@ -372,6 +426,8 @@
 								<option id="com.qnx.qcc.option.compile.debug.2009331751" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.profile2.571900348" name="Build for Profiling (Function Instrumentation) (-finstrument-functions)" superClass="com.qnx.qcc.option.compiler.profile2" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.includePath.2063040436" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/opus/public}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ogg/public}&quot;"/>
 									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}/public}"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/freetype2"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
@@ -384,7 +440,8 @@
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.1650776281" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">
 								<option id="com.qnx.qcc.option.assembler.debug.257125137" name="Debug (-g)" superClass="com.qnx.qcc.option.assembler.debug" value="true" valueType="boolean"/>
-								<option id="com.qnx.qcc.option.assembler.includePath.1421320358" superClass="com.qnx.qcc.option.assembler.includePath" valueType="includePath">
+								<option id="com.qnx.qcc.option.assembler.includePath.1421320358" name="Include Directories (-I)" superClass="com.qnx.qcc.option.assembler.includePath" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ogg/public}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/opus/public}&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.assembler.1338429485" superClass="com.qnx.qcc.inputType.assembler"/>
@@ -407,7 +464,22 @@
 					</sourceEntries>
 				</configuration>
 			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+				<externalSettings containerId="ogg;com.qnx.qcc.configuration.staticLib.profile.309711841" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/ogg/public"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/ogg/Simulator-Profile"/>
+						<entry flags="NONE" kind="libraryFile" name="ogg" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+				<externalSettings containerId="opus;com.qnx.qcc.configuration.staticLib.profile.1358470771" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/opus/public"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/opus/Simulator-Profile"/>
+						<entry flags="NONE" kind="libraryFile" name="opus" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+			</storageModule>
 		</cconfiguration>
 		<cconfiguration id="com.qnx.qcc.configuration.staticLib.coverage.1141676339">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.qnx.qcc.configuration.staticLib.coverage.1141676339" moduleId="org.eclipse.cdt.core.settings" name="Simulator-Coverage">
@@ -434,6 +506,8 @@
 								<option id="com.qnx.qcc.option.compile.debug.1069898349" name="Debug (-g)" superClass="com.qnx.qcc.option.compile.debug" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.coverage.1623962402" name="Build for Code Coverage (-Wc,-ftest-coverage -Wc,-fprofile-arcs)" superClass="com.qnx.qcc.option.compiler.coverage" value="true" valueType="boolean"/>
 								<option id="com.qnx.qcc.option.compiler.includePath.856205618" name="Include Directories (-I)" superClass="com.qnx.qcc.option.compiler.includePath" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/opus/public}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ogg/public}&quot;"/>
 									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}/public}"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/usr/include/freetype2"/>
 									<listOptionValue builtIn="false" value="${QNX_TARGET}/../target-override/usr/include"/>
@@ -446,7 +520,8 @@
 							</tool>
 							<tool id="com.qnx.qcc.tool.assembler.359543433" name="QCC Assembler" superClass="com.qnx.qcc.tool.assembler">
 								<option id="com.qnx.qcc.option.assembler.debug.1677675303" name="Debug (-g)" superClass="com.qnx.qcc.option.assembler.debug" value="true" valueType="boolean"/>
-								<option id="com.qnx.qcc.option.assembler.includePath.1164983992" superClass="com.qnx.qcc.option.assembler.includePath" valueType="includePath">
+								<option id="com.qnx.qcc.option.assembler.includePath.1164983992" name="Include Directories (-I)" superClass="com.qnx.qcc.option.assembler.includePath" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ogg/public}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/opus/public}&quot;"/>
 								</option>
 								<inputType id="com.qnx.qcc.inputType.assembler.919074653" superClass="com.qnx.qcc.inputType.assembler"/>
@@ -469,7 +544,22 @@
 					</sourceEntries>
 				</configuration>
 			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+				<externalSettings containerId="ogg;com.qnx.qcc.configuration.staticLib.coverage.651490615" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/ogg/public"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/ogg/Simulator-Coverage"/>
+						<entry flags="NONE" kind="libraryFile" name="ogg" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+				<externalSettings containerId="opus;com.qnx.qcc.configuration.staticLib.coverage.1786858614" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/opus/public"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/opus/Simulator-Coverage"/>
+						<entry flags="NONE" kind="libraryFile" name="opus" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+			</storageModule>
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
@@ -501,4 +591,5 @@
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>
