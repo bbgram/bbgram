@@ -19,7 +19,6 @@ Container {
         visible: me.active
         
         layout: DockLayout {
-            
         }
         
         verticalAlignment: VerticalAlignment.Center
@@ -38,15 +37,15 @@ Container {
             }
             Label {
                 function formatTime(t) {
-                var h = Math.floor(t / 3600);
-                var m = Math.floor(t / 60) % 60;
-                m = m >= 10 ? m : "0" + m;
-                var s = t % 60;
-                s = s >= 10 ? s : "0" + s;
-                   if (h != 0)
-                       return "%1:%2:%3".arg(h).arg(m).arg(s);
-                   else
-                       return "%1:%2".arg(m).arg(s);
+                    var h = Math.floor(t / 3600);
+                    var m = Math.floor(t / 60) % 60;
+                    m = m >= 10 ? m : "0" + m;
+                    var s = t % 60;
+                    s = s >= 10 ? s : "0" + s;
+                    if (h != 0)
+                        return "%1:%2:%3".arg(h).arg(m).arg(s);
+                    else
+                        return "%1:%2".arg(m).arg(s);
                 }
                 verticalAlignment: VerticalAlignment.Center
                 text: formatTime(recordTimer.duration)
@@ -66,7 +65,6 @@ Container {
             text: "< Slide to cancel"
             textStyle {
                 fontSize: FontSize.Large
-
                 color: Color.White
             }
         }
@@ -79,7 +77,7 @@ Container {
         pressedImageSource: "asset:///images/bar_voice2.png"
         preferredWidth: 90
         preferredHeight: 90
-
+        
         property int touchX: 0
         
         function cancelRecord() {
@@ -97,9 +95,11 @@ Container {
                 voiceButton.touchX = event.localX
             }
             else if (event.touchType == TouchType.Up || event.touchType == TouchType.Cancel) {
-                _owner.stopRecord();
-                recordTimer.stop();
-                me.active = false;
+                if (me.active) {
+                    _owner.stopRecord();
+                    recordTimer.stop();
+                    me.active = false;
+                }
             }
             else if (event.touchType == TouchType.Move && me.active) {
                 var dx = voiceButton.touchX - event.localX;
@@ -114,7 +114,7 @@ Container {
             }
         }
     }
-   
+    
     attachedObjects: [
         QTimer {
             id: recordTimer
