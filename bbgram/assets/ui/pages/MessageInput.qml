@@ -8,8 +8,11 @@ Container {
     signal submitted();
     signal valueChanging(string value);    
     property alias value: message.text
-    
     property alias recorder: audioRecorder
+    
+    function clear() {
+        message.text = ""
+    }
     
     /*layout: StackLayout {
      orientation: LayoutOrientation.TopToBottom
