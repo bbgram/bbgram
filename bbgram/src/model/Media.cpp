@@ -61,7 +61,7 @@ QUrl Media::thumbnail() const
 int Media::flags() const
 {
     if (m_message->mediaType() == tgl_message_media_photo)
-        return FLAG_DOCUMENT_IMAGE;
+        return TGLDF_IMAGE;
     else
         return m_message->media().value("flags").toInt();
 }
@@ -86,7 +86,7 @@ QString Media::durationFormatted() const
         return QString("%1:%2").arg(m).arg(s, 2, 10, QLatin1Char('0'));
 }
 
-void Media::_loadThumbnailCallback(struct tgl_state *TLS, void *callback_extra, int success, char *filename)
+void Media::_loadThumbnailCallback(struct tgl_state *TLS, void *callback_extra, int success, const char *filename)
 {
     Media* photo = (Media*)callback_extra;
     photo->m_thumbnail = QUrl::fromLocalFile(filename);

@@ -1,4 +1,4 @@
-/* 
+/*
     This file is part of tgl-library
 
     This library is free software; you can redistribute it and/or
@@ -29,8 +29,8 @@
 
 struct query;
 struct query_methods {
-  int (*on_answer)(struct tgl_state *TLS, struct query *q);
-  int (*on_error)(struct tgl_state *TLS, struct query *q, int error_code, int len, char *error);
+  int (*on_answer)(struct tgl_state *TLS, struct query *q, void *DS);
+  int (*on_error)(struct tgl_state *TLS, struct query *q, int error_code, int len, const char *error);
   int (*on_timeout)(struct tgl_state *TLS, struct query *q);
   struct paramed_type *type;
 };
@@ -76,8 +76,38 @@ void tgl_do_abort_exchange (struct tgl_state *TLS, struct tgl_secret_chat *E);
 
 void tglq_regen_query (struct tgl_state *TLS, long long id);
 void tglq_query_delete (struct tgl_state *TLS, long long id);
+void tglq_query_free_all (struct tgl_state *TLS);
 // For binlog
 
 //int get_dh_config_on_answer (struct query *q);
 //void fetch_dc_option (void);
+
+#define sha1 SHA1
+
+struct send_file {
+  int fd;
+  long long size;
+  long long offset;
+  int part_num;
+  int part_size;
+  long long id;
+  long long thumb_id;
+  tgl_peer_id_t to_id;
+  int flags;
+  char *file_name;
+  int encr;
+  int avatar;
+  int reply;
+  unsigned char *iv;
+  unsigned char *init_iv;
+  unsigned char *key;
+  int w;
+  int h;
+  int duration;
+  char *caption;
+};
+
+static void out_random (int n);
+static int q_void_on_error (struct tgl_state *TLS, struct query *q, int error_code, int error_len, const char *error);
+static int q_ptr_on_error (struct tgl_state *TLS, struct query *q, int error_code, int error_len, const char *error);
 #endif

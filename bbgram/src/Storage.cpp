@@ -418,7 +418,7 @@ struct photo_data
     Peer* peer;
 };
 
-void Storage::_loadPhotoCallback(struct tgl_state *TLS, void *callback_extra, int success, char *filename)
+void Storage::_loadPhotoCallback(struct tgl_state *TLS, void *callback_extra, int success, const char *filename)
 {
     photo_data* data = (photo_data*)callback_extra;
     m_instance->_PhotoLoaded();
@@ -569,12 +569,12 @@ void Storage::userUpdateHandler(struct tgl_state *TLS, struct tgl_user *U, unsig
 
     if (flags & TGL_UPDATE_CONTACT)
     {
-        if ((U->flags & FLAG_USER_CONTACT) == 0)
+        if ((U->flags & TGLUF_CONTACT) == 0)
         {
             m_instance->deleteContact(user);
         }
 
-        if (U->flags & FLAG_USER_CONTACT)
+        if (U->flags & TGLUF_CONTACT)
         {
             m_instance->addContact(user);
         }
@@ -805,21 +805,6 @@ void Storage::encrChatUpdate(struct tgl_state *TLS, struct tgl_secret_chat *C, u
     CHECK_FLAG(flags, TGL_UPDATE_ACCESS_HASH)
     CHECK_FLAG(flags, TGL_UPDATE_USERNAME)
     CHECK_FLAG(flags, TGL_UPDATE_REQUESTED)
-    str += "  %  ";
-
-    CHECK_FLAG(C->flags, FLAG_MESSAGE_EMPTY)
-    CHECK_FLAG(C->flags, FLAG_DELETED)
-    CHECK_FLAG(C->flags, FLAG_FORBIDDEN)
-    CHECK_FLAG(C->flags, FLAG_HAS_PHOTO)
-    CHECK_FLAG(C->flags, FLAG_CREATED)
-    CHECK_FLAG(C->flags, FLAG_SESSION_OUTBOUND)
-    CHECK_FLAG(C->flags, FLAG_USER_SELF)
-    CHECK_FLAG(C->flags, FLAG_USER_FOREIGN)
-    CHECK_FLAG(C->flags, FLAG_USER_CONTACT)
-    CHECK_FLAG(C->flags, FLAG_USER_IN_CONTACT)
-    CHECK_FLAG(C->flags, FLAG_USER_OUT_CONTACT)
-    CHECK_FLAG(C->flags, FLAG_ENCRYPTED)
-    CHECK_FLAG(C->flags, FLAG_PENDING)
 
     qDebug() << "Storage::encrChatUpdate user=" << QString::fromUtf8(C->print_name) << " flags=" << flags << str;
 
@@ -1089,18 +1074,18 @@ void Storage::_updateGroupPhoto(struct tgl_state *TLS, void *callback_extra, int
     long long newPhotoId = (long long)C->photo_big.local_id << 32 | C->photo_small.local_id;
     if (groupChat->getPhotoId() != newPhotoId)
     {
-        if (C->photo.sizes_num != 0)
+        if (C->photo->sizes_num != 0)
         {
             int min = 0;
-            for (int i = 0; i < C->photo.sizes_num; i++)
+            for (int i = 0; i < C->photo->sizes_num; i++)
             {
-                if (C->photo.sizes[i].h + C->photo.sizes[i].w < C->photo.sizes[min].h + C->photo.sizes[min].w)
+                if (C->photo->sizes[i].h + C->photo->sizes[i].w < C->photo->sizes[min].h + C->photo->sizes[min].w)
                     min = i;
             }
             photo_data* data = new photo_data;
             data->peer = groupChat;
             data->photo_id = newPhotoId;
-            tgl_do_load_photo_size(gTLS, &C->photo.sizes[min], Storage::_loadPhotoCallback, data);
+            tgl_do_load_photo_size(gTLS, &C->photo->sizes[min], Storage::_loadPhotoCallback, data);
         }
         else
         {
@@ -1127,18 +1112,18 @@ void Storage::_updateContactPhoto(struct tgl_state *TLS, void *callback_extra, i
     long long newPhotoId = (long long)U->photo_big.local_id << 32 | U->photo_small.local_id;
     if (user->getPhotoId() != newPhotoId)
     {
-        if (U->photo.sizes_num != 0)
+        if (U->photo->sizes_num != 0)
         {
             int min = 0;
-            for (int i = 0; i < U->photo.sizes_num; i++)
+            for (int i = 0; i < U->photo->sizes_num; i++)
             {
-                if (U->photo.sizes[i].h + U->photo.sizes[i].w < U->photo.sizes[min].h + U->photo.sizes[min].w)
+                if (U->photo->sizes[i].h + U->photo->sizes[i].w < U->photo->sizes[min].h + U->photo->sizes[min].w)
                     min = i;
             }
             photo_data* data = new photo_data;
             data->peer = user;
             data->photo_id = newPhotoId;
-            tgl_do_load_photo_size(gTLS, &U->photo.sizes[min], Storage::_loadPhotoCallback, data);
+            tgl_do_load_photo_size(gTLS, &U->photo->sizes[min], Storage::_loadPhotoCallback, data);
         }
         else
         {
@@ -1161,7 +1146,7 @@ void Storage::_searchMessageCallback(struct tgl_state *TLS, void *callback_extra
 
 void Storage::updateChats()
 {
-    tgl_do_get_dialog_list(gTLS, _getDialogsCallback, this);
+    tgl_do_get_dialog_list(gTLS, 100, 0,_getDialogsCallback, this);
 }
 
 void Storage::updateContacts()
@@ -1233,7 +1218,7 @@ void Storage::loadAdditionalHistory(Peer* peer)
 
 void Storage::searchMessage(Peer* peer, int from, int to, int limit, int offset, const char *s)
 {
-    tgl_do_msg_search(gTLS, {peer->type(), peer->id()}, from, to, limit, offset, s, Storage::_searchMessageCallback, NULL);
+    tgl_do_msg_search(gTLS, {peer->type(), peer->id()}, from, to, limit, offset, s, strlen(s), Storage::_searchMessageCallback, NULL);
 }
 
 struct SearchMediaCallbackExtra
@@ -1311,9 +1296,8 @@ bb::cascades::DataModel* Storage::getSharedMedia(Peer* peer)
             m_messages.insert(id, message);
         }
         QVariantMap media = message->media();
-        if (message->mediaType() == tgl_message_media_photo || media["flags"].toInt() == FLAG_DOCUMENT_VIDEO)
+        if (message->mediaType() == tgl_message_media_photo || media["flags"].toInt() == TGLDF_VIDEO)
         {
-
             Media* media = new Media(message);
             media->setParent(model);
             model->insert(0, media);

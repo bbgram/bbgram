@@ -65,7 +65,7 @@ public:
 signals:
     void thumbnailChanged();
 protected:
-    static void _loadThumbnailCallback(struct tgl_state *TLS, void *callback_extra, int success, char *filename);
+    static void _loadThumbnailCallback(struct tgl_state *TLS, void *callback_extra, int success, const char *filename);
 
     friend class Storage;
     Message*    m_message;

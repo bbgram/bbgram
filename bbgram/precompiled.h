@@ -5,7 +5,10 @@
 #include <QVariant>
 
 extern "C" {
+
 #include <tgl.h>
+#include <tgl-methods-in.h>
+#include <tools.h>
 }
 
 extern tgl_state*  gTLS;

@@ -33,8 +33,8 @@ signals:
     void thumbnailChanged();
     void loaded(const QUrl& url);
 protected:
-    static void _loadThumbnailCallback(struct tgl_state *TLS, void *callback_extra, int success, char *filename);
-    static void _loadCallback(struct tgl_state *TLS, void *callback_extra, int success, char *filename);
+    static void _loadThumbnailCallback(struct tgl_state *TLS, void *callback_extra, int success, const char *filename);
+    static void _loadCallback(struct tgl_state *TLS, void *callback_extra, int success, const char *filename);
 
     int     m_id;
     QString m_title;

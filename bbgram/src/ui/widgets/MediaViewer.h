@@ -31,5 +31,5 @@ protected:
     QByteArray                  m_encMimeType;
 
 
-    static void loadPhotoCallback(struct tgl_state *TLS, void *callback_extra, int success, char *filename);
+    static void loadPhotoCallback(struct tgl_state *TLS, void *callback_extra, int success, const char *filename);
 };

@@ -47,6 +47,10 @@
 #define CLOCK_MONOTONIC 1
 #endif
 
+#ifdef VALGRIND_FIXES
+#include "valgrind/memcheck.h"
+#endif
+
 #define RES_PRE 8
 #define RES_AFTER 8
 #define MAX_BLOCKS 1000000
@@ -118,6 +122,7 @@ void tgl_free_debug (void *ptr, int size __attribute__ ((unused))) {
 }
 
 void tgl_free_release (void *ptr, int size) {
+  memset (ptr, 0, size);
   free (ptr);
 }
 
@@ -146,10 +151,7 @@ void *tgl_alloc_debug (size_t size) {
   *(int *)(p + RES_AFTER + 4 + size) = used_blocks;
   blocks[used_blocks ++] = p;
 
-  if (used_blocks - 1 == 24867) {
-    assert (0);
-  }
-  tcheck ();
+  //tcheck ();
   return p + 8;
 }
 
@@ -179,6 +181,12 @@ char *tgl_strndup (const char *s, size_t n) {
   memcpy (p, s, l);
   p[l] = 0;
   return p;
+}
+
+void *tgl_memdup (const void *s, size_t n) {
+  void *r = talloc (n);
+  memcpy (r, s, n);
+  return r;
 }
 
 
@@ -275,6 +283,11 @@ void tglt_secure_random (void *s, int l) {
     } else {*/
       assert (0 && "End of random. If you want, you can start with -w");
     //}
+  } else {
+    #ifdef VALGRIND_FIXES
+      VALGRIND_MAKE_MEM_DEFINED (s, l);
+      VALGRIND_CHECK_MEM_IS_DEFINED (s, l);
+    #endif
   }
 }
 

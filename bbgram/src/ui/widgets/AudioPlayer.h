@@ -48,7 +48,7 @@ protected:
     void setDonwloaded(bool value);
     void setPlaying(bool value);
     int _fillBuffer(ALuint buffer);
-    static void loadAudioCallback(struct tgl_state *TLS, void *callback_extra, int success, char *filename);
+    static void loadAudioCallback(struct tgl_state *TLS, void *callback_extra, int success, const char *filename);
 
     static ALCdevice* m_alDevice;
     static ALCcontext* m_alContext;

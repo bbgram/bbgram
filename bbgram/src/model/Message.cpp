@@ -9,14 +9,14 @@ Message::Message(long long id, tgl_message* M)
     if (!M)
         return;
 
-    if (M->service == 0 && M->message)
+    if (!(M->flags & TGLMF_SERVICE) && M->message)
         m_text = QString::fromUtf8(M->message);
     m_date = QDateTime::fromTime_t(M->date);
     m_fromId = M->from_id.id;
     m_toId = M->to_id.id;
     m_toType = M->to_id.type;
-    m_unread = M->unread;
-    m_service = M->service;
+    m_unread = M->flags & TGLMF_UNREAD;
+    m_service = M->flags & TGLMF_SERVICE;
     m_fwdDate = QDateTime::fromTime_t(M->fwd_date);
     m_fwdFromId = M->fwd_from_id.id;
 
@@ -37,18 +37,18 @@ Message::Message(long long id, tgl_message* M)
     {
         if (m_mediaType == tgl_message_media_photo)
         {
-            m_media.insert("id", M->media.photo.id);
-            m_media.insert("access_hash", M->media.photo.access_hash);
-            m_media.insert("user_id", M->media.photo.user_id);
-            m_media.insert("date", M->media.photo.date);
-            m_media.insert("caption", M->media.photo.caption);
-            m_media.insert("geo_longitude", M->media.photo.geo.longitude);
-            m_media.insert("geo_latitude", M->media.photo.geo.latitude);
+            m_media.insert("id", M->media.photo->id);
+            m_media.insert("access_hash", M->media.photo->access_hash);
+            m_media.insert("user_id", M->media.photo->user_id);
+            m_media.insert("date", M->media.photo->date);
+            m_media.insert("caption", M->media.photo->caption);
+            m_media.insert("geo_longitude", M->media.photo->geo.longitude);
+            m_media.insert("geo_latitude", M->media.photo->geo.latitude);
 
             QVariantList sizes;
-            for (int i = 0; i < M->media.photo.sizes_num; i++)
+            for (int i = 0; i < M->media.photo->sizes_num; i++)
             {
-                tgl_photo_size& sz = M->media.photo.sizes[i];
+                tgl_photo_size& sz = M->media.photo->sizes[i];
 
                 QVariantMap size;
                 size.insert("type", sz.type);
@@ -64,7 +64,7 @@ Message::Message(long long id, tgl_message* M)
 
             m_media.insert("sizes", sizes);
         }
-        else if (m_mediaType == tgl_message_media_photo_encr)
+        /*@else if (m_mediaType == tgl_message_media_photo_encr)
         {
             m_media.insert("id", M->media.encr_document.id);
             m_media.insert("width", M->media.encr_document.w);
@@ -81,7 +81,7 @@ Message::Message(long long id, tgl_message* M)
             if (M->media.encr_document.mime_type)
                 m_media.insert("mime_type", QByteArray::fromRawData(M->media.encr_document.mime_type, strlen(M->media.encr_document.mime_type)));
             m_media.insert("duration", M->media.encr_document.duration);
-        }
+        }*/
         else if (m_mediaType == tgl_message_media_contact)
         {
             m_media.insert("phone", QString::fromUtf8(M->media.phone));
@@ -91,29 +91,29 @@ Message::Message(long long id, tgl_message* M)
         }
         else if (m_mediaType == tgl_message_media_document)
         {
-            m_media.insert("id", M->media.document.id);
-            m_media.insert("access_hash", M->media.document.access_hash);
-            m_media.insert("user_id", M->media.document.user_id);
-            m_media.insert("date", M->media.document.date);
-            m_media.insert("size", M->media.document.size);
-            m_media.insert("dc_id", M->media.document.dc_id);
+            m_media.insert("id", M->media.document->id);
+            m_media.insert("access_hash", M->media.document->access_hash);
+            m_media.insert("user_id", M->media.document->user_id);
+            m_media.insert("date", M->media.document->date);
+            m_media.insert("size", M->media.document->size);
+            m_media.insert("dc_id", M->media.document->dc_id);
 
             QVariantMap thumb;
-            thumb.insert("width", M->media.document.thumb.w);
-            thumb.insert("height", M->media.document.thumb.h);
-            thumb.insert("size", M->media.document.thumb.size);
-            thumb.insert("volume", M->media.document.thumb.loc.volume);
-            thumb.insert("dc", M->media.document.thumb.loc.dc);
-            thumb.insert("local_id", M->media.document.thumb.loc.local_id);
-            thumb.insert("secret", M->media.document.thumb.loc.secret);
+            thumb.insert("width", M->media.document->thumb.w);
+            thumb.insert("height", M->media.document->thumb.h);
+            thumb.insert("size", M->media.document->thumb.size);
+            thumb.insert("volume", M->media.document->thumb.loc.volume);
+            thumb.insert("dc", M->media.document->thumb.loc.dc);
+            thumb.insert("local_id", M->media.document->thumb.loc.local_id);
+            thumb.insert("secret", M->media.document->thumb.loc.secret);
 
             m_media.insert("thumb", thumb);
-            m_media.insert("caption", QString::fromUtf8(M->media.document.caption));
-            m_media.insert("mime_type",  QString::fromUtf8(M->media.document.mime_type));
-            m_media.insert("w", M->media.document.w);
-            m_media.insert("h", M->media.document.h);
-            m_media.insert("flags", M->media.document.flags);
-            m_media.insert("duration", M->media.document.duration);
+            m_media.insert("caption", QString::fromUtf8(M->media.document->caption));
+            m_media.insert("mime_type",  QString::fromUtf8(M->media.document->mime_type));
+            m_media.insert("w", M->media.document->w);
+            m_media.insert("h", M->media.document->h);
+            m_media.insert("flags", M->media.document->flags);
+            m_media.insert("duration", M->media.document->duration);
         }
        // tgl_do_load_photo()
 
@@ -267,8 +267,6 @@ QString Message::text() const
                 return "#Unsupported media: geo";
             case tgl_message_media_contact:
                 return "contact";
-            case tgl_message_media_photo_encr:
-                return "photo";
             /*case tgl_message_media_video_encr:
                 return "#Unsupported media: video encr";
             case tgl_message_media_audio_encr:
@@ -321,7 +319,7 @@ int Message::mediaType() const
 
 bool Message::isAudio() const
 {
-    return m_media["flags"].toInt() & FLAG_DOCUMENT_AUDIO;
+    return m_media["flags"].toInt() & TGLDF_AUDIO;
 }
 
 QVariantMap& Message::media()

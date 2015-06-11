@@ -86,10 +86,10 @@ int tgl_authorized_dc (struct tgl_state *TLS, struct tgl_dc *DC) {
 
 int tgl_signed_dc (struct tgl_state *TLS, struct tgl_dc *DC) {
   assert (DC);
-  return DC->has_auth;
+  return (DC->flags & TGLDCF_LOGGED_IN) != 0;
 }
 
-void tgl_register_app_id (struct tgl_state *TLS, int app_id, char *app_hash) {
+void tgl_register_app_id (struct tgl_state *TLS, int app_id, const char *app_hash) {
   TLS->app_id = app_id;
   TLS->app_hash = tstrdup (app_hash);
 }
@@ -138,4 +138,8 @@ void tgl_set_app_version (struct tgl_state *TLS, const char *app_version) {
 
 void tgl_enable_ipv6 (struct tgl_state *TLS) {
   TLS->ipv6_enabled = 1;
+}
+
+void tgl_disable_link_preview (struct tgl_state *TLS) {
+  TLS->disable_link_preview = 1;
 }

@@ -285,7 +285,7 @@ int AudioPlayer::_fillBuffer(ALuint buffer)
     return samples_read;
 }
 
-void AudioPlayer::loadAudioCallback(struct tgl_state *TLS, void *callback_extra, int success, char *filename)
+void AudioPlayer::loadAudioCallback(struct tgl_state *TLS, void *callback_extra, int success, const char *filename)
 {
     ExtraAudioData* extraData = (ExtraAudioData*)callback_extra;
 

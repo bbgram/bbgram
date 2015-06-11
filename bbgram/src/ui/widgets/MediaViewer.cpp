@@ -30,7 +30,7 @@ struct LoadPhotoExtra
     int             sizeIdx;
 };
 
-void MediaViewer::loadPhotoCallback(struct tgl_state *TLS, void *callback_extra, int success, char *filename)
+void MediaViewer::loadPhotoCallback(struct tgl_state *TLS, void *callback_extra, int success, const char *filename)
 {
     LoadPhotoExtra* extra = (LoadPhotoExtra*)callback_extra;
     if (success)
@@ -101,10 +101,9 @@ void MediaViewer::setMessage(Message *message)
             tgl_do_load_photo_size(gTLS, &photoSize, loadPhotoCallback, extra);
         }
     }
-    else if (m_message->mediaType() == tgl_message_media_photo_encr)
+    /*@else if (m_message->mediaType() == tgl_message_media_photo_encr)
     {
         const QVariantMap& media = message->media();
-        /**/
         m_height = media["height"].toInt();
         m_width = media["width"].toInt();
 
@@ -147,7 +146,7 @@ void MediaViewer::setMessage(Message *message)
 
             tgl_do_load_encr_document(gTLS, &encrPhoto, loadPhotoCallback, this);
         }
-    }
+    }*/
 }
 
 void MediaViewer::updateImageView(float maxWidth){

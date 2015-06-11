@@ -34,12 +34,13 @@
 #define tcheck tgl_allocator->check
 #define texists tgl_allocator->exists
 #define tstrdup tgl_strdup
+#define tmemdup tgl_memdup
 #define tstrndup tgl_strndup
 #define tasprintf tgl_asprintf
 #define tsnprintf tgl_snprintf
 
 
-struct tgl_allocator *tgl_allocator;
+extern struct tgl_allocator *tgl_allocator;
 double tglt_get_double_time (void);
 
 int tgl_inflate (void *input, int ilen, void *output, int olen);
@@ -85,6 +86,7 @@ void tgl_exists_debug (void *ptr, int size);
 void tgl_check_release (void);
 void tgl_exists_release (void *ptr, int size);
 
+void *tgl_memdup (const void *s, size_t n);
 
 int tgl_snprintf (char *buf, int len, const char *format, ...) __attribute__ ((format (printf, 3, 4)));
 int tgl_asprintf (char **res, const char *format, ...) __attribute__ ((format (printf, 2, 3)));
@@ -92,9 +94,9 @@ int tgl_asprintf (char **res, const char *format, ...) __attribute__ ((format (p
 void tglt_secure_random (void *s, int l);
 void tgl_my_clock_gettime (int clock_id, struct timespec *T);
 
-static inline void tgl_free_str (void *ptr) {
+static inline void tgl_free_str (const char *ptr) {
   if (!ptr) { return; }
-  tfree (ptr, strlen (ptr) + 1);
+  tfree ((void*)ptr, strlen (ptr) + 1);
 }
 
 static inline void tgl_free_secure (void *ptr, int size) {
@@ -102,7 +104,7 @@ static inline void tgl_free_secure (void *ptr, int size) {
   tfree (ptr, size);
 }
 
-static inline void hexdump (void *ptr, void *end_ptr) {
+static inline void hexdump (char *ptr, char *end_ptr) {
   int total = 0;
   while (ptr < end_ptr) {
     fprintf (stderr, "%02x", (int)*(unsigned char *)ptr);

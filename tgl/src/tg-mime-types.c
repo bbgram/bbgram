@@ -90,14 +90,26 @@ char *tg_mime_by_filename (const char *filename) {
   }
 
   static char *def = "application/octet-stream";
+  if (strlen (p) > 10) {
+    return def;
+  }
+  static char s[11];
+  strcpy (s, p);
+  char *q = s;
+  while (*q) {
+    if (*q >= 'A' && *p <= 'Z') {
+      *q = *q + 'z' - 'Z';
+    }
+    q ++;
+  }
   int i;
   for (i = 0; i < mime_type_number; i++) {
-    if (!strcmp (mime_type_extensions[i], p)) {
+    if (!strcmp (mime_type_extensions[i], s)) {
       return mime_type_names[i];
     }
   }
 
-  if (!strcmp ("m4a", p))
+  if (!strcmp ("m4a", s))
       return "audio/mp4";
 
   return def;
