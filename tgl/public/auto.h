@@ -20,6 +20,8 @@
 #ifndef __AUTO_H__
 #define __AUTO_H__
 
+#include "tools.h"
+
 struct tl_type_descr {
   unsigned name;
   char *id;
@@ -41,8 +43,20 @@ struct paramed_type {
 #define INT2PTR(x) (void *)(long)(((long)x) * 2 + 1)
 #define PTR2INT(x) ((((long)x) - 1) / 2)
 
-void tgl_paramed_type_free (struct paramed_type *P);
+static inline void *memdup (const void *d, int len) {
+  assert (d || !len);
+  if (!d) { return NULL; }
+  void *r = talloc (len);
+  memcpy (r, d, len);
+  return r;
+}
 
-#include "auto/auto-header.h"
+#define DS_LVAL(x) ((x) ? *(x) : 0)
+#define DS_STR(x) ((x) ? (x)->data : NULL), ((x) ? (x)->len : 0)
+#define DS_RSTR(x) ((x) ? (x)->len : 0), ((x) ? (x)->data : NULL)
+#define DS_STR_DUP(x) memdup(((x) ? (x)->data : NULL), ((x) ? (x)->len + 1: 0))
+#define DS_BVAL(x) ((x) && ((x)->magic == CODE_bool_true))
+
+void tgl_paramed_type_free (struct paramed_type *P);
 
 #endif

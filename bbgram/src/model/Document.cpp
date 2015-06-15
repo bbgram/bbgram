@@ -59,7 +59,7 @@ QUrl Document::thumbnail() const
     return m_thumbnail;
 }
 
-void Document::_loadThumbnailCallback(struct tgl_state *TLS, void *callback_extra, int success, char *filename)
+void Document::_loadThumbnailCallback(struct tgl_state *TLS, void *callback_extra, int success, const char *filename)
 {
     Document* doc = (Document*)callback_extra;
 

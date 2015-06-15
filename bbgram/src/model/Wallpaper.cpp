@@ -89,7 +89,7 @@ QUrl Wallpaper::thumbnail() const
     return m_thumbnail;
 }
 
-void Wallpaper::_loadThumbnailCallback(struct tgl_state *TLS, void *callback_extra, int success, char *filename)
+void Wallpaper::_loadThumbnailCallback(struct tgl_state *TLS, void *callback_extra, int success, const char *filename)
 {
     Q_UNUSED(TLS);
     Q_UNUSED(success);
@@ -124,7 +124,7 @@ void Wallpaper::load()
     tgl_do_load_photo_size(gTLS, &photoSize, _loadCallback, (void*)this);
 }
 
-void Wallpaper::_loadCallback(struct tgl_state *TLS, void *callback_extra, int success, char *filename)
+void Wallpaper::_loadCallback(struct tgl_state *TLS, void *callback_extra, int success, const char *filename)
 {
     Q_UNUSED(TLS);
     if (success)

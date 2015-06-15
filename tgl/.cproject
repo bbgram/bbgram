@@ -54,9 +54,12 @@
 							<tool id="com.qnx.qcc.tool.archiver.1918922019" name="QCC Archiver" superClass="com.qnx.qcc.tool.archiver"/>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="com.qnx.qcc.configuration.staticLib.debug.1125656857.1369770416" name="auto-static-fetch-ds.c" rcbsApplicability="disable" resourcePath="src/auto-static-fetch-ds.c" toolsToInvoke="com.qnx.qcc.tool.compiler.1927821102.1064305229">
+						<tool id="com.qnx.qcc.tool.compiler.1927821102.1064305229" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler.1927821102"/>
+					</fileInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="public"/>
-						<entry excluding="tgl-timers.c|tgl-net.c|auto-static-print.c|auto-static.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="auto-static-fetch-ds.c|auto-static-free-ds.c|auto-static-print-ds.c|auto-static-skip.c|auto-static-store.c|auto-static-store-ds.c|auto-static-fetch.c|auto-static-autocomplete.c|tgl-timers.c|tgl-net.c|auto-static-print.c|auto-static.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -117,9 +120,12 @@
 							<tool id="com.qnx.qcc.tool.archiver.199962985" name="QCC Archiver" superClass="com.qnx.qcc.tool.archiver"/>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="com.qnx.qcc.configuration.staticLib.release.1437879237.837698134" name="auto-static-fetch-ds.c" rcbsApplicability="disable" resourcePath="src/auto-static-fetch-ds.c" toolsToInvoke="com.qnx.qcc.tool.compiler.67114943.501750188">
+						<tool id="com.qnx.qcc.tool.compiler.67114943.501750188" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler.67114943"/>
+					</fileInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="public"/>
-						<entry excluding="tgl-timers.c|tgl-net.c|auto-static-print.c|auto-static.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="auto-static-fetch-ds.c|auto-static-free-ds.c|auto-static-print-ds.c|auto-static-skip.c|auto-static-store.c|auto-static-store-ds.c|auto-static-fetch.c|auto-static-autocomplete.c|tgl-timers.c|tgl-net.c|auto-static-print.c|auto-static.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -184,9 +190,12 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="com.qnx.qcc.configuration.staticLib.profile.2098331885.386518341" name="auto-static-fetch-ds.c" rcbsApplicability="disable" resourcePath="src/auto-static-fetch-ds.c" toolsToInvoke="com.qnx.qcc.tool.compiler.1996409128.907926203">
+						<tool id="com.qnx.qcc.tool.compiler.1996409128.907926203" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler.1996409128"/>
+					</fileInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="public"/>
-						<entry excluding="tgl-timers.c|tgl-net.c|auto-static-print.c|auto-static.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="auto-static-fetch-ds.c|auto-static-free-ds.c|auto-static-print-ds.c|auto-static-skip.c|auto-static-store.c|auto-static-store-ds.c|auto-static-fetch.c|auto-static-autocomplete.c|tgl-timers.c|tgl-net.c|auto-static-print.c|auto-static.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -246,9 +255,12 @@
 							<tool id="com.qnx.qcc.tool.archiver.14326012" name="QCC Archiver" superClass="com.qnx.qcc.tool.archiver"/>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="com.qnx.qcc.configuration.staticLib.coverage.1147986695.66991856" name="auto-static-fetch-ds.c" rcbsApplicability="disable" resourcePath="src/auto-static-fetch-ds.c" toolsToInvoke="com.qnx.qcc.tool.compiler.1263264982.1549248784">
+						<tool id="com.qnx.qcc.tool.compiler.1263264982.1549248784" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler.1263264982"/>
+					</fileInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="public"/>
-						<entry excluding="tgl-timers.c|tgl-net.c|auto-static-print.c|auto-static.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="auto-static-fetch-ds.c|auto-static-free-ds.c|auto-static-print-ds.c|auto-static-skip.c|auto-static-store.c|auto-static-store-ds.c|auto-static-fetch.c|auto-static-autocomplete.c|tgl-timers.c|tgl-net.c|auto-static-print.c|auto-static.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -305,9 +317,12 @@
 							<tool id="com.qnx.qcc.tool.archiver.1355801892" name="QCC Archiver" superClass="com.qnx.qcc.tool.archiver"/>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="com.qnx.qcc.configuration.staticLib.debug.1357652543.1014195592" name="auto-static-fetch-ds.c" rcbsApplicability="disable" resourcePath="src/auto-static-fetch-ds.c" toolsToInvoke="com.qnx.qcc.tool.compiler.660296074.446186020">
+						<tool command="qcc" commandLinePattern="${COMMAND}  ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS} ${FLAGS}" id="com.qnx.qcc.tool.compiler.660296074.446186020" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler.660296074"/>
+					</fileInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="public"/>
-						<entry excluding="tgl-timers.c|tgl-net.c|auto-static-print.c|auto-static.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="auto-static-free-ds.c|auto-static-print-ds.c|auto-static-skip.c|auto-static-store.c|auto-static-store-ds.c|auto-static-fetch-ds.c|auto-static-fetch.c|auto-static-autocomplete.c|tgl-timers.c|tgl-net.c|auto-static-print.c|auto-static.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -366,9 +381,12 @@
 							<tool id="com.qnx.qcc.tool.archiver.53762635" name="QCC Archiver" superClass="com.qnx.qcc.tool.archiver"/>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="com.qnx.qcc.configuration.staticLib.profile.350059736.410146763" name="auto-static-fetch-ds.c" rcbsApplicability="disable" resourcePath="src/auto-static-fetch-ds.c" toolsToInvoke="com.qnx.qcc.tool.compiler.270569042.817015164">
+						<tool id="com.qnx.qcc.tool.compiler.270569042.817015164" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler.270569042"/>
+					</fileInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="public"/>
-						<entry excluding="tgl-timers.c|tgl-net.c|auto-static-print.c|auto-static.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="auto-static-fetch-ds.c|auto-static-free-ds.c|auto-static-print-ds.c|auto-static-skip.c|auto-static-store.c|auto-static-store-ds.c|auto-static-fetch.c|auto-static-autocomplete.c|tgl-timers.c|tgl-net.c|auto-static-print.c|auto-static.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -427,9 +445,12 @@
 							<tool id="com.qnx.qcc.tool.archiver.2146894858" name="QCC Archiver" superClass="com.qnx.qcc.tool.archiver"/>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="com.qnx.qcc.configuration.staticLib.coverage.302011669.1624338255" name="auto-static-fetch-ds.c" rcbsApplicability="disable" resourcePath="src/auto-static-fetch-ds.c" toolsToInvoke="com.qnx.qcc.tool.compiler.1027500404.1134622853">
+						<tool id="com.qnx.qcc.tool.compiler.1027500404.1134622853" name="QCC Compiler" superClass="com.qnx.qcc.tool.compiler.1027500404"/>
+					</fileInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="public"/>
-						<entry excluding="tgl-timers.c|tgl-net.c|auto-static-print.c|auto-static.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="auto-static-fetch-ds.c|auto-static-free-ds.c|auto-static-print-ds.c|auto-static-skip.c|auto-static-store.c|auto-static-store-ds.c|auto-static-fetch.c|auto-static-autocomplete.c|tgl-timers.c|tgl-net.c|auto-static-print.c|auto-static.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

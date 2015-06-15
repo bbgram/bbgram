@@ -79,21 +79,24 @@ void EncrChat::load(const QVariantMap& map)
 
         it = encrChatSettings.find("out_seq_no");
         out_seq_no = it.value().toInt();
-
-        bl_do_encr_chat_create (gTLS, id(), user_id, admin_id, print_name.data(), print_name.size());
-        tgl_secret_chat* secret_chat = (tgl_secret_chat *)tgl_peer_get (gTLS, TGL_MK_ENCR_CHAT(id()));
-
-        assert(secret_chat && (secret_chat->flags & FLAG_CREATED));
-        bl_do_encr_chat_set_date(gTLS, secret_chat, date);
-        bl_do_encr_chat_set_ttl(gTLS, secret_chat, ttl);
-        bl_do_encr_chat_set_layer(gTLS ,secret_chat, layer);
-        bl_do_encr_chat_set_access_hash(gTLS, secret_chat, access_hash);
-        bl_do_encr_chat_set_state(gTLS, secret_chat, (tgl_secret_chat_state)state);
-        bl_do_encr_chat_set_key(gTLS, secret_chat, (unsigned char*)key.data(), key_fingerprint);
-        bl_do_encr_chat_set_sha(gTLS, secret_chat, (unsigned char*)first_key_sha.data());
-        bl_do_encr_chat_set_seq(gTLS, secret_chat, in_seq_no, last_in_seq_no, out_seq_no);
-
-        m_secret_chat = secret_chat;
+        bl_do_encr_chat_new (gTLS, id(),
+            &access_hash,
+            &date,
+            &admin_id,
+            &user_id,
+            key.data(),
+            NULL,
+            first_key_sha.data(),
+            &state,
+            &ttl,
+            &layer,
+            &in_seq_no,
+            &last_in_seq_no,
+            &out_seq_no,
+            &key_fingerprint,
+            TGLECF_CREATE | TGLECF_CREATED
+        );
+        m_secret_chat = (tgl_secret_chat *)tgl_peer_get (gTLS, TGL_MK_ENCR_CHAT(id()));
     }
 }
 

@@ -53,5 +53,18 @@ void tglp_insert_encrypted_chat (struct tgl_state *TLS, tgl_peer_t *P);
 void tglp_insert_user (struct tgl_state *TLS, tgl_peer_t *P);
 void tglp_insert_chat (struct tgl_state *TLS, tgl_peer_t *P);
 enum tgl_typing_status tglf_fetch_typing (void);
+void tgls_messages_mark_read (struct tgl_state *TLS, struct tgl_message *M, int out, int seq);
 
+void tgls_insert_random2local (struct tgl_state *TLS, long long random_id, int local_id);
+int tgls_get_local_by_random (struct tgl_state *TLS, long long random_id);
+
+
+void tgl_photo_insert (struct tgl_state *TLS, struct tgl_photo *P);
+struct tgl_photo *tgl_photo_get (struct tgl_state *TLS, long long id);
+struct tgl_document *tgl_document_get (struct tgl_state *TLS, long long id);
+void tgl_document_insert (struct tgl_state *TLS, struct tgl_document *P);
+struct tgl_webpage *tgl_webpage_get (struct tgl_state *TLS, long long id);
+void tgl_webpage_insert (struct tgl_state *TLS, struct tgl_webpage *P);
+
+void tglf_fetch_photo_size_new (struct tgl_state *TLS, struct tgl_photo_size *S, struct tl_ds_photo_size *DS_PS);
 #endif

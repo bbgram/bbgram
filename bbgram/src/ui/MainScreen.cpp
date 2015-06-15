@@ -23,6 +23,12 @@ struct CreateGroupData
     QString chatPhoto;
 };
 
+struct GroupAndUserData
+{
+    GroupChat* group;
+    User* user;
+};
+
 struct ContactsData
 {
     char** phones;
@@ -120,12 +126,12 @@ void MainScreen::sendMessage(Peer* peer, const QString& message)
             idx++;
         }
 
-        tgl_do_send_broadcast(gTLS, members->size(), peers, bytes.data(), bytes.length(), Storage::_broadcastSended, chat);
+        tgl_do_send_broadcast(gTLS, members->size(), peers, bytes.data(), bytes.length(), 0, Storage::_broadcastSended, chat);
 
         delete[] peers;
     }
     else
-        tgl_do_send_message(gTLS, {peer->type(), peer->id()}, (const char*)bytes.data(), bytes.length(), 0, 0);
+        tgl_do_send_message(gTLS, {peer->type(), peer->id()}, (const char*)bytes.data(), bytes.length(), 0, NULL, NULL);
 }
 
 void MainScreen::sendAudio(Peer* peer, const QString& audio, int duration)
@@ -134,7 +140,7 @@ void MainScreen::sendAudio(Peer* peer, const QString& audio, int duration)
     path.replace("file://", "");
     if (peer->type() != TGL_BROADCAST_CHAT)
     {
-        tgl_do_send_document_ex(gTLS, FLAG_DOCUMENT_AUDIO, {peer->type(), peer->id()}, path.toUtf8().data(), 0, 0, duration, NULL, NULL, _sendAudioCallback, NULL);
+        tgl_do_send_audio(gTLS, {peer->type(), peer->id()}, path.toUtf8().data(), duration, _sendAudioCallback, NULL);
         //tgl_do_send_document(gTLS, -2, {peer->type(), peer->id()}, path.toUtf8().data(), _sendAudioCallback, NULL);
     }
 }
@@ -144,7 +150,7 @@ void MainScreen::sendPhoto(Peer* peer, const QString& fileName)
     //if (peer->type() == TGL_PEER_ENCR_CHAT)
     //    123
     //else
-        tgl_do_send_document(gTLS, -1, {peer->type(), peer->id()}, fileName.toUtf8().data(), NULL, NULL);
+        tgl_do_send_document(gTLS, {peer->type(), peer->id()}, fileName.toUtf8().data(), NULL, 0, -1, NULL, NULL);
 }
 
 void MainScreen::deleteMessage(long long id)
@@ -171,9 +177,9 @@ void MainScreen::forwardMessages(const QVariantList& messages, Peer* peer)
         identifiers[i] = (int)list[i]->id();
 
     if (count == 1)
-        tgl_do_forward_message(gTLS, { peer->type(), peer->id() }, identifiers[0], 0, 0);
+        tgl_do_forward_message(gTLS, { peer->type(), peer->id() }, identifiers[0], 0, NULL, NULL);
     else
-        tgl_do_forward_messages(gTLS, { peer->type(), peer->id() }, count, identifiers, 0, 0);
+        tgl_do_forward_messages(gTLS, { peer->type(), peer->id() }, count, identifiers, 0, NULL, NULL);
     delete [] identifiers;
 }
 
@@ -315,8 +321,8 @@ void MainScreen::createGroup(QVariantList users, const QString& title, const QSt
         data->peers[idx] = peer;
         idx++;
     }
-
-    tgl_do_create_group_chat_ex(gTLS, users.size(), data->peers, title.toUtf8().data(), MainScreen::_createGroupCallback, data);
+    QByteArray _title = title.toUtf8();
+    tgl_do_create_group_chat(gTLS, users.size(), data->peers, _title.data(), _title.length(), MainScreen::_createGroupCallback, data);
 }
 
 void MainScreen::createSecretChat(Peer* peer)
@@ -335,17 +341,25 @@ void MainScreen::setGroupName(GroupChat* group, const QString& title)
     if (group->type() == TGL_BROADCAST_CHAT)
         group->setTitle(title);
     else
-        tgl_do_rename_chat(gTLS, {group->type(), group->id()}, title.toUtf8().data(), NULL, NULL);
+        tgl_do_rename_chat(gTLS, {group->type(), group->id()}, title.toUtf8().data(), 0, NULL, NULL);
 }
 
 void MainScreen::addUserToGroup(GroupChat* group, User* user)
 {
-    tgl_do_add_user_to_chat(gTLS, {group->type(), group->id()}, {user->type(), user->id()}, 0, MainScreen::_addMemberCallback, user);
+    GroupAndUserData* data = new GroupAndUserData;
+    data->group = group;
+    data->user = user;
+
+    tgl_do_add_user_to_chat(gTLS, {group->type(), group->id()}, {user->type(), user->id()}, 0, MainScreen::_addMemberCallback, data);
 }
 
 void MainScreen::deleteMemberFromGroup(GroupChat* group, User* member)
 {
-    tgl_do_del_user_from_chat(gTLS, {group->type(), group->id()}, {member->type(), member->id()}, MainScreen::_deleteMemberCallback, member);
+    GroupAndUserData* data = new GroupAndUserData;
+    data->group = group;
+    data->user = member;
+
+    tgl_do_del_user_from_chat(gTLS, {group->type(), group->id()}, {member->type(), member->id()}, MainScreen::_deleteMemberCallback, data);
 }
 
 void MainScreen::deleteHistory(Peer* peer)
@@ -358,7 +372,10 @@ void MainScreen::deleteChat(Peer* peer)
     User* currentUser = (User*)Storage::instance()->getPeer(TGL_PEER_USER, gTLS->our_id);
     if (peer->type() == TGL_PEER_CHAT)
     {
-        tgl_do_del_user_from_chat(gTLS, {peer->type(), peer->id()}, {currentUser->type(), currentUser->id()}, MainScreen::_deleteSelfFromGroupCallback, peer);
+        GroupAndUserData* data = new GroupAndUserData;
+        data->group = (GroupChat*)peer;
+        data->user = currentUser;
+        tgl_do_del_user_from_chat(gTLS, {peer->type(), peer->id()}, {currentUser->type(), currentUser->id()}, MainScreen::_deleteSelfFromGroupCallback, data);
     }
     else
     {
@@ -561,34 +578,30 @@ void MainScreen::_createGroupCallback(struct tgl_state *TLS, void *callback_extr
     emit m_instance->groupCreated(groupChat);
 }
 
-void MainScreen::_addMemberCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M)
+void MainScreen::_addMemberCallback(struct tgl_state *TLS, void *callback_extra, int success)
 {
-    if (!success)
-        return;
-
-    GroupChat* groupChat = (GroupChat*)Storage::instance()->getPeer(TGL_PEER_CHAT, M->to_id.id);
-    groupChat->addMember((User*)callback_extra, TLS->our_id);
-}
-
-void MainScreen::_deleteMemberCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M)
-{
-    if (!success)
-        return;
-
-    GroupChat* groupChat = (GroupChat*)Storage::instance()->getPeer(TGL_PEER_CHAT, M->to_id.id);
-    groupChat->deleteMember((User*)callback_extra);
-}
-
-void MainScreen::_deleteSelfFromGroupCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_message *M)
-{
+    GroupAndUserData* data = (GroupAndUserData*)callback_extra;
     if (success)
-    {
-        User* currentUser = (User*)Storage::instance()->getPeer(TGL_PEER_USER, gTLS->our_id);
-        GroupChat* groupChat = (GroupChat*)Storage::instance()->getPeer(TGL_PEER_CHAT, M->to_id.id);
-        groupChat->deleteMember(currentUser);
-    }
-    Storage::instance()->deleteHistory((Peer*)callback_extra);
-    Storage::instance()->deleteChat((Peer*)callback_extra);
+        data->group->addMember(data->user, TLS->our_id);
+    delete data;
+}
+
+void MainScreen::_deleteMemberCallback(struct tgl_state *TLS, void *callback_extra, int success)
+{
+    GroupAndUserData* data = (GroupAndUserData*)callback_extra;
+    if (success)
+        data->group->deleteMember(data->user);
+    delete data;
+}
+
+void MainScreen::_deleteSelfFromGroupCallback(struct tgl_state *TLS, void *callback_extra, int success)
+{
+    GroupAndUserData* data = (GroupAndUserData*)callback_extra;
+    if (success)
+        data->group->deleteMember(data->user);
+    Storage::instance()->deleteHistory(data->group);
+    Storage::instance()->deleteChat(data->group);
+    delete data;
 }
 
 void MainScreen::_contactAddHandler(struct tgl_state *TLS, void *callback_extra, int success, int size, struct tgl_user *users[])

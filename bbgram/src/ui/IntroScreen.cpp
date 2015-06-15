@@ -67,14 +67,14 @@ void IntroScreen::requestCode(const QString& phone)
     emit phoneChanged();
 
     QByteArray user = phone.toLocal8Bit();
-    tgl_do_send_code(gTLS, (const char*)user.data(), _requestCodeCallback, this);
+    tgl_do_send_code(gTLS, (const char*)user.data(), user.length(), _requestCodeCallback, this);
 }
 
 void IntroScreen::requestPhoneCall()
 {
     QByteArray _user = m_phone.toLocal8Bit();
     QByteArray _hash = m_codeHash.toLocal8Bit();
-    tgl_do_phone_call(gTLS, _user.data(), _hash.data(), 0, 0);
+    tgl_do_phone_call(gTLS, _user.data(), _user.length(), _hash.data(), _hash.length(), 0, 0);
 }
 
 void IntroScreen::_sendCodeCallback(struct tgl_state *TLS, void *callback_extra, int success, struct tgl_user *self)
@@ -102,10 +102,12 @@ void IntroScreen::submitCode(const QString& code)
     QByteArray _code = code.toLocal8Bit();
     m_code = code;
     if (m_registered)
-        tgl_do_send_code_result(gTLS, _user.data(), _hash.data(), _code.data(), _sendCodeCallback, this);
+        tgl_do_send_code_result(gTLS, _user.data(), _user.length(), _hash.data(), _hash.length(), _code.data(), _code.length(), _sendCodeCallback, this);
     else if (m_firstName.size() && m_lastName.size())
     {
-        tgl_do_send_code_result_auth(gTLS, _user.data(), _hash.data(), _code.data(), m_firstName.toUtf8().data(), m_lastName.toUtf8().data(), _sendCodeCallback, this);
+        QByteArray firstName = m_firstName.toUtf8();
+        QByteArray lastName = m_lastName.toUtf8();
+        tgl_do_send_code_result_auth(gTLS, _user.data(), _user.length(), _hash.data(), _hash.length(), _code.data(), _code.length(), firstName.data(), firstName.length(), lastName.data(), lastName.length(), _sendCodeCallback, this);
     }
     else
     {
@@ -129,5 +131,5 @@ void IntroScreen::registerUser(const QString& firstName, const QString& lastName
     m_firstName = firstName;
     m_lastName = lastName;
 
-    tgl_do_send_code_result_auth(gTLS, _user.data(), _hash.data(), _code.data(), _firstName.data(), _lastName.data(), _sendCodeCallback, this);
+    tgl_do_send_code_result_auth(gTLS, _user.data(), _user.length(), _hash.data(), _hash.length(), _code.data(), _code.length(), _firstName.data(), _firstName.length(), _lastName.data(), _lastName.length(), _sendCodeCallback, this);
 }

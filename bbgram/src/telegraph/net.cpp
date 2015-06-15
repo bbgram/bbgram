@@ -1,5 +1,9 @@
 #include "net.h"
 
+extern "C" {
+    #include "mtproto-client.h"
+}
+
 #include "../Telegraph.h"
 
 #include <assert.h>
